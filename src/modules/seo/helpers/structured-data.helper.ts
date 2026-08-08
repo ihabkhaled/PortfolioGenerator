@@ -1,6 +1,7 @@
 import type { PortfolioDocument } from '@/modules/portfolio-document';
 
 import type { PersonStructuredData } from '../types/seo.types';
+import type { DangerousMarkup } from '../types/structured-data.types';
 
 /**
  * `Person` structured data built strictly from published, reviewed fields.
@@ -46,4 +47,15 @@ export function buildPersonStructuredData(
  */
 export function serializeStructuredData(data: PersonStructuredData): string {
   return JSON.stringify(data).replaceAll('<', '\\u003c');
+}
+
+/**
+ * Wrap an already-escaped payload for `dangerouslySetInnerHTML`.
+ *
+ * Exists so the prop is not an inline object literal in the component — and,
+ * more usefully, so there is exactly one place that produces this shape and it
+ * sits next to the escaping that makes it safe.
+ */
+export function toStructuredDataMarkup(json: string): DangerousMarkup {
+  return { __html: json };
 }

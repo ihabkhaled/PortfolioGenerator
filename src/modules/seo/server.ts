@@ -47,4 +47,6 @@ export function buildPortfolioMetadata(input: PortfolioMetadataInput): Metadata 
   };
 }
 
+export { PortfolioOgCard } from './components/portfolio-og-card.component';
+export { buildOgCardValues } from './helpers/og-card.helper';
 export { buildPortfolioMetadataValues } from './helpers/portfolio-metadata.helper';

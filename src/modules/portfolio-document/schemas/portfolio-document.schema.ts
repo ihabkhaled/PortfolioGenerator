@@ -1,4 +1,5 @@
 import { z, type ZodType } from '@/packages/zod';
+import { PORTFOLIO_SUBPATH_SEGMENTS } from '@/shared/constants/route-paths.constants';
 import { CONTROL_CHARACTER_GLOBAL_PATTERN } from '@/shared/constants/text.constants';
 import { normalizeSafeUrl } from '@/shared/utils/safe-url.util';
 import { hasValidSlugShape } from '@/shared/utils/slug-shape.util';
@@ -309,6 +310,10 @@ export const pageSchema = z.object({
     .max(DOCUMENT_LIMITS.pageSlug)
     .refine((value) => value === HOME_PAGE_SLUG || hasValidSlugShape(value), {
       message: 'Page slug must be lowercase words separated by single hyphens',
+    })
+    // Shadowed by a platform handler on the same path; see PORTFOLIO_SUBPATH_SEGMENTS.
+    .refine((value) => !PORTFOLIO_SUBPATH_SEGMENTS.includes(value), {
+      message: 'Page slug is reserved by the platform',
     }),
   title: requiredText(DOCUMENT_LIMITS.pageTitle),
   navLabel: requiredText(DOCUMENT_LIMITS.navLabel),

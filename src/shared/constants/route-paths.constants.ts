@@ -41,6 +41,26 @@ export function buildDashboardPublishPath(portfolioId: string): string {
   return `${buildDashboardPortfolioPath(portfolioId)}/publish`;
 }
 
+/**
+ * Paths the app serves under `/{portfolioSlug}/` that are not tenant pages.
+ *
+ * The public route is an optional catch-all, so a page whose slug matched one
+ * of these would be shadowed by the platform's own handler and 404 with no
+ * explanation. Listed here so the document schema can refuse the slug at the
+ * point it is created, rather than leaving the user to discover it after
+ * publishing.
+ */
+export const PORTFOLIO_SUBPATH_SEGMENTS: readonly string[] = [
+  'apple-icon',
+  'icon',
+  'opengraph-image',
+  'twitter-image',
+];
+
 export function buildPortfolioPath(slug: string): string {
   return `/${slug}`;
+}
+
+export function buildPortfolioOgImagePath(slug: string): string {
+  return `/${slug}/opengraph-image`;
 }

@@ -79,6 +79,23 @@ export default [
   },
   {
     /**
+     * EXC-0006 — the renderer fixture matrix.
+     *
+     * A `<script type="application/ld+json">` body has no accessible role and
+     * no text node Testing Library will return: its queries deliberately
+     * ignore script content. Asserting that the JSON-LD payload reaches the
+     * page unescaped therefore requires reading the node directly. The
+     * alternative — asserting only the serializer in isolation — would leave
+     * the one place the escaping actually matters untested.
+     */
+    files: ['src/tests/unit/portfolio-template.test.tsx'],
+    rules: {
+      'testing-library/no-container': 'off',
+      'testing-library/no-node-access': 'off',
+    },
+  },
+  {
+    /**
      * EXC-0004 — src/packages/link/index.tsx
      *
      * `toAppRoute` widens a database-derived path to the branded `Route` type

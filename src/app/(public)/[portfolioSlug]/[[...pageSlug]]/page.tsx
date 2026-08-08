@@ -4,6 +4,12 @@ import type { ReactElement } from 'react';
 import { buildNavigation, findVisiblePage, resolvePageSlug } from '@/modules/portfolio-document';
 import { buildPortfolioLabels, PortfolioTemplate } from '@/modules/portfolio-renderer';
 import { getPublishedPortfolio } from '@/modules/portfolios/server';
+import {
+  buildPageUrl,
+  buildPersonStructuredData,
+  serializeStructuredData,
+  StructuredData,
+} from '@/modules/seo';
 import { buildPortfolioMetadata } from '@/modules/seo/server';
 import { I18N_NAMESPACES } from '@/packages/i18n';
 import { getServerTranslations } from '@/packages/i18n/server';
@@ -77,16 +83,36 @@ export default async function PublicPortfolioPage(
   }
 
   const translate = await getServerTranslations(I18N_NAMESPACES.portfolio);
+  const pageUrl = buildPageUrl(portfolioSlug, resolved.page.slug);
 
   return (
-    <PortfolioTemplate
-      document={portfolio.document}
-      sections={resolved.sections}
-      navigation={buildNavigation(portfolio.document, portfolioSlug, resolvedPageSlug)}
-      labels={buildPortfolioLabels(translate)}
-      portfolioSlug={portfolioSlug}
-      pageTitle={resolved.page.title}
-      isPreview={false}
-    />
+    <>
+      {/*
+       * Structured data on every page of the portfolio, describing the person
+       * rather than the page. A crawler that lands on `/amina/projects` first
+       * should learn the same thing about who this is as one that lands on the
+       * home page.
+       *
+       * Suppressed for a page the author asked not to index: emitting
+       * machine-readable claims about someone who opted out would be a strange
+       * way to honour that.
+       */}
+      {portfolio.document.seo.indexable ? (
+        <StructuredData
+          json={serializeStructuredData(
+            buildPersonStructuredData(portfolio.document, pageUrl),
+          )}
+        />
+      ) : null}
+      <PortfolioTemplate
+        document={portfolio.document}
+        sections={resolved.sections}
+        navigation={buildNavigation(portfolio.document, portfolioSlug, resolvedPageSlug)}
+        labels={buildPortfolioLabels(translate)}
+        portfolioSlug={portfolioSlug}
+        pageTitle={resolved.page.title}
+        isPreview={false}
+      />
+    </>
   );
 }

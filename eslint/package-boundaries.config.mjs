@@ -55,6 +55,11 @@ const packageBoundaries = [
     owners: ['src/packages/cache/'],
   },
   {
+    package: 'next/og',
+    matchSubpaths: false,
+    owners: ['src/packages/og/'],
+  },
+  {
     package: 'next/font/google',
     matchSubpaths: false,
     owners: ['src/shared/fonts/'],

@@ -36,7 +36,28 @@ import {
   toPosixPath,
 } from '../shared/source-utils.mjs';
 
-const APPROVED_CONST_NAMES = new Set(['LOG_PREFIX']);
+/**
+ * `LOG_PREFIX` is the one value a file is allowed to name for itself.
+ *
+ * The rest are Next.js route-segment config: the framework reads them from the
+ * route module's own AST, so they cannot be imported from a constants file
+ * without silently ceasing to apply. They are a framework contract rather than
+ * configuration this repository chose to embed, which is what the rule is
+ * actually about.
+ */
+const APPROVED_CONST_NAMES = new Set([
+  'LOG_PREFIX',
+  'alt',
+  'contentType',
+  'dynamic',
+  'dynamicParams',
+  'fetchCache',
+  'maxDuration',
+  'preferredRegion',
+  'revalidate',
+  'runtime',
+  'size',
+]);
 
 function isTargetFile(sourcePath) {
   return (

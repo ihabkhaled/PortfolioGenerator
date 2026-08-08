@@ -106,3 +106,14 @@ the counter null — and the read mapper treats a null version as "not really
 published".
 **Fix:** the column defaults to 0 and is NOT NULL; zero means never published.
 Found by the E2E suite, which is the entire argument for having one.
+
+---
+
+**Symptom:** a GitHub Actions job fails in 3 seconds with "Unable to resolve
+action … unable to find version".
+
+**Cause:** the version was written without the `v` prefix the action actually
+publishes (`aquasecurity/trivy-action@0.33.1` instead of `@v0.36.0`).
+**Fix:** check the tag list — `gh api repos/<owner>/<repo>/tags` — rather than
+assuming a version string is a tag. The job fails at setup, before it runs, so
+the workflow reports a security scan that never happened.

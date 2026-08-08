@@ -1,0 +1,22 @@
+---
+description: Architecture rules for this repository
+globs: src/**/*.{ts,tsx}
+alwaysApply: false
+---
+
+# Architecture
+
+Dependency direction is one-way and lint-enforced:
+
+    actions → services → repositories/providers → mappers/schemas/policies/types/constants
+
+Containers and hooks sit on the view side and reach services only through server
+actions. Components receive computed props and return TSX — no state, no data
+access, no logic. Nothing below the view layer imports React.
+
+Cross-module imports go through a declared surface: index, server, client,
+dashboard, ingestion-ui, editor-ui, account-ui. A deep import into another
+module's directories is an error.
+
+Implementation files do not declare module-level types, interfaces, enums or
+non-function constants. Those live in types/, enums/ and constants/.

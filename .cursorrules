@@ -1,0 +1,24 @@
+Read AGENTS.md before editing. It is the canonical instruction set.
+
+Architecture, in one paragraph: routes in src/app are thin and call a module
+surface; features live in src/modules with fixed layer directories (actions,
+services, repositories, providers, mappers, policies, schemas, helpers, types,
+constants, components, containers, hooks); vendors are wrapped one-per-directory
+in src/packages; src/shared is generic. Cross-module imports go through a
+declared surface file, never into another module's directories.
+
+Hard rules, all lint-enforced:
+- Every dashboard repository call takes an ownerId in the WHERE clause.
+- Tenant-free reads carry an Unscoped suffix and are confined to the public path.
+- Stored JSON is parsed through portfolioDocumentSchema, never cast.
+- The public render path imports no AI, ingestion, editor, storage or auth code.
+- No eslint-disable comments; exceptions live in eslint/exceptions.config.mjs.
+- No raw className outside the design system; no literal user-facing strings.
+- process.env only inside src/packages/env.
+- No non-null assertions.
+
+Testing: pure logic is held at 100% coverage, everything unit-tested at 95%.
+Repositories, actions, providers and services are covered by the Playwright
+suite against a real database, not by mocks.
+
+Never weaken a gate to make it pass.

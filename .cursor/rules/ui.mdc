@@ -1,0 +1,20 @@
+---
+description: UI rules for this repository
+globs: src/**/*.tsx
+alwaysApply: false
+---
+
+# UI
+
+Raw `className` strings belong to the design system (`src/packages/ui-primitives`,
+`src/shared/components/primitives`) and to `*.variants.ts` / `*.constants.ts`
+files. Everywhere else, import a class bundle.
+
+User-facing text comes from the message catalog by key. A literal string in a
+component fails lint.
+
+A client component must carry a `// client-boundary-reason:` comment saying
+what browser-only capability it needs. "It felt easier" is not one.
+
+Every interactive control is reachable and operable by keyboard. Where a gesture
+would be the obvious implementation — reordering, for instance — use buttons.

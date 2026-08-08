@@ -1,0 +1,17 @@
+---
+description: Tenancy rules for this repository
+globs: src/modules/**/repositories/*.ts
+alwaysApply: false
+---
+
+# Tenancy
+
+Every method here takes `ownerId` as its first argument and puts it in the
+WHERE clause. There is deliberately no `findById(id)`: that shape invites
+"load now, check ownership later", which is how cross-tenant reads ship.
+
+The two genuinely tenant-free lookups carry an `Unscoped` suffix, and the
+`no-unscoped-repository-access` rule confines them to the public read path.
+
+A row that belongs to another tenant is reported as not found, never as
+forbidden. Telling a stranger an id exists is itself a leak.

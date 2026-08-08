@@ -1,0 +1,25 @@
+# OpenAI Codex / codex-cli
+
+**Read [AGENTS.md](./AGENTS.md) first.** It is the canonical instruction set for
+this repository: architecture, non-negotiables, commands, and where things live.
+This file only adds what is specific to OpenAI Codex / codex-cli.
+
+## Notes for OpenAI Codex / codex-cli
+
+Codex works from a sandboxed shell.
+
+- The repository has no network-dependent tests: the AI provider defaults to
+  `deterministic` and object storage to `local`, so the unit suite runs
+  offline.
+- `npm run test` needs no database. `npm run test:e2e` does.
+- Apply patches file by file. This repository has an ESLint rule against inline
+  disables, so a patch that adds one will fail the gate rather than land.
+
+## The short version
+
+- Nothing is invented. A field the CV does not contain stays empty.
+- A person reviews before anything is public.
+- A published portfolio is a database read and nothing else.
+- Never add an `eslint-disable` comment. Exceptions go in
+  `eslint/exceptions.config.mjs` with an id and a reason.
+- Never weaken a gate to make it pass.

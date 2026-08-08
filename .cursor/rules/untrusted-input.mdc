@@ -1,0 +1,18 @@
+---
+description: Untrusted input rules for this repository
+globs: src/modules/{ai,resume-ingestion}/**/*.ts
+alwaysApply: false
+---
+
+# Untrusted input
+
+Resume text and model output are data, never instruction and never trusted
+shape.
+
+- Resume text goes to the provider inside an envelope the model owns; it is
+  never concatenated into the system instruction.
+- Model output is parsed with a schema whose every field is nullable, so the
+  model always has a legal way to say "not present" and never has to choose
+  between guessing and failing validation.
+- The mapper's contract is "drop, do not guess". An unusable value becomes
+  absent and produces a warning attached to the field it concerns.

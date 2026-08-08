@@ -1,0 +1,23 @@
+# Qwen Code
+
+**Read [AGENTS.md](./AGENTS.md) first.** It is the canonical instruction set for
+this repository: architecture, non-negotiables, commands, and where things live.
+This file only adds what is specific to Qwen Code.
+
+## Notes for Qwen Code
+
+Start with `AGENTS.md`. Then, before writing:
+
+- `npm run lint` tells you the architecture rules by name and points at the
+  layer you violated. Read the message; it usually contains the fix.
+- Every module has an `index.ts` that lists what is public. If what you need
+  is not exported, decide whether it should be — do not deep-import.
+
+## The short version
+
+- Nothing is invented. A field the CV does not contain stays empty.
+- A person reviews before anything is public.
+- A published portfolio is a database read and nothing else.
+- Never add an `eslint-disable` comment. Exceptions go in
+  `eslint/exceptions.config.mjs` with an id and a reason.
+- Never weaken a gate to make it pass.

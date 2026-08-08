@@ -42,3 +42,9 @@ export interface UpdateResumeUploadInput {
   readonly warnings?: unknown;
   readonly errorCode?: string | null;
 }
+
+/** The two columns an object sweep needs, projected from a row. */
+export interface StorageKeyRow {
+  readonly storageKey: string;
+  readonly extractedTextStorageKey: string | null;
+}

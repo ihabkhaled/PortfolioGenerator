@@ -14,6 +14,7 @@ export {
   getOwnedPortfolio,
   isSlugAvailable,
   listOwnedPortfolios,
+  listOwnedSlugs,
   listPublishedPortfoliosUnscoped,
   publishOwnedPortfolio,
   saveDraftDocument,

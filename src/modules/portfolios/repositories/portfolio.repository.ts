@@ -39,6 +39,20 @@ export async function listOwnedPortfolios(ownerId: string): Promise<readonly Por
   return rows.map((row) => toPortfolioSummary(row));
 }
 
+/**
+ * Every slug an owner holds, so a deletion can invalidate the cache tags of
+ * pages that are about to stop existing. Soft-deleted rows are included: their
+ * tag may still be warm from a read taken moments before.
+ */
+export async function listOwnedSlugs(ownerId: string): Promise<readonly string[]> {
+  const rows = await getDatabase().portfolio.findMany({
+    where: { ownerId },
+    select: { slug: true },
+  });
+
+  return rows.map((row) => row.slug);
+}
+
 export async function getOwnedPortfolio(
   ownerId: string,
   portfolioId: string,

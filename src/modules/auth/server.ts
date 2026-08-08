@@ -7,4 +7,4 @@ import 'server-only';
  */
 
 export { getCurrentUser, requireOwner } from './services/require-owner.service';
-export { getOptionalUser } from './services/session.service';
+export { getOptionalUser, signOutCurrentSession } from './services/session.service';

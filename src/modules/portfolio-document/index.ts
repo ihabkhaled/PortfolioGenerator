@@ -25,6 +25,7 @@ export {
 } from './helpers/portfolio-document-defaults.helper';
 
 export {
+  applyMigrationSteps,
   migratePortfolioDocument,
   readSchemaVersion,
   tryMigratePortfolioDocument,

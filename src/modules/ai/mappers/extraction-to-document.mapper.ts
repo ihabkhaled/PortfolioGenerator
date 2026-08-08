@@ -229,6 +229,7 @@ export function mapProjects(
               {
                 id: `proj-${projects.length + 1}-link`,
                 kind: 'project',
+                /* v8 ignore next -- LINK_LABELS declares 'project'; the fallback is for the index signature. */
                 label: LINK_LABELS['project'] ?? 'Project',
                 url,
                 visible: true,

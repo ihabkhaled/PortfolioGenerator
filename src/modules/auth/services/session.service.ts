@@ -38,3 +38,19 @@ export async function getOptionalUser(requestHeaders: Headers): Promise<Authenti
     return null;
   }
 }
+
+/**
+ * End the current session and clear its cookie.
+ *
+ * Tolerant of the session already being gone. Account deletion cascades the
+ * session row away before this runs, so "no such session" is the expected case
+ * there, not an error — and a user who has just deleted their account must not
+ * be shown a failure for the cleanup step that followed it.
+ */
+export async function signOutCurrentSession(requestHeaders: Headers): Promise<void> {
+  try {
+    await getAuth().api.signOut({ headers: requestHeaders });
+  } catch {
+    logger.warn('auth.sign_out.failed');
+  }
+}

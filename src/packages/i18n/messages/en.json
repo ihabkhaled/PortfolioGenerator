@@ -250,5 +250,40 @@
       "slugTaken": "That address is already taken. Try another.",
       "invalidSlug": "Use lowercase letters, numbers and single hyphens only."
     }
+  },
+  "account": {
+    "title": "Account",
+    "lead": "What we hold about you, and how to remove it.",
+    "summary": {
+      "title": "Your account",
+      "nameLabel": "Name",
+      "emailLabel": "Email",
+      "portfolioCountLabel": "Portfolios"
+    },
+    "data": {
+      "title": "Your data",
+      "hint": "Uploaded CVs are stored privately and are only ever read by a request that has already been matched to your account. Extracted text is kept so you can re-run a review without uploading again.",
+      "retentionTitle": "Retention",
+      "retention": "Deleting a portfolio removes its CV files immediately and keeps the public address claimed, so nobody else can take an address your CV still points at. Deleting your account removes every file and every row we hold about you; the audit log keeps a record that the deletion happened, with no identifying data attached."
+    },
+    "portfolio": {
+      "delete": "Delete",
+      "deleteConfirm": "Delete permanently",
+      "deleteCancel": "Keep it",
+      "deleting": "Deleting",
+      "confirmMessage": "This removes the portfolio and its uploaded CV files. It cannot be undone."
+    },
+    "delete": {
+      "title": "Delete your account",
+      "hint": "This removes your portfolios, every uploaded CV, and your sign-in details. Published pages stop resolving immediately. It cannot be undone.",
+      "confirmationLabel": "Type {word} to confirm",
+      "submit": "Delete my account",
+      "submitting": "Deleting"
+    },
+    "errors": {
+      "deleteFailed": "We could not complete the deletion. Nothing was removed — please try again.",
+      "confirmationMismatch": "Type the confirmation word exactly to continue.",
+      "notFound": "That portfolio is no longer available."
+    }
   }
 }

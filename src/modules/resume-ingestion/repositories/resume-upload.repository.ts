@@ -6,6 +6,7 @@ import { RESUME_UPLOAD_SELECT } from '../constants/resume-upload-query.constants
 import type {
   CreateResumeUploadInput,
   ResumeUploadRecord,
+  StorageKeyRow,
   UpdateResumeUploadInput,
 } from '../types/resume-upload.types';
 
@@ -117,7 +118,44 @@ export async function listOwnedUploadKeys(ownerId: string): Promise<readonly str
     select: { storageKey: true, extractedTextStorageKey: true },
   });
 
+  return toStorageKeys(rows);
+}
+
+/**
+ * Every upload belonging to one portfolio, for the per-portfolio sweep.
+ *
+ * Soft-deleted rows are included on purpose. A row marked deleted whose object
+ * is still in the bucket is precisely what this list exists to clean up; a
+ * filter here would leave those files behind forever.
+ */
+export async function listOwnedUploadKeysForPortfolio(
+  ownerId: string,
+  portfolioId: string,
+): Promise<readonly string[]> {
+  const rows = await getDatabase().resumeUpload.findMany({
+    where: { ownerId, portfolioId },
+    select: { storageKey: true, extractedTextStorageKey: true },
+  });
+
+  return toStorageKeys(rows);
+}
+
+export function toStorageKeys(rows: readonly StorageKeyRow[]): readonly string[] {
   return rows.flatMap((row) =>
     [row.storageKey, row.extractedTextStorageKey].filter((key): key is string => key !== null),
   );
+}
+
+/** Mark every upload of one portfolio deleted, in one statement. */
+export async function softDeleteUploadsForPortfolio(
+  ownerId: string,
+  portfolioId: string,
+  deletedAt: Date,
+): Promise<number> {
+  const updated = await getDatabase().resumeUpload.updateMany({
+    where: { ownerId, portfolioId, deletedAt: null },
+    data: { deletedAt },
+  });
+
+  return updated.count;
 }

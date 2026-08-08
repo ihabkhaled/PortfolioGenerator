@@ -10,6 +10,7 @@ import { ROUTE_PATHS } from '@/shared/constants/route-paths.constants';
 
 import { AUTH_ERROR_KEYS, AUTH_FIELD_NAMES } from '../constants/auth.constants';
 import { signInSchema, signUpSchema } from '../schemas/auth.schema';
+import { signOutCurrentSession } from '../services/session.service';
 import type { AuthFormState } from '../types/auth.types';
 
 /**
@@ -90,11 +91,7 @@ export async function signUpAction(
 }
 
 export async function signOutAction(): Promise<void> {
-  try {
-    await getAuth().api.signOut({ headers: await headers() });
-  } catch {
-    logger.warn('auth.sign_out.failed');
-  }
+  await signOutCurrentSession(await headers());
 
   appRedirect(ROUTE_PATHS.home);
 }

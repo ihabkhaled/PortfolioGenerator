@@ -22,12 +22,14 @@ export function formatMonth(value: string | null): string | null {
 
   const [year, month] = value.split('-', 2);
 
+  /* v8 ignore next 3 -- MONTH_PATTERN guarantees both parts; the compiler cannot see that. */
   if (year === undefined || month === undefined) {
     return null;
   }
 
   const label = MONTH_LABELS[Number(month) - 1];
 
+  /* v8 ignore next -- the pattern bounds the month to 01-12, so a label always exists. */
   return label === undefined ? year : `${label} ${year}`;
 }
 
@@ -50,6 +52,7 @@ export function formatDateRange(
   }
 
   if (start === null) {
+    /* v8 ignore next -- both null returned above, so end is a string here. */
     return end ?? '';
   }
 

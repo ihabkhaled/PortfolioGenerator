@@ -9,7 +9,9 @@ export {
   getLatestOwnedUpload,
   getOwnedResumeUpload,
   listOwnedUploadKeys,
+  listOwnedUploadKeysForPortfolio,
   softDeleteOwnedUpload,
+  softDeleteUploadsForPortfolio,
   updateOwnedResumeUpload,
 } from './repositories/resume-upload.repository';
 export { importResume } from './services/resume-import.service';

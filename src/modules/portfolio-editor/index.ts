@@ -12,5 +12,10 @@ export {
   setSectionVisibility,
   setSeoField,
 } from './helpers/document-edit.helper';
+export {
+  claimSlugSchema,
+  portfolioIdSchema,
+  saveDraftSchema,
+} from './schemas/editor.schema';
 export type { DraftEditor, DraftEditorInput } from './types/draft-editor.types';
 export type { EditorActionState, SaveDraftPayload } from './types/editor.types';

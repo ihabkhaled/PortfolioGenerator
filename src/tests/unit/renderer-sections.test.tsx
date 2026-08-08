@@ -1,0 +1,454 @@
+import { render, screen, within } from '@testing-library/react';
+import { describe, expect, it } from 'vitest';
+
+import type {
+  PortfolioCustomBlock,
+  PortfolioDocument,
+  PortfolioSection,
+} from '@/modules/portfolio-document';
+import { buildPortfolioLabels, SectionRenderer } from '@/modules/portfolio-renderer';
+
+import { buildFullPortfolioDocument } from '../fixtures/portfolio-document.fixtures';
+
+/**
+ * One section at a time, with the optional parts present and absent.
+ *
+ * The whole-template matrix proves the page holds together; this proves each
+ * band omits what is missing instead of rendering an empty element with a
+ * heading above it — the failure mode a reviewer reads as "extraction lost it".
+ */
+
+const labels = buildPortfolioLabels((key: string) => key);
+
+function renderSection(section: PortfolioSection, document = buildFullPortfolioDocument()): void {
+  render(<SectionRenderer section={section} document={document} labels={labels} />);
+}
+
+function hero(config: Partial<{ showPortrait: boolean; showAvailability: boolean }> = {}) {
+  return {
+    id: 'section-hero',
+    type: 'hero',
+    visible: true,
+    order: 0,
+    config: { showPortrait: false, showAvailability: true, ...config },
+  } satisfies PortfolioSection;
+}
+
+function contact(
+  config: Partial<{ showEmail: boolean; showPhone: boolean; showLinks: boolean }> = {},
+) {
+  return {
+    id: 'section-contact',
+    type: 'contact',
+    visible: true,
+    order: 0,
+    config: { title: null, showEmail: true, showPhone: false, showLinks: true, ...config },
+  } satisfies PortfolioSection;
+}
+
+function custom(blocks: PortfolioCustomBlock[]) {
+  return {
+    id: 'section-custom',
+    type: 'custom',
+    visible: true,
+    order: 0,
+    config: { title: null, blocks },
+  } satisfies PortfolioSection;
+}
+
+describe('the hero band', () => {
+  it('shows the availability note when both the section and the person allow it', () => {
+    renderSection(hero());
+
+    expect(screen.getByText('availability')).toBeInTheDocument();
+  });
+
+  it('hides the availability note when the section turns it off', () => {
+    renderSection(hero({ showAvailability: false }));
+
+    expect(screen.queryByText('availability')).not.toBeInTheDocument();
+  });
+
+  // Availability is the person's claim, not the template's.
+  it('hides the availability note when the person turned it off', () => {
+    const document = buildFullPortfolioDocument();
+
+    renderSection(hero(), {
+      ...document,
+      identity: { ...document.identity, availabilityEnabled: false },
+    });
+
+    expect(screen.queryByText('availability')).not.toBeInTheDocument();
+  });
+
+  it('renders a portrait only when one was uploaded and the section asks for it', () => {
+    const document = buildFullPortfolioDocument();
+
+    renderSection(hero({ showPortrait: true }), {
+      ...document,
+      identity: { ...document.identity, portraitAssetId: 'asset-1' },
+    });
+
+    expect(screen.getByRole('img', { name: 'portraitAlt' })).toBeInTheDocument();
+  });
+
+  it('renders no portrait when the section asks for one that does not exist', () => {
+    renderSection(hero({ showPortrait: true }));
+
+    expect(screen.queryByRole('img')).not.toBeInTheDocument();
+  });
+
+  // A portfolio with no location should not advertise the gap.
+  it('omits the evidence panel when there is nothing to put in it', () => {
+    const document = buildFullPortfolioDocument();
+
+    renderSection(hero(), {
+      ...document,
+      identity: { ...document.identity, location: null },
+      contact: { ...document.contact, email: { value: null, visible: false } },
+    });
+
+    expect(screen.queryByLabelText('contactCta')).not.toBeInTheDocument();
+  });
+
+  it('includes location and a visible email in the evidence panel', () => {
+    renderSection(hero());
+
+    const panel = screen.getByLabelText('contactCta');
+
+    expect(within(panel).getByText('Lisbon, Portugal')).toBeInTheDocument();
+    expect(within(panel).getByText('amina@example.com')).toBeInTheDocument();
+  });
+});
+
+describe('the contact band', () => {
+  it('lists the channels the author chose to show', () => {
+    renderSection(contact());
+
+    expect(screen.getByRole('link', { name: 'amina@example.com' })).toHaveAttribute(
+      'href',
+      'mailto:amina@example.com',
+    );
+    expect(screen.queryByText('+351 000 000 000')).not.toBeInTheDocument();
+  });
+
+  // Two switches have to both be on: the section's, and the field's.
+  it('still hides a phone number the section would show but the author would not', () => {
+    renderSection(contact({ showPhone: true }));
+
+    expect(screen.queryByText('+351 000 000 000')).not.toBeInTheDocument();
+  });
+
+  it('shows a phone number when both switches are on', () => {
+    const document = buildFullPortfolioDocument();
+
+    renderSection(contact({ showPhone: true }), {
+      ...document,
+      contact: { ...document.contact, phone: { value: '+351 000 000 000', visible: true } },
+    });
+
+    expect(screen.getByText('+351 000 000 000')).toBeInTheDocument();
+  });
+
+  it('omits the link row when the section turns links off', () => {
+    renderSection(contact({ showLinks: false }));
+
+    expect(screen.queryByRole('link', { name: 'Code' })).not.toBeInTheDocument();
+  });
+});
+
+describe('the custom band', () => {
+  it('renders each block kind with its own element', () => {
+    renderSection(
+      custom([
+        { id: 'b1', kind: 'paragraph', text: 'A paragraph.' },
+        { id: 'b2', kind: 'bullet-list', items: ['First', 'Second'] },
+        { id: 'b3', kind: 'stat-list', items: [{ id: 's1', label: 'Shipped', value: '2' }] },
+        {
+          id: 'b4',
+          kind: 'links',
+          items: [
+            {
+              id: 'l1',
+              kind: 'code',
+              label: 'Repository',
+              url: 'https://example.com/repo',
+              visible: true,
+            },
+          ],
+        },
+      ]),
+    );
+
+    expect(screen.getByText('A paragraph.')).toBeInTheDocument();
+    expect(screen.getByText('First')).toBeInTheDocument();
+    expect(screen.getByText('Shipped')).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Repository' })).toBeInTheDocument();
+  });
+
+  it('renders an empty block list without an empty container of text', () => {
+    renderSection(custom([]));
+
+    expect(screen.queryByRole('link')).not.toBeInTheDocument();
+  });
+});
+
+describe('the fact-list bands', () => {
+  it('links a certification credential and shows the bare host', () => {
+    renderSection({
+      id: 'section-certifications',
+      type: 'certifications',
+      visible: true,
+      order: 0,
+      config: { title: null },
+    });
+
+    expect(screen.getByRole('link', { name: /example\.com/ })).toBeInTheDocument();
+  });
+
+  it('renders an education entry that has no link', () => {
+    renderSection({
+      id: 'section-education',
+      type: 'education',
+      visible: true,
+      order: 0,
+      config: { title: null },
+    });
+
+    expect(screen.getByText('University of Lisbon')).toBeInTheDocument();
+    expect(screen.queryByRole('link')).not.toBeInTheDocument();
+  });
+
+  it('renders languages with their proficiency', () => {
+    renderSection({
+      id: 'section-languages',
+      type: 'languages',
+      visible: true,
+      order: 0,
+      config: { title: null },
+    });
+
+    expect(screen.getByText('Portuguese')).toBeInTheDocument();
+  });
+});
+
+describe('the projects band', () => {
+  it('renders every project when no limit is set', () => {
+    renderSection({
+      id: 'section-projects',
+      type: 'projects',
+      visible: true,
+      order: 0,
+      config: { title: null, limit: null },
+    });
+
+    expect(screen.getByText('Ledger Replay')).toBeInTheDocument();
+    expect(screen.getByText('Budget Alarm')).toBeInTheDocument();
+  });
+
+  // A limit is the author saying "show my best two", not a pagination bug.
+  it('honours a limit', () => {
+    renderSection({
+      id: 'section-projects',
+      type: 'projects',
+      visible: true,
+      order: 0,
+      config: { title: null, limit: 1 },
+    });
+
+    expect(screen.getByText('Ledger Replay')).toBeInTheDocument();
+    expect(screen.queryByText('Budget Alarm')).not.toBeInTheDocument();
+  });
+});
+
+describe('the experience band', () => {
+  it('honours a limit', () => {
+    renderSection({
+      id: 'section-experience',
+      type: 'experience',
+      visible: true,
+      order: 0,
+      config: { title: null, limit: 1 },
+    });
+
+    expect(screen.getByText('Northwind Payments')).toBeInTheDocument();
+    expect(screen.queryByText('Harbour Analytics')).not.toBeInTheDocument();
+  });
+});
+
+describe('the skills band', () => {
+  it('omits a group the author emptied', () => {
+    const document: PortfolioDocument = {
+      ...buildFullPortfolioDocument(),
+      skills: [
+        { id: 'skills-1', label: 'Languages', items: ['TypeScript'] },
+        { id: 'skills-2', label: 'Empty', items: [] },
+      ],
+    };
+
+    renderSection(
+      { id: 'section-skills', type: 'skills', visible: true, order: 0, config: { title: null } },
+      document,
+    );
+
+    expect(screen.getByText('Languages')).toBeInTheDocument();
+    expect(screen.queryByText('Empty')).not.toBeInTheDocument();
+  });
+});
+
+describe('the about band', () => {
+  it('splits a multi-paragraph summary', () => {
+    renderSection({
+      id: 'section-about',
+      type: 'about',
+      visible: true,
+      order: 0,
+      config: { title: null },
+    });
+
+    expect(screen.getAllByText(/payment systems|idempotency/).length).toBeGreaterThan(0);
+  });
+
+  it('renders nothing readable when there is no summary', () => {
+    const document = buildFullPortfolioDocument();
+
+    renderSection(
+      { id: 'section-about', type: 'about', visible: true, order: 0, config: { title: null } },
+      { ...document, identity: { ...document.identity, summary: null } },
+    );
+
+    expect(screen.queryByText(/payment systems/)).not.toBeInTheDocument();
+  });
+});
+
+describe('bands rendered from entries with nothing optional filled in', () => {
+  // An entry stripped to its required fields still has to render as a row, not
+  // as a stack of empty elements with headings above them.
+  const bare: PortfolioDocument = {
+    ...buildFullPortfolioDocument(),
+    experience: [
+      {
+        id: 'exp-bare',
+        organization: 'Northwind Payments',
+        title: 'Engineer',
+        location: null,
+        startDate: null,
+        endDate: null,
+        current: false,
+        summary: null,
+        highlights: [],
+        technologies: [],
+      },
+    ],
+    projects: [
+      {
+        id: 'proj-bare',
+        name: 'Budget Alarm',
+        summary: null,
+        highlights: [],
+        technologies: [],
+        links: [],
+      },
+    ],
+    education: [
+      {
+        id: 'edu-bare',
+        institution: 'University of Lisbon',
+        degree: null,
+        field: null,
+        startDate: null,
+        endDate: null,
+        location: null,
+        details: null,
+      },
+    ],
+    certifications: [
+      { id: 'cert-bare', name: 'CKA', issuer: null, date: null, credentialUrl: null },
+    ],
+    languages: [{ id: 'lang-bare', name: 'Portuguese', proficiency: null }],
+  };
+
+  it('renders a role with no dates, summary, highlights or technologies', () => {
+    renderSection(
+      {
+        id: 'section-experience',
+        type: 'experience',
+        visible: true,
+        order: 0,
+        config: { title: null, limit: null },
+      },
+      bare,
+    );
+
+    expect(screen.getByText('Northwind Payments')).toBeInTheDocument();
+    expect(screen.queryByRole('list')).not.toBeInTheDocument();
+  });
+
+  it('renders a project with nothing but a name', () => {
+    renderSection(
+      {
+        id: 'section-projects',
+        type: 'projects',
+        visible: true,
+        order: 0,
+        config: { title: null, limit: null },
+      },
+      bare,
+    );
+
+    expect(screen.getByText('Budget Alarm')).toBeInTheDocument();
+    expect(screen.queryByRole('link')).not.toBeInTheDocument();
+  });
+
+  it('renders an education entry with only an institution', () => {
+    renderSection(
+      {
+        id: 'section-education',
+        type: 'education',
+        visible: true,
+        order: 0,
+        config: { title: null },
+      },
+      bare,
+    );
+
+    expect(screen.getByText('University of Lisbon')).toBeInTheDocument();
+  });
+
+  it('renders a certification with no issuer, date or credential', () => {
+    renderSection(
+      {
+        id: 'section-certifications',
+        type: 'certifications',
+        visible: true,
+        order: 0,
+        config: { title: null },
+      },
+      bare,
+    );
+
+    expect(screen.getByText('CKA')).toBeInTheDocument();
+    expect(screen.queryByRole('link')).not.toBeInTheDocument();
+  });
+
+  it('renders a language with no stated proficiency', () => {
+    renderSection(
+      {
+        id: 'section-languages',
+        type: 'languages',
+        visible: true,
+        order: 0,
+        config: { title: null },
+      },
+      bare,
+    );
+
+    expect(screen.getByText('Portuguese')).toBeInTheDocument();
+  });
+
+  it('renders a hero for someone with no links at all', () => {
+    renderSection(hero(), { ...bare, links: [] });
+
+    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('Amina Rahman');
+  });
+});

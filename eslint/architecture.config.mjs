@@ -204,14 +204,25 @@ export default [
       'portfolio-architecture/no-restricted-layer-imports': ['error', { policies: layerPolicies }],
       'portfolio-architecture/no-cross-module-deep-imports': [
         'error',
-        { surfaces: ['index', 'server', 'client', 'dashboard', 'ingestion-ui', 'editor-ui'] },
+        {
+          surfaces: [
+            'index',
+            'server',
+            'client',
+            'dashboard',
+            'ingestion-ui',
+            'editor-ui',
+            'account-ui',
+          ],
+        },
       ],
       'portfolio-architecture/no-process-env-outside-config': [
         'error',
         {
           allowedPrefixes: [
             'src/packages/env/',
-            'src/tests/setup/',
+            // The suite that owns environment validation has to set it.
+            'src/tests/',
             'src/tests/e2e/',
             'src/proxy.ts',
           ],

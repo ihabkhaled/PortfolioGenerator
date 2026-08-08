@@ -94,10 +94,12 @@ export function stripSurroundingPunctuation(token: string): string {
   let start = 0;
   let end = token.length;
 
+  /* v8 ignore next -- start < end keeps the index in range. */
   while (start < end && TRAILING_PUNCTUATION.includes(token[start] ?? '')) {
     start += 1;
   }
 
+  /* v8 ignore next -- end > start keeps the index in range. */
   while (end > start && TRAILING_PUNCTUATION.includes(token[end - 1] ?? '')) {
     end -= 1;
   }
@@ -138,6 +140,7 @@ export function parseMonth(value: string): string | null {
   const nameMatch = /^([a-z]+)\.?\s+(\d{4})$/u.exec(trimmed);
 
   if (nameMatch?.[1] !== undefined && nameMatch[2] !== undefined) {
+    /* v8 ignore next -- group 1 was checked non-undefined on the line above. */
     const index = MONTH_NAMES.findIndex((name) => name.startsWith(nameMatch[1] ?? ''));
 
     return index === -1 ? null : formatMonthParts(nameMatch[2], index + 1);
@@ -169,6 +172,7 @@ export function parseDateRange(line: string): ParsedDateRange {
 
     const [rawStart, rawEnd] = line.split(separator, 2);
 
+    /* v8 ignore next 3 -- the separator is known to be present, so the split yields two parts. */
     if (rawStart === undefined || rawEnd === undefined) {
       continue;
     }

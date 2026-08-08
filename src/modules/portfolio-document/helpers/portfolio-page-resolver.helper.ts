@@ -26,6 +26,7 @@ export function resolvePageSlug(segments: readonly string[] | undefined): string
     return null;
   }
 
+  /* v8 ignore next -- length is 0 or 1 here, and 0 returned above. */
   return segments[0] ?? null;
 }
 

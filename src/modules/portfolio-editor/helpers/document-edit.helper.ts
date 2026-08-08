@@ -102,6 +102,7 @@ export function moveItem<TItem>(
   const next = [...items];
   const [moved] = next.splice(from, 1);
 
+  /* v8 ignore next 3 -- the bounds check above makes the splice always yield an item. */
   if (moved === undefined) {
     return items;
   }

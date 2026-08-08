@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import type { ReactElement } from 'react';
 
+import { DeletePortfolioContainer } from '@/modules/account/account-ui';
 import { requireOwner } from '@/modules/auth/server';
 import {
   buildPortfolioListItems,
@@ -28,6 +29,7 @@ export const metadata: Metadata = {
 export default async function DashboardPage(): Promise<ReactElement> {
   const owner = await requireOwner();
   const t = await getServerTranslations(I18N_NAMESPACES.dashboard);
+  const account = await getServerTranslations(I18N_NAMESPACES.account);
   const portfolios = await listOwnedPortfolios(owner.id);
 
   const items: readonly PortfolioListItem[] = buildPortfolioListItems(portfolios, t).map(
@@ -55,6 +57,14 @@ export default async function DashboardPage(): Promise<ReactElement> {
               {t('actions.view')}
             </AppLink>
           ) : null}
+          <DeletePortfolioContainer
+            portfolioId={item.id}
+            label={account('portfolio.delete')}
+            confirmLabel={account('portfolio.deleteConfirm')}
+            cancelLabel={account('portfolio.deleteCancel')}
+            submittingLabel={account('portfolio.deleting')}
+            confirmMessage={account('portfolio.confirmMessage')}
+          />
         </>
       ),
     }),

@@ -3,6 +3,7 @@ import { formatIssues, parseSchema } from '@/packages/zod';
 import { DOCUMENT_MIGRATION_STEPS } from '../constants/portfolio-migration.constants';
 import { portfolioDocumentSchema } from '../schemas/portfolio-document.schema';
 import type { PortfolioDocument } from '../types/portfolio-document.types';
+import type { DocumentMigrationStep } from '../types/portfolio-migration.types';
 
 /**
  * The only supported way to read a stored document.
@@ -37,10 +38,26 @@ export function upgradeToCurrentVersion(input: unknown): unknown {
     return input;
   }
 
+  return applyMigrationSteps(input, startVersion, DOCUMENT_MIGRATION_STEPS);
+}
+
+/**
+ * Walk a chain of steps, taking the argument rather than the module constant.
+ *
+ * Split out so the chain is testable *before* the first real migration exists.
+ * The alternative — testing it only when version 2 arrives — means the code
+ * that has to run correctly against every document ever published gets its
+ * first test on the day it first matters.
+ */
+export function applyMigrationSteps(
+  input: unknown,
+  startVersion: number,
+  steps: readonly DocumentMigrationStep[],
+): unknown {
   let document = input;
   let version = startVersion;
 
-  for (const step of DOCUMENT_MIGRATION_STEPS) {
+  for (const step of steps) {
     if (step.from !== version) {
       continue;
     }

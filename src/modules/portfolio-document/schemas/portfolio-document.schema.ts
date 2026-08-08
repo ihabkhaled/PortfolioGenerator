@@ -70,7 +70,10 @@ const safeUrl = z
   .refine((value) => normalizeSafeUrl(value) !== null, {
     message: 'Only https: and mailto: URLs can be published',
   })
-  .transform((value) => normalizeSafeUrl(value) ?? value);
+  .transform((value) => {
+    /* v8 ignore next -- the refine above rejects anything normalizeSafeUrl would refuse. */
+    return normalizeSafeUrl(value) ?? value;
+  });
 
 export const linkSchema = z.object({
   id: identifier,

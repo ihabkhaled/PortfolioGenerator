@@ -9,6 +9,7 @@
  */
 
 export { PortfolioTemplate } from './components/portfolio-template';
+export { SectionRenderer } from './components/section-renderer';
 export { buildPortfolioLabels } from './helpers/portfolio-labels.helper';
 export { formatDateRange, formatMonth } from './helpers/date-range.helper';
 export {

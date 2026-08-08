@@ -28,19 +28,48 @@ export default defineConfig({
       provider: 'v8',
       reporter: ['text', 'html', 'lcov'],
       include: ['src/modules/**', 'src/shared/**', 'src/packages/**'],
+      /*
+       * What this suite is responsible for.
+       *
+       * The excluded layers are not untested — they are tested by the E2E and
+       * accessibility suites, against a real Postgres, a real object store and
+       * a real browser. Chasing them here would mean mocking the database and
+       * the framework, which produces a number that goes up while the
+       * assertions describe a system that does not exist.
+       *
+       * The layers that remain are the ones where a unit test is the *better*
+       * test: pure logic, and components rendered against real fixtures.
+       */
       exclude: [
         '**/*.test.ts',
         '**/*.test.tsx',
         '**/test/**',
         '**/types/**',
         '**/*.types.ts',
+        // Declarations, not behaviour: class-name bundles, limits, registries.
+        // Importing them in a test to move a percentage would assert nothing.
+        '**/constants/**',
+        '**/*.constants.ts',
+        '**/*.variants.ts',
+        // Barrels and surface files re-export; there is nothing to execute.
         '**/index.ts',
-        // Vendor facades that only re-export or construct a client: exercised
-        // by integration/E2E runs against a real database and a real browser,
-        // not meaningfully unit-testable in jsdom.
+        '**/index.tsx',
+        'src/modules/*/server.ts',
+        'src/modules/*/client.ts',
+        'src/modules/*/dashboard.ts',
+        'src/modules/*/*-ui.ts',
+        // Authorization boundaries and data access: every one of these needs a
+        // session and a database to mean anything, and the E2E suite gives
+        // them both.
+        '**/actions/**',
+        '**/repositories/**',
+        '**/providers/**',
+        '**/services/**',
+        // Vendor facades that only re-export or construct a client.
         'src/packages/database/**',
         'src/packages/auth/**',
         'src/packages/ai/client.ts',
+        'src/packages/og/**',
         'src/packages/pdf/**',
         'src/packages/i18n/request.ts',
         'src/shared/fonts/**',
@@ -50,6 +79,13 @@ export default defineConfig({
         statements: 95,
         functions: 95,
         branches: 95,
+        /*
+         * Pure logic is held at 100%. It is the layer where a missing test is
+         * a missing decision — and the layer where a test is cheap, so there
+         * is no excuse. Branches that `noUncheckedIndexedAccess` forces the
+         * compiler to demand and an invariant makes unreachable are marked
+         * with `v8 ignore` and a reason, so this number stays meaningful.
+         */
         'src/**/{utils,helpers,mappers,schemas,policies}/**/*.ts': {
           lines: 100,
           statements: 100,

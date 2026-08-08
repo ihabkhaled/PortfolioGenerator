@@ -3,6 +3,7 @@ export const APP_LOCALE = 'en';
 
 /** Message namespaces, so a typo in a namespace is a type error, not a blank string. */
 export const I18N_NAMESPACES = {
+  account: 'account',
   app: 'app',
   auth: 'auth',
   dashboard: 'dashboard',

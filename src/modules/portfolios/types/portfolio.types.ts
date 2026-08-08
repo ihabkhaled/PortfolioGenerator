@@ -32,7 +32,7 @@ export interface PortfolioSummary {
   readonly slug: string;
   readonly status: PortfolioStatus;
   readonly displayName: string;
-  readonly headline: string;
+  readonly headline: string | null;
   readonly updatedAt: Date;
   readonly publishedAt: Date | null;
 }

@@ -17,7 +17,14 @@ export function buildPortfolioMetadata(input: PortfolioMetadataInput): Metadata 
   const values = buildPortfolioMetadataValues(input);
 
   return {
-    title: values.title,
+    /**
+     * Absolute on purpose. The root layout defines a `%s · PortfolioGenerate`
+     * template, which is right for our own pages and wrong for a tenant's:
+     * a published portfolio is their professional artifact, and stamping the
+     * platform's name into their search results and browser tab is us taking
+     * credit on their page.
+     */
+    title: { absolute: values.title },
     description: values.description,
     alternates: { canonical: values.canonical },
     robots: values.indexable

@@ -40,7 +40,14 @@ export default [
      * validated against a strict pattern before any call; user input never
      * reaches these paths.
      */
-    files: ['src/modules/storage/providers/local-object-storage.provider.ts', 'support/*.mts'],
+    files: [
+      'src/modules/storage/providers/local-object-storage.provider.ts',
+      'support/*.mts',
+      // The alias resolver stats candidate module paths built from an import
+      // specifier that the TypeScript compiler has already resolved. It runs at
+      // build time in a developer's own checkout, never on a request.
+      'support/alias-resolver.mjs',
+    ],
     rules: {
       'security/detect-non-literal-fs-filename': 'off',
     },
@@ -52,6 +59,22 @@ export default [
     files: ['src/packages/logger/**'],
     rules: {
       'no-console': 'off',
+    },
+  },
+  {
+    /**
+     * EXC-0005 — the URL policy and its test.
+     *
+     * `sonarjs/no-clear-text-protocols` autofixes `http://` to `https://`. In
+     * a test whose entire purpose is asserting that cleartext URLs are
+     * *rejected*, that fixer quietly inverts the assertion — it did exactly
+     * that once already, and the suite still passed. The policy itself names
+     * `http:` in prose for the same reason.
+     */
+    files: ['src/tests/unit/safe-url.test.ts', 'src/shared/utils/safe-url.util.ts'],
+    rules: {
+      'sonarjs/no-clear-text-protocols': 'off',
+      'unicorn/prefer-https': 'off',
     },
   },
   {

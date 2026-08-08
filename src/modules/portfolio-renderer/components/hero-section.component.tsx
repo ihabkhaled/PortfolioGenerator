@@ -22,7 +22,9 @@ export function HeroSection(props: Readonly<HeroSectionProps>): ReactElement {
             </p>
           )}
           <h1 className={heroClasses.name}>{props.displayName}</h1>
-          <p className={heroClasses.headline}>{props.headline}</p>
+          {props.headline === null ? null : (
+            <p className={heroClasses.headline}>{props.headline}</p>
+          )}
           {props.summary === null ? null : <p className={heroClasses.summary}>{props.summary}</p>}
           <div className={heroClasses.socialRow}>{props.links}</div>
         </div>

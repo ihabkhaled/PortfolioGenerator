@@ -33,6 +33,13 @@ export default [
        * real; its application to props and command methods is not.
        */
       'unicorn/consistent-boolean-name': 'off',
+      /**
+       * Off: its autofix rewrites `'\\u003c'` into a `String.raw` template and
+       * keeps both backslashes, turning a deliberate JSON escape into a
+       * literal backslash. A rule that silently changes what a string *is*
+       * cannot be allowed near the JSON-LD serializer.
+       */
+      'unicorn/prefer-string-raw': 'off',
       // Its autofix rewrites `/** One line. */` into a three-line block with no
       // leading asterisks, which is neither JSDoc nor readable. Comment layout
       // is Prettier's job.

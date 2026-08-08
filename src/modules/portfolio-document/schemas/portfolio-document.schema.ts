@@ -86,7 +86,11 @@ const contactFieldSchema = z.object({
 
 const identitySchema = z.object({
   displayName: requiredText(DOCUMENT_LIMITS.displayName),
-  headline: requiredText(DOCUMENT_LIMITS.headline),
+  // Nullable because a draft is a real document: a portfolio created from
+  // the manual path has no headline yet, and forcing a placeholder would put
+  // a word nobody chose on a page someone might publish. Publishing is where
+  // a headline becomes required.
+  headline: boundedText(DOCUMENT_LIMITS.headline).nullable(),
   summary: boundedText(DOCUMENT_LIMITS.summary).nullable(),
   location: boundedText(DOCUMENT_LIMITS.location).nullable(),
   portraitAssetId: z.string().max(DOCUMENT_LIMITS.assetId).nullable(),

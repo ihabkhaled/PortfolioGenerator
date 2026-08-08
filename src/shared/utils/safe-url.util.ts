@@ -52,10 +52,6 @@ export function normalizeSafeUrl(candidate: string): string | null {
     return null;
   }
 
-  if (parsed.protocol === 'https:' && parsed.hostname.length === 0) {
-    return null;
-  }
-
   return parsed.href;
 }
 

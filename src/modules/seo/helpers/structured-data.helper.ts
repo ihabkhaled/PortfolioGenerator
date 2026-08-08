@@ -5,22 +5,26 @@ import type { PersonStructuredData } from '../types/seo.types';
 /**
  * `Person` structured data built strictly from published, reviewed fields.
  *
- * Optional keys are omitted rather than emitted empty: a `sameAs` array of one
- * blank string, or an address with no locality, is a claim about a real person
- * that nobody made.
+ * Absent keys are omitted rather than emitted empty. A `sameAs` array holding
+ * one blank string, or an address with no locality, is a machine-readable claim
+ * about a real person that nobody actually made — and structured data is
+ * exactly the surface where an invented claim gets believed.
  */
 export function buildPersonStructuredData(
   document: PortfolioDocument,
   url: string,
 ): PersonStructuredData {
   const sameAs = document.links.filter((link) => link.visible).map((link) => link.url);
-
-  return {
+  const structuredData: PersonStructuredData = {
     '@context': 'https://schema.org',
     '@type': 'Person',
     name: document.identity.displayName,
     url,
-    ...(document.identity.headline !== '' && { jobTitle: document.identity.headline }),
+  };
+
+  return {
+    ...structuredData,
+    ...(document.identity.headline !== null && { jobTitle: document.identity.headline }),
     ...(document.identity.summary !== null && { description: document.identity.summary }),
     ...(document.identity.location !== null && {
       address: {
@@ -36,10 +40,10 @@ export function buildPersonStructuredData(
  * Serialise for a `<script type="application/ld+json">` body.
  *
  * `<` is escaped because a `</script>` sequence inside a JSON string value
- * would close the tag early and turn published content into markup — the one
- * XSS vector that survives React's escaping, since script bodies are not
+ * would close the tag early and turn published content into markup. It is the
+ * one XSS vector React's escaping does not cover, because a script body is not
  * escaped by it.
  */
 export function serializeStructuredData(data: PersonStructuredData): string {
-  return JSON.stringify(data).replaceAll('<', String.raw`\u003c`);
+  return JSON.stringify(data).replaceAll('<', '\\u003c');
 }

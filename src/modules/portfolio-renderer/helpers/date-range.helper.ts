@@ -1,3 +1,5 @@
+import { MONTH_PATTERN } from '@/modules/portfolio-document';
+
 import { MONTH_LABELS } from '../constants/date-format.constants';
 
 /**
@@ -11,7 +13,10 @@ import { MONTH_LABELS } from '../constants/date-format.constants';
  */
 
 export function formatMonth(value: string | null): string | null {
-  if (value === null) {
+  // The shape is checked here as well as in the schema. This helper is
+  // exported, and a naive split turns `not-a-month` into the year "not" — a
+  // plausible-looking wrong date is worse than no date at all.
+  if (value === null || !MONTH_PATTERN.test(value)) {
     return null;
   }
 

@@ -6,7 +6,7 @@ import type { FactEntry, TimelineEntry } from './renderer.types';
 
 export interface HeroSectionProps {
   readonly displayName: string;
-  readonly headline: string;
+  readonly headline: string | null;
   readonly summary: string | null;
   readonly availabilityLabel: string | null;
   readonly portrait: ReactNode;
@@ -62,7 +62,7 @@ export interface CustomSectionProps {
 
 export interface PortfolioShellProps {
   readonly displayName: string;
-  readonly headline: string;
+  readonly headline: string | null;
   readonly navigation: ReactNode;
   readonly navigationLabel: string;
   readonly footerNote: string;

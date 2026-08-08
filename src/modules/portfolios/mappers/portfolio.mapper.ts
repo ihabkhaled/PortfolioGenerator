@@ -87,7 +87,7 @@ export function readIdentity(draftDocument: unknown): PortfolioDocument['identit
   if (document === null) {
     return {
       displayName: '',
-      headline: '',
+      headline: null,
       summary: null,
       location: null,
       portraitAssetId: null,

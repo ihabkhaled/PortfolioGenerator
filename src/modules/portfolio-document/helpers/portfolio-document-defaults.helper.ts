@@ -19,7 +19,7 @@ export function createEmptyPortfolioDocument(displayName: string): PortfolioDocu
     schemaVersion: PORTFOLIO_SCHEMA_VERSION,
     identity: {
       displayName,
-      headline: '',
+      headline: null,
       summary: null,
       location: null,
       portraitAssetId: null,

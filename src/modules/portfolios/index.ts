@@ -1,5 +1,6 @@
 /** Public surface of the portfolios module (client-safe types only). */
 
+export type { PortfolioRow } from './types/portfolio-row.types';
 export type {
   CreatePortfolioInput,
   OwnedPortfolio,

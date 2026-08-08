@@ -36,4 +36,24 @@ export default [
       },
     },
   },
+  {
+    /**
+     * Build and maintenance scripts run in Node, not in a browser or a bundle,
+     * so the platform globals they use are declared here rather than pulled in
+     * as a dependency for four names.
+     */
+    files: ['support/**/*.{mjs,mts}', 'eslint/**/*.mjs'],
+    languageOptions: {
+      globals: {
+        Buffer: 'readonly',
+        URL: 'readonly',
+        URLSearchParams: 'readonly',
+        console: 'readonly',
+        fetch: 'readonly',
+        performance: 'readonly',
+        process: 'readonly',
+        structuredClone: 'readonly',
+      },
+    },
+  },
 ];

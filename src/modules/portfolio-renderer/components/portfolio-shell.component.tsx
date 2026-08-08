@@ -14,7 +14,9 @@ export function PortfolioShell(props: Readonly<PortfolioShellProps>): ReactEleme
         <div className={portfolioShellClasses.headerInner}>
           <div className={portfolioShellClasses.brand}>
             <span className={portfolioShellClasses.brandName}>{props.displayName}</span>
-            <span className={portfolioShellClasses.brandHeadline}>{props.headline}</span>
+            {props.headline === null ? null : (
+              <span className={portfolioShellClasses.brandHeadline}>{props.headline}</span>
+            )}
           </div>
           <nav aria-label={props.navigationLabel} className={portfolioShellClasses.nav}>
             {props.navigation}

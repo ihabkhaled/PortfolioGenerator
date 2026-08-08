@@ -1,0 +1,158 @@
+{
+  "app": {
+    "name": "PortfolioGenerate",
+    "tagline": "Turn a CV into a portfolio you control",
+    "skipToContent": "Skip to content",
+    "themeSwitchLabel": "Switch theme",
+    "theme": {
+      "light": "Light",
+      "dark": "Dark",
+      "system": "System"
+    },
+    "loading": "Loading",
+    "footerNote": "Your CV stays private. Only what you review and publish becomes public.",
+    "nav": {
+      "dashboard": "Dashboard",
+      "signIn": "Sign in",
+      "signUp": "Create account",
+      "signOut": "Sign out"
+    }
+  },
+  "marketing": {
+    "eyebrow": "CV to portfolio",
+    "title": "Your CV, published as a portfolio you actually control.",
+    "lead": "Upload a PDF. Review every extracted fact. Compose your pages. Claim a URL and publish.",
+    "supporting": "Nothing goes public until you say so, and no AI runs when a visitor loads your page.",
+    "primaryCta": "Create your portfolio",
+    "secondaryCta": "Sign in",
+    "howTitle": "How it works",
+    "howLead": "Four steps, and you stay the editor of every one of them.",
+    "steps": {
+      "uploadTitle": "Upload your CV",
+      "uploadBody": "A PDF, stored privately. Text is extracted locally before any model sees it.",
+      "reviewTitle": "Review the draft",
+      "reviewBody": "Every field is editable. Warnings point at the values worth a second look.",
+      "composeTitle": "Compose your pages",
+      "composeBody": "Reorder, hide, add sections and extra pages. No code, no templates to fight.",
+      "publishTitle": "Claim a URL and publish",
+      "publishBody": "Pick your slug, preview the result, and publish when it reads right."
+    },
+    "principlesTitle": "What the product promises",
+    "principles": {
+      "controlTitle": "You approve every public fact",
+      "controlBody": "Extraction produces a draft. Publishing is always an explicit action you take.",
+      "privacyTitle": "Your CV stays private",
+      "privacyBody": "The uploaded file is never publicly addressable and you can delete it at any time.",
+      "honestTitle": "Nothing is invented",
+      "honestBody": "The extractor is instructed to leave a field empty rather than guess at it.",
+      "fastTitle": "Public pages are cheap and fast",
+      "fastBody": "A published portfolio is served from a snapshot and needs no AI to render."
+    }
+  },
+  "auth": {
+    "signInTitle": "Sign in",
+    "signInLead": "Continue to your dashboard.",
+    "signUpTitle": "Create your account",
+    "signUpLead": "One account, as many portfolios as you need.",
+    "nameLabel": "Name",
+    "emailLabel": "Email",
+    "passwordLabel": "Password",
+    "passwordHint": "At least 12 characters.",
+    "submitSignIn": "Sign in",
+    "submitSignUp": "Create account",
+    "pendingSignIn": "Signing in",
+    "pendingSignUp": "Creating your account",
+    "toSignUp": "No account yet? Create one.",
+    "toSignIn": "Already have an account? Sign in.",
+    "signOut": "Sign out",
+    "errors": {
+      "invalidCredentials": "That email and password combination did not match an account.",
+      "emailTaken": "An account already exists for that email.",
+      "weakPassword": "Choose a password of at least 12 characters.",
+      "invalidEmail": "Enter a valid email address.",
+      "nameRequired": "Enter the name you want to sign in as.",
+      "unknown": "Something went wrong. Try again."
+    }
+  },
+  "errors": {
+    "title": "Something went wrong",
+    "lead": "The page could not be rendered. The problem has been logged.",
+    "retry": "Try again",
+    "notFoundTitle": "Page not found",
+    "notFoundLead": "There is nothing published at this address.",
+    "backHome": "Go to the home page",
+    "unauthorized": "You do not have access to that portfolio."
+  },
+  "portfolio": {
+    "sections": {
+      "hero": "Profile",
+      "about": "About",
+      "experience": "Experience",
+      "projects": "Projects",
+      "skills": "Skills",
+      "education": "Education",
+      "certifications": "Certifications",
+      "languages": "Languages",
+      "contact": "Contact",
+      "custom": "More"
+    },
+    "present": "Present",
+    "emailLabel": "Email",
+    "phoneLabel": "Phone",
+    "locationLabel": "Location",
+    "availability": "Open to work",
+    "contactCta": "Get in touch",
+    "skipToContent": "Skip to content",
+    "builtWith": "Published with PortfolioGenerate",
+    "navigationLabel": "Portfolio pages",
+    "portraitAlt": "Portrait"
+  },
+  "dashboard": {
+    "title": "Your portfolios",
+    "lead": "Each portfolio has a private draft and, once published, a public address you choose.",
+    "empty": {
+      "title": "No portfolios yet",
+      "description": "Create one, upload your CV, and review what the extractor found before anything goes public."
+    },
+    "listTitle": "Portfolios",
+    "create": {
+      "title": "Create a portfolio",
+      "lead": "Start with your name. You can change the public address any time before you publish.",
+      "nameLabel": "Display name",
+      "namePlaceholder": "Jane Doe",
+      "slugLabel": "Public address",
+      "slugHint": "Leave empty and we will suggest one from your name.",
+      "submit": "Create",
+      "pending": "Creating"
+    },
+    "status": {
+      "draft": "Draft",
+      "published": "Published",
+      "unpublished": "Unpublished"
+    },
+    "actions": {
+      "edit": "Edit",
+      "preview": "Preview",
+      "view": "View live",
+      "import": "Import CV",
+      "publish": "Publish"
+    },
+    "meta": {
+      "updated": "Updated {when}",
+      "published": "Published {when}",
+      "neverPublished": "Not published yet"
+    },
+    "errors": {
+      "invalidInput": "Check the name and address and try again.",
+      "limitReached": "You have reached the maximum number of portfolios for this account.",
+      "slugTaken": "That address is already taken. Try another.",
+      "notFound": "That portfolio no longer exists.",
+      "versionConflict": "This portfolio changed in another tab. Reload before saving again.",
+      "slug.empty": "Choose a public address.",
+      "slug.too-short": "The address needs at least 3 characters.",
+      "slug.too-long": "The address is too long.",
+      "slug.invalid-characters": "Use lowercase letters, numbers and single hyphens only.",
+      "slug.reserved": "That address is reserved by the platform. Try another."
+    }
+  }
+}

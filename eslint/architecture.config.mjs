@@ -90,13 +90,7 @@ const layerPolicies = [
     message: 'Stores hold client state only; server data belongs to the server.',
   },
   {
-    from: [
-      'module-utils',
-      'module-helpers',
-      'module-mappers',
-      'module-schemas',
-      'module-policies',
-    ],
+    from: ['module-utils', 'module-helpers', 'module-mappers', 'module-schemas', 'module-policies'],
     forbid: [
       'module-components',
       'module-containers',
@@ -208,11 +202,19 @@ export default [
       'portfolio-architecture/no-inline-declarations': 'error',
       'portfolio-architecture/no-inline-component-logic': 'error',
       'portfolio-architecture/no-restricted-layer-imports': ['error', { policies: layerPolicies }],
-      'portfolio-architecture/no-cross-module-deep-imports': 'error',
+      'portfolio-architecture/no-cross-module-deep-imports': [
+        'error',
+        { surfaces: ['index', 'server', 'client', 'dashboard'] },
+      ],
       'portfolio-architecture/no-process-env-outside-config': [
         'error',
         {
-          allowedPrefixes: ['src/packages/env/', 'src/tests/setup/', 'src/tests/e2e/', 'src/proxy.ts'],
+          allowedPrefixes: [
+            'src/packages/env/',
+            'src/tests/setup/',
+            'src/tests/e2e/',
+            'src/proxy.ts',
+          ],
         },
       ],
       'portfolio-architecture/no-direct-browser-api-outside-packages': 'error',
@@ -232,7 +234,12 @@ export default [
         'error',
         {
           allowedPrefixes: [
+            // The repository declares them; the module's own server surface
+            // re-exports them; the public read service is the one consumer
+            // that legitimately has no owner.
             'src/modules/portfolios/repositories/',
+            'src/modules/portfolios/server.ts',
+            'src/modules/portfolios/services/public-portfolio.service.ts',
             'src/modules/publishing/',
             'src/modules/seo/',
             'src/modules/admin-health/',

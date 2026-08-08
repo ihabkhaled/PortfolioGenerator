@@ -3,12 +3,22 @@
   "compilerOptions": {
     "incremental": false,
     "tsBuildInfoFile": null,
-    "module": "nodenext",
-    "moduleResolution": "nodenext",
-    "jsx": "react-jsx",
+    /**
+     * Build-time files: the Next config, PostCSS config, and the `support/`
+     * scripts Node runs directly with type stripping.
+     *
+     * `verbatimModuleSyntax` is off for this project only. It is exactly right
+     * for application code, where an accidental value import of a type has a
+     * runtime cost; here it just argues with `next.config.ts`, which Next
+     * compiles itself and which is neither declared ESM by `package.json` nor
+     * named `.mts`.
+     */
+    "module": "preserve",
+    "moduleResolution": "bundler",
+    "verbatimModuleSyntax": false,
     "types": ["node"],
     "noEmit": true
   },
-  "include": ["support/**/*.mts", "next.config.ts", "postcss.config.mjs"],
+  "include": ["support/**/*.mts", "next.config.ts", "prisma.config.ts", "postcss.config.mjs"],
   "exclude": ["node_modules"]
 }

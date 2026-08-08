@@ -10,6 +10,67 @@ import { getSourcePath, isComponentFile, toPosixPath } from '../shared/source-ut
 
 const TRANSFORM_METHODS = new Set(['map', 'filter', 'reduce', 'sort', 'flatMap', 'forEach']);
 
+/**
+ * `props.items.map(...)` is rendering, not transformation.
+ *
+ * The reference architecture this rule came from puts every `.map()` in a
+ * container, because there every list is client-side. The public portfolio
+ * renderer is server-rendered with no containers at all — inventing one per
+ * list would add a client boundary to a page whose whole point is not having
+ * one. So the rule keeps its real intent (no data *transformation* in a
+ * component) while allowing a component to iterate a prop it was handed.
+ *
+ * `props.items.filter(...).map(...)` is still a violation: the filter is the
+ * decision, and decisions belong upstream.
+ */
+function collectRowBindings(node) {
+  const bindings = new Set();
+  let current = node.parent;
+
+  while (current) {
+    const isMapCallback =
+      (current.type === 'ArrowFunctionExpression' || current.type === 'FunctionExpression') &&
+      current.parent?.type === 'CallExpression' &&
+      current.parent.callee?.type === 'MemberExpression' &&
+      current.parent.callee.property?.type === 'Identifier' &&
+      current.parent.callee.property.name === 'map';
+
+    if (isMapCallback) {
+      const [firstParameter] = current.params;
+
+      if (firstParameter?.type === 'Identifier') {
+        bindings.add(firstParameter.name);
+      }
+    }
+
+    current = current.parent;
+  }
+
+  return bindings;
+}
+
+function isDirectPropIteration(node) {
+  if (node.callee.property.name !== 'map') {
+    return false;
+  }
+
+  let target = node.callee.object;
+
+  // Unwrap `props.a.b` chains down to the root identifier.
+  while (target.type === 'MemberExpression') {
+    target = target.object;
+  }
+
+  if (target.type !== 'Identifier') {
+    return false;
+  }
+
+  // Either the component's own props, or a row already handed to it by an
+  // enclosing `.map()` — `props.entries.map((entry) => entry.tags.map(...))`
+  // is still just rendering the data it was given.
+  return target.name === 'props' || collectRowBindings(node).has(target.name);
+}
+
 function isInsideJsxAttribute(node) {
   let current = node.parent;
 
@@ -89,7 +150,8 @@ export default {
           isInsideJsxTree(node) &&
           node.callee.type === 'MemberExpression' &&
           node.callee.property.type === 'Identifier' &&
-          TRANSFORM_METHODS.has(node.callee.property.name)
+          TRANSFORM_METHODS.has(node.callee.property.name) &&
+          !isDirectPropIteration(node)
         ) {
           context.report({
             node,
@@ -109,12 +171,20 @@ export default {
       },
       NewExpression(node) {
         if (node.callee.type === 'Identifier' && node.callee.name === 'Date') {
-          context.report({ node, messageId: 'inlineComputation', data: { what: 'new Date()' } });
+          context.report({
+            node,
+            messageId: 'inlineComputation',
+            data: { what: 'new Date()' },
+          });
         }
       },
       MemberExpression(node) {
         if (node.object.type === 'Identifier' && node.object.name === 'Intl') {
-          context.report({ node, messageId: 'inlineComputation', data: { what: 'Intl.*' } });
+          context.report({
+            node,
+            messageId: 'inlineComputation',
+            data: { what: 'Intl.*' },
+          });
         }
       },
       Literal(node) {

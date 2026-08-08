@@ -46,7 +46,11 @@ export default {
     return {
       CallExpression(node) {
         if (node.callee.type === 'Identifier' && isHookName(node.callee.name)) {
-          context.report({ node, messageId: 'hookCall', data: { name: node.callee.name } });
+          context.report({
+            node,
+            messageId: 'hookCall',
+            data: { name: node.callee.name },
+          });
         }
 
         if (
@@ -78,7 +82,11 @@ export default {
               specifier.imported.type === 'Identifier' &&
               REACT_BUILTIN_HOOKS.has(specifier.imported.name)
             ) {
-              context.report({ node: specifier, messageId: 'hookImport', data: { source } });
+              context.report({
+                node: specifier,
+                messageId: 'hookImport',
+                data: { source },
+              });
             }
           }
         }

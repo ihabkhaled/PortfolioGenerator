@@ -58,7 +58,11 @@ export default {
           return;
         }
 
-        context.report({ node, messageId: 'unscoped', data: { name: node.name } });
+        context.report({
+          node,
+          messageId: 'unscoped',
+          data: { name: node.name },
+        });
       },
     };
   },

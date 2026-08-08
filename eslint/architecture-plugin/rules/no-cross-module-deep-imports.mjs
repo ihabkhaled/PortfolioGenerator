@@ -21,13 +21,30 @@ export default {
       description:
         "Modules may only be imported through their public surface '@/modules/<feature>'.",
     },
-    schema: [],
+    schema: [
+      {
+        type: 'object',
+        properties: {
+          /**
+           * Additional public surface files a module may expose beside
+           * `index.ts`. This repo uses `server.ts` for surfaces guarded by
+           * `server-only` and `dashboard.ts` for authoring UI, so a client
+           * component importing a type never drags the database client into
+           * its bundle. Anything not listed here is still internal.
+           */
+          surfaces: { type: 'array', items: { type: 'string' } },
+        },
+        additionalProperties: false,
+      },
+    ],
     messages: {
       deepImport:
-        "Deep import into module '{{module}}' internals is forbidden. Import from '@/modules/{{module}}' — its index.ts decides what is public.",
+        "Deep import into module '{{module}}' internals is forbidden. Import from '@/modules/{{module}}' or one of its declared surfaces — the module decides what is public.",
     },
   },
   create(context) {
+    const options = context.options[0] ?? {};
+    const surfaces = options.surfaces ?? ['index'];
     const importerSource = getSourcePath(toPosixPath(context.filename));
 
     if (!importerSource) {
@@ -51,12 +68,19 @@ export default {
         }
 
         const moduleRoot = `src/modules/${targetModule}`;
-        const isPublicSurface = [moduleRoot, `${moduleRoot}/`, `${moduleRoot}/index`].includes(
-          resolved,
-        );
+        const allowed = [
+          moduleRoot,
+          `${moduleRoot}/`,
+          ...surfaces.map((surface) => `${moduleRoot}/${surface}`),
+        ];
+        const isPublicSurface = allowed.includes(resolved);
 
         if (!isPublicSurface) {
-          context.report({ node, messageId: 'deepImport', data: { module: targetModule } });
+          context.report({
+            node,
+            messageId: 'deepImport',
+            data: { module: targetModule },
+          });
         }
       },
     };

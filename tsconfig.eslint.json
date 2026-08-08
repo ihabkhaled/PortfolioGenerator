@@ -10,6 +10,7 @@
     "src/**/*.ts",
     "src/**/*.tsx",
     "support/**/*.mts",
+    "eslint/**/*.d.mts",
     "*.ts",
     "*.mts",
     "*.mjs",

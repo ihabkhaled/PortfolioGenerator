@@ -78,7 +78,7 @@ export function isNodeBuiltinImport(importPath) {
     return true;
   }
 
-  const [head] = specifier.split('/');
+  const [head] = specifier.split('/', 1);
 
   return NODE_BUILTIN_MODULES.has(head ?? '');
 }

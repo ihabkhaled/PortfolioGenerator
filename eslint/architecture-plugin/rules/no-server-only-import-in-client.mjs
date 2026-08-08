@@ -46,7 +46,11 @@ export default {
         const specifier = String(node.source.value);
 
         if (FORBIDDEN_BARE_IMPORTS.has(specifier) || isNodeBuiltinImport(specifier)) {
-          context.report({ node, messageId: 'serverImport', data: { source: specifier } });
+          context.report({
+            node,
+            messageId: 'serverImport',
+            data: { source: specifier },
+          });
 
           return;
         }
@@ -61,7 +65,11 @@ export default {
           SERVER_FACADE_PATTERNS.some((pattern) => pattern.test(resolved)) ||
           isRouteHandlerFile(`${resolved}.ts`)
         ) {
-          context.report({ node, messageId: 'serverImport', data: { source: specifier } });
+          context.report({
+            node,
+            messageId: 'serverImport',
+            data: { source: specifier },
+          });
         }
       },
     };

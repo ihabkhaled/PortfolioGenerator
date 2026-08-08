@@ -21,16 +21,4 @@ export default [
       'security/detect-object-injection': 'off',
     },
   },
-  {
-    /**
-     * EXC-0001: the local object-storage adapter is the one place that touches
-     * the filesystem with a computed name. Keys are generated server-side from
-     * crypto randomness and validated against a strict pattern before any call;
-     * user input never reaches these paths. See docs/exceptions/.
-     */
-    files: ['src/modules/storage/providers/local-object-storage.provider.ts', 'support/*.mts'],
-    rules: {
-      'security/detect-non-literal-fs-filename': 'off',
-    },
-  },
 ];

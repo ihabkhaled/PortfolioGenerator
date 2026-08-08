@@ -59,7 +59,11 @@ export default {
       );
 
       if (match) {
-        context.report({ node, messageId: 'authoringImport', data: { specifier } });
+        context.report({
+          node,
+          messageId: 'authoringImport',
+          data: { specifier },
+        });
       }
     }
 

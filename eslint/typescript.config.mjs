@@ -24,10 +24,17 @@ export default [
     files: typescriptFiles,
     languageOptions: {
       parserOptions: {
-        projectService: {
-          allowDefaultProject: ['*.ts', '*.mts'],
-          defaultProject: 'tsconfig.eslint.json',
-        },
+        /**
+         * One explicit project rather than the project service. The service
+         * builds an *inferred* program for files matched by
+         * `allowDefaultProject`, and an inferred program does not pick up
+         * `@types/node` — which silently turned `process.env` into `any` in
+         * every root-level config file, exactly where typed rules matter least
+         * to a reader and most to correctness. `tsconfig.eslint.json` lists
+         * every file that gets type-aware linting; anything missing from it
+         * fails loudly instead.
+         */
+        project: ['./tsconfig.eslint.json'],
         tsconfigRootDir: path.resolve(import.meta.dirname, '..'),
       },
     },

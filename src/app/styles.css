@@ -1,0 +1,225 @@
+@import 'tailwindcss';
+
+/* Dark theme is attribute-driven so a portfolio's own theme setting and the
+   dashboard's theme toggle both resolve through the same mechanism. */
+@custom-variant dark (&:where([data-theme='dark'], [data-theme='dark'] *));
+
+/*
+ * Semantic design tokens. Components never hardcode palette values — they use
+ * these roles, which resolve per theme below. The direction is
+ * editorial-technology: layered neutral surfaces, hairline borders, and a
+ * single confident accent used sparingly.
+ */
+@theme inline {
+  --font-sans: var(--role-font-body);
+  --font-display: var(--role-font-display);
+  --font-mono: var(--role-font-mono);
+  --color-canvas: var(--role-canvas);
+  --color-primary: var(--role-primary);
+  --color-primary-readable: var(--role-primary-readable);
+  --color-primary-foreground: var(--role-primary-foreground);
+  --color-accent: var(--role-accent);
+  --color-accent-readable: var(--role-accent-readable);
+  --color-surface: var(--role-surface);
+  --color-surface-raised: var(--role-surface-raised);
+  --color-foreground: var(--role-foreground);
+  --color-muted: var(--role-muted);
+  --color-muted-foreground: var(--role-muted-foreground);
+  --color-border: var(--role-border);
+  --color-border-strong: var(--role-border-strong);
+  --color-ring: var(--role-ring);
+  --color-danger: var(--role-danger);
+  --color-danger-foreground: var(--role-danger-foreground);
+  --color-success: var(--role-success);
+  --color-success-readable: var(--role-success-readable);
+  --color-warning: var(--role-warning);
+  --color-warning-readable: var(--role-warning-readable);
+  --color-shadow: var(--role-shadow);
+}
+
+:root {
+  color-scheme: light;
+
+  --role-font-display: var(--font-display-latin), 'Segoe UI', ui-sans-serif, system-ui, sans-serif;
+  --role-font-body: var(--font-body-latin), 'Segoe UI', ui-sans-serif, system-ui, sans-serif;
+  --role-font-mono: var(--font-mono-latin), ui-monospace, 'Cascadia Mono', monospace;
+
+  --role-canvas: #f7f8fa;
+  --role-surface: #f1f3f7;
+  --role-surface-raised: #ffffff;
+  --role-foreground: #0e1420;
+  --role-muted: #eaedf2;
+  --role-muted-foreground: #57627a;
+  --role-border: #e3e7ee;
+  --role-border-strong: #cfd6e1;
+  --role-primary: #2258d8;
+  --role-primary-readable: #1b49b8;
+  --role-primary-foreground: #ffffff;
+  --role-accent: #6b4fd8;
+  --role-accent-readable: #5a3fc0;
+  --role-ring: #2258d8;
+  --role-shadow: #0e1420;
+  --role-danger: #b3261e;
+  --role-danger-foreground: #ffffff;
+  --role-success: #2f7d5b;
+  --role-success-readable: #256349;
+  --role-warning: #8a5a00;
+  --role-warning-readable: #6d4700;
+}
+
+[data-theme='dark'] {
+  color-scheme: dark;
+
+  --role-canvas: #0d1117;
+  --role-surface: #121924;
+  --role-surface-raised: #151c26;
+  --role-foreground: #e8edf5;
+  --role-muted: #1b2432;
+  --role-muted-foreground: #9aa6ba;
+  --role-border: #26303d;
+  --role-border-strong: #35414f;
+  --role-primary: #7fa6ff;
+  --role-primary-readable: #9dbaff;
+  --role-primary-foreground: #0d1117;
+  --role-accent: #a996ff;
+  --role-accent-readable: #bcaeff;
+  --role-ring: #7fa6ff;
+  --role-shadow: #01040a;
+  --role-danger: #f2867d;
+  --role-danger-foreground: #0d1117;
+  --role-success: #5fbf92;
+  --role-success-readable: #7ed0a9;
+  --role-warning: #e0b062;
+  --role-warning-readable: #edc684;
+}
+
+/*
+ * Portfolio accents. A tenant picks an accent name, never a raw colour value:
+ * arbitrary user CSS is a whole class of attacks we do not accept, and a fixed
+ * palette guarantees the contrast ratios the accessibility suite asserts.
+ */
+[data-accent='violet'] {
+  --role-primary: #6b4fd8;
+  --role-primary-readable: #5a3fc0;
+  --role-ring: #6b4fd8;
+}
+
+[data-theme='dark'][data-accent='violet'],
+[data-theme='dark'] [data-accent='violet'] {
+  --role-primary: #a996ff;
+  --role-primary-readable: #bcaeff;
+  --role-ring: #a996ff;
+}
+
+[data-accent='emerald'] {
+  --role-primary: #10715a;
+  --role-primary-readable: #0c5b49;
+  --role-ring: #10715a;
+}
+
+[data-theme='dark'][data-accent='emerald'],
+[data-theme='dark'] [data-accent='emerald'] {
+  --role-primary: #5fd0a6;
+  --role-primary-readable: #86e0bf;
+  --role-ring: #5fd0a6;
+}
+
+[data-accent='amber'] {
+  --role-primary: #9a5a00;
+  --role-primary-readable: #7d4900;
+  --role-ring: #9a5a00;
+}
+
+[data-theme='dark'][data-accent='amber'],
+[data-theme='dark'] [data-accent='amber'] {
+  --role-primary: #eab264;
+  --role-primary-readable: #f2c98d;
+  --role-ring: #eab264;
+}
+
+[data-accent='slate'] {
+  --role-primary: #3c4759;
+  --role-primary-readable: #2c3648;
+  --role-ring: #3c4759;
+}
+
+[data-theme='dark'][data-accent='slate'],
+[data-theme='dark'] [data-accent='slate'] {
+  --role-primary: #aab6c8;
+  --role-primary-readable: #c3cdda;
+  --role-ring: #aab6c8;
+}
+
+/*
+ * A portfolio's content is the tenant's, in the tenant's language. Arabic and
+ * Persian get a real typeface and a looser line height rather than a broken
+ * Latin fallback.
+ */
+:where([lang='ar'], [lang='fa']) {
+  --role-font-display: var(--font-arabic), 'Segoe UI', ui-sans-serif, sans-serif;
+  --role-font-body: var(--font-arabic), 'Segoe UI', ui-sans-serif, sans-serif;
+  --role-line-height-body: 1.9;
+}
+
+body {
+  min-height: 100dvh;
+  background-color: var(--role-canvas);
+  color: var(--role-foreground);
+  font-family: var(--role-font-body);
+  line-height: var(--role-line-height-body, 1.7);
+  -webkit-font-smoothing: antialiased;
+}
+
+/*
+ * The measured grid: a barely-there column rhythm that signals structure
+ * without becoming decoration. It sits behind content, never above it.
+ */
+.surface-grid {
+  background-image:
+    linear-gradient(
+      to right,
+      color-mix(in oklab, var(--role-border) 55%, transparent) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      to bottom,
+      color-mix(in oklab, var(--role-border) 55%, transparent) 1px,
+      transparent 1px
+    );
+  background-size: 4rem 4rem;
+  mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 30%, transparent 78%);
+}
+
+::selection {
+  background: color-mix(in oklab, var(--role-primary) 22%, transparent);
+}
+
+:where(a, button, summary, input, select, textarea):focus-visible {
+  outline: 2px solid var(--role-ring);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* Printing a portfolio should produce the document, not the site chrome. */
+@media print {
+  header,
+  footer,
+  [data-sonner-toaster] {
+    display: none !important;
+  }
+
+  .surface-grid {
+    background-image: none !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}

@@ -1,0 +1,287 @@
+// PortfolioGenerate data model.
+//
+// Two design decisions drive this schema:
+//
+//   1. Portfolio content is a document, read and written as a unit, so it lives
+//      in JSONB with runtime validation rather than a dozen joined tables. The
+//      canonical shape is `PortfolioDocument` in
+//      src/modules/portfolio-document — the database stores it, it does not
+//      define it.
+//   2. Draft and published are separate columns, not separate rows and not a
+//      status flag over one column. Publishing is then a copy inside one
+//      transaction, and there is no window in which a half-saved edit is live.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ---------------------------------------------------------------------------
+// Authentication (owned by better-auth; field names are its contract)
+// ---------------------------------------------------------------------------
+
+model User {
+  id            String   @id
+  name          String
+  email         String   @unique
+  emailVerified Boolean  @default(false)
+  image         String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  sessions      Session[]
+  accounts      Account[]
+  portfolios    Portfolio[]
+  resumeUploads ResumeUpload[]
+  aiRuns        AiRun[]
+  auditEvents   AuditEvent[]
+
+  @@map("users")
+}
+
+model Session {
+  id        String   @id
+  expiresAt DateTime
+  token     String   @unique
+  ipAddress String?
+  userAgent String?
+  userId    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("sessions")
+}
+
+model Account {
+  id                    String    @id
+  accountId             String
+  providerId            String
+  userId                String
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([providerId, accountId])
+  @@index([userId])
+  @@map("accounts")
+}
+
+model Verification {
+  id         String   @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([identifier])
+  @@map("verifications")
+}
+
+// ---------------------------------------------------------------------------
+// Portfolios
+// ---------------------------------------------------------------------------
+
+enum PortfolioStatus {
+  DRAFT
+  PUBLISHED
+  UNPUBLISHED
+
+  @@map("portfolio_status")
+}
+
+model Portfolio {
+  id      String @id @default(uuid())
+  ownerId String @map("owner_id")
+
+  /// Globally unique public identity. The unique constraint — not an
+  /// availability check — is what decides a slug race between two users.
+  slug String @unique
+
+  status     PortfolioStatus @default(DRAFT)
+  templateId String          @default("reference-classic-v1") @map("template_id")
+
+  draftDocument Json @map("draft_document")
+  /// Bumped on every accepted draft write. A save carrying a stale value is
+  /// rejected rather than silently overwriting a concurrent edit.
+  draftVersion  Int  @default(1) @map("draft_version")
+
+  publishedDocument Json?     @map("published_document")
+  publishedVersion  Int?      @map("published_version")
+  publishedAt       DateTime? @map("published_at")
+
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  owner         User           @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  resumeUploads ResumeUpload[]
+  aiRuns        AiRun[]
+  auditEvents   AuditEvent[]
+
+  @@index([ownerId, deletedAt])
+  @@index([status, publishedAt])
+  @@map("portfolios")
+}
+
+// ---------------------------------------------------------------------------
+// Resume ingestion
+// ---------------------------------------------------------------------------
+
+enum ResumeUploadStatus {
+  UPLOADED
+  VALIDATED
+  TEXT_EXTRACTED
+  AI_STRUCTURING
+  NEEDS_REVIEW
+  READY
+  FAILED_VALIDATION
+  FAILED_TEXT_EXTRACTION
+  FAILED_AI
+
+  @@map("resume_upload_status")
+}
+
+model ResumeUpload {
+  id          String @id @default(uuid())
+  ownerId     String @map("owner_id")
+  portfolioId String @map("portfolio_id")
+
+  /// Random, server-generated object key. The user never chooses it and the
+  /// original filename never becomes a path.
+  storageKey       String @map("storage_key")
+  originalFilename String @map("original_filename")
+  mimeType         String @map("mime_type")
+  sizeBytes        Int    @map("size_bytes")
+
+  /// Content hash, scoped to the owner for dedupe. Never used to share
+  /// extraction results between different users.
+  sha256 String
+
+  status    ResumeUploadStatus @default(UPLOADED)
+  pageCount Int?               @map("page_count")
+
+  extractedTextStorageKey String? @map("extracted_text_storage_key")
+  characterCount          Int?    @map("character_count")
+  ocrUsed                 Boolean @default(false) @map("ocr_used")
+
+  /// Bounded extraction warnings shown next to the affected editor field.
+  warnings  Json    @default("[]")
+  errorCode String? @map("error_code")
+
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  owner     User      @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  portfolio Portfolio @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
+  aiRuns    AiRun[]
+
+  @@index([ownerId, portfolioId])
+  @@index([ownerId, sha256])
+  @@map("resume_uploads")
+}
+
+// ---------------------------------------------------------------------------
+// AI observability
+// ---------------------------------------------------------------------------
+
+enum AiRunStatus {
+  SUCCEEDED
+  FAILED_VALIDATION
+  FAILED_PROVIDER
+  FAILED_TIMEOUT
+
+  @@map("ai_run_status")
+}
+
+/// One row per model call. Enough to answer "what does a successful extraction
+/// cost and how often do we escalate" without building a finance subsystem —
+/// and deliberately holding no prompt text, no completion text and no secrets.
+model AiRun {
+  id                 String  @id @default(uuid())
+  ownerId            String  @map("owner_id")
+  portfolioId        String? @map("portfolio_id")
+  resumeUploadId     String? @map("resume_upload_id")
+
+  operation String
+  provider  String
+  model     String
+
+  status AiRunStatus
+
+  inputUnits         Int?    @map("input_units")
+  outputUnits        Int?    @map("output_units")
+  estimatedCostMinor Int?    @map("estimated_cost_minor")
+  currency           String?
+  latencyMs          Int?    @map("latency_ms")
+  retryCount         Int     @default(0) @map("retry_count")
+  fallbackUsed       Boolean @default(false) @map("fallback_used")
+  errorCode          String? @map("error_code")
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  owner        User          @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  portfolio    Portfolio?    @relation(fields: [portfolioId], references: [id], onDelete: SetNull)
+  resumeUpload ResumeUpload? @relation(fields: [resumeUploadId], references: [id], onDelete: SetNull)
+
+  @@index([ownerId, createdAt])
+  @@index([createdAt])
+  @@map("ai_runs")
+}
+
+// ---------------------------------------------------------------------------
+// Audit and abuse control
+// ---------------------------------------------------------------------------
+
+/// Append-only record of the events that change what the public can see.
+/// `metadata` is bounded and must never contain CV text.
+model AuditEvent {
+  id          String  @id @default(uuid())
+  ownerId     String? @map("owner_id")
+  portfolioId String? @map("portfolio_id")
+
+  eventType String @map("event_type")
+  metadata  Json   @default("{}")
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  owner     User?      @relation(fields: [ownerId], references: [id], onDelete: SetNull)
+  portfolio Portfolio? @relation(fields: [portfolioId], references: [id], onDelete: SetNull)
+
+  @@index([portfolioId, createdAt])
+  @@index([eventType, createdAt])
+  @@map("audit_events")
+}
+
+/// Durable rate-limit and quota counters.
+///
+/// Postgres rather than Redis: the limits that matter here are per-user-per-day
+/// import and AI quotas, which are low-frequency writes already adjacent to a
+/// database transaction. Adding a second datastore would buy nothing and add an
+/// operational dependency and a failure mode.
+model RateLimitCounter {
+  id          String   @id @default(uuid())
+  bucket      String
+  windowStart DateTime @map("window_start")
+  count       Int      @default(0)
+  expiresAt   DateTime @map("expires_at")
+
+  @@unique([bucket, windowStart])
+  @@index([expiresAt])
+  @@map("rate_limit_counters")
+}

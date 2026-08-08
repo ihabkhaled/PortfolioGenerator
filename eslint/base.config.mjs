@@ -36,11 +36,4 @@ export default [
       },
     },
   },
-  {
-    // The logger wrapper is the single owner of console output.
-    files: ['src/packages/logger/**'],
-    rules: {
-      'no-console': 'off',
-    },
-  },
 ];

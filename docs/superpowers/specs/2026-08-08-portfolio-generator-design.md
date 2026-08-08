@@ -36,30 +36,30 @@ generator. There is exactly one repository, one deployment, and one renderer for
 The pack suggests the public prefix `/portfolios/<slug>`. We serve portfolios at the **root**
 `/{slug}` instead, because a personal portfolio URL is the product's shareable artifact and the
 extra segment adds nothing. The safety property the prefix was buying — no collision with platform
-routes — is preserved by a *reserved-slug denylist derived from the actual route table*, which is
+routes — is preserved by a _reserved-slug denylist derived from the actual route table_, which is
 stronger than a prefix (a prefix protects nothing if a new route is added under it). Route order in
 Next.js resolves static segments before the dynamic `[portfolioSlug]` catch-all, and the denylist
 plus a unit test over `ROUTE_PATHS` keeps the two in sync.
 
 ## 3. Stack
 
-| Concern         | Choice                                                       |
-| --------------- | ------------------------------------------------------------ |
-| Framework       | Next.js 16.3.0 App Router, Turbopack, typedRoutes            |
-| Runtime         | React 19.2.8, Node 24.18.0                                    |
-| Language        | TypeScript 7.0.2 (`@typescript/native` tsgo) + TS6 for tooling|
-| Styling         | Tailwind CSS 4.3.3, CSS-first semantic tokens                 |
-| Validation      | Zod 4.4.3 behind `@/packages/zod`                             |
-| Database        | PostgreSQL + Prisma 7.9.1                                     |
-| Auth            | better-auth 1.6.26 (email + password, DB sessions)            |
-| AI              | AI SDK 7 (`ai`, `@ai-sdk/openai`) behind `PortfolioAiProvider`|
-| PDF text        | `unpdf` behind `ResumeTextExtractor`                          |
-| Object storage  | `ObjectStorage` adapter: local FS (dev/test), S3-compatible   |
-| Rate limit      | `RateLimiter` adapter: in-memory (dev/test), Postgres (prod)  |
-| Copy            | next-intl, single `en` catalog, `localePrefix: 'never'`       |
-| Unit/integration| Vitest 4 + Testing Library + MSW                              |
-| E2E/a11y/visual | Playwright 1.62 + axe                                         |
-| Lint            | ESLint flat config + local `portfolio-architecture` plugin    |
+| Concern          | Choice                                                         |
+| ---------------- | -------------------------------------------------------------- |
+| Framework        | Next.js 16.3.0 App Router, Turbopack, typedRoutes              |
+| Runtime          | React 19.2.8, Node 24.18.0                                     |
+| Language         | TypeScript 7.0.2 (`@typescript/native` tsgo) + TS6 for tooling |
+| Styling          | Tailwind CSS 4.3.3, CSS-first semantic tokens                  |
+| Validation       | Zod 4.4.3 behind `@/packages/zod`                              |
+| Database         | PostgreSQL + Prisma 7.9.1                                      |
+| Auth             | better-auth 1.6.26 (email + password, DB sessions)             |
+| AI               | AI SDK 7 (`ai`, `@ai-sdk/openai`) behind `PortfolioAiProvider` |
+| PDF text         | `unpdf` behind `ResumeTextExtractor`                           |
+| Object storage   | `ObjectStorage` adapter: local FS (dev/test), S3-compatible    |
+| Rate limit       | `RateLimiter` adapter: in-memory (dev/test), Postgres (prod)   |
+| Copy             | next-intl, single `en` catalog, `localePrefix: 'never'`        |
+| Unit/integration | Vitest 4 + Testing Library + MSW                               |
+| E2E/a11y/visual  | Playwright 1.62 + axe                                          |
+| Lint             | ESLint flat config + local `portfolio-architecture` plugin     |
 
 Redis is deliberately absent. Rate limiting and quota counters are Postgres rows with an index on
 `(bucket, window_start)`; the pack explicitly warns against adding Redis by reflex.
@@ -158,7 +158,7 @@ plus `FAILED_VALIDATION | FAILED_TEXT_EXTRACTION | FAILED_AI`. Persisted so a re
    a clear "this looks scanned" message plus the manual-entry path.
 7. One primary structured-output call. Validate against the extraction schema.
 8. Deterministic repairs first (date normalization, URL validation, dedupe, trimming). Only an
-   still-invalid *fragment* is repaired by a targeted second call. The fallback model runs only if
+   still-invalid _fragment_ is repaired by a targeted second call. The fallback model runs only if
    the document is still unusable. Retries are capped.
 9. Map to `PortfolioDocument`, persist as **draft**, surface warnings. Never auto-publish.
 

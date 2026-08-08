@@ -1,21 +1,30 @@
+import process from 'node:process';
+
 import { defineConfig, devices } from '@playwright/test';
 
 const PORT = 3100;
 const BASE_URL = `http://127.0.0.1:${PORT}`;
+const isContinuousIntegration = Boolean(process.env['CI']);
 
 /**
  * E2E runs against a real Next.js production build and a real PostgreSQL test
  * database, with the deterministic AI provider selected through configuration.
- * Nothing in CI is allowed to reach a paid model.
+ * Nothing in CI is allowed to reach a paid model, which is why `AI_PROVIDER` is
+ * pinned here rather than inherited from the developer's shell.
+ *
+ * Port 3100 rather than 3000: a developer running `npm run dev` should not have
+ * their session torn down by a test run.
  */
 export default defineConfig({
   testDir: './src/tests',
   testMatch: ['e2e/**/*.spec.ts', 'accessibility/**/*.spec.ts'],
   fullyParallel: false,
-  forbidOnly: !!process.env['CI'],
-  retries: process.env['CI'] ? 1 : 0,
+  forbidOnly: isContinuousIntegration,
+  retries: isContinuousIntegration ? 1 : 0,
+  // One worker: the suite asserts on publish/unpublish transitions of shared
+  // slugs, which are global by definition and cannot be parallelised safely.
   workers: 1,
-  reporter: process.env['CI'] ? [['github'], ['html', { open: 'never' }]] : [['list']],
+  reporter: isContinuousIntegration ? [['github'], ['html', { open: 'never' }]] : [['list']],
   timeout: 60_000,
   expect: { timeout: 10_000 },
   use: {
@@ -28,7 +37,7 @@ export default defineConfig({
   webServer: {
     command: `npm run build && npm run start -- --port ${PORT}`,
     url: BASE_URL,
-    reuseExistingServer: !process.env['CI'],
+    reuseExistingServer: !isContinuousIntegration,
     timeout: 300_000,
     env: {
       AI_PROVIDER: 'deterministic',

@@ -9,11 +9,12 @@ import accessibilityConfig from './eslint/accessibility.config.mjs';
 import architectureConfig from './eslint/architecture.config.mjs';
 import baseConfig from './eslint/base.config.mjs';
 import { enforceErrorSeverity } from './eslint/error-severity.config.mjs';
+import exceptionsConfig from './eslint/exceptions.config.mjs';
 import ignoresConfig from './eslint/ignores.config.mjs';
 import importsConfig from './eslint/imports.config.mjs';
 import nextConfig from './eslint/next.config.mjs';
 import packageBoundariesConfig from './eslint/package-boundaries.config.mjs';
-import prettierConfig from './eslint/prettier.config.mjs';
+import prettierConfig from './eslint/prettier-interop.config.mjs';
 import promiseConfig from './eslint/promise.config.mjs';
 import reactHooksConfig from './eslint/react-hooks.config.mjs';
 import reactConfig from './eslint/react.config.mjs';
@@ -41,6 +42,9 @@ const composedConfig = [
   ...architectureConfig,
   ...packageBoundariesConfig,
   ...testConfig,
+  // Documented exceptions come after every preset: several presets re-enable
+  // core rules, so an exception placed earlier would be silently overwritten.
+  ...exceptionsConfig,
   ...prettierConfig,
 ];
 

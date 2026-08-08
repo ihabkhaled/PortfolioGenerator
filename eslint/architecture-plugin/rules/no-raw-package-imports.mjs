@@ -72,12 +72,10 @@ export default {
         const packageName = getPackageName(specifier);
 
         for (const boundary of boundaries) {
-          const matches =
-            boundary.matchSubpaths === false
-              ? specifier === boundary.package
-              : packageName === boundary.package;
+          const candidate = boundary.matchSubpaths === false ? specifier : packageName;
+          const isMatches = candidate === boundary.package;
 
-          if (!matches) {
+          if (!isMatches) {
             continue;
           }
 

@@ -120,7 +120,11 @@ export default {
           continue;
         }
 
-        context.report({ node: declaration, messageId: 'inlineConst', data: { name } });
+        context.report({
+          node: declaration,
+          messageId: 'inlineConst',
+          data: { name },
+        });
       }
     }
 
@@ -134,7 +138,11 @@ export default {
       if (componentFile) {
         // Only the exported component function is allowed in a component file.
         if (!isExportedFunction(node)) {
-          context.report({ node, messageId: 'localHelperFunction', data: { name } });
+          context.report({
+            node,
+            messageId: 'localHelperFunction',
+            data: { name },
+          });
         }
 
         return;
@@ -143,7 +151,11 @@ export default {
       if (hookFile) {
         // Only the exported hook function is allowed in a hook file.
         if (!isExportedFunction(node) || !isHookFunction(node)) {
-          context.report({ node, messageId: 'localHelperFunction', data: { name } });
+          context.report({
+            node,
+            messageId: 'localHelperFunction',
+            data: { name },
+          });
         }
 
         return;
@@ -151,32 +163,60 @@ export default {
 
       if (pureLogicFile && !isExportedFunction(node)) {
         // Pure logic files must export every function so tests can call it.
-        context.report({ node, messageId: 'localHelperFunction', data: { name } });
+        context.report({
+          node,
+          messageId: 'localHelperFunction',
+          data: { name },
+        });
         return;
       }
 
       if (appRouteFile && !routeHandlerFile && !isExportedFunction(node)) {
         // App Router implementation files (route helpers, middleware proxies, etc.)
         // must export every function so the route handler can delegate to them.
-        context.report({ node, messageId: 'localHelperFunction', data: { name } });
+        context.report({
+          node,
+          messageId: 'localHelperFunction',
+          data: { name },
+        });
       }
     }
 
     return {
       TSEnumDeclaration(node) {
-        context.report({ node, messageId: 'inlineType', data: { kind: 'enum' } });
+        context.report({
+          node,
+          messageId: 'inlineType',
+          data: { kind: 'enum' },
+        });
       },
       'Program > TSInterfaceDeclaration'(node) {
-        context.report({ node, messageId: 'inlineType', data: { kind: 'interface' } });
+        context.report({
+          node,
+          messageId: 'inlineType',
+          data: { kind: 'interface' },
+        });
       },
       'Program > ExportNamedDeclaration > TSInterfaceDeclaration'(node) {
-        context.report({ node, messageId: 'inlineType', data: { kind: 'interface' } });
+        context.report({
+          node,
+          messageId: 'inlineType',
+          data: { kind: 'interface' },
+        });
       },
       'Program > TSTypeAliasDeclaration'(node) {
-        context.report({ node, messageId: 'inlineType', data: { kind: 'type alias' } });
+        context.report({
+          node,
+          messageId: 'inlineType',
+          data: { kind: 'type alias' },
+        });
       },
       'Program > ExportNamedDeclaration > TSTypeAliasDeclaration'(node) {
-        context.report({ node, messageId: 'inlineType', data: { kind: 'type alias' } });
+        context.report({
+          node,
+          messageId: 'inlineType',
+          data: { kind: 'type alias' },
+        });
       },
       'Program > VariableDeclaration'(node) {
         checkModuleLevelConst(node);
@@ -216,19 +256,17 @@ export default {
 
         context.report({ node, messageId: 'inlineTypeLiteral' });
       },
-      ...(componentFile
-        ? {
-            'FunctionDeclaration BlockStatement > VariableDeclaration'(node) {
-              context.report({ node, messageId: 'componentBodyDeclaration' });
-            },
-            'ArrowFunctionExpression BlockStatement > VariableDeclaration'(node) {
-              context.report({ node, messageId: 'componentBodyDeclaration' });
-            },
-            'FunctionExpression BlockStatement > VariableDeclaration'(node) {
-              context.report({ node, messageId: 'componentBodyDeclaration' });
-            },
-          }
-        : {}),
+      ...(componentFile && {
+        'FunctionDeclaration BlockStatement > VariableDeclaration'(node) {
+          context.report({ node, messageId: 'componentBodyDeclaration' });
+        },
+        'ArrowFunctionExpression BlockStatement > VariableDeclaration'(node) {
+          context.report({ node, messageId: 'componentBodyDeclaration' });
+        },
+        'FunctionExpression BlockStatement > VariableDeclaration'(node) {
+          context.report({ node, messageId: 'componentBodyDeclaration' });
+        },
+      }),
     };
   },
 };

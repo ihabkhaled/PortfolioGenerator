@@ -13,7 +13,11 @@ import { portfolioArchitecturePlugin } from './architecture-plugin.mjs';
 
 const packageBoundaries = [
   { package: 'zod', owners: ['src/packages/zod/'] },
-  { package: '@prisma/client', owners: ['src/packages/database/'], allowInTests: true },
+  {
+    package: '@prisma/client',
+    owners: ['src/packages/database/'],
+    allowInTests: true,
+  },
   { package: 'better-auth', owners: ['src/packages/auth/'] },
   { package: 'ai', owners: ['src/packages/ai/'] },
   { package: '@ai-sdk/openai', owners: ['src/packages/ai/'] },
@@ -26,13 +30,40 @@ const packageBoundaries = [
   { package: '@hookform/resolvers', owners: ['src/packages/forms/'] },
   { package: 'clsx', owners: ['src/packages/ui-primitives/'] },
   { package: 'tailwind-merge', owners: ['src/packages/ui-primitives/'] },
-  { package: 'class-variance-authority', owners: ['src/packages/ui-primitives/'] },
-  { package: 'next/link', matchSubpaths: false, owners: ['src/packages/link/'] },
-  { package: 'next/image', matchSubpaths: false, owners: ['src/packages/image/'] },
-  { package: 'next/navigation', matchSubpaths: false, owners: ['src/packages/navigation/'] },
-  { package: 'next/cache', matchSubpaths: false, owners: ['src/packages/cache/'] },
-  { package: 'next/font/google', matchSubpaths: false, owners: ['src/shared/fonts/'] },
-  { package: 'next/font/local', matchSubpaths: false, owners: ['src/shared/fonts/'] },
+  {
+    package: 'class-variance-authority',
+    owners: ['src/packages/ui-primitives/'],
+  },
+  {
+    package: 'next/link',
+    matchSubpaths: false,
+    owners: ['src/packages/link/'],
+  },
+  {
+    package: 'next/image',
+    matchSubpaths: false,
+    owners: ['src/packages/image/'],
+  },
+  {
+    package: 'next/navigation',
+    matchSubpaths: false,
+    owners: ['src/packages/navigation/'],
+  },
+  {
+    package: 'next/cache',
+    matchSubpaths: false,
+    owners: ['src/packages/cache/'],
+  },
+  {
+    package: 'next/font/google',
+    matchSubpaths: false,
+    owners: ['src/shared/fonts/'],
+  },
+  {
+    package: 'next/font/local',
+    matchSubpaths: false,
+    owners: ['src/shared/fonts/'],
+  },
 ];
 
 export default [

@@ -7,5 +7,9 @@ playwright-report
 package-lock.json
 src/generated
 prisma/migrations
+# Generated from the Zod schema and asserted as a snapshot. Reformatting it
+# here would make the test that guards the public contract fail against its own
+# source of truth.
+schemas
 public
 .storage

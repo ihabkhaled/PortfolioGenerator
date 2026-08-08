@@ -81,18 +81,27 @@ export function sectionLines(
 }
 
 /**
- * Drop trailing punctuation a CV writer left on a token — "amina@example.com,"
- * or "https://example.com)." — with a bounded scan rather than an anchored
- * `[...]+$` pattern, which backtracks on a long run of them.
+ * Drop the punctuation a CV writer wrapped a token in — "(https://example.com)."
+ * or "<amina@example.com>" — from both ends.
+ *
+ * A bounded scan rather than an anchored `[...]+$` pattern, which backtracks on
+ * a long run of them, and both ends rather than just the trailing one: a URL
+ * inside parentheses fails a `startsWith('https://')` check if only its tail is
+ * cleaned, and silently disappears from the import.
  */
-export function stripTrailingPunctuation(token: string): string {
+export function stripSurroundingPunctuation(token: string): string {
+  let start = 0;
   let end = token.length;
 
-  while (end > 0 && TRAILING_PUNCTUATION.includes(token[end - 1] ?? '')) {
+  while (start < end && TRAILING_PUNCTUATION.includes(token[start] ?? '')) {
+    start += 1;
+  }
+
+  while (end > start && TRAILING_PUNCTUATION.includes(token[end - 1] ?? '')) {
     end -= 1;
   }
 
-  return token.slice(0, end);
+  return token.slice(start, end);
 }
 
 export function isBullet(line: string): boolean {
@@ -185,7 +194,7 @@ export function parseDateRange(line: string): ParsedDateRange {
  */
 export function findEmail(text: string): string | null {
   for (const token of text.split(/\s+/u)) {
-    const candidate = stripTrailingPunctuation(token);
+    const candidate = stripSurroundingPunctuation(token);
     const at = candidate.indexOf('@');
 
     if (at <= 0 || at !== candidate.lastIndexOf('@')) {
@@ -205,9 +214,8 @@ export function findEmail(text: string): string | null {
 export function findUrls(text: string): readonly string[] {
   return text
     .split(/\s+/u)
-    .filter((token) => token.startsWith('https://'))
-    .map((token) => stripTrailingPunctuation(token))
-    .filter((token) => token.length > 'https://'.length);
+    .map((token) => stripSurroundingPunctuation(token))
+    .filter((token) => token.startsWith('https://') && token.length > 'https://'.length);
 }
 
 /**

@@ -62,6 +62,22 @@ export default [
     rules: {
       '@typescript-eslint/explicit-module-boundary-types': 'off',
       '@typescript-eslint/no-magic-numbers': 'off',
+      /**
+       * Both rules exist to keep production expressions readable. In a test,
+       * `expect(fn(build({ ... }))).toBe(x)` *is* the readable form — extracting
+       * each step to a named variable buries the assertion the reader came for.
+       */
+      'unicorn/max-nested-calls': 'off',
+      'unicorn/no-await-expression-member': 'off',
+      /**
+       * Off for tests, and this is a correctness decision rather than a style
+       * one. Both rules *autofix* `http://` to `https://`. In a suite whose job
+       * is asserting that cleartext URLs are rejected, that silently inverts
+       * the assertion — it has already happened twice here, and both times the
+       * suite still passed. Production code keeps both rules.
+       */
+      'sonarjs/no-clear-text-protocols': 'off',
+      'unicorn/prefer-https': 'off',
       // Mock/stub callbacks are legitimately empty in tests.
       '@typescript-eslint/no-empty-function': 'off',
       // expect(spy.method) references are the standard mock-assertion shape.

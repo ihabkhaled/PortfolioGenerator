@@ -1,0 +1,29 @@
+{
+  "$schema": "https://unpkg.com/knip@6/schema.json",
+  "entry": [
+    "src/app/**/{page,layout,route,error,global-error,not-found,loading,template,default,sitemap,robots,manifest,opengraph-image}.{ts,tsx}",
+    "src/proxy.ts",
+    "src/instrumentation.ts",
+    "next.config.ts",
+    "eslint.config.mjs",
+    "vitest.config.mts",
+    "playwright.config.ts",
+    "postcss.config.mjs",
+    "support/**/*.{mjs,mts}",
+    "src/tests/**/*.{ts,tsx}",
+    "prisma/seed.mts"
+  ],
+  "project": ["src/**/*.{ts,tsx}", "eslint/**/*.mjs", "support/**/*.{mjs,mts}"],
+  "ignore": ["src/generated/**", "eslint/architecture-plugin.d.mts"],
+  "ignoreDependencies": [
+    "@typescript/native",
+    "typescript",
+    "@tailwindcss/postcss",
+    "tailwindcss",
+    "postcss",
+    "@testing-library/jest-dom",
+    "eslint-plugin-testing-library",
+    "@types/react-dom"
+  ],
+  "ignoreBinaries": ["depcruise", "prisma", "trivy"]
+}

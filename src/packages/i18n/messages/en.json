@@ -154,5 +154,40 @@
       "slug.invalid-characters": "Use lowercase letters, numbers and single hyphens only.",
       "slug.reserved": "That address is reserved by the platform. Try another."
     }
+  },
+  "ingestion": {
+    "title": "Import your CV",
+    "lead": "Upload a PDF. We read it, structure it, and hand you a draft to review — nothing becomes public until you publish it.",
+    "upload": {
+      "title": "Choose your CV",
+      "hint": "PDF only, up to {maxMegabytes} MB and {maxPages} pages.",
+      "fieldLabel": "CV file",
+      "submit": "Import",
+      "pending": "Importing"
+    },
+    "facts": {
+      "privacyLabel": "Privacy",
+      "privacyValue": "The file is stored privately and is never publicly addressable. You can delete it at any time.",
+      "reviewLabel": "Review",
+      "reviewValue": "Extraction produces a draft. You approve every fact before anything is published.",
+      "accuracyLabel": "Accuracy",
+      "accuracyValue": "Nothing is invented. Fields the document does not support are left empty and flagged for you.",
+      "costLabel": "Cost",
+      "costValue": "Text is read locally first, so a normal CV costs one model call and your published page costs none."
+    },
+    "warningsTitle": "Worth a second look",
+    "errors": {
+      "empty": "That file is empty. Choose a PDF and try again.",
+      "tooLarge": "That file is larger than the upload limit.",
+      "notAPdf": "That file is not a readable PDF.",
+      "encrypted": "That PDF is password-protected. Remove the password and upload it again.",
+      "tooManyPages": "That PDF has more pages than the import limit.",
+      "scanned": "That PDF looks scanned, so there is no text to read. Upload a text-based PDF, or start your portfolio manually.",
+      "quotaExceeded": "You have used your CV imports for today. Try again tomorrow.",
+      "rateLimited": "Too many uploads right now. Try again in a little while.",
+      "invalid": "Something about that request was not right. Try again.",
+      "notFound": "That portfolio no longer exists.",
+      "conflict": "This portfolio changed in another tab. Reload before importing again."
+    }
   }
 }

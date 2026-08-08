@@ -9,6 +9,7 @@ export {
 export { RESUME_EXTRACTION_SYSTEM_PROMPT } from './constants/extraction-prompt.constants';
 export { DEFAULT_SKILL_GROUP_LABEL, LINK_LABELS } from './constants/mapping.constants';
 export { parseDeterministicResume } from './helpers/deterministic-extraction.helper';
+export { wrapResumeText } from './helpers/resume-envelope.helper';
 export {
   dropIncompleteEntries,
   mapExperience,
@@ -18,6 +19,7 @@ export {
   mapSkills,
   normalizeMonth,
 } from './mappers/extraction-to-document.mapper';
+export { isRetryable, shouldEscalate, toAiRunStatus } from './policies/ai-run-status.policy';
 export { createDeterministicAiProvider } from './providers/deterministic-ai.provider';
 export { resumeExtractionSchema } from './schemas/resume-extraction.schema';
 export type {

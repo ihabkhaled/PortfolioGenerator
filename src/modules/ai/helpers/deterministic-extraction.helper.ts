@@ -1,5 +1,6 @@
 import {
   BULLET_MARKERS,
+  MAX_SKILL_LENGTH,
   TRAILING_PUNCTUATION,
   CURRENT_ROLE_MARKERS,
   MONTH_NAMES,
@@ -255,10 +256,24 @@ export function splitRoleLine(line: string): ParsedRoleLine {
   return { organization: null, title: null };
 }
 
+/**
+ * Skills, split on the separators CVs actually use.
+ *
+ * Items are length-bounded because the section usually has no terminator: the
+ * next paragraph of prose — or, as observed, a prompt-injection sentence
+ * someone appended to their CV — otherwise arrives as a "skill". A real skill
+ * is a short noun phrase, so anything sentence-length is not one.
+ */
 export function parseSkills(lines: readonly string[]): readonly string[] {
   const items = lines.flatMap((line) => stripBullet(line).split(/[,;•]/u));
 
-  return [...new Set(items.map((item) => item.trim()).filter((item) => item.length > 0))];
+  return [
+    ...new Set(
+      items
+        .map((item) => item.trim())
+        .filter((item) => item.length > 0 && item.length <= MAX_SKILL_LENGTH),
+    ),
+  ];
 }
 
 export function parseExperience(lines: readonly string[]): ParsedExperience {

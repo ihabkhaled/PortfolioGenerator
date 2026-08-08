@@ -6,7 +6,7 @@ export {
   SCANNED_CHARACTERS_PER_PAGE_THRESHOLD,
   UPLOAD_REJECTIONS,
 } from './constants/ingestion.constants';
-export { normalizeResumeText, wrapResumeText } from './helpers/resume-text.helper';
+export { normalizeResumeText } from './helpers/resume-text.helper';
 export { canTransition, hasDraft, isFailure, isTerminal } from './policies/ingestion-state.policy';
 export { hasPdfSignature, looksEncrypted, validateUpload } from './policies/pdf-validation.policy';
 export type {

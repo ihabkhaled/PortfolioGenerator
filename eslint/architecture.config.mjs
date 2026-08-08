@@ -204,7 +204,7 @@ export default [
       'portfolio-architecture/no-restricted-layer-imports': ['error', { policies: layerPolicies }],
       'portfolio-architecture/no-cross-module-deep-imports': [
         'error',
-        { surfaces: ['index', 'server', 'client', 'dashboard'] },
+        { surfaces: ['index', 'server', 'client', 'dashboard', 'ingestion-ui', 'editor-ui'] },
       ],
       'portfolio-architecture/no-process-env-outside-config': [
         'error',

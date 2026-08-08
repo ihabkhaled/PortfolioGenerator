@@ -26,6 +26,15 @@ export const CURRENT_ROLE_MARKERS = ['present', 'current', 'now', 'ongoing'] as 
 
 export const BULLET_MARKERS = ['•', '-', '*', '·', '‣'] as const;
 
+/**
+ * The longest a parsed skill may be.
+ *
+ * "Distributed systems architecture" is 32 characters; a sentence is not a
+ * skill. The bound is what stops a trailing paragraph from being swallowed by
+ * an unterminated skills section.
+ */
+export const MAX_SKILL_LENGTH = 60;
+
 /** Punctuation a CV writer leaves on the end of an email or URL. */
 export const TRAILING_PUNCTUATION: readonly string[] = [
   '.',

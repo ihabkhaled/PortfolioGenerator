@@ -6,6 +6,7 @@ import { parseSchema } from '@/packages/zod';
 
 import { RESUME_EXTRACTION_SYSTEM_PROMPT } from '../constants/extraction-prompt.constants';
 import { MODEL_PROVIDER_NAME } from '../constants/model-provider.constants';
+import { wrapResumeText } from '../helpers/resume-envelope.helper';
 import { resumeExtractionSchema } from '../schemas/resume-extraction.schema';
 import type {
   AiOutcome,
@@ -57,7 +58,7 @@ export function createModelAiProvider(): PortfolioAiProvider {
         model,
         schema: resumeExtractionSchema,
         systemPrompt: RESUME_EXTRACTION_SYSTEM_PROMPT,
-        userPrompt: input.resumeText,
+        userPrompt: wrapResumeText(input.resumeText),
         maxOutputTokens: env.AI_MAX_OUTPUT_TOKENS,
         timeoutMs: env.AI_REQUEST_TIMEOUT_MS,
       });

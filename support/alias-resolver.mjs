@@ -43,6 +43,12 @@ function findProjectFile(baseUrl) {
 }
 
 function resolveProjectSpecifier(specifier, parentUrl) {
+  // `server-only` throws when Node loads it directly: it is a build-time
+  // marker for bundlers, and a script has no client bundle for it to guard.
+  if (specifier === 'server-only') {
+    return new URL('server-only-stub.mjs', import.meta.url).href;
+  }
+
   if (specifier.startsWith('@/')) {
     return findProjectFile(new URL(`src/${specifier.slice(2)}`, projectRoot));
   }

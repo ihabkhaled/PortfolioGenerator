@@ -26,7 +26,7 @@ describe('toOwnedPortfolio', () => {
 
   it('reports no published version when the snapshot column is null', () => {
     const owned = toOwnedPortfolio(
-      buildPortfolioRow({ publishedDocument: null, publishedVersion: null, publishedAt: null }),
+      buildPortfolioRow({ publishedDocument: null, publishedVersion: 0, publishedAt: null }),
     );
 
     expect(owned.hasPublishedVersion).toBe(false);
@@ -43,8 +43,7 @@ describe('toPublishedPortfolio', () => {
 
   it.each([
     ['no document', { publishedDocument: null }],
-    ['no version', { publishedVersion: null }],
-    ['no timestamp', { publishedAt: null }],
+    ['no publish timestamp', { publishedAt: null }],
   ])('returns null when the snapshot has %s', (_description, overrides) => {
     expect(toPublishedPortfolio(buildPortfolioRow(overrides))).toBeNull();
   });

@@ -21,9 +21,24 @@ import type { SitemapEntry, SitemapPortfolio } from '../types/sitemap.types';
  */
 export function buildPlatformSitemapEntries(now: Date): readonly SitemapEntry[] {
   return [
-    { url: absoluteUrl(ROUTE_PATHS.home), lastModified: now, changeFrequency: 'monthly' as const, priority: 1 },
-    { url: absoluteUrl(ROUTE_PATHS.signIn), lastModified: now, changeFrequency: 'yearly' as const, priority: 0.3 },
-    { url: absoluteUrl(ROUTE_PATHS.signUp), lastModified: now, changeFrequency: 'yearly' as const, priority: 0.3 },
+    {
+      url: absoluteUrl(ROUTE_PATHS.home),
+      lastModified: now,
+      changeFrequency: 'monthly' as const,
+      priority: 1,
+    },
+    {
+      url: absoluteUrl(ROUTE_PATHS.signIn),
+      lastModified: now,
+      changeFrequency: 'yearly' as const,
+      priority: 0.3,
+    },
+    {
+      url: absoluteUrl(ROUTE_PATHS.signUp),
+      lastModified: now,
+      changeFrequency: 'yearly' as const,
+      priority: 0.3,
+    },
   ];
 }
 

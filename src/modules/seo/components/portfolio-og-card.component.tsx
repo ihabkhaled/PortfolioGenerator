@@ -21,9 +21,7 @@ export function PortfolioOgCard(props: Readonly<OgCardValues>): ReactElement {
       <div style={ogCardStyles.accentBar} />
       <div style={ogCardStyles.body}>
         <div style={ogCardStyles.name}>{props.name}</div>
-        {props.headline === null ? null : (
-          <div style={ogCardStyles.headline}>{props.headline}</div>
-        )}
+        {props.headline === null ? null : <div style={ogCardStyles.headline}>{props.headline}</div>}
       </div>
       <div style={ogCardStyles.footer}>
         <div style={ogCardStyles.dot} />

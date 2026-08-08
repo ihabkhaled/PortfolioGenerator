@@ -12,7 +12,7 @@ export interface OwnedPortfolio {
   readonly draftDocument: PortfolioDocument;
   readonly draftVersion: number;
   readonly hasPublishedVersion: boolean;
-  readonly publishedVersion: number | null;
+  readonly publishedVersion: number;
   readonly publishedAt: Date | null;
   readonly createdAt: Date;
   readonly updatedAt: Date;

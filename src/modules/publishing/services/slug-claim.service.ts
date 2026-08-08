@@ -75,7 +75,7 @@ export async function claimSlug(
   }
 
   if (previous.slug === validation.slug) {
-    return { ok: true, slug: validation.slug, publishedVersion: previous.publishedVersion ?? 0 };
+    return { ok: true, slug: validation.slug, publishedVersion: previous.publishedVersion };
   }
 
   const result = await updateOwnedSlug(ownerId, portfolioId, validation.slug);
@@ -101,6 +101,6 @@ export async function claimSlug(
   return {
     ok: true,
     slug: validation.slug,
-    publishedVersion: result.value.publishedVersion ?? 0,
+    publishedVersion: result.value.publishedVersion,
   };
 }

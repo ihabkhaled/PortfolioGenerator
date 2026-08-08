@@ -26,8 +26,6 @@ const packageBoundaries = [
   { package: 'next-intl', owners: ['src/packages/i18n/'] },
   { package: 'sonner', owners: ['src/packages/toast/'] },
   { package: 'lucide-react', owners: ['src/packages/icons/'] },
-  { package: 'react-hook-form', owners: ['src/packages/forms/'] },
-  { package: '@hookform/resolvers', owners: ['src/packages/forms/'] },
   { package: 'clsx', owners: ['src/packages/ui-primitives/'] },
   { package: 'tailwind-merge', owners: ['src/packages/ui-primitives/'] },
   {

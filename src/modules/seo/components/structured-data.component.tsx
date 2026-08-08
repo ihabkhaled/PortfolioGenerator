@@ -15,6 +15,9 @@ import type { StructuredDataProps } from '../types/structured-data.types';
  */
 export function StructuredData(props: Readonly<StructuredDataProps>): ReactElement {
   return (
-    <script type="application/ld+json" dangerouslySetInnerHTML={toStructuredDataMarkup(props.json)} />
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={toStructuredDataMarkup(props.json)}
+    />
   );
 }

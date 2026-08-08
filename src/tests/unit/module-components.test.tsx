@@ -4,11 +4,7 @@ import { describe, expect, it, vi } from 'vitest';
 
 import { AccountSummary } from '@/modules/account/account-ui';
 import { CredentialForm } from '@/modules/auth';
-import {
-  LandingHero,
-  LandingPrincipleList,
-  LandingStepList,
-} from '@/modules/marketing';
+import { LandingHero, LandingPrincipleList, LandingStepList } from '@/modules/marketing';
 import {
   ContactFields,
   EditorShell,
@@ -69,7 +65,6 @@ function sectionEntry(overrides: Record<string, unknown> = {}) {
     ...overrides,
   };
 }
-
 
 describe('marketing components', () => {
   it('renders the hero with one first-level heading and both actions', () => {

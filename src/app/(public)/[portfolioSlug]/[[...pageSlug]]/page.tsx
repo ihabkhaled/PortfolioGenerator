@@ -99,9 +99,7 @@ export default async function PublicPortfolioPage(
        */}
       {portfolio.document.seo.indexable ? (
         <StructuredData
-          json={serializeStructuredData(
-            buildPersonStructuredData(portfolio.document, pageUrl),
-          )}
+          json={serializeStructuredData(buildPersonStructuredData(portfolio.document, pageUrl))}
         />
       ) : null}
       <PortfolioTemplate

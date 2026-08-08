@@ -157,7 +157,9 @@ describe('dropIncompleteEntries', () => {
     const result = dropIncompleteEntries(
       {
         ...document,
-        certifications: [{ id: 'cert-1', name: ' ', issuer: null, date: null, credentialUrl: null }],
+        certifications: [
+          { id: 'cert-1', name: ' ', issuer: null, date: null, credentialUrl: null },
+        ],
       },
       warnings,
     );
@@ -187,7 +189,9 @@ describe('parseDeterministicResume on awkward layouts', () => {
   // A date the parser cannot read is reported, not guessed at.
   it('warns when a start date cannot be read confidently', () => {
     const result = parseDeterministicResume(
-      ['Amina Rahman', 'EXPERIENCE', 'Senior Engineer — Northwind', 'sometime — 2021-04'].join('\n'),
+      ['Amina Rahman', 'EXPERIENCE', 'Senior Engineer — Northwind', 'sometime — 2021-04'].join(
+        '\n',
+      ),
     );
 
     expect(result.warnings.map((warning) => warning.code)).toContain(WARNING_CODES.ambiguousDate);
@@ -340,9 +344,7 @@ describe('mapping entries the model left partly empty', () => {
 
 describe('parseDeterministicResume on punctuation and month names', () => {
   it('strips punctuation wrapped around a contact token', () => {
-    const result = parseDeterministicResume(
-      ['Amina Rahman', '(amina@example.com).'].join('\n'),
-    );
+    const result = parseDeterministicResume(['Amina Rahman', '(amina@example.com).'].join('\n'));
 
     expect(result.contact.email).toBe('amina@example.com');
   });
@@ -359,7 +361,9 @@ describe('parseDeterministicResume on punctuation and month names', () => {
 
   it('refuses a month name it does not recognise rather than guessing', () => {
     const result = parseDeterministicResume(
-      ['Amina Rahman', 'EXPERIENCE', 'Senior Engineer — Northwind', 'Xxx 2020 - Present'].join('\n'),
+      ['Amina Rahman', 'EXPERIENCE', 'Senior Engineer — Northwind', 'Xxx 2020 - Present'].join(
+        '\n',
+      ),
     );
 
     expect(result.experience[0]?.startDate).toBeNull();

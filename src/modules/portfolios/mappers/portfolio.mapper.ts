@@ -43,7 +43,7 @@ export function toOwnedPortfolio(row: PortfolioRow): OwnedPortfolio {
  * 500 for the request.
  */
 export function toPublishedPortfolio(row: PortfolioRow): PublishedPortfolio | null {
-  if (row.publishedDocument === null || row.publishedVersion === null || row.publishedAt === null) {
+  if (row.publishedDocument === null || row.publishedAt === null) {
     return null;
   }
 

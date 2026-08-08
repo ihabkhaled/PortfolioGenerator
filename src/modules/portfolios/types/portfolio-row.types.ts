@@ -14,7 +14,7 @@ export interface PortfolioRow {
   readonly draftDocument: unknown;
   readonly draftVersion: number;
   readonly publishedDocument: unknown;
-  readonly publishedVersion: number | null;
+  readonly publishedVersion: number;
   readonly publishedAt: Date | null;
   readonly createdAt: Date;
   readonly updatedAt: Date;

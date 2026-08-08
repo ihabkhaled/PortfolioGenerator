@@ -21,7 +21,6 @@ import {
   buildMinimalPortfolioDocument,
 } from '../fixtures/portfolio-document.fixtures';
 
-
 const editorPageLabels: EditorLabels = {
   identityTitle: 'Identity',
   identityHint: 'Who you are.',
@@ -45,7 +44,6 @@ const editorPageLabels: EditorLabels = {
   unsaved: 'Unsaved changes',
   warningsTitle: 'Worth a second look',
 };
-
 
 function renderEditor(
   warnings: readonly { code: string; path: string; message: string }[] = [],
@@ -140,9 +138,7 @@ describe('useAppTranslation', () => {
 
   // The identity has to be stable or every consumer re-renders on every tick.
   it('returns the same translator across renders of the same namespace', () => {
-    const { result, rerender } = renderHook(() =>
-      useAppTranslation(I18N_NAMESPACES.account),
-    );
+    const { result, rerender } = renderHook(() => useAppTranslation(I18N_NAMESPACES.account));
     const first = result.current;
 
     rerender();

@@ -27,10 +27,7 @@ import {
 export function DeleteAccountContainer(): ReactElement {
   const t = useAppTranslation(I18N_NAMESPACES.account);
   const [confirmation, setConfirmation] = useState<string>('');
-  const [state, formAction, isPending] = useActionState(
-    deleteAccountAction,
-    ACCOUNT_INITIAL_STATE,
-  );
+  const [state, formAction, isPending] = useActionState(deleteAccountAction, ACCOUNT_INITIAL_STATE);
 
   return (
     <section className={accountClasses.dangerSection}>

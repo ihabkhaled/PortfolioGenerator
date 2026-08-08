@@ -7,7 +7,8 @@ import type { PortfolioDocument } from '@/modules/portfolio-document';
 export interface SitemapEntry {
   readonly url: string;
   readonly lastModified: Date;
-  readonly changeFrequency: 'always' | 'hourly' | 'daily' | 'weekly' | 'monthly' | 'yearly' | 'never';
+  readonly changeFrequency:
+    'always' | 'hourly' | 'daily' | 'weekly' | 'monthly' | 'yearly' | 'never';
   readonly priority: number;
 }
 

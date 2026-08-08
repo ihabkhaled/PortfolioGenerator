@@ -85,7 +85,7 @@ export async function publishPortfolio(request: PublishRequest): Promise<Publish
   return {
     ok: true,
     slug: portfolio.slug,
-    publishedVersion: result.value.publishedVersion ?? 1,
+    publishedVersion: result.value.publishedVersion,
   };
 }
 

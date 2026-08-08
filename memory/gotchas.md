@@ -94,3 +94,15 @@ page.
 
 **Cause:** it resolves to `ENVIRONMENT_FALLBACK` during static generation.
 **Fix:** the translator is owned now; see ADR-0005.
+
+---
+
+**Symptom:** the dashboard says a portfolio is Published, and its public address
+returns 404. A fresh server restart does not help.
+
+**Cause:** `publishedVersion` was a nullable column and the publish write used
+`{ increment: 1 }`. SQL arithmetic on NULL is NULL, so the _first_ publish left
+the counter null — and the read mapper treats a null version as "not really
+published".
+**Fix:** the column defaults to 0 and is NOT NULL; zero means never published.
+Found by the E2E suite, which is the entire argument for having one.

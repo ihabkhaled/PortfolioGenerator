@@ -72,7 +72,6 @@
   },
   "dependencies": {
     "@ai-sdk/openai": "^4.0.36",
-    "@hookform/resolvers": "^5.7.1",
     "@prisma/adapter-pg": "^7.9.1",
     "@prisma/client": "^7.9.1",
     "ai": "^7.0.58",
@@ -84,7 +83,6 @@
     "next": "^16.3.0",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
-    "react-hook-form": "^7.85.0",
     "server-only": "^0.0.1",
     "sonner": "^2.0.7",
     "tailwind-merge": "^3.6.0",
@@ -110,6 +108,7 @@
     "@vitejs/plugin-react": "^6.0.5",
     "@vitest/coverage-v8": "^4.1.10",
     "@vitest/eslint-plugin": "^1.6.26",
+    "axe-core": "^4.13.0",
     "dependency-cruiser": "^18.1.1",
     "dotenv": "^17.4.2",
     "eslint": "^10.8.1",

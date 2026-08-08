@@ -1,6 +1,6 @@
 import type { MetadataRoute } from 'next';
 
-import { absoluteUrl, publicEnv  } from '@/packages/env';
+import { absoluteUrl, publicEnv } from '@/packages/env';
 import { ROUTE_PATHS } from '@/shared/constants/route-paths.constants';
 
 /**

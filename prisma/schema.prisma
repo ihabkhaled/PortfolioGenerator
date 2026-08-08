@@ -121,7 +121,10 @@ model Portfolio {
   draftVersion  Int  @default(1) @map("draft_version")
 
   publishedDocument Json?     @map("published_document")
-  publishedVersion  Int?      @map("published_version")
+  /// Counts publishes, starting at 0 for "never". Nullable would make the
+  /// first `increment` yield NULL — SQL arithmetic on NULL is NULL — and a
+  /// null version reads as unpublished.
+  publishedVersion  Int       @default(0) @map("published_version")
   publishedAt       DateTime? @map("published_at")
 
   createdAt DateTime  @default(now()) @map("created_at")

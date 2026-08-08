@@ -15,6 +15,17 @@ A commit compiles, passes lint and typecheck, and does one thing.
 | `commit-msg` | commitlint                                             |
 | `pre-push`   | `npm run gate:push`                                    |
 
+## Dead code
+
+`npm run quality:dead-code` (knip) fails on unused **files**, unused
+**dependencies** and **unlisted** imports. Those are unambiguous rot.
+
+Its unused-**exports** check is switched off, because it contradicts two rules
+this repository enforces deliberately: pure-logic files must export every
+function so a test can reach it, and a module surface publishes an API whether
+or not every symbol has a consumer today. Leaving it on would mean choosing
+between a green gate and the architecture.
+
 ## CI
 
 Three workflows: quality (lint, typecheck, coverage, build, dead code, circular

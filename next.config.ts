@@ -43,7 +43,13 @@ const nextConfig: NextConfig = {
   headers() {
     return Promise.resolve([
       { source: '/(.*)', headers: securityHeaders },
+      // Both forms are listed on purpose: `:path*` does not match the bare
+      // segment, so `/dashboard/:path*` alone leaves the dashboard index — the
+      // page every signed-in user actually lands on — without these headers.
+      // The E2E suite asserts on `/dashboard` for exactly that reason.
+      { source: '/dashboard', headers: noStoreHeaders },
       { source: '/dashboard/:path*', headers: noStoreHeaders },
+      { source: '/api/uploads', headers: noStoreHeaders },
       { source: '/api/uploads/:path*', headers: noStoreHeaders },
     ]);
   },

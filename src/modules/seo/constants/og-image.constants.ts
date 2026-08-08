@@ -18,4 +18,5 @@ export const OG_NAME_MAX_LENGTH = 60;
 export const OG_HEADLINE_MAX_LENGTH = 120;
 
 /** Cached at the edge for a day; publishing does not change the card's content. */
-export const OG_IMAGE_CACHE_CONTROL = 'public, max-age=0, s-maxage=86400, stale-while-revalidate=604800';
+export const OG_IMAGE_CACHE_CONTROL =
+  'public, max-age=0, s-maxage=86400, stale-while-revalidate=604800';

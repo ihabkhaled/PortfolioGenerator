@@ -45,10 +45,7 @@ export async function checkStorage(): Promise<HealthCheck> {
  * without a deadline this endpoint inherits that hang — reporting nothing at
  * all instead of reporting a failure.
  */
-export async function timed(
-  name: string,
-  probe: () => Promise<void>,
-): Promise<HealthCheck> {
+export async function timed(name: string, probe: () => Promise<void>): Promise<HealthCheck> {
   const startedAt = performance.now();
 
   try {

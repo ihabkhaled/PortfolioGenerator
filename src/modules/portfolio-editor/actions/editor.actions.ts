@@ -7,11 +7,7 @@ import { logger } from '@/packages/logger';
 import { parseSchema } from '@/packages/zod';
 
 import { EDITOR_ERROR_KEYS } from '../constants/editor.constants';
-import {
-  claimSlugSchema,
-  portfolioIdSchema,
-  saveDraftSchema,
-} from '../schemas/editor.schema';
+import { claimSlugSchema, portfolioIdSchema, saveDraftSchema } from '../schemas/editor.schema';
 import type { EditorActionState, SaveDraftPayload } from '../types/editor.types';
 
 /**

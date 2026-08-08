@@ -1,0 +1,18 @@
+import type { PortfolioDocument } from '@/modules/portfolio-document';
+
+export interface DraftEditorInput {
+  readonly portfolioId: string;
+  readonly initialDocument: PortfolioDocument;
+  readonly initialVersion: number;
+}
+
+export interface DraftEditor {
+  readonly document: PortfolioDocument;
+  readonly version: number;
+  readonly isDirty: boolean;
+  readonly isSaving: boolean;
+  /** A message key, or null. */
+  readonly error: string | null;
+  readonly update: (next: PortfolioDocument) => void;
+  readonly save: () => void;
+}

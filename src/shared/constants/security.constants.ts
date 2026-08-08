@@ -12,3 +12,11 @@ export const PDF_MAGIC_BYTES = [0x25, 0x50, 0x44, 0x46] as const;
  * tag immediately, so this bound only matters if an invalidation is ever lost.
  */
 export const PUBLISHED_PORTFOLIO_REVALIDATE_SECONDS = 3600;
+
+/**
+ * Bound on a stored warning string before it is rendered.
+ *
+ * The column is JSONB written by past builds, so a value there is as untrusted
+ * as anything else that survives a deploy.
+ */
+export const WARNING_TEXT_MAX_LENGTH = 400;

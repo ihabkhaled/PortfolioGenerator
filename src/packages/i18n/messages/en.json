@@ -189,5 +189,66 @@
       "notFound": "That portfolio no longer exists.",
       "conflict": "This portfolio changed in another tab. Reload before importing again."
     }
+  },
+  "editor": {
+    "title": "Review and edit",
+    "untitled": "Untitled portfolio",
+    "save": "Save",
+    "saving": "Saving",
+    "saved": "Saved",
+    "unsaved": "Unsaved changes",
+    "warningsTitle": "Worth a second look",
+    "identityTitle": "Who you are",
+    "identityHint": "This is the first thing a reader sees. Everything here comes from your CV — correct anything the extractor got wrong.",
+    "displayName": "Display name",
+    "headline": "Headline",
+    "summary": "Summary",
+    "location": "Location",
+    "contactTitle": "Contact",
+    "contactHint": "Stored and published are different decisions. Nothing here appears on your public page unless you switch it on.",
+    "email": "Email",
+    "phone": "Phone",
+    "showPublicly": "Show on my public page",
+    "seoTitle": "Search and sharing",
+    "seoHint": "How your portfolio appears in search results and link previews. Leave blank to use your name and headline.",
+    "seoTitleField": "Page title",
+    "seoDescriptionField": "Description",
+    "indexable": "Allow search engines to index this portfolio",
+    "sections": {
+      "title": "Page sections",
+      "hint": "Reorder and hide sections. A section with nothing in it is skipped automatically.",
+      "moveUp": "Move section up",
+      "moveDown": "Move section down",
+      "show": "Show",
+      "hide": "Hide"
+    },
+    "publish": {
+      "title": "Publish",
+      "hint": "Choose your public address, then publish. Nothing is public until you do.",
+      "slugLabel": "Public address",
+      "urlPreview": "Your portfolio will be at {url}",
+      "claim": "Save address",
+      "publish": "Publish",
+      "republish": "Publish changes",
+      "unpublish": "Unpublish",
+      "publishing": "Publishing",
+      "published": "Published",
+      "viewLive": "View live",
+      "blockersTitle": "Before you can publish",
+      "blockers": {
+        "missing-name": "Add your display name.",
+        "missing-headline": "Add a headline so a reader knows what you do.",
+        "empty-portfolio": "Add at least one role, project, qualification or a summary.",
+        "no-visible-home-page": "Your home page is hidden. Make it visible to publish."
+      }
+    },
+    "errors": {
+      "invalidDocument": "Some of these values could not be saved. Check the highlighted fields.",
+      "versionConflict": "This portfolio changed somewhere else. Reload to get the latest version before saving again.",
+      "notFound": "That portfolio no longer exists.",
+      "notReady": "This portfolio is not ready to publish yet.",
+      "slugTaken": "That address is already taken. Try another.",
+      "invalidSlug": "Use lowercase letters, numbers and single hyphens only."
+    }
   }
 }

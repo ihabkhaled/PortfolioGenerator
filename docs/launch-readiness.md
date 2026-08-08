@@ -3,6 +3,32 @@
 The checklist before the first real user. Every line is either automated — in
 which case the command is named — or a human judgement that no test can make.
 
+## Last full run
+
+**2026-08-09**, against Node 24, PostgreSQL 17 and a production build.
+
+| Gate                                             | Result                                                                                 |
+| ------------------------------------------------ | -------------------------------------------------------------------------------------- |
+| `format:check`                                   | clean                                                                                  |
+| `lint` (`--max-warnings=0`) + severity check     | clean                                                                                  |
+| `typecheck` — TypeScript 7.0.2 (app, test, node) | clean                                                                                  |
+| `typecheck:compat` — TypeScript 6.0.3            | clean                                                                                  |
+| `test`                                           | 746 passing, 33 files                                                                  |
+| `test:coverage`                                  | 98.21% statements, 98.12% lines, 98.5% functions, 95.34% branches; pure layers at 100% |
+| `build`                                          | 14 routes, production build                                                            |
+| `quality:dead-code` (knip)                       | clean                                                                                  |
+| `quality:circular` (dependency-cruiser)          | 385 modules, 1149 dependencies, no violations                                          |
+| `security:audit`                                 | 0 vulnerabilities in production dependencies                                           |
+| `test:e2e` + `test:a11y`                         | 37 passing                                                                             |
+
+Two product bugs were found by that E2E run and fixed before it went green: the
+first publish of every portfolio produced a page that 404'd, and the dashboard
+index shipped without its `no-store` and `noindex` headers. Both are recorded in
+[../memory/gotchas.md](../memory/gotchas.md).
+
+The human-judgement sections below have **not** been signed off. They need a
+person and a phone.
+
 ## Automated gates
 
 ```bash

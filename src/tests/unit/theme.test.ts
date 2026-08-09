@@ -1,7 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { buildThemeOptions } from '@/modules/preferences';
-import { toInlineScript } from '@/shared/utils/inline-script.util';
 import {
   applyTheme,
   buildThemeScript,
@@ -13,6 +12,7 @@ import {
   THEME_STORAGE_KEY,
   watchSystemTheme,
 } from '@/packages/theme';
+import { toInlineScript } from '@/shared/utils/inline-script.util';
 
 /**
  * The theme is the one piece of state that lives in the reader's browser and

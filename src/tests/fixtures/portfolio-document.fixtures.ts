@@ -67,7 +67,10 @@ export const PROJECTS_PAGE: PortfolioPage = {
   slug: 'projects',
   title: 'Projects',
   navLabel: 'Projects',
+  description: null,
   visible: true,
+  visibility: 'public',
+  passwordHash: null,
   order: 10,
   sections: [
     {
@@ -115,11 +118,38 @@ export function buildFullPortfolioDocument(): PortfolioDocument {
       location: 'Lisbon, Portugal',
       portraitAssetId: null,
       availabilityEnabled: true,
+      tagline: 'Open to staff-level backend work, remote or Lisbon-based.',
+      availabilityNote: 'Available from March',
+      coverLetter:
+        'I have spent eight years on the parts of a payment system nobody demos: reconciliation, idempotency, and the error budget somebody actually reads.\nIf that sounds like the problem you have, I would like to talk.',
     },
     contact: {
       email: { value: 'amina@example.com', visible: true },
-      phone: { value: '+351 000 000 000', visible: false },
+      phone: { countryIso: 'PT', nationalNumber: '000 000 000', visible: false },
     },
+    socialLinks: [
+      {
+        id: 'social-github',
+        kind: 'github',
+        label: null,
+        url: 'https://example.com/amina',
+        visible: true,
+      },
+      {
+        id: 'social-linkedin',
+        kind: 'linkedin',
+        label: null,
+        url: 'https://example.com/in/amina',
+        visible: true,
+      },
+      {
+        id: 'social-behance',
+        kind: 'behance',
+        label: null,
+        url: 'https://example.com/behance/amina',
+        visible: false,
+      },
+    ],
     links: [
       {
         id: 'link-code',
@@ -168,6 +198,11 @@ export function buildFullPortfolioDocument(): PortfolioDocument {
     projects: [
       {
         id: 'proj-1',
+        slug: 'ledger-replay',
+        role: 'Author and maintainer',
+        year: '2024-02',
+        coverAssetId: null,
+        featured: true,
         name: 'Ledger Replay',
         summary: 'A tool that replays a day of ledger events against a candidate build.',
         highlights: ['Caught two rounding regressions before release.'],
@@ -181,19 +216,106 @@ export function buildFullPortfolioDocument(): PortfolioDocument {
             visible: true,
           },
         ],
+        content: [
+          {
+            id: 'proj-1-intro',
+            kind: 'paragraph',
+            text: 'Replays a day of ledger events against a candidate build and diffs the resulting balances.',
+          },
+        ],
       },
       {
         id: 'proj-2',
+        slug: null,
+        role: null,
+        year: null,
+        coverAssetId: null,
+        featured: false,
         name: 'Budget Alarm',
         summary: null,
         highlights: [],
         technologies: ['Go'],
         links: [],
+        content: [],
       },
     ],
     skills: [
-      { id: 'skills-1', label: 'Languages', items: ['TypeScript', 'Go', 'SQL'] },
-      { id: 'skills-2', label: 'Infrastructure', items: ['PostgreSQL', 'Kafka', 'Terraform'] },
+      { id: 'skills-1', label: 'Languages', tier: 'primary', items: ['TypeScript', 'Go', 'SQL'] },
+      {
+        id: 'skills-2',
+        label: 'Infrastructure',
+        tier: 'strong',
+        items: ['PostgreSQL', 'Kafka', 'Terraform'],
+      },
+    ],
+    softSkills: [
+      {
+        id: 'soft-1',
+        label: 'Writing things down',
+        detail: 'Wrote the reconciliation runbook the on-call rota still uses.',
+      },
+      { id: 'soft-2', label: 'Mentoring', detail: null },
+    ],
+    courses: [
+      {
+        id: 'course-1',
+        name: 'Distributed Systems',
+        provider: 'MIT OpenCourseWare',
+        date: '2021-09',
+        url: 'https://example.com/course/distributed-systems',
+        summary: null,
+      },
+    ],
+    publications: [
+      {
+        id: 'pub-1',
+        title: 'Reconciling a ledger you did not design',
+        publisher: 'Example Engineering Blog',
+        date: '2024-05',
+        url: 'https://example.com/writing/reconciliation',
+        summary: null,
+      },
+    ],
+    volunteering: [
+      {
+        id: 'vol-1',
+        organization: 'Code Club Lisbon',
+        role: 'Mentor',
+        startDate: '2022-01',
+        endDate: null,
+        summary: 'Weekly sessions with secondary-school students.',
+      },
+    ],
+    testimonials: [
+      {
+        id: 'testimonial-1',
+        quote:
+          'Amina found the rounding bug three releases before it would have reached a customer.',
+        author: 'Rui Marques',
+        role: 'Engineering Manager',
+        organization: 'Northwind Payments',
+      },
+    ],
+    interests: ['Long-distance running', 'Typography'],
+    gallery: [
+      {
+        id: 'gallery-1',
+        assetId: 'asset-gallery-1',
+        alt: 'A whiteboard showing the settlement state machine',
+        caption: 'The settlement state machine, before it was code',
+      },
+    ],
+    attachments: [
+      {
+        id: 'attachment-cv',
+        kind: 'cv',
+        label: 'Curriculum vitae',
+        assetId: 'asset-cv',
+        fileName: 'amina-rahman-cv.pdf',
+        contentType: 'application/pdf',
+        sizeBytes: 184_320,
+        visible: true,
+      },
     ],
     education: [
       {
@@ -227,7 +349,10 @@ export function buildFullPortfolioDocument(): PortfolioDocument {
         slug: '',
         title: 'Home',
         navLabel: 'Home',
+        description: 'Backend engineer working on payment systems.',
         visible: true,
+        visibility: 'public',
+        passwordHash: null,
         order: 0,
         sections: [...HOME_SECTIONS],
       },
@@ -237,7 +362,10 @@ export function buildFullPortfolioDocument(): PortfolioDocument {
         slug: 'notes',
         title: 'Notes',
         navLabel: 'Notes',
+        description: null,
         visible: false,
+        visibility: 'public',
+        passwordHash: null,
         order: 20,
         sections: [],
       },

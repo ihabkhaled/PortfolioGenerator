@@ -47,7 +47,8 @@
     "deps:check": "npm-check-updates --errorLevel 2",
     "deps:upgrade": "npm-check-updates -u && npm install",
     "prepare": "husky",
-    "lint-staged": "lint-staged"
+    "lint-staged": "lint-staged",
+    "postinstall": "prisma generate"
   },
   "prisma": {
     "schema": "prisma/schema.prisma"

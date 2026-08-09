@@ -206,7 +206,10 @@ describe('hasContent', () => {
   it('reports a contact section as present when only a visible phone is shown', () => {
     const withPhone = {
       ...full,
-      contact: { ...full.contact, phone: { value: '+351 000', visible: true } },
+      contact: {
+        ...full.contact,
+        phone: { countryIso: 'PT', nationalNumber: '000 000 000', visible: true },
+      },
     };
 
     expect(
@@ -234,7 +237,10 @@ describe('hasContent', () => {
   });
 
   it('reports a skills section with only empty groups as empty', () => {
-    const emptyGroups = { ...full, skills: [{ id: 'g', label: 'Group', items: [] }] };
+    const emptyGroups = {
+      ...full,
+      skills: [{ id: 'g', label: 'Group', tier: 'working' as const, items: [] }],
+    };
 
     expect(hasContent(section('skills', { title: null }), emptyGroups)).toBe(false);
   });

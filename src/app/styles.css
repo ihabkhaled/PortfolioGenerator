@@ -4,6 +4,49 @@
    dashboard's theme toggle both resolve through the same mechanism. */
 @custom-variant dark (&:where([data-theme='dark'], [data-theme='dark'] *));
 
+@layer base {
+  /*
+   * Controls read as controls.
+   *
+   * Tailwind's preflight sets `cursor: default` on `<button>`, which matches
+   * the HTML spec and matches nothing a person has experienced on the web. A
+   * control that does not change the cursor reads as decoration, and the first
+   * thing someone does with a button that looks inert is stop trying it.
+   *
+   * Checkboxes and radios get an explicit size because every platform's default
+   * is smaller than the WCAG 2.2 pointer-target minimum, and an accent colour
+   * because the browser default ignores the theme entirely.
+   */
+  button:not(:disabled),
+  [role='button']:not([aria-disabled='true']),
+  label,
+  summary,
+  a[href] {
+    cursor: pointer;
+  }
+
+  input[type='checkbox'],
+  input[type='radio'] {
+    accent-color: var(--role-primary);
+    block-size: 1.125rem;
+    cursor: pointer;
+    inline-size: 1.125rem;
+  }
+
+  input[type='file'] {
+    cursor: pointer;
+  }
+
+  :where(button, input, select, textarea):disabled {
+    cursor: not-allowed;
+  }
+
+  /* Anchored headings should not land under the sticky header. */
+  :target {
+    scroll-margin-block-start: 6rem;
+  }
+}
+
 /*
  * Semantic design tokens. Components never hardcode palette values — they use
  * these roles, which resolve per theme below. The direction is

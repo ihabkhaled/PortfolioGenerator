@@ -58,7 +58,14 @@ export function mapExtractionToDocument(
       // page reads as a broken portfolio, and the editor makes turning it on
       // one click.
       email: { value: extraction.contact.email, visible: extraction.contact.email !== null },
-      phone: { value: extraction.contact.phone, visible: false },
+      // The country is not inferred from a leading `+20`: two countries share
+      // several prefixes, and a wrong flag next to someone's number is worse
+      // than no flag. The editor asks; the extractor keeps what it read.
+      phone: {
+        countryIso: null,
+        nationalNumber: extraction.contact.phone,
+        visible: false,
+      },
     },
     links,
     experience,
@@ -218,7 +225,14 @@ export function mapProjects(
 
     projects.push({
       id: `proj-${projects.length + 1}`,
+      // A project page is a decision, not a default. Giving every extracted
+      // project a slug would fill the sitemap with pages holding two lines.
+      slug: null,
       name,
+      role: null,
+      year: null,
+      coverAssetId: null,
+      featured: false,
       summary: project.summary,
       highlights: project.highlights.slice(0, DOCUMENT_COUNTS.projectHighlights),
       technologies: project.technologies.slice(0, DOCUMENT_COUNTS.technologies),
@@ -235,6 +249,7 @@ export function mapProjects(
                 visible: true,
               },
             ],
+      content: [],
     });
   }
 
@@ -255,7 +270,17 @@ export function mapSkills(extraction: ResumeExtractionResult): PortfolioSkillGro
 
   return items.length === 0
     ? []
-    : [{ id: 'skill-group-1', label: DEFAULT_SKILL_GROUP_LABEL, items }];
+    : [
+        {
+          id: 'skill-group-1',
+          label: DEFAULT_SKILL_GROUP_LABEL,
+          // A CV lists skills; it does not rank them, and a model asked to rank
+          // them invents a confidence nobody stated. `working` is the claim the
+          // document can actually support until a person says otherwise.
+          tier: 'working',
+          items,
+        },
+      ];
 }
 
 /**

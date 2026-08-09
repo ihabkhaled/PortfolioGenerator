@@ -25,6 +25,17 @@ export {
 } from './helpers/portfolio-document-defaults.helper';
 
 export {
+  deriveSocialLinks,
+  isRecord,
+  upgradeContact,
+  upgradeDocumentToVersion2,
+  upgradeIdentity,
+  upgradePages,
+  upgradeProjects,
+  upgradeSkills,
+} from './helpers/portfolio-document-v2.migration';
+
+export {
   applyMigrationSteps,
   migratePortfolioDocument,
   readSchemaVersion,

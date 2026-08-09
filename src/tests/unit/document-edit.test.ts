@@ -5,8 +5,9 @@ import {
   moveItem,
   moveSection,
   removeItem,
-  setContactValue,
   setContactVisibility,
+  setEmailValue,
+  setPhoneNumber,
   setIdentityField,
   setIndexable,
   setSectionVisibility,
@@ -45,25 +46,57 @@ describe('setIdentityField', () => {
 });
 
 describe('contact edits', () => {
-  it('nulls an emptied channel value', () => {
-    const next = setContactValue(buildFullPortfolioDocument(), 'email', '  ');
+  it('nulls an emptied email address', () => {
+    const next = setEmailValue(buildFullPortfolioDocument(), '  ');
 
     expect(next.contact.email.value).toBeNull();
+  });
+
+  it('stores a trimmed address', () => {
+    const next = setEmailValue(buildFullPortfolioDocument(), '  noor@example.com  ');
+
+    expect(next.contact.email.value).toBe('noor@example.com');
   });
 
   // Visibility is a separate decision from the value: clearing the address
   // should not silently re-expose it when the user types a new one.
   it('leaves visibility alone when the value changes', () => {
-    const next = setContactValue(buildFullPortfolioDocument(), 'phone', '+20 100 000 0000');
+    const next = setPhoneNumber(buildFullPortfolioDocument(), 'EG', '100 000 0000');
 
-    expect(next.contact.phone).toEqual({ value: '+20 100 000 0000', visible: false });
+    expect(next.contact.phone).toEqual({
+      countryIso: 'EG',
+      nationalNumber: '100 000 0000',
+      visible: false,
+    });
+  });
+
+  // A national number without its country renders as `100-156-8256`, which is
+  // unusable to anyone outside that country.
+  it('keeps the country when only the number changes', () => {
+    const withCountry = setPhoneNumber(buildFullPortfolioDocument(), 'PT', '000 000 000');
+    const next = setPhoneNumber(withCountry, withCountry.contact.phone.countryIso, '111 111 111');
+
+    expect(next.contact.phone.countryIso).toBe('PT');
+    expect(next.contact.phone.nationalNumber).toBe('111 111 111');
+  });
+
+  it('treats an emptied country as no country rather than an empty string', () => {
+    const next = setPhoneNumber(buildFullPortfolioDocument(), '', '100 000 0000');
+
+    expect(next.contact.phone.countryIso).toBeNull();
+  });
+
+  it('nulls an emptied number', () => {
+    const next = setPhoneNumber(buildFullPortfolioDocument(), 'EG', ' '.repeat(3));
+
+    expect(next.contact.phone.nationalNumber).toBeNull();
   });
 
   it('toggles visibility without touching the value', () => {
     const next = setContactVisibility(buildFullPortfolioDocument(), 'phone', true);
 
     expect(next.contact.phone.visible).toBe(true);
-    expect(next.contact.phone.value).toBe('+351 000 000 000');
+    expect(next.contact.phone.nationalNumber).toBe('000 000 000');
   });
 });
 

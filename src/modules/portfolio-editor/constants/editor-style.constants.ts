@@ -6,6 +6,7 @@
  * the result of is an edit you make twice.
  */
 export const editorClasses = {
+  phoneRow: 'grid gap-2 sm:grid-cols-[minmax(0,11rem)_minmax(0,1fr)]',
   shell: 'mx-auto grid w-full max-w-7xl gap-6 px-5 py-8 sm:px-8 lg:px-10',
   header: 'flex flex-wrap items-end justify-between gap-4 border-b border-border pb-6',
   headerMain: 'grid gap-2',

@@ -108,7 +108,7 @@ describe('hasAnyContent', () => {
     expect(
       hasAnyContent({
         ...document,
-        skills: [{ id: 'skills-1', label: 'Languages', items: ['TypeScript'] }],
+        skills: [{ id: 'skills-1', label: 'Languages', tier: 'primary', items: ['TypeScript'] }],
       }),
     ).toBe(true);
   });
@@ -117,7 +117,10 @@ describe('hasAnyContent', () => {
     const document = stripContent(buildFullPortfolioDocument());
 
     expect(
-      hasAnyContent({ ...document, skills: [{ id: 'skills-1', label: 'Languages', items: [] }] }),
+      hasAnyContent({
+        ...document,
+        skills: [{ id: 'skills-1', label: 'Languages', tier: 'primary', items: [] }],
+      }),
     ).toBe(false);
   });
 });

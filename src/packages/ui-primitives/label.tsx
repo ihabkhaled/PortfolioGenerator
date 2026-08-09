@@ -8,7 +8,13 @@ export function Label(props: Readonly<LabelProps>): ReactElement {
   const { className, children, ...rest } = props;
 
   return (
-    <label className={cn('text-sm font-medium text-foreground', className)} {...rest}>
+    <label
+      className={cn(
+        'inline-flex cursor-pointer items-center gap-2 text-sm font-medium text-foreground',
+        className,
+      )}
+      {...rest}
+    >
       {children}
     </label>
   );

@@ -129,14 +129,14 @@ describe('the contact band', () => {
       'href',
       'mailto:amina@example.com',
     );
-    expect(screen.queryByText('+351 000 000 000')).not.toBeInTheDocument();
+    expect(screen.queryByText('(+351) 000 000 000')).not.toBeInTheDocument();
   });
 
   // Two switches have to both be on: the section's, and the field's.
   it('still hides a phone number the section would show but the author would not', () => {
     renderSection(contact({ showPhone: true }));
 
-    expect(screen.queryByText('+351 000 000 000')).not.toBeInTheDocument();
+    expect(screen.queryByText('(+351) 000 000 000')).not.toBeInTheDocument();
   });
 
   it('shows a phone number when both switches are on', () => {
@@ -144,10 +144,13 @@ describe('the contact band', () => {
 
     renderSection(contact({ showPhone: true }), {
       ...document,
-      contact: { ...document.contact, phone: { value: '+351 000 000 000', visible: true } },
+      contact: {
+        ...document.contact,
+        phone: { countryIso: 'PT', nationalNumber: '000 000 000', visible: true },
+      },
     });
 
-    expect(screen.getByText('+351 000 000 000')).toBeInTheDocument();
+    expect(screen.getByText('(+351) 000 000 000')).toBeInTheDocument();
   });
 
   it('omits the link row when the section turns links off', () => {
@@ -281,8 +284,8 @@ describe('the skills band', () => {
     const document: PortfolioDocument = {
       ...buildFullPortfolioDocument(),
       skills: [
-        { id: 'skills-1', label: 'Languages', items: ['TypeScript'] },
-        { id: 'skills-2', label: 'Empty', items: [] },
+        { id: 'skills-1', label: 'Languages', tier: 'primary', items: ['TypeScript'] },
+        { id: 'skills-2', label: 'Empty', tier: 'working', items: [] },
       ],
     };
 
@@ -343,11 +346,17 @@ describe('bands rendered from entries with nothing optional filled in', () => {
     projects: [
       {
         id: 'proj-bare',
+        slug: null,
         name: 'Budget Alarm',
+        role: null,
+        year: null,
+        coverAssetId: null,
+        featured: false,
         summary: null,
         highlights: [],
         technologies: [],
         links: [],
+        content: [],
       },
     ],
     education: [

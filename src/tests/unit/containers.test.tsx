@@ -32,6 +32,8 @@ const editorPageLabels: EditorLabels = {
   contactHint: 'How people reach you.',
   email: 'Email',
   phone: 'Phone',
+  phoneCountry: 'Country code',
+  phoneCountryNone: 'No country',
   showPublicly: 'Show publicly',
   seoTitle: 'Search',
   seoHint: 'How this looks in results.',

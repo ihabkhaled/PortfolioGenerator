@@ -38,18 +38,41 @@ export function setIdentityField(
   };
 }
 
-export function setContactValue(
-  document: PortfolioDocument,
-  channel: 'email' | 'phone',
-  value: string,
-): PortfolioDocument {
+export function setEmailValue(document: PortfolioDocument, value: string): PortfolioDocument {
   const trimmed = value.trim();
 
   return {
     ...document,
     contact: {
       ...document.contact,
-      [channel]: { ...document.contact[channel], value: trimmed === '' ? null : trimmed },
+      email: { ...document.contact.email, value: trimmed === '' ? null : trimmed },
+    },
+  };
+}
+
+/**
+ * The number and the country are set together because they are one answer.
+ *
+ * Storing a national number without the country it belongs to produces
+ * `100-156-8256`, which is unusable to anyone outside that country — and the
+ * reader has no way to tell which country it was.
+ */
+export function setPhoneNumber(
+  document: PortfolioDocument,
+  countryIso: string | null,
+  nationalNumber: string,
+): PortfolioDocument {
+  const trimmed = nationalNumber.trim();
+
+  return {
+    ...document,
+    contact: {
+      ...document.contact,
+      phone: {
+        ...document.contact.phone,
+        countryIso: countryIso === '' ? null : countryIso,
+        nationalNumber: trimmed === '' ? null : trimmed,
+      },
     },
   };
 }

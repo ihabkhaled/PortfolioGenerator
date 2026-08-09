@@ -85,6 +85,9 @@ describe('readIdentity', () => {
       location: null,
       portraitAssetId: null,
       availabilityEnabled: false,
+      tagline: null,
+      availabilityNote: null,
+      coverLetter: null,
     });
   });
 });

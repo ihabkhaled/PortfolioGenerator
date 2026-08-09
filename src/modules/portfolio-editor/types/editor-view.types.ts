@@ -14,6 +14,8 @@ export interface EditorLabels {
   readonly contactHint: string;
   readonly email: string;
   readonly phone: string;
+  readonly phoneCountry: string;
+  readonly phoneCountryNone: string;
   readonly showPublicly: string;
   readonly seoTitle: string;
   readonly seoHint: string;

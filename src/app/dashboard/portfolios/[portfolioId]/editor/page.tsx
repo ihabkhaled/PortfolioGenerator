@@ -48,6 +48,8 @@ export default async function EditorPage(props: EditorPageProps): Promise<ReactE
     contactHint: t('contactHint'),
     email: t('email'),
     phone: t('phone'),
+    phoneCountry: t('phoneCountry'),
+    phoneCountryNone: t('phoneCountryNone'),
     showPublicly: t('showPublicly'),
     seoTitle: t('seoTitle'),
     seoHint: t('seoHint'),

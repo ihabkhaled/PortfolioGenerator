@@ -35,6 +35,8 @@ const editorLabels = {
   contactHint: 'How people reach you.',
   email: 'Email',
   phone: 'Phone',
+  phoneCountry: 'Country code',
+  phoneCountryNone: 'No country',
   showPublicly: 'Show publicly',
   seoTitle: 'Search',
   seoHint: 'How this looks in results.',
@@ -289,9 +291,12 @@ describe('editor field components', () => {
       <ContactFields
         labels={editorLabels}
         email="amina@example.com"
-        phone="+351 000 000 000"
+        phone="000 000 000"
         isEmailVisible
         isPhoneVisible={false}
+        phoneCountryIso="PT"
+        countries={[{ iso: 'PT', name: 'Portugal', dial: '+351' }]}
+        onPhoneCountryChange={noop}
         onEmailChange={noop}
         onPhoneChange={noop}
         onEmailVisibilityChange={noop}

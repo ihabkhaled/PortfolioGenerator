@@ -92,6 +92,9 @@ export function readIdentity(draftDocument: unknown): PortfolioDocument['identit
       location: null,
       portraitAssetId: null,
       availabilityEnabled: false,
+      tagline: null,
+      availabilityNote: null,
+      coverLetter: null,
     };
   }
 

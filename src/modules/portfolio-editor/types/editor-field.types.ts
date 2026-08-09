@@ -1,5 +1,7 @@
 import type { ChangeEventHandler } from 'react';
 
+import type { CountryDialCode } from '@/shared/types/country-code.types';
+
 import type { EditorLabels } from './editor-view.types';
 
 type TextChange = ChangeEventHandler<HTMLInputElement>;
@@ -18,6 +20,9 @@ export interface IdentityFieldsProps {
 }
 
 export interface ContactFieldsProps {
+  readonly phoneCountryIso: string | null;
+  readonly countries: readonly CountryDialCode[];
+  readonly onPhoneCountryChange: ChangeEventHandler<HTMLSelectElement>;
   readonly labels: EditorLabels;
   readonly email: string;
   readonly phone: string;

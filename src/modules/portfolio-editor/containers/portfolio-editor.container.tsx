@@ -6,9 +6,10 @@ import type { ReactElement } from 'react';
 
 import { buildNavigation, findVisiblePage, HOME_PAGE_SLUG } from '@/modules/portfolio-document';
 import { buildPortfolioLabels, PortfolioTemplate } from '@/modules/portfolio-renderer';
-import { I18N_NAMESPACES, useAppTranslation } from '@/packages/i18n';
+import { APP_LOCALE, I18N_NAMESPACES, useAppTranslation } from '@/packages/i18n';
 import { ErrorIcon } from '@/packages/icons';
 import { Button } from '@/packages/ui-primitives';
+import { sortCountriesByName } from '@/shared/utils/phone-number.util';
 
 import { ContactFields } from '../components/contact-fields.component';
 import { EditorShell } from '../components/editor-shell.component';
@@ -19,8 +20,9 @@ import { WarningList } from '../components/warning-list.component';
 import { editorClasses } from '../constants/editor-style.constants';
 import {
   moveSection,
-  setContactValue,
   setContactVisibility,
+  setEmailValue,
+  setPhoneNumber,
   setIdentityField,
   setIndexable,
   setSectionVisibility,
@@ -115,14 +117,27 @@ export function PortfolioEditorContainer(props: Readonly<EditorContainerProps>):
           <ContactFields
             labels={props.labels}
             email={document.contact.email.value ?? ''}
-            phone={document.contact.phone.value ?? ''}
+            phone={document.contact.phone.nationalNumber ?? ''}
             isEmailVisible={document.contact.email.visible}
             isPhoneVisible={document.contact.phone.visible}
             onEmailChange={(event) => {
-              editor.update(setContactValue(document, 'email', event.target.value));
+              editor.update(setEmailValue(document, event.target.value));
             }}
             onPhoneChange={(event) => {
-              editor.update(setContactValue(document, 'phone', event.target.value));
+              editor.update(
+                setPhoneNumber(document, document.contact.phone.countryIso, event.target.value),
+              );
+            }}
+            phoneCountryIso={document.contact.phone.countryIso}
+            countries={sortCountriesByName(APP_LOCALE)}
+            onPhoneCountryChange={(event) => {
+              editor.update(
+                setPhoneNumber(
+                  document,
+                  event.target.value === '' ? null : event.target.value,
+                  document.contact.phone.nationalNumber ?? '',
+                ),
+              );
             }}
             onEmailVisibilityChange={(event) => {
               editor.update(setContactVisibility(document, 'email', event.target.checked));

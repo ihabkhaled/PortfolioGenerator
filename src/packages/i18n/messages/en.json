@@ -250,7 +250,9 @@
       "notReady": "This portfolio is not ready to publish yet.",
       "slugTaken": "That address is already taken. Try another.",
       "invalidSlug": "Use lowercase letters, numbers and single hyphens only."
-    }
+    },
+    "phoneCountry": "Country code",
+    "phoneCountryNone": "No country"
   },
   "account": {
     "title": "Account",

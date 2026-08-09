@@ -7,7 +7,7 @@
  * strings would make a single portfolio able to degrade the whole platform.
  */
 
-export const PORTFOLIO_SCHEMA_VERSION = 1;
+export const PORTFOLIO_SCHEMA_VERSION = 2;
 
 export const DOCUMENT_LIMITS = {
   displayName: 120,
@@ -52,6 +52,33 @@ export const DOCUMENT_LIMITS = {
   blockItem: 300,
   statLabel: 80,
   statValue: 80,
+  tagline: 200,
+  availabilityNote: 200,
+  coverLetter: 6000,
+  countryIso: 2,
+  nationalNumber: 40,
+  softSkill: 120,
+  softSkillDetail: 400,
+  courseName: 240,
+  provider: 200,
+  courseSummary: 800,
+  publicationTitle: 300,
+  publisher: 200,
+  publicationSummary: 800,
+  volunteerRole: 200,
+  volunteerSummary: 800,
+  testimonialQuote: 1200,
+  testimonialAuthor: 160,
+  interest: 80,
+  caption: 300,
+  altText: 300,
+  attachmentLabel: 160,
+  fileName: 260,
+  contentType: 120,
+  projectRole: 160,
+  projectSlug: 80,
+  pageDescription: 320,
+  passwordHash: 255,
 } as const;
 
 export const DOCUMENT_COUNTS = {
@@ -72,6 +99,16 @@ export const DOCUMENT_COUNTS = {
   sectionsPerPage: 30,
   blocksPerCustomSection: 12,
   itemsPerBlock: 20,
+  socialLinks: 16,
+  softSkills: 40,
+  courses: 60,
+  publications: 40,
+  volunteering: 30,
+  testimonials: 20,
+  interests: 30,
+  gallery: 60,
+  attachments: 20,
+  projectContentBlocks: 20,
 } as const;
 
 /** Section kinds the renderer knows how to draw. Adding one is a schema change. */
@@ -81,12 +118,78 @@ export const SECTION_TYPES = [
   'experience',
   'projects',
   'skills',
+  'soft-skills',
   'education',
+  'courses',
   'certifications',
   'languages',
+  'publications',
+  'volunteering',
+  'awards',
+  'interests',
+  'testimonials',
+  'gallery',
+  'attachments',
+  'social',
   'contact',
   'custom',
 ] as const;
+
+/**
+ * How well someone knows a thing, as tiers rather than a percentage.
+ *
+ * A skill bar that says "TypeScript 87%" is a number nobody can defend and no
+ * reader can act on. A tier says what the claim actually is: what I use daily,
+ * what I have shipped, what I have touched, what I have read about.
+ */
+export const SKILL_TIERS = ['primary', 'strong', 'working', 'foundational'] as const;
+
+/**
+ * The social platforms a portfolio can link to.
+ *
+ * A closed set, because each one renders with its own mark and its own
+ * accessible name. An unknown kind would render as an unlabelled icon, which is
+ * worse than not rendering at all — so anything not on this list belongs in the
+ * general links collection instead.
+ */
+export const SOCIAL_LINK_KINDS = [
+  'github',
+  'gitlab',
+  'linkedin',
+  'behance',
+  'dribbble',
+  'youtube',
+  'tiktok',
+  'instagram',
+  'facebook',
+  'x',
+  'threads',
+  'medium',
+  'stackoverflow',
+  'telegram',
+  'whatsapp',
+  'website',
+] as const;
+
+/** What a downloadable file on a portfolio is. */
+export const ATTACHMENT_KINDS = [
+  'cv',
+  'cover-letter',
+  'certificate',
+  'portfolio',
+  'reference',
+  'other',
+] as const;
+
+/**
+ * Who can read a page.
+ *
+ * `private` is not "hidden": a hidden page 404s for everyone. A private page
+ * is reachable by anyone holding the password its owner set, and is excluded
+ * from the sitemap, from RSS and from indexing — because the whole point is to
+ * share it with a named person rather than with a crawler.
+ */
+export const PAGE_VISIBILITIES = ['public', 'private'] as const;
 
 /** Bounded, non-executable content blocks. No HTML, no script, no embed. */
 export const CUSTOM_BLOCK_KINDS = ['paragraph', 'bullet-list', 'stat-list', 'links'] as const;

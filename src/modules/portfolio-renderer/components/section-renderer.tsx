@@ -5,6 +5,7 @@ import { AppImage } from '@/packages/image';
 import { ManifestPanel } from '@/shared/components/data-display/manifest-panel.component';
 import { ExternalLink } from '@/shared/components/primitives/external-link';
 import type { ManifestRow } from '@/shared/components/types/shared-component.types';
+import { formatPhoneNumber } from '@/shared/utils/phone-number.util';
 import { toDisplayUrl } from '@/shared/utils/safe-url.util';
 
 import {
@@ -275,8 +276,13 @@ function buildContactRows(
     });
   }
 
-  if (config.showPhone && document.contact.phone.visible && document.contact.phone.value !== null) {
-    rows.push({ id: 'phone', label: labels.phoneLabel, value: document.contact.phone.value });
+  const phone = formatPhoneNumber(
+    document.contact.phone.countryIso,
+    document.contact.phone.nationalNumber,
+  );
+
+  if (phone !== null && config.showPhone && document.contact.phone.visible) {
+    rows.push({ id: 'phone', label: labels.phoneLabel, value: phone });
   }
 
   const location = joinNonEmpty([document.identity.location], '');

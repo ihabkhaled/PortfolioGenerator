@@ -142,7 +142,7 @@ export function hasContactContent(
   const isShowsPhone =
     section.config.showPhone &&
     document.contact.phone.visible &&
-    document.contact.phone.value !== null;
+    document.contact.phone.nationalNumber !== null;
   const isShowsLinks = section.config.showLinks && document.links.some((link) => link.visible);
 
   return isShowsEmail || isShowsPhone || isShowsLinks;

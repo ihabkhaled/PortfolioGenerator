@@ -29,8 +29,16 @@ The values that must be set for production, and what goes wrong if they are not:
 | `BETTER_AUTH_SECRET`                                 | Boot failure below 32 characters. Rotating it invalidates every session.                                                  |
 | `STORAGE_DRIVER=s3` without the S3 block             | Boot failure, naming the missing variables.                                                                               |
 | `AI_PROVIDER=openai-compatible` without `AI_API_KEY` | Boot failure.                                                                                                             |
-| `CLAMAV_ENABLED=true` without reachable clamd        | Uploads fail closed; no unscanned bytes are stored.                                                                       |
-| `CONTACT_EMAIL_ENABLED=true` without the SMTP block  | Boot failure, naming the missing relay values.                                                                            |
+
+Gemini uses the existing OpenAI-compatible AI boundary; do not install or import a
+Gemini SDK. Set `AI_PROVIDER=openai-compatible`, `AI_BASE_URL` to
+`https://generativelanguage.googleapis.com/v1beta/openai`, `AI_API_KEY` to the
+Gemini API key, and optionally `AI_TRANSLATION_MODEL` to a translation-specific
+Gemini model id. When omitted, translations use `AI_PRIMARY_MODEL`. These values
+are runtime environment variables on Vercel and are not required while `next build`
+imports route modules.
+| `CLAMAV_ENABLED=true` without reachable clamd | Uploads fail closed; no unscanned bytes are stored. |
+| `CONTACT_EMAIL_ENABLED=true` without the SMTP block | Boot failure, naming the missing relay values. |
 
 The supported contact contract includes `CONTACT_EMAIL_PROVIDER=smtp`,
 `CONTACT_RATE_LIMIT_MAX`, `CONTACT_RATE_LIMIT_WINDOW_MS`, and the

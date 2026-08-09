@@ -91,7 +91,7 @@ export function createModelAiProvider(): PortfolioAiProvider {
       input: PortfolioTranslationInput,
     ): Promise<AiOutcome<PortfolioDocument>> {
       const env = getServerEnv();
-      const model = env.AI_PRIMARY_MODEL;
+      const model = env.AI_TRANSLATION_MODEL ?? env.AI_PRIMARY_MODEL;
       const emptyUsage = {
         provider: MODEL_PROVIDER_NAME,
         model,

@@ -10,3 +10,7 @@ export const translationActionSchema = z.object({
 export const versionedTranslationActionSchema = translationActionSchema.extend({
   expectedVersion: z.coerce.number().int().positive(),
 });
+
+export const translationCorrectionActionSchema = versionedTranslationActionSchema.extend({
+  document: z.string().min(2).max(1_000_000),
+});

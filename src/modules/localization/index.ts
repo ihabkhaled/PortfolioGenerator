@@ -20,7 +20,9 @@ export { toTranslationSnapshot } from './mappers/translation.mapper';
 export {
   translationActionSchema,
   versionedTranslationActionSchema,
+  translationCorrectionActionSchema,
 } from './schemas/translation-action.schema';
+export { fingerprintTranslationSource } from './helpers/translation-fingerprint.helper';
 export { LocalizationControlsContainer } from './containers/localization-controls.container';
 export { TranslationPanelContainer } from './containers/translation-panel.container';
 export type {

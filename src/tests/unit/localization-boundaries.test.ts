@@ -5,6 +5,8 @@ import {
   translationActionSchema,
   type TranslationRow,
   versionedTranslationActionSchema,
+  translationCorrectionActionSchema,
+  fingerprintTranslationSource,
 } from '@/modules/localization';
 import { parseSchema } from '@/packages/zod';
 
@@ -19,6 +21,7 @@ function translationRow(overrides: Partial<TranslationRow> = {}): TranslationRow
     locale: 'fr',
     draftDocument: document,
     draftVersion: 2,
+    sourceFingerprint: 'source-fingerprint',
     reviewedDocument: document,
     reviewedAt: new Date('2026-08-09T12:00:00.000Z'),
     publishedDocument: document,
@@ -54,6 +57,27 @@ describe('toTranslationSnapshot', () => {
 });
 
 describe('translation action schemas', () => {
+  it('requires a bounded serialized document for an owner correction', () => {
+    expect(
+      parseSchema(translationCorrectionActionSchema, {
+        portfolioId: 'portfolio-1',
+        locale: 'fr',
+        expectedVersion: '2',
+        document: '{}',
+      }).ok,
+    ).toBe(true);
+  });
+
+  it('fingerprints the complete source document deterministically', () => {
+    const document = buildFullPortfolioDocument();
+    expect(fingerprintTranslationSource(document)).toBe(fingerprintTranslationSource(document));
+    expect(
+      fingerprintTranslationSource({
+        ...document,
+        identity: { ...document.identity, headline: 'Changed' },
+      }),
+    ).not.toBe(fingerprintTranslationSource(document));
+  });
   it('accepts a non-English locale and coerces a positive version', () => {
     expect(
       parseSchema(versionedTranslationActionSchema, {

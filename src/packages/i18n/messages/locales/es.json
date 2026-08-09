@@ -1,0 +1,818 @@
+{
+  "app": {
+    "name": "PortafolioGenerar",
+    "tagline": "Convierte un CV en un portafolio que controlas",
+    "skipToContent": "Saltar al contenido",
+    "themeSwitchLabel": "Cambiar tema",
+    "theme": {
+      "label": "Tema de color",
+      "light": "Luz",
+      "dark": "Oscuro",
+      "system": "Coincidir con mi sistema"
+    },
+    "loading": "Cargando",
+    "footerNote": "Tu CV permanece privado. Sólo lo que revisas y publicas se vuelve público.",
+    "nav": {
+      "dashboard": "Panel",
+      "signIn": "Iniciar sesión",
+      "signUp": "Crear una cuenta",
+      "signOut": "desconectar"
+    }
+  },
+  "marketing": {
+    "eyebrow": "CV al portafolio",
+    "title": "Tu CV, publicado como un portafolio que realmente controlas.",
+    "lead": "Sube un PDF. Revise cada hecho extraído. Componga sus páginas. Solicite una URL y publíquela.",
+    "supporting": "Nada se hace público hasta que usted lo diga y no se ejecuta ninguna IA cuando un visitante carga su página.",
+    "primaryCta": "Crea tu portafolio",
+    "secondaryCta": "Iniciar sesión",
+    "howTitle": "como funciona",
+    "howLead": "Cuatro pasos y seguirás siendo el editor de cada uno de ellos.",
+    "steps": {
+      "uploadTitle": "Sube tu CV",
+      "uploadBody": "Un PDF, almacenado de forma privada. El texto se extrae localmente antes de que cualquier modelo lo vea.",
+      "reviewTitle": "Revisar el borrador",
+      "reviewBody": "Cada campo es editable. Las advertencias apuntan a valores que merecen una segunda mirada.",
+      "composeTitle": "Componga sus páginas",
+      "composeBody": "Reordene, oculte, agregue secciones y páginas adicionales. Sin código, sin plantillas con las que luchar.",
+      "publishTitle": "Reclama una URL y publica",
+      "publishBody": "Elija su slug, obtenga una vista previa del resultado y publíquelo cuando se lea correctamente."
+    },
+    "principlesTitle": "Lo que promete el producto",
+    "principles": {
+      "controlTitle": "Apruebas cada hecho público.",
+      "controlBody": "La extracción produce un borrador. Publicar es siempre una acción explícita que usted realiza.",
+      "privacyTitle": "Tu CV permanece privado",
+      "privacyBody": "El archivo subido nunca es accesible públicamente y puedes eliminarlo en cualquier momento.",
+      "honestTitle": "nada esta inventado",
+      "honestBody": "Se le indica al extractor que deje un campo vacío en lugar de adivinarlo.",
+      "fastTitle": "Las páginas públicas son baratas y rápidas.",
+      "fastBody": "Un portafolio publicado se sirve a partir de una instantánea y no necesita IA para renderizarse."
+    },
+    "landing": {
+      "directory": {
+        "eyebrow": "Explora el producto",
+        "title": "Los detalles que vale la pena comprobar antes de subir un CV",
+        "lead": "Lea sobre el flujo de trabajo, los límites de precisión de los hechos, el modelo de seguridad, la plantilla accesible, las opciones de privacidad y la asistencia práctica antes de crear una cuenta.",
+        "linkLabel": "Lea esta guía"
+      },
+      "useCases": {
+        "eyebrow": "Trabajo diferente, una estructura clara",
+        "title": "Un portafolio puede liderar con la evidencia que se ajuste a la carrera",
+        "lead": "La plantilla se mantiene coherente mientras el documento revisado decide qué secciones aparecen y qué aparece primero.",
+        "engineerTitle": "Ingeniería y trabajos técnicos.",
+        "engineerBody": "Lidera con sistemas, roles, limitaciones del proyecto, tecnologías, publicaciones y los resultados que ya respalda tu CV.",
+        "designerTitle": "Diseño y práctica visual.",
+        "designerBody": "Combine narrativas de proyectos con imágenes de galería propias, texto alternativo útil, cursos, premios y perfiles sociales seleccionados.",
+        "graduateTitle": "Estudiantes y recién graduados.",
+        "graduateBody": "Impulsar la educación, proyectos, cursos, idiomas, voluntariado y habilidades demostradas cuando el historial laboral aún es corto.",
+        "consultantTitle": "Consultores y especialistas independientes",
+        "consultantBody": "Mantenga carteras separadas para diferentes audiencias desde una cuenta sin mezclar sus borradores o direcciones publicadas."
+      },
+      "trust": {
+        "eyebrow": "Límites sobre los que puedes razonar",
+        "title": "La página pública está separada de la maquinaria que la creó.",
+        "lead": "Estos son comportamientos del producto, no afirmaciones de rendimiento: describen qué se almacena, cuándo se vuelve público y de qué depende la solicitud de un visitante.",
+        "draftTitle": "La importación se detiene en un borrador",
+        "draftBody": "La extracción puede organizar los hechos fuente, pero sólo el propietario puede corregirlos, componerlos y publicarlos.",
+        "snapshotTitle": "La publicación crea una instantánea validada",
+        "snapshotBody": "Un visitante lee el contenido revisado almacenado; su solicitud no llama al proveedor de IA ni analiza el PDF original.",
+        "ownershipTitle": "La creación permanece en el ámbito del propietario",
+        "ownershipBody": "Las operaciones del panel resuelven el propietario que ha iniciado sesión antes de leer o cambiar una cartera.",
+        "accessTitle": "El contenido ausente y privado permanece ausente",
+        "accessBody": "Los canales ocultos, las secciones vacías, los borradores y las páginas privadas no autorizadas se omiten de la navegación y la producción pública."
+      },
+      "faq": {
+        "eyebrow": "Preguntas practicas",
+        "title": "¿Qué pasa en los momentos que importan?",
+        "lead": "Respuestas breves a las preguntas detrás de cargar, revisar, publicar y mantener un portafolio disponible.",
+        "publishQuestion": "¿Subir mi CV publica algo?",
+        "publishAnswer": "No. La importación crea un borrador privado. La publicación es una acción separada después de haber revisado el contenido y la dirección pública.",
+        "missingQuestion": "¿Qué pasa cuando el CV no contiene ningún campo?",
+        "missingAnswer": "El campo permanece vacío. El extractor no puede completar una reclamación profesional basándose únicamente en la plausibilidad.",
+        "cvQuestion": "¿Pueden los visitantes descargar mi CV original?",
+        "cvAnswer": "La carga de origen permanece privada. Un visitante solo puede acceder a un archivo adjunto que usted agregue explícitamente a un documento publicado revisado.",
+        "outageQuestion": "¿Una página publicada necesita IA para cargarse?",
+        "outageAnswer": "No. Los portafolios publicados se procesan a partir de instantáneas almacenadas validadas, independientemente de los servicios de extracción de IA y análisis de PDF.",
+        "manyQuestion": "¿Puede una cuenta publicar más de un portafolio?",
+        "manyAnswer": "Sí. Cada portafolio tiene su propio borrador, páginas, opciones de tema, estado de publicación y dirección pública."
+      },
+      "cta": {
+        "title": "Comience con un borrador que pueda inspeccionar",
+        "description": "Cree un portafolio, importe un PDF legible o comience manualmente y decida qué merece hacerse público.",
+        "learnMore": "Ver el flujo de trabajo completo"
+      }
+    },
+    "pages": {
+      "features": {
+        "title": "Todo lo necesario para publicar tu historia profesional.",
+        "description": "Importe datos, edite todos los campos, redacte páginas y publique uno o varios portafolios desde una cuenta.",
+        "sections": {
+          "first": "La extracción de CV revisable mantiene todos los reclamos bajo su control.",
+          "second": "Las páginas flexibles combinan experiencia, proyectos, habilidades, educación y sus propias secciones.",
+          "third": "Las instantáneas publicadas se mantienen rápidas incluso cuando los servicios de creación no están disponibles."
+        }
+      },
+      "how-it-works": {
+        "title": "Del PDF al portafolio público en cuatro pasos deliberados",
+        "description": "Cargue, revise, redacte y luego publique. Cada límite es visible y reversible.",
+        "sections": {
+          "first": "Su PDF se valida y se lee como un documento fuente privado.",
+          "second": "Los datos extraídos se convierten en un borrador editable con advertencias, nunca en una página pública.",
+          "third": "Usted elige la dirección y la publica solo después de que la vista previa sea precisa."
+        }
+      },
+      "examples": {
+        "title": "Portafolios moldeados por el trabajo, no una plantilla de demostración",
+        "description": "Vea cómo las diferentes carreras siguen siendo reconocibles dentro de un sistema coherente y accesible.",
+        "sections": {
+          "first": "Los portafolios de ingeniería destacan los sistemas, los resultados y la profundidad técnica.",
+          "second": "Los portafolios de diseño pueden combinar narrativas de proyectos con medios de galería propios.",
+          "third": "Los portafolios de inicio de carrera pueden liderar con educación, cursos y proyectos demostrables."
+        }
+      },
+      "templates": {
+        "title": "Una plantilla disciplinada con espacio para una voz individual",
+        "description": "Una arquitectura de información estable mantiene la atención en la evidencia mientras los temas ajustan su tono.",
+        "sections": {
+          "first": "Las secciones semánticas crean una jerarquía legible en todos los tamaños de pantalla.",
+          "second": "Las opciones de acento y tema con nombre preservan el contraste probado.",
+          "third": "Ningún script, estilo o incrustación arbitrario puede comprometer a un visitante."
+        }
+      },
+      "cv-import": {
+        "title": "Importación de CV que trata el documento como prueba.",
+        "description": "El importador informa qué puede admitir y deja vacíos los campos no admitidos.",
+        "sections": {
+          "first": "Las firmas y los límites del PDF se verifican antes de que comience el análisis.",
+          "second": "Los valores extraídos conservan advertencias cuando es importante una revisión humana.",
+          "third": "El CV original permanece privado y el importador nunca se publica."
+        }
+      },
+      "ai-accuracy": {
+        "title": "AI ayuda al draft; nunca tiene la última palabra",
+        "description": "La extracción estructurada está limitada por una regla simple: la evidencia faltante significa un campo vacío.",
+        "sections": {
+          "first": "El modelo recibe el texto extraído a través de un contrato estructurado acotado.",
+          "second": "La validación del esquema rechaza la salida con formato incorrecto antes de que llegue al editor.",
+          "third": "Las mejoras en la escritura son acciones separadas y no pueden reemplazar silenciosamente los hechos."
+        }
+      },
+      "security": {
+        "title": "Límites de seguridad diseñados en torno a un CV privado",
+        "description": "Las comprobaciones de propiedad, las cargas validadas y las instantáneas públicas aisladas reducen lo que cualquier solicitud puede exponer.",
+        "sections": {
+          "first": "Las lecturas y escrituras del panel están dirigidas al propietario autenticado.",
+          "second": "Las cargas se identifican por contenido, se escanean y se almacenan bajo claves generadas por el servidor.",
+          "third": "La representación pública no importa la creación, el analizador, la IA ni la ruta de almacenamiento privado."
+        }
+      },
+      "privacy": {
+        "title": "Su documento fuente permanece privado de forma predeterminada",
+        "description": "Solo los campos de instantáneas revisados ​​y los activos explícitamente públicos pueden llegar a una dirección publicada.",
+        "sections": {
+          "first": "Un CV sin formato nunca se entrega desde una URL de objeto público.",
+          "second": "Los canales y páginas de contacto ocultos se omiten en lugar de disfrazarse.",
+          "third": "La eliminación de la cuenta elimina las filas de identificación y los archivos de propiedad."
+        }
+      },
+      "about": {
+        "title": "Un producto de cartera construido en torno a la autoría fáctica",
+        "description": "PortfolioGenerate existe para acortar la configuración sin quitarle la autoría a la persona representada.",
+        "sections": {
+          "first": "El producto comienza con evidencias ya escritas en un CV.",
+          "second": "La edición y la publicación siguen siendo decisiones humanas explícitas.",
+          "third": "Las páginas públicas son lecturas duraderas, no demostraciones de IA en vivo."
+        }
+      },
+      "mission": {
+        "title": "Haga que la publicación profesional sea honesta y responsable",
+        "description": "Un portafolio útil debe ser accesible para crear, fácil de verificar y confiable para visitar.",
+        "sections": {
+          "first": "Reducir el coste mecánico de convertir un CV en un sitio coherente.",
+          "second": "Nunca cambie la velocidad por afirmaciones profesionales plausibles pero sin fundamento.",
+          "third": "Dale a cada persona una dirección estable y control sobre lo que dice."
+        }
+      },
+      "contact": {
+        "title": "Habla con el equipo de PortfolioGenerate",
+        "description": "Pregunte sobre el producto, informe un problema de accesibilidad o comparta una inquietud de seguridad.",
+        "sections": {
+          "first": "Las preguntas sobre productos reciben respuestas prácticas sobre importación, edición y publicación.",
+          "second": "Los informes de accesibilidad deben incluir la página, el navegador y la tecnología de asistencia utilizada.",
+          "third": "Los informes de seguridad se manejan de forma discreta y nunca requieren el envío de su CV."
+        }
+      },
+      "help": {
+        "title": "Ayuda para cada paso desde la importación hasta la publicación.",
+        "description": "Encuentre orientación directa para decisiones comunes y problemas recuperables.",
+        "sections": {
+          "first": "La ayuda para la importación cubre archivos PDF legibles, límites, escaneos y archivos rechazados.",
+          "second": "La ayuda del editor explica la visibilidad, el orden, las vistas previas y las advertencias.",
+          "third": "La ayuda para la publicación cubre direcciones, actualizaciones, páginas privadas y despublicación."
+        }
+      },
+      "faq": {
+        "title": "Preguntas que la gente hace antes de confiar en un importador de CV",
+        "description": "Respuestas claras sobre IA, privacidad, costos, propiedad y qué sucede después de la publicación.",
+        "sections": {
+          "first": "Nada se publica automáticamente: cada importación produce un borrador.",
+          "second": "Los datos faltantes del CV permanecen vacíos en lugar de completarse por inferencia.",
+          "third": "Un portafolio publicado sigue funcionando sin el proveedor de inteligencia artificial o el analizador de PDF."
+        }
+      },
+      "accessibility": {
+        "title": "La accesibilidad forma parte del contrato editorial.",
+        "description": "El editor y todos los portafolios públicos apuntan a las WCAG 2.2 AA en teclado, tacto, contraste y estructura.",
+        "sections": {
+          "first": "Los puntos de referencia, encabezados, etiquetas y estados de la página actual admiten la navegación.",
+          "second": "El enfoque visible y los controles táctiles sirven para lectores móviles y de teclado.",
+          "third": "Las imágenes de la galería requieren alternativas útiles y el movimiento respeta la configuración de movimiento reducido."
+        }
+      },
+      "terms": {
+        "title": "Términos escritos en torno al control y uso responsable",
+        "description": "Utilice el servicio para contenido que tenga derecho a publicar y revise cada hecho antes de hacerlo público.",
+        "sections": {
+          "first": "Usted conserva la responsabilidad de la información profesional que publica.",
+          "second": "No cargues malware, te hagas pasar por otra persona ni eludas los controles de acceso.",
+          "third": "Puede cancelar la publicación o eliminar sus datos utilizando los controles proporcionados."
+        }
+      },
+      "changelog": {
+        "title": "Qué cambió y por qué es importante",
+        "description": "Un registro conciso de los cambios del producto que afectan la creación, la privacidad, la accesibilidad o la salida pública.",
+        "sections": {
+          "first": "Los cambios en los documentos explican nuevos campos y el comportamiento de migración.",
+          "second": "Los cambios de seguridad identifican límites reforzados sin exponer los detalles del exploit.",
+          "third": "Los cambios en el renderizador indican mejoras visibles en el comportamiento y la accesibilidad."
+        }
+      }
+    }
+  },
+  "contact": {
+    "title": "Contáctenos",
+    "lead": "Envíe una pregunta sobre PortfolioGenerate. Utilizamos sus datos sólo para responder a este mensaje.",
+    "name": "Nombre",
+    "email": "Correo electrónico",
+    "subject": "Sujeto",
+    "message": "Mensaje",
+    "website": "Sitio web",
+    "send": "enviar mensaje",
+    "sending": "Enviando mensaje",
+    "accepted": "Su mensaje fue aceptado. Le responderemos por correo electrónico.",
+    "errors": {
+      "invalid": "Verifique los campos e inténtelo nuevamente.",
+      "rate-limited": "Se enviaron demasiados mensajes desde esta conexión. Vuelve a intentarlo más tarde.",
+      "unavailable": "No pudimos enviar el mensaje en este momento. Vuelve a intentarlo en breve."
+    }
+  },
+  "auth": {
+    "signInTitle": "Iniciar sesión",
+    "signInLead": "Continúe hasta su panel de control.",
+    "signUpTitle": "Crea tu cuenta",
+    "signUpLead": "Una cuenta, tantas carteras como necesites.",
+    "nameLabel": "Nombre",
+    "emailLabel": "Correo electrónico",
+    "passwordLabel": "Contraseña",
+    "passwordHint": "Al menos 12 caracteres.",
+    "submitSignIn": "Iniciar sesión",
+    "submitSignUp": "Crear una cuenta",
+    "pendingSignIn": "Iniciar sesión",
+    "pendingSignUp": "Creando tu cuenta",
+    "toSignUp": "¿Aún no tienes cuenta? Crea uno.",
+    "toSignIn": "¿Ya tienes una cuenta? Iniciar sesión.",
+    "signOut": "desconectar",
+    "forgotPasswordLink": "¿Olvidaste tu contraseña?",
+    "reset": {
+      "requestTitle": "Restablece tu contraseña",
+      "requestLead": "Introduce tu correo electrónico. Si existe una cuenta, le enviaremos un enlace de restablecimiento seguro.",
+      "requestSubmit": "Enviar enlace de reinicio",
+      "requestPending": "Enviando enlace de reinicio",
+      "requested": "Si existe una cuenta para ese correo electrónico, un enlace de restablecimiento está en camino.",
+      "resetTitle": "Elija una nueva contraseña",
+      "resetLead": "Utilice el enlace seguro de su correo electrónico para reemplazar su contraseña.",
+      "newPassword": "Nueva contraseña",
+      "resetSubmit": "Guardar nueva contraseña",
+      "resetPending": "Guardando nueva contraseña",
+      "completed": "Su contraseña ha sido cambiada. Ahora puedes iniciar sesión."
+    },
+    "errors": {
+      "invalidCredentials": "Esa combinación de correo electrónico y contraseña no coincidía con ninguna cuenta.",
+      "emailTaken": "Ya existe una cuenta para ese correo electrónico.",
+      "weakPassword": "Elija una contraseña de al menos 12 caracteres.",
+      "invalidEmail": "Ingrese una dirección de correo electrónico válida.",
+      "nameRequired": "Ingrese el nombre con el que desea iniciar sesión.",
+      "unknown": "Algo salió mal. Intentar otra vez."
+    }
+  },
+  "localization": {
+    "label": "Idioma",
+    "copyUrl": "Copiar URL",
+    "copied": "Copiado",
+    "locales": {
+      "en": "Inglés",
+      "ar": "العربية",
+      "fr": "francés",
+      "de": "alemán",
+      "it": "italiano",
+      "zh": "中文",
+      "ja": "日本語",
+      "th": "ไทย",
+      "pt": "portugués",
+      "es": "Español",
+      "hi": "हिन्दी",
+      "fa": "فارسی",
+      "ru": "ruso"
+    },
+    "translation": {
+      "title": "Traducciones de portafolios",
+      "hint": "Genere un borrador, revise los datos traducidos a continuación y luego márquelo como revisado antes de publicarlo. Nada es público hasta que lo publiques por separado.",
+      "locale": "Idioma de traducción",
+      "generate": "Generar borrador",
+      "generating": "Generando borrador",
+      "draft": "Borrador: se requiere revisión",
+      "reviewed": "Revisado: listo para publicar",
+      "published": "Publicado",
+      "stale": "Desactualizado: regenerar a partir del borrador actual en inglés",
+      "correctDocument": "Borrador JSON traducido correcto",
+      "saveCorrection": "Guardar corrección",
+      "correcting": "Corrección de ahorro",
+      "versions": "Versión borrador {draft} · versión publicada {published}",
+      "reviewDocument": "Revisar el documento traducido completo",
+      "markReviewed": "Marcos revisado",
+      "reviewing": "Calificación revisada",
+      "publish": "Publicar traducción",
+      "publishing": "Traducción editorial",
+      "errors": {
+        "generic": "No se pudo completar la operación de traducción. No se publicó nada."
+      }
+    }
+  },
+  "errors": {
+    "title": "algo salió mal",
+    "lead": "No se pudo representar la página. El problema ha sido registrado.",
+    "retry": "Intentar otra vez",
+    "notFoundTitle": "Página no encontrada",
+    "notFoundLead": "No hay nada publicado en esta dirección.",
+    "backHome": "Ir a la página de inicio",
+    "unauthorized": "No tienes acceso a esa cartera."
+  },
+  "portfolio": {
+    "sections": {
+      "hero": "Perfil",
+      "about": "Acerca de",
+      "experience": "Experiencia",
+      "projects": "Proyectos",
+      "skills": "Habilidades",
+      "education": "Educación",
+      "certifications": "Certificaciones",
+      "languages": "Idiomas",
+      "contact": "Contacto",
+      "custom": "Más"
+    },
+    "present": "Presente",
+    "emailLabel": "Correo electrónico",
+    "phoneLabel": "Teléfono",
+    "locationLabel": "Ubicación",
+    "availability": "Abierto para trabajar",
+    "contactCta": "Ponte en contacto",
+    "skipToContent": "Saltar al contenido",
+    "builtWith": "Publicado con PortfolioGenerate",
+    "navigationLabel": "Páginas del portafolio",
+    "portraitAlt": "Retrato",
+    "privatePage": {
+      "title": "Esta pagina es privada",
+      "description": "Ingrese la contraseña que el propietario de la cartera compartió con usted.",
+      "password": "Contraseña compartida",
+      "submit": "Abrir pagina privada",
+      "denied": "Esa contraseña no coincide. Compruébalo y vuelve a intentarlo."
+    },
+    "supplemental": {
+      "softSkills": "Habilidades blandas",
+      "courses": "Cursos",
+      "publications": "Publicaciones",
+      "volunteering": "Voluntariado",
+      "awards": "Premios",
+      "interests": "Intereses",
+      "testimonials": "Testimonios",
+      "gallery": "Galería",
+      "attachments": "Descargas"
+    }
+  },
+  "dashboard": {
+    "title": "Tus carteras",
+    "lead": "Cada portafolio tiene un borrador privado y, una vez publicado, una dirección pública que tú eliges.",
+    "empty": {
+      "title": "Aún no hay carteras",
+      "description": "Crea uno, sube tu CV y ​​revisa lo que encontró el extractor antes de que algo se haga público."
+    },
+    "listTitle": "Portafolios",
+    "create": {
+      "title": "Crear un portafolio",
+      "lead": "Comienza con tu nombre. Puede cambiar la dirección pública en cualquier momento antes de publicar.",
+      "nameLabel": "Nombre para mostrar",
+      "namePlaceholder": "Jane Doe",
+      "slugLabel": "megafonía",
+      "slugHint": "Déjelo vacío y le sugeriremos uno a su nombre.",
+      "submit": "Crear",
+      "pending": "Creando"
+    },
+    "status": {
+      "draft": "Borrador",
+      "published": "Publicado",
+      "unpublished": "Inédito"
+    },
+    "actions": {
+      "edit": "Editar",
+      "preview": "Avance",
+      "view": "Ver en vivo",
+      "import": "Importar CV",
+      "publish": "Publicar"
+    },
+    "meta": {
+      "updated": "Actualizado {when}",
+      "published": "Publicado {when}",
+      "neverPublished": "Aún no publicado"
+    },
+    "errors": {
+      "invalidInput": "Verifique el nombre y la dirección e inténtelo nuevamente.",
+      "limitReached": "Ha alcanzado el número máximo de carteras para esta cuenta.",
+      "slugTaken": "Esa dirección ya está ocupada. Prueba con otro.",
+      "notFound": "Esa cartera ya no existe.",
+      "versionConflict": "Este portafolio cambió en otra pestaña. Vuelva a cargar antes de guardar nuevamente.",
+      "slug.empty": "Elija una dirección pública.",
+      "slug.too-short": "La dirección necesita al menos 3 caracteres.",
+      "slug.too-long": "La dirección es demasiado larga.",
+      "slug.invalid-characters": "Utilice únicamente letras minúsculas, números y guiones simples.",
+      "slug.reserved": "Esa dirección está reservada por la plataforma. Prueba con otro."
+    }
+  },
+  "ingestion": {
+    "title": "Importa tu CV",
+    "lead": "Sube un PDF. Lo leemos, lo estructuramos y le entregamos un borrador para que lo revise; nada se hace público hasta que lo publica.",
+    "upload": {
+      "title": "Elige tu currículum",
+      "hint": "PDF, DOCX, DOC o RTF, hasta páginas {maxMegabytes} MB y {maxPages}.",
+      "fieldLabel": "archivo CV",
+      "submit": "Importar",
+      "pending": "Importador"
+    },
+    "facts": {
+      "privacyLabel": "Privacidad",
+      "privacyValue": "El archivo se almacena de forma privada y nunca se puede acceder públicamente. Puedes eliminarlo en cualquier momento.",
+      "reviewLabel": "Revisar",
+      "reviewValue": "La extracción produce un borrador. Apruebas cada hecho antes de que se publique algo.",
+      "accuracyLabel": "Exactitud",
+      "accuracyValue": "No se inventa nada. Los campos que el documento no admite se dejan vacíos y se marcan para usted.",
+      "costLabel": "Costo",
+      "costValue": "El texto se lee primero localmente, por lo que un CV normal cuesta una llamada de modelo y su página publicada no cuesta nada."
+    },
+    "warningsTitle": "Vale la pena echarle un segundo vistazo",
+    "errors": {
+      "empty": "Ese archivo está vacío. Elija un PDF e inténtelo de nuevo.",
+      "tooLarge": "Ese archivo es más grande que el límite de carga.",
+      "notAPdf": "Ese archivo no es un PDF legible.",
+      "unreadableDocument": "No pudimos leer con seguridad el texto de ese documento. Exportelo nuevamente como PDF, DOCX, DOC o RTF y vuelva a intentarlo.",
+      "unsafeDocument": "Ese documento contiene macros, objetos incrustados o recursos externos, por lo que no se abrió.",
+      "encrypted": "Ese PDF está protegido con contraseña. Elimine la contraseña y cárguela nuevamente.",
+      "tooManyPages": "Ese PDF tiene más páginas que el límite de importación.",
+      "scanned": "Ese PDF parece escaneado, por lo que no hay texto para leer. Cargue un PDF basado en texto o inicie su portafolio manualmente.",
+      "quotaExceeded": "Ha utilizado sus importaciones de CV para hoy. Inténtalo de nuevo mañana.",
+      "rateLimited": "Demasiadas cargas en este momento. Vuelve a intentarlo dentro de un rato.",
+      "invalid": "Algo en esa solicitud no estaba bien. Intentar otra vez.",
+      "notFound": "Esa cartera ya no existe.",
+      "conflict": "Este portafolio cambió en otra pestaña. Vuelva a cargar antes de importar nuevamente.",
+      "typeMismatch": "Ese archivo no es lo que su nombre dice. Cargue el PDF original en lugar de una copia renombrada.",
+      "infected": "Nuestro escáner encontró algo en ese archivo, por lo que no se almacenó. Verifique el archivo en su propia máquina antes de volver a intentarlo.",
+      "scannerUnavailable": "No pudimos escanear ese archivo en este momento, por lo que no se almacenó nada. Inténtelo de nuevo en unos minutos."
+    }
+  },
+  "editor": {
+    "title": "Revisar y editar",
+    "untitled": "Portafolio sin título",
+    "save": "Ahorrar",
+    "saving": "Ahorro",
+    "saved": "Guardado",
+    "unsaved": "Cambios no guardados",
+    "warningsTitle": "Vale la pena echarle un segundo vistazo",
+    "identityTitle": "quien eres",
+    "identityHint": "Esto es lo primero que ve un lector. Todo lo que aparece aquí proviene de tu CV: corrige cualquier error que haya cometido el extractor.",
+    "displayName": "Nombre para mostrar",
+    "headline": "Titular",
+    "summary": "Resumen",
+    "location": "Ubicación",
+    "tagline": "Lema de bienvenida",
+    "availabilityEnabled": "Mostrar que estoy disponible para trabajar",
+    "availabilityNote": "Nota de disponibilidad",
+    "coverLetter": "Carta de presentación o introducción más larga",
+    "contactTitle": "Contacto",
+    "contactHint": "Almacenar y publicar son decisiones diferentes. Nada aquí aparece en su página pública a menos que la active.",
+    "email": "Correo electrónico",
+    "phone": "Teléfono",
+    "showPublicly": "Mostrar en mi página pública",
+    "seoTitle": "Buscar y compartir",
+    "seoHint": "Cómo aparece su cartera en los resultados de búsqueda y vistas previas de enlaces. Déjelo en blanco para usar su nombre y título.",
+    "seoTitleField": "Título de la página",
+    "seoDescriptionField": "Descripción",
+    "indexable": "Permitir que los motores de búsqueda indexen este portafolio",
+    "sections": {
+      "title": "Secciones de página",
+      "hint": "Reordenar y ocultar secciones. Una sección que no contiene nada se omite automáticamente.",
+      "moveUp": "Mover sección hacia arriba",
+      "moveDown": "Mover sección hacia abajo",
+      "show": "Espectáculo",
+      "hide": "Esconder"
+    },
+    "collections": {
+      "title": "Contenido del portafolio",
+      "hint": "Agregue, edite, elimine y ordene los hechos en su borrador. Los campos obligatorios vacíos deben completarse antes de guardar.",
+      "experience": "Experiencia",
+      "projects": "Proyectos",
+      "skills": "Grupos de habilidades técnicas",
+      "softSkills": "Habilidades blandas",
+      "education": "Educación",
+      "courses": "Cursos",
+      "certifications": "Certificaciones",
+      "languages": "Idiomas",
+      "awards": "Premios",
+      "publications": "Publicaciones",
+      "volunteering": "Voluntariado",
+      "testimonials": "Testimonios",
+      "socialLinks": "Enlaces sociales",
+      "interests": "Intereses, separados por comas",
+      "add": "Agregar entrada",
+      "remove": "Eliminar entrada",
+      "moveUp": "Mover entrada hacia arriba",
+      "moveDown": "Mover entrada hacia abajo",
+      "fields": {
+        "organization": "Organización",
+        "title": "Título",
+        "location": "Ubicación",
+        "startDate": "Mes de inicio",
+        "endDate": "Fin de mes",
+        "current": "Rol actual",
+        "summary": "Resumen",
+        "highlights": "Destacados, uno por línea",
+        "technologies": "Tecnologías, una por línea",
+        "name": "Nombre",
+        "slug": "Dirección del proyecto",
+        "role": "Role",
+        "year": "Mes del proyecto",
+        "featured": "Proyecto destacado",
+        "content": "Párrafos del proyecto, uno por línea",
+        "links": "Enlaces de proyectos, una etiqueta | URL por línea",
+        "label": "Etiqueta",
+        "tier": "nivel de habilidad",
+        "items": "Habilidades, una por línea",
+        "detail": "Evidencia o detalle",
+        "institution": "Institución",
+        "degree": "Grado",
+        "field": "campo de estudio",
+        "details": "Detalles",
+        "provider": "Proveedor",
+        "date": "Fecha",
+        "url": "URL",
+        "issuer": "Editor",
+        "credentialUrl": "URL de credencial",
+        "proficiency": "Competencia",
+        "description": "Descripción",
+        "publisher": "Editor",
+        "quote": "Cita",
+        "author": "Autor",
+        "kind": "Plataforma",
+        "visible": "Mostrar públicamente"
+      },
+      "skillTiers": {
+        "primary": "Primario",
+        "strong": "Fuerte",
+        "working": "Laboral",
+        "familiar": "Familiar"
+      },
+      "socialKinds": {
+        "github": "GitHub",
+        "gitlab": "GitLab",
+        "linkedin": "LinkedIn",
+        "behance": "comportamiento",
+        "dribbble": "regatear",
+        "youtube": "YouTube",
+        "tiktok": "tiktok",
+        "instagram": "Instagram",
+        "facebook": "Facebook",
+        "x": "incógnita",
+        "threads": "Trapos",
+        "medium": "Medio",
+        "stackoverflow": "Desbordamiento de pila",
+        "telegram": "Telegrama",
+        "whatsapp": "WhatsApp",
+        "website": "Sitio web"
+      }
+    },
+    "pages": {
+      "title": "Páginas del portafolio",
+      "hint": "Cree y solicite páginas públicas o protegidas con contraseña. Establezca una contraseña de página privada por separado para que el texto sin formato nunca entre en el borrador.",
+      "pageTitle": "Título de la página",
+      "navLabel": "Etiqueta de navegación",
+      "slug": "DIRECCIÓN",
+      "visibility": "Acceso",
+      "description": "Descripción de la página",
+      "public": "Público",
+      "private": "Privado",
+      "add": "Agregar página",
+      "remove": "Quitar página",
+      "moveUp": "Mover página hacia arriba",
+      "moveDown": "Mover página hacia abajo",
+      "show": "Espectáculo",
+      "hide": "Esconder",
+      "privateAccess": {
+        "visibility": "Acceso a la página",
+        "public": "Público",
+        "private": "Privado con contraseña compartida",
+        "password": "compartir contraseña",
+        "passwordHint": "Utilice al menos 12 caracteres al hacer que esta página sea privada. Déjelo vacío al devolver la página al acceso público.",
+        "submit": "Actualizar acceso a la página",
+        "success": "Acceso a la página actualizado.",
+        "errors": {
+          "invalidInput": "Elija un nivel de acceso y utilice una contraseña de al menos 12 caracteres para una página privada.",
+          "notFound": "Este portafolio o página ya no está disponible.",
+          "versionConflict": "La cartera cambió en otra pestaña. Vuelva a cargar antes de actualizar el acceso a la página."
+        }
+      }
+    },
+    "publish": {
+      "title": "Publicar",
+      "hint": "Elija su dirección pública y luego publíquela. Nada es público hasta que lo hagas.",
+      "slugLabel": "megafonía",
+      "urlPreview": "Su cartera estará en {url}",
+      "claim": "Guardar dirección",
+      "publish": "Publicar",
+      "republish": "Publicar cambios",
+      "unpublish": "Despublicar",
+      "publishing": "Publicación",
+      "published": "Publicado",
+      "viewLive": "Ver en vivo",
+      "blockersTitle": "Antes de que puedas publicar",
+      "blockers": {
+        "missing-name": "Añade tu nombre para mostrar.",
+        "missing-headline": "Añade un título para que el lector sepa lo que haces.",
+        "empty-portfolio": "Agregue al menos un rol, proyecto, calificación o un resumen.",
+        "no-visible-home-page": "Tu página de inicio está oculta. Hazlo visible para publicar."
+      }
+    },
+    "errors": {
+      "invalidDocument": "Algunos de estos valores no se pudieron guardar. Verifique los campos resaltados.",
+      "versionConflict": "Esta cartera cambió en otra parte. Vuelva a cargar para obtener la última versión antes de guardar nuevamente.",
+      "notFound": "Esa cartera ya no existe.",
+      "notReady": "Este portafolio aún no está listo para publicarse.",
+      "slugTaken": "Esa dirección ya está ocupada. Prueba con otro.",
+      "invalidSlug": "Utilice únicamente letras minúsculas, números y guiones simples."
+    },
+    "phoneCountry": "Código del país",
+    "phoneCountryNone": "Ningún país",
+    "assets": {
+      "portraitTitle": "Retrato",
+      "portraitHint": "Sube una imagen clara. Se escanea y valida antes de adjuntarlo a su borrador.",
+      "portraitLabel": "Imagen vertical",
+      "portraitFormats": "PNG, JPEG, WebP, GIF o AVIF, hasta 5 MB.",
+      "uploadPortrait": "Subir retrato",
+      "uploading": "Subiendo retrato",
+      "removePortrait": "Quitar retrato",
+      "uploaded": "Retrato subido. Guarde el borrador cuando la vista previa se vea bien.",
+      "collectionsTitle": "Galería y descargas",
+      "collectionsHint": "Los archivos se validan y analizan en busca de virus antes de adjuntarlos. Se vuelven públicos sólo después de guardar y publicar este borrador.",
+      "galleryFile": "Imagen de la galería",
+      "galleryAlt": "Descripción de la imagen",
+      "galleryCaption": "Título (opcional)",
+      "uploadGallery": "Subir imagen de la galería",
+      "attachmentFile": "Archivo descargable",
+      "attachmentKind": "tipo de archivo",
+      "attachmentLabel": "Etiqueta de descarga pública",
+      "uploadAttachment": "Subir archivo adjunto",
+      "remove": "Quitar del borrador",
+      "kinds": {
+        "cv": "CV o currículum",
+        "cover-letter": "Carta de presentación",
+        "certificate": "Certificado",
+        "portfolio": "Documento de cartera",
+        "reference": "Referencia",
+        "other": "Otro documento"
+      },
+      "errors": {
+        "invalid-input": "Elija un archivo e inténtelo de nuevo.",
+        "not-found": "Esa cartera ya no está disponible.",
+        "empty": "Ese archivo está vacío.",
+        "too-large": "Ese archivo es más grande que el límite para esta carga.",
+        "forbidden-extension": "Ese nombre de archivo contiene un tipo de archivo prohibido.",
+        "unknown-extension": "Ese archivo no tiene ninguna extensión reconocida.",
+        "unsupported-type": "Ese tipo de archivo no se acepta para esta carga.",
+        "signature-mismatch": "El contenido del archivo no coincide con su nombre de archivo.",
+        "extension-mismatch": "El tipo de archivo no coincide con su extensión.",
+        "image-unreadable": "El encabezado de esa imagen no se pudo leer.",
+        "image-too-large": "Esa imagen tiene dimensiones demasiado grandes para procesarla de forma segura.",
+        "image-too-small": "Elija una imagen de al menos 8 por 8 píxeles.",
+        "infected": "El escáner encontró contenido no seguro, por lo que el archivo no se almacenó.",
+        "scanner-unavailable": "No se pudo escanear el archivo. No se almacenó nada; Inténtalo de nuevo en breve.",
+        "rate-limited": "Se cargaron demasiados archivos desde esta conexión. Vuelve a intentarlo más tarde."
+      }
+    }
+  },
+  "account": {
+    "title": "Cuenta",
+    "lead": "Qué tenemos sobre usted y cómo eliminarlo.",
+    "summary": {
+      "title": "tu cuenta",
+      "nameLabel": "Nombre",
+      "emailLabel": "Correo electrónico",
+      "portfolioCountLabel": "Portafolios"
+    },
+    "profile": {
+      "title": "Perfil",
+      "hint": "Actualice el nombre que se muestra en su cuenta y en el panel de su cartera.",
+      "name": "Nombre para mostrar",
+      "submit": "Guardar perfil",
+      "pending": "Guardando perfil",
+      "saved": "Tu perfil fue actualizado."
+    },
+    "security": {
+      "title": "Seguridad",
+      "hint": "Verifique su correo electrónico, cambie su contraseña y revise los dispositivos en los que inició sesión.",
+      "verificationTitle": "Verificación de correo electrónico",
+      "verified": "Verificado",
+      "unverified": "No verificado",
+      "resend": "Enviar correo electrónico de verificación",
+      "sending": "Envío de correo electrónico de verificación",
+      "sent": "Si la entrega está disponible, un correo electrónico de verificación está en camino.",
+      "passwordTitle": "Cambiar la contraseña",
+      "currentPassword": "Contraseña actual",
+      "newPassword": "Nueva contraseña",
+      "changePassword": "Cambiar la contraseña",
+      "changingPassword": "Cambiar contraseña",
+      "passwordChanged": "Se cambió su contraseña y se revocaron otras sesiones.",
+      "sessionsTitle": "Dispositivos registrados",
+      "currentSession": "Sesión actual",
+      "revoke": "Cerrar sesión en el dispositivo",
+      "revoking": "Cerrar sesión en el dispositivo",
+      "created": "Iniciado sesión",
+      "expires": "Vence",
+      "unknownDevice": "Dispositivo desconocido",
+      "unknownAddress": "dirección desconocida",
+      "noSessions": "No se devolvieron sesiones activas."
+    },
+    "data": {
+      "title": "Tus datos",
+      "hint": "Los CV cargados se almacenan de forma privada y solo se leen mediante una solicitud que ya se ha relacionado con su cuenta. El texto extraído se conserva para que pueda volver a ejecutar una revisión sin volver a cargarlo.",
+      "retentionTitle": "Retención",
+      "retention": "Al eliminar un portafolio se eliminan sus archivos de CV inmediatamente y se mantiene la dirección pública reclamada, para que nadie más pueda tomar una dirección a la que todavía apunta su CV. Al eliminar su cuenta, se eliminan todos los archivos y todas las filas que tenemos sobre usted; el registro de auditoría mantiene un registro de que se produjo la eliminación, sin datos de identificación adjuntos."
+    },
+    "preferences": {
+      "title": "Preferencias",
+      "hint": "Elija el idioma, el tema de color y el país del teléfono predeterminado que se utilizará cuando edite sus carteras.",
+      "locale": "Idioma",
+      "theme": "Tema de color",
+      "country": "País de teléfono predeterminado",
+      "noCountry": "Sin país predeterminado",
+      "submit": "Guardar preferencias",
+      "pending": "Guardar preferencias",
+      "saved": "Tus preferencias fueron guardadas.",
+      "locales": {
+        "en": "Inglés",
+        "ar": "árabe",
+        "fr": "Francés",
+        "de": "Alemán",
+        "it": "italiano",
+        "zh": "Chino",
+        "ja": "japonés",
+        "th": "tailandés",
+        "pt": "portugués",
+        "es": "Español",
+        "hi": "hindi",
+        "fa": "persa",
+        "ru": "ruso"
+      },
+      "themes": {
+        "light": "Luz",
+        "dark": "Oscuro",
+        "system": "Usar configuración del dispositivo"
+      }
+    },
+    "portfolio": {
+      "delete": "Borrar",
+      "deleteConfirm": "Eliminar permanentemente",
+      "deleteCancel": "Guárdalo",
+      "deleting": "Eliminando",
+      "confirmMessage": "Esto elimina el portafolio y sus archivos CV cargados. No se puede deshacer."
+    },
+    "delete": {
+      "title": "Elimina tu cuenta",
+      "hint": "Esto elimina sus carteras, todos los CV cargados y sus datos de inicio de sesión. Las páginas publicadas dejan de resolverse inmediatamente. No se puede deshacer.",
+      "confirmationLabel": "Escriba {word} para confirmar",
+      "submit": "eliminar mi cuenta",
+      "submitting": "Eliminando"
+    },
+    "errors": {
+      "deleteFailed": "No pudimos completar la eliminación. No se eliminó nada; inténtelo de nuevo.",
+      "confirmationMismatch": "Escriba la palabra de confirmación exactamente para continuar.",
+      "notFound": "Esa cartera ya no está disponible."
+    }
+  }
+}

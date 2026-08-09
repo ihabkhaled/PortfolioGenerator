@@ -8,6 +8,8 @@ export interface TranslationSnapshot {
   readonly locale: AppLocale;
   readonly draftDocument: PortfolioDocument;
   readonly draftVersion: number;
+  readonly sourceFingerprint: string;
+  readonly isStale: boolean;
   readonly reviewedDocument: PortfolioDocument | null;
   readonly reviewedAt: Date | null;
   readonly publishedDocument: PortfolioDocument | null;
@@ -29,12 +31,18 @@ export interface TranslationActionInput {
   readonly locale: FormDataEntryValue | null;
 }
 
+export interface TranslationCorrectionInput extends TranslationActionInput {
+  readonly expectedVersion: FormDataEntryValue | null;
+  readonly document: FormDataEntryValue | null;
+}
+
 export interface TranslationRow {
   readonly id: string;
   readonly portfolioId: string;
   readonly locale: string;
   readonly draftDocument: unknown;
   readonly draftVersion: number;
+  readonly sourceFingerprint: string;
   readonly reviewedDocument: unknown;
   readonly reviewedAt: Date | null;
   readonly publishedDocument: unknown;

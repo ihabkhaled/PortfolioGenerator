@@ -40,6 +40,7 @@ export async function saveOwnedTranslationDraft(
   portfolioId: string,
   locale: AppLocale,
   document: PortfolioDocument,
+  sourceFingerprint: string,
 ): Promise<TranslationSnapshot | null> {
   const portfolio = await getDatabase().portfolio.findFirst({
     where: { id: portfolioId, ownerId, deletedAt: null },
@@ -49,9 +50,10 @@ export async function saveOwnedTranslationDraft(
 
   const row = await getDatabase().portfolioTranslation.upsert({
     where: { portfolioId_locale: { portfolioId, locale } },
-    create: { ownerId, portfolioId, locale, draftDocument: document },
+    create: { ownerId, portfolioId, locale, draftDocument: document, sourceFingerprint },
     update: {
       draftDocument: document,
+      sourceFingerprint,
       draftVersion: { increment: 1 },
       reviewedDocument: DbNull,
       reviewedAt: null,
@@ -59,6 +61,25 @@ export async function saveOwnedTranslationDraft(
     select: TRANSLATION_SELECT,
   });
   return toTranslationSnapshot(row);
+}
+
+export async function correctOwnedTranslationDraft(
+  ownerId: string,
+  portfolioId: string,
+  locale: AppLocale,
+  expectedVersion: number,
+  document: PortfolioDocument,
+): Promise<TranslationSnapshot | null> {
+  const updated = await getDatabase().portfolioTranslation.updateMany({
+    where: { ownerId, portfolioId, locale, draftVersion: expectedVersion },
+    data: {
+      draftDocument: document,
+      draftVersion: { increment: 1 },
+      reviewedDocument: DbNull,
+      reviewedAt: null,
+    },
+  });
+  return updated.count === 0 ? null : getOwnedTranslation(ownerId, portfolioId, locale);
 }
 
 export async function reviewOwnedTranslation(

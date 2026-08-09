@@ -9,6 +9,7 @@ export const TRANSLATION_ACTION_FIELDS = {
   portfolioId: 'portfolioId',
   locale: 'locale',
   expectedVersion: 'expectedVersion',
+  document: 'document',
 } as const;
 
 export const TRANSLATION_ACTION_ERROR_KEY = 'translation.errors.generic';

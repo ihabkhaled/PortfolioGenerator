@@ -47,6 +47,7 @@ export const serverEnvSchema = z.object({
   AI_API_KEY: optionalString,
   AI_PRIMARY_MODEL: z.string().trim().default('gpt-5-mini'),
   AI_FALLBACK_MODEL: z.string().trim().default('gpt-5'),
+  AI_TRANSLATION_MODEL: optionalString,
   AI_MAX_OUTPUT_TOKENS: positiveInt.default(8000),
   AI_REQUEST_TIMEOUT_MS: positiveInt.default(60_000),
 

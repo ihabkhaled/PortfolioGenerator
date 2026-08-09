@@ -1,20 +1,38 @@
 import 'server-only';
 
 import { getAiProvider } from '@/modules/ai/server';
+import type { PortfolioDocument } from '@/modules/portfolio-document';
 import { getOwnedPortfolio, portfolioCacheTag } from '@/modules/portfolios/server';
 import { redactPrivatePagePasswords, restoreServerPageAccess } from '@/modules/private-page-access';
 import { invalidateTagImmediately } from '@/packages/cache';
 
+import { fingerprintTranslationSource } from '../helpers/translation-fingerprint.helper';
 import {
+  correctOwnedTranslationDraft,
   getOwnedTranslation,
+  listOwnedTranslations as listOwnedTranslationsRepository,
   publishOwnedTranslation,
   reviewOwnedTranslation,
   saveOwnedTranslationDraft,
 } from '../repositories/translation.repository';
 import type { AppLocale } from '../types/locale.types';
-import type { TranslationWriteResult } from '../types/translation.types';
+import type { TranslationSnapshot, TranslationWriteResult } from '../types/translation.types';
 
-export { listOwnedTranslations } from '../repositories/translation.repository';
+export async function listOwnedTranslations(
+  ownerId: string,
+  portfolioId: string,
+): Promise<readonly TranslationSnapshot[]> {
+  const [portfolio, translations] = await Promise.all([
+    getOwnedPortfolio(ownerId, portfolioId),
+    listOwnedTranslationsRepository(ownerId, portfolioId),
+  ]);
+  if (portfolio === null) return [];
+  const currentFingerprint = fingerprintTranslationSource(portfolio.draftDocument);
+  return translations.map((translation) => ({
+    ...translation,
+    isStale: translation.sourceFingerprint !== currentFingerprint,
+  }));
+}
 
 export async function generateTranslationDraft(
   ownerId: string,
@@ -33,6 +51,34 @@ export async function generateTranslationDraft(
     portfolioId,
     locale,
     restoreServerPageAccess(translated.value, portfolio.draftDocument),
+    fingerprintTranslationSource(portfolio.draftDocument),
+  );
+  return saved === null ? { ok: false, reason: 'not-found' } : { ok: true, value: saved };
+}
+
+export async function correctTranslationDraft(
+  ownerId: string,
+  portfolioId: string,
+  locale: Exclude<AppLocale, 'en'>,
+  expectedVersion: number,
+  document: PortfolioDocument,
+): Promise<TranslationWriteResult> {
+  const [current, portfolio] = await Promise.all([
+    getOwnedTranslation(ownerId, portfolioId, locale),
+    getOwnedPortfolio(ownerId, portfolioId),
+  ]);
+  if (
+    current === null ||
+    portfolio === null ||
+    current.sourceFingerprint !== fingerprintTranslationSource(portfolio.draftDocument)
+  )
+    return { ok: false, reason: 'not-found' };
+  const saved = await correctOwnedTranslationDraft(
+    ownerId,
+    portfolioId,
+    locale,
+    expectedVersion,
+    document,
   );
   return saved === null ? { ok: false, reason: 'not-found' } : { ok: true, value: saved };
 }
@@ -44,6 +90,15 @@ export async function markTranslationReviewed(
   expectedVersion: number,
   reviewedAt: Date,
 ): Promise<TranslationWriteResult> {
+  const [portfolio, current] = await Promise.all([
+    getOwnedPortfolio(ownerId, portfolioId),
+    getOwnedTranslation(ownerId, portfolioId, locale),
+  ]);
+  if (
+    portfolio === null ||
+    current?.sourceFingerprint !== fingerprintTranslationSource(portfolio.draftDocument)
+  )
+    return { ok: false, reason: 'not-found' };
   const saved = await reviewOwnedTranslation(
     ownerId,
     portfolioId,
@@ -62,9 +117,15 @@ export async function publishTranslationSnapshot(
   publishedAt: Date,
 ): Promise<TranslationWriteResult> {
   const current = await getOwnedTranslation(ownerId, portfolioId, locale);
-  if (current === null) return { ok: false, reason: 'not-found' };
-  if (current.draftVersion !== expectedVersion) return { ok: false, reason: 'not-found' };
+  if (current?.draftVersion !== expectedVersion) return { ok: false, reason: 'not-found' };
   if (current.reviewedDocument === null) return { ok: false, reason: 'not-reviewed' };
+  const portfolio = await getOwnedPortfolio(ownerId, portfolioId);
+  if (
+    portfolio === null ||
+    current.sourceFingerprint !== fingerprintTranslationSource(portfolio.draftDocument)
+  ) {
+    return { ok: false, reason: 'not-reviewed' };
+  }
   const saved = await publishOwnedTranslation(
     ownerId,
     portfolioId,

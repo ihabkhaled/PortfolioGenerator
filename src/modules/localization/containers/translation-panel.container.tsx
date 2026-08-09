@@ -5,9 +5,10 @@ import { useActionState } from 'react';
 import type { ReactElement } from 'react';
 
 import { I18N_NAMESPACES, useAppTranslation } from '@/packages/i18n';
-import { Button, Label, Select } from '@/packages/ui-primitives';
+import { Button, Label, Select, Textarea } from '@/packages/ui-primitives';
 
 import {
+  correctTranslationAction,
   generateTranslationAction,
   publishTranslationAction,
   reviewTranslationAction,
@@ -52,7 +53,11 @@ export function TranslationPanelContainer(props: Readonly<TranslationPanelProps>
     publishTranslationAction,
     TRANSLATION_ACTION_INITIAL_STATE,
   );
-  const error = [generateState, reviewState, publishState].find(
+  const [correctState, correctAction, correcting] = useActionState(
+    correctTranslationAction,
+    TRANSLATION_ACTION_INITIAL_STATE,
+  );
+  const error = [generateState, correctState, reviewState, publishState].find(
     (state) => state.status === 'error',
   );
   const generateLabel = getPendingLabel(
@@ -108,7 +113,7 @@ export function TranslationPanelContainer(props: Readonly<TranslationPanelProps>
             <div className={localizationClasses.itemHeader}>
               <h3 className={localizationClasses.itemTitle}>{t(`locales.${snapshot.locale}`)}</h3>
               <span className={localizationClasses.status}>
-                {t(getSnapshotStatusKey(snapshot))}
+                {t(snapshot.isStale ? 'translation.stale' : getSnapshotStatusKey(snapshot))}
               </span>
             </div>
             <div className={localizationClasses.preview}>
@@ -133,6 +138,41 @@ export function TranslationPanelContainer(props: Readonly<TranslationPanelProps>
                 {JSON.stringify(snapshot.draftDocument, null, 2)}
               </pre>
             </details>
+            <form action={correctAction} className={localizationClasses.field}>
+              <input
+                type="hidden"
+                name={TRANSLATION_ACTION_FIELDS.portfolioId}
+                value={props.portfolioId}
+              />
+              <input
+                type="hidden"
+                name={TRANSLATION_ACTION_FIELDS.locale}
+                value={snapshot.locale}
+              />
+              <input
+                type="hidden"
+                name={TRANSLATION_ACTION_FIELDS.expectedVersion}
+                value={snapshot.draftVersion}
+              />
+              <Label htmlFor={`translation-document-${snapshot.locale}`}>
+                {t('translation.correctDocument')}
+              </Label>
+              <Textarea
+                id={`translation-document-${snapshot.locale}`}
+                name={TRANSLATION_ACTION_FIELDS.document}
+                defaultValue={JSON.stringify(snapshot.draftDocument, null, 2)}
+                rows={12}
+                disabled={snapshot.isStale || correcting}
+              />
+              <Button
+                type="submit"
+                variant="secondary"
+                size="sm"
+                disabled={snapshot.isStale || correcting}
+              >
+                {t(correcting ? 'translation.correcting' : 'translation.saveCorrection')}
+              </Button>
+            </form>
             <div className={localizationClasses.actions}>
               <form action={reviewAction}>
                 <input
@@ -150,7 +190,12 @@ export function TranslationPanelContainer(props: Readonly<TranslationPanelProps>
                   name={TRANSLATION_ACTION_FIELDS.expectedVersion}
                   value={snapshot.draftVersion}
                 />
-                <Button type="submit" variant="secondary" size="sm" disabled={reviewing}>
+                <Button
+                  type="submit"
+                  variant="secondary"
+                  size="sm"
+                  disabled={reviewing || snapshot.isStale}
+                >
                   {reviewLabel}
                 </Button>
               </form>
@@ -173,7 +218,7 @@ export function TranslationPanelContainer(props: Readonly<TranslationPanelProps>
                 <Button
                   type="submit"
                   size="sm"
-                  disabled={publishing || snapshot.reviewedDocument === null}
+                  disabled={publishing || snapshot.isStale || snapshot.reviewedDocument === null}
                 >
                   {publishLabel}
                 </Button>

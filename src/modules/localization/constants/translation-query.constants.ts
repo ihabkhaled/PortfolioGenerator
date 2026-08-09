@@ -4,6 +4,7 @@ export const TRANSLATION_SELECT = {
   locale: true,
   draftDocument: true,
   draftVersion: true,
+  sourceFingerprint: true,
   reviewedDocument: true,
   reviewedAt: true,
   publishedDocument: true,

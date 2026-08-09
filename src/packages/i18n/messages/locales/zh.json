@@ -1,0 +1,818 @@
+{
+  "app": {
+    "skipToContent": "跳至内容",
+    "theme": {
+      "dark": "黑暗的",
+      "light": "光",
+      "system": "匹配我的系统",
+      "label": "色彩主题"
+    },
+    "loading": "加载中",
+    "nav": {
+      "signIn": "登入",
+      "dashboard": "仪表板",
+      "signUp": "创建账户",
+      "signOut": "登出"
+    },
+    "name": "投资组合生成",
+    "tagline": "将简历变成您掌控的作品集",
+    "footerNote": "您的简历保密。只有您评论和发布的内容才会公开。",
+    "themeSwitchLabel": "切换主题"
+  },
+  "marketing": {
+    "howTitle": "它是如何运作的",
+    "secondaryCta": "登入",
+    "eyebrow": "简历到作品集",
+    "lead": "上传 PDF。审查每一个提取的事实。撰写您的页面。声明 URL 并发布。",
+    "title": "您的简历，作为您实际控制的作品集发布。",
+    "supporting": "除非您这么说，否则任何事情都不会公开，并且当访问者加载您的页面时，不会运行任何人工智能。",
+    "primaryCta": "创建您的投资组合",
+    "steps": {
+      "uploadTitle": "上传您的简历",
+      "reviewTitle": "审查草稿",
+      "composeBody": "重新排序、隐藏、添加部分和额外页面。没有代码，没有模板可以战斗。",
+      "uploadBody": "PDF，私密存储。在任何模型看到文本之前，文本都会在本地提取。",
+      "publishBody": "选择您的 slug，预览结果，并在读取正确时发布。",
+      "composeTitle": "撰写您的页面",
+      "reviewBody": "每个字段都是可编辑的。警告指出值得重新审视的值。",
+      "publishTitle": "声明 URL 并发布"
+    },
+    "howLead": "只需四个步骤，您就可以成为其中每一步的编辑。",
+    "principlesTitle": "产品承诺什么",
+    "principles": {
+      "controlTitle": "你认可每一个公开事实",
+      "controlBody": "提取产生草稿。发布始终是您采取的明确行动。",
+      "privacyBody": "上传的文件永远不可公开寻址，您可以随时将其删除。",
+      "fastBody": "已发布的投资组合由快照提供，不需要人工智能来渲染。",
+      "honestBody": "提取器被指示将字段留空而不是猜测它。",
+      "privacyTitle": "您的简历保密",
+      "honestTitle": "没有什么被发明出来",
+      "fastTitle": "公共页面便宜且速度快"
+    },
+    "landing": {
+      "directory": {
+        "linkLabel": "阅读本指南",
+        "eyebrow": "探索产品",
+        "lead": "在创建帐户之前，请了解工作流程、事实准确性边界、安全模型、可访问模板、隐私选择和实际支持。",
+        "title": "上传简历之前值得检查的详细信息"
+      },
+      "useCases": {
+        "eyebrow": "不同的工作，一种清晰的结构",
+        "designerBody": "将项目叙述与拥有的画廊图像、有用的替代文本、课程、奖项和选定的社交资料相结合。",
+        "title": "投资组合可以以适合职业的证据为主导",
+        "engineerBody": "以您的简历中已支持的系统、角色、项目限制、技术、出版物和成果为主导。",
+        "graduateBody": "当工作经历还很短时，就提供教育、项目、课程、语言、志愿服务和展示的技能。",
+        "lead": "模板保持一致，同时审阅的文档决定显示哪些部分以及首先显示哪些部分。",
+        "consultantBody": "通过一个帐户为不同受众维护单独的投资组合，而无需混合他们的草稿或已发布的地址。",
+        "designerTitle": "设计与视觉实践",
+        "graduateTitle": "学生和应届毕业生",
+        "engineerTitle": "工程技术工作",
+        "consultantTitle": "顾问和独立专家"
+      },
+      "trust": {
+        "eyebrow": "你可以推理的界限",
+        "snapshotTitle": "发布创建经过验证的快照",
+        "accessTitle": "缺席和私人内容仍然缺席",
+        "ownershipTitle": "创作保持在所有者范围内",
+        "ownershipBody": "在读取或更改投资组合之前，仪表板操作会解析登录的所有者。",
+        "title": "公共页面与创建它的机器是分开的",
+        "snapshotBody": "访问者阅读存储的评论内容；他们的请求不会调用 AI 提供者或解析原始 PDF。",
+        "draftBody": "提取可以组织源事实，但只有所有者才能更正、撰写和发布它们。",
+        "draftTitle": "进口戛然而止",
+        "accessBody": "公共输出和导航中会省略隐藏频道、空白部分、草稿和未经授权的私人页面。",
+        "lead": "这些是产品行为，而不是性能声明：它们描述了存储的内容、何时公开以及访问者请求所依赖的内容。"
+      },
+      "faq": {
+        "missingQuestion": "当简历不包含字段时会发生什么？",
+        "lead": "对上传、审核、发布和保持作品集可用的问题的简短回答。",
+        "outageAnswer": "不会。已发布的作品集根据经过验证的存储快照进行渲染，独立于 AI 提取和 PDF 解析服务。",
+        "cvAnswer": "源上传保持私密。访问者只能访问您明确添加到已审阅的已发布文档中的附件。",
+        "title": "重要时刻会发生什么",
+        "cvQuestion": "访客可以下载我的原始简历吗？",
+        "publishAnswer": "不会。导入会创建私人草稿。发布是您审阅内容和公共地址后的单独操作。",
+        "publishQuestion": "上传我的简历会发布任何内容吗？",
+        "outageQuestion": "发布的页面需要AI加载吗？",
+        "missingAnswer": "该字段仍然是空的。不允许提取者仅凭合理性来完成专业声明。",
+        "eyebrow": "实际问题",
+        "manyAnswer": "是的。每个作品集都有自己的草稿、页面、主题选择、出版状态和公共地址。",
+        "manyQuestion": "一个帐户可以发布多个作品集吗？"
+      },
+      "cta": {
+        "description": "创建作品集、导入可读的 PDF 或手动开始，然后决定哪些内容值得公开。",
+        "learnMore": "查看完整的工作流程",
+        "title": "从可以检查的草稿开始"
+      }
+    },
+    "pages": {
+      "features": {
+        "title": "发布您的职业故事所需的一切",
+        "sections": {
+          "first": "可审查的简历提取使每一项索赔都在您的控制之下。",
+          "second": "灵活的页面结合了经验、项目、技能、教育和您自己的部分。",
+          "third": "即使创作服务不可用，已发布的快照也能保持快速。"
+        },
+        "description": "导入事实、编辑每个字段、撰写页面以及从一个帐户发布一个或多个投资组合。"
+      },
+      "how-it-works": {
+        "title": "从 PDF 到公共作品集只需四个精心设计的步骤",
+        "sections": {
+          "first": "您的 PDF 经过验证并作为私人源文档读取。",
+          "second": "提取的事实成为带有警告的可编辑草稿，而不是公共页面。",
+          "third": "您选择地址并在预览准确后发布。"
+        },
+        "description": "上传、审阅、撰写，然后发布。每个边界都是可见且可逆的。"
+      },
+      "templates": {
+        "description": "稳定的信息架构可以在主题调整基调的同时保持对证据的关注。",
+        "sections": {
+          "first": "语义部分在每种屏幕尺寸上创建可读的层次结构。",
+          "third": "任意脚本、样式或嵌入都不会危害访问者。",
+          "second": "命名重音和主题选择保留了经过测试的对比度。"
+        },
+        "title": "一个严格的模板，可以容纳个人声音"
+      },
+      "examples": {
+        "sections": {
+          "third": "早期职业生涯的投资组合可以以教育、课程和可论证的项目为主导。",
+          "first": "工程组合前景系统、成果和技术深度。",
+          "second": "设计作品集可以将项目叙述与自有画廊媒体结合起来。"
+        },
+        "title": "由工作而不是演示模板塑造的作品集",
+        "description": "了解不同的职业如何在一个一致、可访问的系统中保持可识别性。"
+      },
+      "cv-import": {
+        "sections": {
+          "third": "原始简历仍然保密，并且导入永远不会发布。",
+          "second": "提取的值会在人工审核重要的地方保留警告。",
+          "first": "在解析开始之前检查 PDF 签名和限制。"
+        },
+        "title": "将文档视为证据的简历导入",
+        "description": "导入器报告其可以支持的内容，并将不支持的字段留空。"
+      },
+      "ai-accuracy": {
+        "description": "结构化提取受到一个简单规则的限制：缺少证据意味着一个空字段。",
+        "sections": {
+          "first": "该模型通过有界结构化合约接收提取的文本。",
+          "second": "架构验证会在格式错误的输出到达编辑器之前拒绝该输出。",
+          "third": "写作增强是单独的行动，不能默默地取代事实。"
+        },
+        "title": "AI辅助起草；它永远不会得到最终的决定"
+      },
+      "security": {
+        "description": "所有权检查、验证上传和隔离的公共快照减少了任何请求可能暴露的内容。",
+        "sections": {
+          "first": "仪表板读取和写入的范围仅限于经过身份验证的所有者。",
+          "second": "上传内容由内容识别、扫描并存储在服务器生成的密钥下。",
+          "third": "公共渲染不导入创作、解析器、AI 或私有存储路径。"
+        },
+        "title": "围绕私人简历设计的安全边界"
+      },
+      "privacy": {
+        "sections": {
+          "third": "帐户删除会删除标识行和拥有的文件。",
+          "second": "隐藏的联系渠道和页面被省略而不是伪装。",
+          "first": "原始简历绝不会通过公共对象 URL 提供。"
+        },
+        "description": "只有经过审核的快照字段和明确公开的资产才能到达已发布的地址。",
+        "title": "默认情况下，您的源文档保持私密状态"
+      },
+      "about": {
+        "sections": {
+          "second": "编辑和出版仍然是明确的人类决定。",
+          "first": "该产品从已经写在简历中的证据开始。",
+          "third": "公共页面是持久阅读，而不是现场人工智能演示。"
+        },
+        "description": "PortfolioGenerate 的存在是为了缩短设置时间，同时又不会剥夺所代表人员的作者权。",
+        "title": "围绕事实作者身份构建的组合产品"
+      },
+      "mission": {
+        "title": "让专业出版变得诚实且可拥有",
+        "sections": {
+          "second": "切勿用速度来换取看似合理但未经证实的专业主张。",
+          "first": "降低将 CV 转变为连贯站点的机械成本。",
+          "third": "为每个人提供一个稳定的地址并控制其内容。"
+        },
+        "description": "一个有用的投资组合应该易于创建、易于验证并且易于访问。"
+      },
+      "contact": {
+        "description": "询问产品、报告可访问性问题或分享安全问题。",
+        "sections": {
+          "first": "产品问题可以获得有关导入、编辑和发布的实用答案。",
+          "second": "无障碍报告应包括页面、浏览器和所使用的辅助技术。",
+          "third": "安全报告会得到谨慎处理，并且无需发送您的简历。"
+        },
+        "title": "与 PortfolioGenerate 团队交谈"
+      },
+      "help": {
+        "description": "查找常见决策和可恢复问题的直接指导。",
+        "sections": {
+          "first": "导入帮助涵盖可读的 PDF、限制、扫描和拒绝的文件。",
+          "second": "编辑器帮助解释了可见性、排序、预览和警告。",
+          "third": "发布帮助涵盖地址、更新、私人页面和取消发布。"
+        },
+        "title": "从导入到发布的每个步骤的帮助"
+      },
+      "faq": {
+        "description": "关于人工智能、隐私、成本、所有权以及发布后会发生什么的清晰答案。",
+        "title": "人们在信任简历导入商之前会问的问题",
+        "sections": {
+          "second": "简历中缺失的事实仍然是空的，而不是通过推理来完成。",
+          "third": "已发布的作品集无需 AI 提供商或 PDF 解析器即可继续运行。",
+          "first": "没有什么会自动发布：每次导入都会产生草稿。"
+        }
+      },
+      "accessibility": {
+        "description": "编辑器和每个公共作品集在键盘、触摸、对比度和结构方面均以 WCAG 2.2 AA 为目标。",
+        "sections": {
+          "second": "可见焦点和触摸大小的控件为键盘和移动阅读器服务。",
+          "first": "地标、标题、标签和当前页面状态支持导航。",
+          "third": "图库图像需要有用的替代方案，并且运动尊重简化运动设置。"
+        },
+        "title": "可访问性是出版合同的一部分"
+      },
+      "terms": {
+        "description": "使用该服务来发布您有权发布的内容，并在公开之前审查每个事实。",
+        "sections": {
+          "second": "请勿上传恶意软件、冒充他人或逃避访问控制。",
+          "first": "您对您发布的专业信息负有责任。",
+          "third": "您可以使用提供的控件取消发布或删除您的数据。"
+        },
+        "title": "围绕控制和负责任的使用编写的条款"
+      },
+      "changelog": {
+        "title": "发生了什么变化以及为什么重要",
+        "sections": {
+          "third": "渲染器的更改带来了可见的行为和可访问性改进。",
+          "second": "安全更改可在不暴露漏洞利用细节的情况下识别强化边界。",
+          "first": "文档更改解释了新字段和迁移行为。"
+        },
+        "description": "影响创作、隐私、可访问性或公共输出的产品变更的简明记录。"
+      }
+    }
+  },
+  "contact": {
+    "title": "联系我们",
+    "email": "电子邮件",
+    "website": "网站",
+    "subject": "主题",
+    "name": "姓名",
+    "message": "信息",
+    "send": "发送消息",
+    "sending": "发送消息",
+    "lead": "发送有关 PortfolioGenerate 的问题。我们仅使用您的详细信息来回复此消息。",
+    "errors": {
+      "rate-limited": "从该连接发送的消息太多。稍后再试。",
+      "unavailable": "我们刚才无法发送消息。稍后再试。",
+      "invalid": "检查字段并重试。"
+    },
+    "accepted": "您的留言已被接受。我们将通过电子邮件回复。"
+  },
+  "auth": {
+    "signInTitle": "登入",
+    "nameLabel": "姓名",
+    "emailLabel": "电子邮件",
+    "passwordLabel": "密码",
+    "signUpTitle": "创建您的帐户",
+    "passwordHint": "至少 12 个字符。",
+    "submitSignUp": "创建账户",
+    "submitSignIn": "登入",
+    "pendingSignUp": "创建您的帐户",
+    "toSignIn": "已经有帐户？登入。",
+    "signOut": "登出",
+    "forgotPasswordLink": "忘记密码了吗？",
+    "reset": {
+      "requestTitle": "重置您的密码",
+      "resetTitle": "选择新密码",
+      "resetSubmit": "保存新密码",
+      "newPassword": "新密码",
+      "requestLead": "输入您的电子邮件。如果帐户存在，我们将发送一个安全重置链接。",
+      "completed": "您的密码已更改。您现在可以登录。",
+      "requestPending": "发送重置链接",
+      "requestSubmit": "发送重置链接",
+      "resetPending": "保存新密码",
+      "resetLead": "使用电子邮件中的安全链接替换您的密码。",
+      "requested": "如果该电子邮件的帐户存在，则会出现重置链接。"
+    },
+    "signInLead": "继续您的仪表板。",
+    "signUpLead": "一个账户，您需要多少个投资组合。",
+    "toSignUp": "还没有帐户？创建一个。",
+    "pendingSignIn": "登录",
+    "errors": {
+      "invalidEmail": "输入有效的电子邮件地址。",
+      "unknown": "出了点问题。再试一次。",
+      "invalidCredentials": "该电子邮件和密码组合与帐户不匹配。",
+      "nameRequired": "输入您想要登录的名称。",
+      "weakPassword": "选择至少 12 个字符的密码。",
+      "emailTaken": "该电子邮件的帐户已存在。"
+    }
+  },
+  "localization": {
+    "label": "语言",
+    "copied": "已复制",
+    "locales": {
+      "en": "英语",
+      "ar": "巴黎",
+      "fr": "法国人",
+      "de": "德语",
+      "it": "意大利人",
+      "zh": "中文",
+      "th": "ไทย",
+      "ja": "日本语",
+      "es": "西班牙语",
+      "pt": "葡萄牙语",
+      "fa": "阿尔斯",
+      "hi": "हिन्दी",
+      "ru": "俄罗斯"
+    },
+    "translation": {
+      "locale": "翻译语言",
+      "published": "已发表",
+      "reviewed": "已审核 - 准备发布",
+      "correctDocument": "正确翻译的 JSON 草案",
+      "draft": "草案——需要审查",
+      "title": "作品集翻译",
+      "hint": "生成草稿，审阅下面翻译的事实，然后在发布前将其标记为审阅。在您单独发布之前，没有任何内容是公开的。",
+      "stale": "过时——从当前的英文草案中重新生成",
+      "generate": "生成草稿",
+      "saveCorrection": "保存修正",
+      "generating": "生成草稿",
+      "reviewDocument": "查看完整的翻译文档",
+      "versions": "草稿版本 {draft} · 发布版本 {published}",
+      "publish": "发布翻译",
+      "markReviewed": "标记已审核",
+      "publishing": "出版翻译",
+      "correcting": "保存修正",
+      "reviewing": "标记已审核",
+      "errors": {
+        "generic": "翻译操作无法完成。什么也没有发表。"
+      }
+    },
+    "copyUrl": "复制网址"
+  },
+  "errors": {
+    "title": "出了点问题",
+    "retry": "再试一次",
+    "lead": "无法呈现该页面。问题已记录。",
+    "notFoundLead": "该地址没有发布任何内容。",
+    "notFoundTitle": "找不到页面",
+    "unauthorized": "您无权访问该投资组合。",
+    "backHome": "进入首页"
+  },
+  "portfolio": {
+    "sections": {
+      "hero": "轮廓",
+      "experience": "经验",
+      "skills": "技能",
+      "about": "关于",
+      "projects": "项目",
+      "education": "教育",
+      "languages": "语言",
+      "certifications": "认证证书",
+      "contact": "接触",
+      "custom": "更多的"
+    },
+    "present": "展示",
+    "phoneLabel": "电话",
+    "emailLabel": "电子邮件",
+    "locationLabel": "地点",
+    "contactCta": "联系我们",
+    "availability": "开放工作",
+    "skipToContent": "跳至内容",
+    "portraitAlt": "肖像",
+    "supplemental": {
+      "courses": "课程",
+      "publications": "刊物",
+      "volunteering": "志愿服务",
+      "awards": "奖项",
+      "interests": "兴趣",
+      "gallery": "画廊",
+      "attachments": "下载",
+      "testimonials": "感言",
+      "softSkills": "软技能"
+    },
+    "navigationLabel": "作品集页面",
+    "privatePage": {
+      "title": "该页面是私人页面",
+      "submit": "打开私人页面",
+      "password": "共享密码",
+      "denied": "该密码不匹配。检查并重试。",
+      "description": "输入投资组合所有者与您共享的密码。"
+    },
+    "builtWith": "与 PortfolioGenerate 一起发布"
+  },
+  "dashboard": {
+    "listTitle": "作品集",
+    "create": {
+      "nameLabel": "显示名称",
+      "namePlaceholder": "简·无名氏",
+      "submit": "创造",
+      "pending": "创造",
+      "lead": "从你的名字开始。您可以在发布之前随时更改公共地址。",
+      "slugHint": "留空，我们会根据您的名字推荐一个。",
+      "title": "创建投资组合",
+      "slugLabel": "公共广播"
+    },
+    "status": {
+      "draft": "草稿",
+      "published": "已发表",
+      "unpublished": "未发表"
+    },
+    "actions": {
+      "edit": "编辑",
+      "preview": "预览",
+      "publish": "发布",
+      "view": "观看直播",
+      "import": "导入简历"
+    },
+    "lead": "每个作品集都有一个私人草稿，一旦发布，您就可以选择一个公共地址。",
+    "empty": {
+      "description": "创建一份，上传您的简历，并在公开之前查看提取器发现的内容。",
+      "title": "还没有作品集"
+    },
+    "title": "你的投资组合",
+    "meta": {
+      "published": "已发布 {when}",
+      "updated": "已更新 {when}",
+      "neverPublished": "尚未发布"
+    },
+    "errors": {
+      "invalidInput": "检查姓名和地址，然后重试。",
+      "slug.empty": "选择一个公共地址。",
+      "slug.too-long": "地址太长了。",
+      "slug.too-short": "地址至少需要 3 个字符。",
+      "notFound": "该投资组合已不复存在。",
+      "versionConflict": "该投资组合在另一个选项卡中发生了变化。再次保存之前重新加载。",
+      "slugTaken": "该地址已被占用。尝试另一个。",
+      "slug.reserved": "该地址由平台保留。尝试另一个。",
+      "slug.invalid-characters": "仅使用小写字母、数字和单个连字符。",
+      "limitReached": "您已达到该账户的投资组合数量上限。"
+    }
+  },
+  "ingestion": {
+    "title": "导入您的简历",
+    "upload": {
+      "pending": "输入",
+      "submit": "进口",
+      "hint": "PDF、DOCX、DOC 或 RTF，最多 {maxMegabytes} MB 和 {maxPages} 页。",
+      "fieldLabel": "简历文件",
+      "title": "选择您的简历"
+    },
+    "facts": {
+      "privacyLabel": "隐私",
+      "reviewLabel": "审查",
+      "accuracyLabel": "准确性",
+      "costLabel": "成本",
+      "accuracyValue": "没有什么是发明的。文档不支持的字段将留空并为您标记。",
+      "costValue": "首先在本地读取文本，因此正常的简历需要一次模型调用，而您发布的页面则不需要任何费用。",
+      "privacyValue": "该文件是私密存储的，永远无法公开寻址。您可以随时将其删除。",
+      "reviewValue": "提取产生草稿。在任何内容发布之前，您都会批准每一个事实。"
+    },
+    "lead": "上传 PDF。我们阅读它、构建它，然后交给您一份草稿供您审阅——在您发布之前，任何内容都不会公开。",
+    "warningsTitle": "值得再看一遍",
+    "errors": {
+      "tooLarge": "该文件大于上传限制。",
+      "notAPdf": "该文件不是可读的 PDF。",
+      "unreadableDocument": "我们无法安全地读取该文档中的文本。再次将其导出为 PDF、DOCX、DOC 或 RTF，然后重试。",
+      "unsafeDocument": "该文档包含宏、嵌入对象或外部资源，因此未打开。",
+      "notFound": "该投资组合已不复存在。",
+      "scanned": "该 PDF 看起来是扫描版，因此没有可供阅读的文本。上传基于文本的 PDF，或手动启动您的作品集。",
+      "infected": "我们的扫描仪在该文件中发现了一些内容，因此它没有被存储。在重试之前，请检查您自己计算机上的文件。",
+      "scannerUnavailable": "我们刚才无法扫描该文件，因此没有存储任何内容。请几分钟后重试。",
+      "encrypted": "该 PDF 受密码保护。删除密码并重新上传。",
+      "tooManyPages": "该 PDF 的页数超出了导入限制。",
+      "quotaExceeded": "您今天已经使用了 CV 导入。明天再试一次。",
+      "rateLimited": "现在上传太多了。稍后再试一次。",
+      "typeMismatch": "该文件并不像它的名字所说的那样。上传原始 PDF 而不是重命名的副本。",
+      "conflict": "该投资组合在另一个选项卡中发生了变化。再次导入之前重新加载。",
+      "invalid": "该请求有些不对劲。再试一次。",
+      "empty": "该文件是空的。选择一个 PDF，然后重试。"
+    }
+  },
+  "editor": {
+    "save": "保存",
+    "saving": "正在保存",
+    "saved": "已保存",
+    "unsaved": "未保存的更改",
+    "identityTitle": "你是谁",
+    "warningsTitle": "值得再看一遍",
+    "summary": "概括",
+    "location": "地点",
+    "headline": "标题",
+    "displayName": "显示名称",
+    "title": "审查和编辑",
+    "untitled": "未命名的作品集",
+    "contactTitle": "接触",
+    "email": "电子邮件",
+    "phone": "电话",
+    "seoTitleField": "页面标题",
+    "availabilityEnabled": "表明我可以参加工作",
+    "seoDescriptionField": "描述",
+    "identityHint": "这是读者看到的第一件事。这里的一切都来自你的简历——纠正提取器出错的任何内容。",
+    "availabilityNote": "可用性说明",
+    "tagline": "欢迎标语",
+    "showPublicly": "在我的公共页面上显示",
+    "seoTitle": "搜索与分享",
+    "sections": {
+      "show": "展示",
+      "hide": "隐藏",
+      "hint": "重新排序并隐藏部分。没有内容的部分会被自动跳过。",
+      "title": "页面部分",
+      "moveUp": "向上移动部分",
+      "moveDown": "向下移动部分"
+    },
+    "indexable": "允许搜索引擎索引该投资组合",
+    "seoHint": "您的作品集在搜索结果和链接预览中的显示方式。留空以使用您的姓名和标题。",
+    "coverLetter": "求职信或更长的介绍",
+    "contactHint": "存储和发布是不同的决定。除非您将其打开，否则此处的任何内容都不会显示在您的公共页面上。",
+    "collections": {
+      "experience": "经验",
+      "projects": "项目",
+      "education": "教育",
+      "softSkills": "软技能",
+      "certifications": "认证证书",
+      "courses": "课程",
+      "languages": "语言",
+      "awards": "奖项",
+      "publications": "刊物",
+      "volunteering": "志愿服务",
+      "testimonials": "感言",
+      "socialLinks": "社交链接",
+      "add": "添加条目",
+      "hint": "添加、编辑、删除和排序草稿中的事实。保存前必须填写空白的必填字段。",
+      "fields": {
+        "organization": "组织",
+        "title": "标题",
+        "summary": "概括",
+        "current": "目前的角色",
+        "location": "地点",
+        "startDate": "开始月份",
+        "name": "姓名",
+        "endDate": "结束月份",
+        "role": "角色",
+        "label": "标签",
+        "technologies": "技术，每条线一项",
+        "tier": "技能等级",
+        "institution": "机构",
+        "degree": "程度",
+        "featured": "特色项目",
+        "detail": "证据或细节",
+        "slug": "项目地址",
+        "links": "项目链接，一个标签 |每行 URL",
+        "year": "项目月份",
+        "highlights": "亮点，每行一个",
+        "items": "技能，每行一项",
+        "details": "细节",
+        "field": "研究领域",
+        "issuer": "发行人",
+        "url": "网址",
+        "description": "描述",
+        "publisher": "出版商",
+        "date": "日期",
+        "proficiency": "熟练程度",
+        "quote": "引用",
+        "provider": "提供者",
+        "author": "作者",
+        "kind": "平台",
+        "credentialUrl": "凭证网址",
+        "visible": "公开展示",
+        "content": "项目段落，每行一个"
+      },
+      "skills": "技术技能组",
+      "title": "作品集内容",
+      "moveUp": "向上移动条目",
+      "remove": "删除条目",
+      "moveDown": "向下移动条目",
+      "interests": "兴趣，用逗号分隔",
+      "skillTiers": {
+        "primary": "基本的",
+        "strong": "强的",
+        "working": "在职的",
+        "familiar": "熟悉的"
+      },
+      "socialKinds": {
+        "github": "GitHub",
+        "gitlab": "GitLab",
+        "behance": "行为",
+        "dribbble": "运球",
+        "youtube": "YouTube",
+        "linkedin": "领英",
+        "tiktok": "抖音",
+        "instagram": "Instagram",
+        "threads": "线程数",
+        "facebook": "Facebook",
+        "medium": "中等的",
+        "x": "X",
+        "stackoverflow": "堆栈溢出",
+        "telegram": "电报",
+        "website": "网站",
+        "whatsapp": "WhatsApp"
+      }
+    },
+    "pages": {
+      "slug": "地址",
+      "pageTitle": "页面标题",
+      "visibility": "使用权",
+      "title": "作品集页面",
+      "private": "私人的",
+      "public": "民众",
+      "add": "添加页面",
+      "hide": "隐藏",
+      "show": "展示",
+      "privateAccess": {
+        "public": "民众",
+        "visibility": "页面访问",
+        "private": "具有共享密码的私有",
+        "errors": {
+          "notFound": "该组合或页面不再可用。",
+          "versionConflict": "投资组合在另一个选项卡中发生了变化。在更新页面访问权限之前重新加载。",
+          "invalidInput": "选择访问级别并为私人页面使用至少 12 个字符的密码。"
+        },
+        "success": "页面访问已更新。",
+        "password": "分享密码",
+        "submit": "更新页面访问",
+        "passwordHint": "将此页面设置为私有时，至少使用 12 个字符。将页面返回给公众访问时将其留空。"
+      },
+      "description": "页面说明",
+      "navLabel": "导航标签",
+      "moveUp": "上移页面",
+      "moveDown": "向下移动页面",
+      "remove": "删除页面",
+      "hint": "创建和订购公共或受密码保护的页面。单独设置私有页面密码，这样明文就不会进入草稿。"
+    },
+    "publish": {
+      "title": "发布",
+      "slugLabel": "公共广播",
+      "urlPreview": "您的作品集将位于 {url}",
+      "hint": "选择您的公共地址，然后发布。在您这样做之前，一切都是公开的。",
+      "claim": "保存地址",
+      "publish": "发布",
+      "publishing": "出版",
+      "unpublish": "取消发布",
+      "published": "已发表",
+      "viewLive": "观看直播",
+      "republish": "发布更改",
+      "blockers": {
+        "no-visible-home-page": "您的主页已隐藏。使其可见以发布。",
+        "missing-headline": "添加标题，以便读者知道您在做什么。",
+        "empty-portfolio": "添加至少一个角色、项目、资格或摘要。",
+        "missing-name": "添加您的显示名称。"
+      },
+      "blockersTitle": "在您可以发布之前"
+    },
+    "errors": {
+      "notFound": "该投资组合已不复存在。",
+      "invalidDocument": "其中一些值无法保存。检查突出显示的字段。",
+      "invalidSlug": "仅使用小写字母、数字和单个连字符。",
+      "slugTaken": "该地址已被占用。尝试另一个。",
+      "versionConflict": "这个投资组合在其他地方发生了变化。重新加载以获取最新版本，然后再次保存。",
+      "notReady": "该作品集尚未准备好发布。"
+    },
+    "phoneCountry": "国家代码",
+    "assets": {
+      "portraitTitle": "肖像",
+      "uploadPortrait": "上传肖像",
+      "portraitLabel": "肖像图像",
+      "portraitHint": "上传清晰的图片。在将其附加到草稿之前，会对其进行扫描和验证。",
+      "galleryFile": "图库图片",
+      "portraitFormats": "PNG、JPEG、WebP、GIF 或 AVIF，最大 5 MB。",
+      "collectionsTitle": "图库和下载",
+      "galleryAlt": "图片说明",
+      "removePortrait": "删除肖像",
+      "uploading": "上传肖像",
+      "attachmentKind": "文件类型",
+      "kinds": {
+        "cover-letter": "求职信",
+        "certificate": "证书",
+        "cv": "简历或简历",
+        "reference": "参考",
+        "portfolio": "投资组合文件",
+        "other": "其他文件"
+      },
+      "uploadGallery": "上传图库图片",
+      "uploadAttachment": "上传附件",
+      "remove": "从草稿中删除",
+      "galleryCaption": "标题（可选）",
+      "attachmentFile": "可下载的文件",
+      "attachmentLabel": "公共下载标签",
+      "collectionsHint": "文件在附加之前会经过验证和病毒扫描。仅当您保存并发布此草稿后，它们才会公开。",
+      "errors": {
+        "empty": "该文件是空的。",
+        "too-large": "该文件大于本次上传的限制。",
+        "extension-mismatch": "文件类型与其扩展名不匹配。",
+        "signature-mismatch": "文件内容与其文件名不匹配。",
+        "unsupported-type": "此次上传不接受该文件类型。",
+        "unknown-extension": "该文件没有可识别的扩展名。",
+        "invalid-input": "选择一个文件并重试。",
+        "forbidden-extension": "该文件名包含禁止的文件类型。",
+        "not-found": "该投资组合不再可用。",
+        "image-too-large": "该图像的尺寸太大，无法安全处理。",
+        "image-too-small": "选择至少 8 x 8 像素的图像。",
+        "image-unreadable": "无法读取该图像标题。",
+        "scanner-unavailable": "无法扫描该文件。没有存储任何内容；稍后再试。",
+        "infected": "扫描仪发现不安全内容，因此未存储该文件。",
+        "rate-limited": "从该连接上传的文件过多。稍后再试。"
+      },
+      "uploaded": "肖像已上传。当预览看起来正确时保存草稿。"
+    },
+    "phoneCountryNone": "没有国家"
+  },
+  "account": {
+    "title": "帐户",
+    "summary": {
+      "nameLabel": "姓名",
+      "title": "您的帐户",
+      "portfolioCountLabel": "作品集",
+      "emailLabel": "电子邮件"
+    },
+    "profile": {
+      "title": "轮廓",
+      "name": "显示名称",
+      "submit": "保存个人资料",
+      "hint": "更新您的账户和投资组合仪表板中显示的名称。",
+      "saved": "您的个人资料已更新。",
+      "pending": "保存配置文件"
+    },
+    "lead": "我们掌握了您的什么信息，以及如何删除它。",
+    "security": {
+      "title": "安全",
+      "verificationTitle": "邮箱验证",
+      "verified": "已验证",
+      "hint": "验证您的电子邮件、更改密码并查看登录的设备。",
+      "passwordTitle": "更改密码",
+      "currentPassword": "当前密码",
+      "newPassword": "新密码",
+      "changePassword": "更改密码",
+      "currentSession": "当前会话",
+      "unverified": "未验证",
+      "resend": "发送验证邮件",
+      "created": "已登录",
+      "expires": "过期",
+      "sending": "发送验证邮件",
+      "revoking": "注销设备",
+      "unknownAddress": "地址未知",
+      "unknownDevice": "未知设备",
+      "revoke": "注销设备",
+      "changingPassword": "更改密码",
+      "sessionsTitle": "已登录的设备",
+      "sent": "如果可以送货，则会发送一封验证电子邮件。",
+      "passwordChanged": "您的密码已更改，其他会话已撤销。",
+      "noSessions": "没有返回任何活动会话。"
+    },
+    "data": {
+      "title": "您的数据",
+      "retentionTitle": "保留",
+      "hint": "上传的简历是私密存储的，并且只能由已与您的帐户匹配的请求读取。提取的文本将被保留，以便您可以重新运行审阅而无需再次上传。",
+      "retention": "删除作品集会立即删除其简历文件并保留公共地址，因此其他人无法获取您的简历仍然指向的地址。删除您的帐户将删除我们持有的有关您的所有文件和每一行；审核日志保留删除发生的记录，不附加任何识别数据。"
+    },
+    "preferences": {
+      "title": "偏好设置",
+      "theme": "色彩主题",
+      "locale": "语言",
+      "submit": "保存首选项",
+      "locales": {
+        "en": "英语",
+        "ar": "阿拉伯",
+        "fr": "法语",
+        "de": "德语",
+        "it": "意大利语",
+        "zh": "中国人",
+        "ja": "日本人",
+        "th": "泰国",
+        "pt": "葡萄牙语",
+        "es": "西班牙语",
+        "fa": "波斯语",
+        "hi": "印地语",
+        "ru": "俄语"
+      },
+      "hint": "选择编辑作品集时使用的语言、颜色主题和默认手机国家/地区。",
+      "themes": {
+        "light": "光",
+        "dark": "黑暗的",
+        "system": "使用设备设置"
+      },
+      "saved": "您的偏好设置已保存。",
+      "country": "默认电话国家",
+      "pending": "保存首选项",
+      "noCountry": "无默认国家/地区"
+    },
+    "portfolio": {
+      "delete": "删除",
+      "deleting": "正在删除",
+      "confirmMessage": "这将删除作品集及其上传的简历文件。它无法撤消。",
+      "deleteCancel": "保留它",
+      "deleteConfirm": "永久删除"
+    },
+    "delete": {
+      "title": "删除您的帐户",
+      "submit": "删除我的帐户",
+      "submitting": "正在删除",
+      "hint": "这将删除您的作品集、每份上传的简历以及您的登录详细信息。已发布的页面立即停止解析。它无法撤消。",
+      "confirmationLabel": "输入 {word} 进行确认"
+    },
+    "errors": {
+      "notFound": "该投资组合不再可用。",
+      "confirmationMismatch": "准确输入确认词以继续。",
+      "deleteFailed": "我们无法完成删除。没有删除任何内容 - 请重试。"
+    }
+  }
+}

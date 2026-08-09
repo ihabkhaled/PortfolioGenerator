@@ -87,6 +87,7 @@ function translationSnapshot(
     reviewedAt: Date | null;
     publishedAt: Date | null;
     publishedVersion: number;
+    isStale: boolean;
   }> = {},
 ) {
   const document = buildFullPortfolioDocument();
@@ -96,6 +97,8 @@ function translationSnapshot(
     locale: 'ar' as const,
     draftDocument: document,
     draftVersion: 3,
+    sourceFingerprint: 'source-fingerprint',
+    isStale: false,
     reviewedDocument: null,
     reviewedAt: null,
     publishedDocument: null,
@@ -374,7 +377,20 @@ describe('localization controls', () => {
 });
 
 describe('translation panel', () => {
+  it('labels stale translations and blocks review and publication', () => {
+    queueActionState();
+    queueActionState();
+    queueActionState();
+    queueActionState();
+    renderTranslationPanel([translationSnapshot({ isStale: true })]);
+    expect(
+      screen.getByText('Out of date — regenerate from the current English draft'),
+    ).toBeVisible();
+    expect(screen.getByRole('button', { name: 'Mark reviewed' })).toBeDisabled();
+    expect(screen.getByRole('button', { name: 'Publish translation' })).toBeDisabled();
+  });
   it('renders a draft preview and prevents publishing before review', () => {
+    queueActionState();
     queueActionState();
     queueActionState();
     queueActionState();
@@ -383,11 +399,14 @@ describe('translation panel', () => {
     expect(screen.getByText('Draft — review required')).toBeInTheDocument();
     expect(screen.getByText('Amina Rahman')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Publish translation' })).toBeDisabled();
-    expect(screen.getByText(/"displayName": "Amina Rahman"/)).toBeInTheDocument();
+    expect(
+      screen.getByText(/"displayName": "Amina Rahman"/, { selector: 'pre' }),
+    ).toBeInTheDocument();
   });
 
   it('distinguishes reviewed work from the currently published version', () => {
     const document = buildFullPortfolioDocument();
+    queueActionState();
     queueActionState();
     queueActionState();
     queueActionState();
@@ -409,6 +428,7 @@ describe('translation panel', () => {
     queueActionState();
     queueActionState();
     queueActionState();
+    queueActionState();
     renderTranslationPanel([
       translationSnapshot({
         reviewedDocument: document,
@@ -425,6 +445,7 @@ describe('translation panel', () => {
     queueActionState({ status: 'error', error: 'translation.errors.generic' }, true);
     queueActionState(idleState, true);
     queueActionState(idleState, true);
+    queueActionState();
     renderTranslationPanel();
 
     expect(screen.getByRole('alert')).toBeVisible();

@@ -156,6 +156,7 @@ model PortfolioTranslation {
 
   draftDocument Json @map("draft_document")
   draftVersion  Int  @default(1) @map("draft_version")
+  sourceFingerprint String @map("source_fingerprint")
 
   reviewedDocument Json?     @map("reviewed_document")
   reviewedAt       DateTime? @map("reviewed_at")

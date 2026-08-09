@@ -1,6 +1,7 @@
 'use server';
 
 import { requireOwner } from '@/modules/auth/server';
+import { portfolioDocumentSchema } from '@/modules/portfolio-document';
 import { invalidatePath } from '@/packages/cache';
 import { parseSchema } from '@/packages/zod';
 import { buildDashboardEditorPath } from '@/shared/constants/route-paths.constants';
@@ -11,9 +12,11 @@ import {
 } from '../constants/translation-action.constants';
 import {
   translationActionSchema,
+  translationCorrectionActionSchema,
   versionedTranslationActionSchema,
 } from '../schemas/translation-action.schema';
 import {
+  correctTranslationDraft,
   generateTranslationDraft,
   markTranslationReviewed,
   publishTranslationSnapshot,
@@ -25,6 +28,36 @@ function readInput(formData: FormData): TranslationActionInput {
     portfolioId: formData.get(TRANSLATION_ACTION_FIELDS.portfolioId),
     locale: formData.get(TRANSLATION_ACTION_FIELDS.locale),
   };
+}
+
+export async function correctTranslationAction(
+  _previous: TranslationActionState,
+  formData: FormData,
+): Promise<TranslationActionState> {
+  const owner = await requireOwner();
+  const parsed = parseSchema(translationCorrectionActionSchema, {
+    ...readInput(formData),
+    expectedVersion: formData.get(TRANSLATION_ACTION_FIELDS.expectedVersion),
+    document: formData.get(TRANSLATION_ACTION_FIELDS.document),
+  });
+  if (!parsed.ok) return resultState(false);
+  let decoded: unknown;
+  try {
+    decoded = JSON.parse(parsed.value.document);
+  } catch {
+    return resultState(false);
+  }
+  const document = parseSchema(portfolioDocumentSchema, decoded);
+  if (!document.ok) return resultState(false);
+  const result = await correctTranslationDraft(
+    owner.id,
+    parsed.value.portfolioId,
+    parsed.value.locale,
+    parsed.value.expectedVersion,
+    document.value,
+  );
+  if (result.ok) invalidatePath(buildDashboardEditorPath(parsed.value.portfolioId));
+  return resultState(result.ok);
 }
 
 function resultState(ok: boolean): TranslationActionState {

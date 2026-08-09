@@ -1,7 +1,14 @@
 import { describe, expect, it } from 'vitest';
 
 import { APP_LOCALES } from '@/modules/localization';
-import { createTranslator, hasLocalizedMessage, interpolate } from '@/packages/i18n';
+import {
+  auditCatalogParity,
+  auditLocalizedCatalogs,
+  createTranslator,
+  hasLocalizedMessage,
+  hasMatchingInterpolations,
+  interpolate,
+} from '@/packages/i18n';
 
 describe('interpolate', () => {
   it('replaces a named placeholder', () => {
@@ -50,6 +57,9 @@ describe('createTranslator', () => {
 });
 
 describe('localized catalogs', () => {
+  it('has complete key and interpolation parity without relying on English fallback', () => {
+    expect(auditLocalizedCatalogs(APP_LOCALES.filter((locale) => locale !== 'en'))).toEqual([]);
+  });
   it('loads an Arabic platform message', () => {
     expect(createTranslator('app', 'ar')('nav.signIn')).toBe('تسجيل الدخول');
   });
@@ -58,8 +68,8 @@ describe('localized catalogs', () => {
     expect(createTranslator('portfolio', 'fr')('sections.experience')).toBe('Expérience');
   });
 
-  it('falls back to English when a locale overlay omits a key', () => {
-    expect(createTranslator('dashboard', 'ja')('create.submit')).toBe('Create');
+  it('falls back to English for an unsupported locale', () => {
+    expect(createTranslator('dashboard', 'xx')('create.submit')).toBe('Create');
   });
 
   it('prefers launch copy over the general localized catalog', () => {
@@ -87,4 +97,31 @@ describe('localized catalogs', () => {
       }
     },
   );
+});
+
+describe('catalog interpolation contracts', () => {
+  it('accepts reordered and repeated placeholders as a multiset', () => {
+    expect(hasMatchingInterpolations('{name} {count} {name}', '{count} {name} {name}')).toBe(true);
+  });
+
+  it('rejects different placeholder counts', () => {
+    expect(hasMatchingInterpolations('{name}', '{name} {count}')).toBe(false);
+  });
+
+  it('rejects different placeholders with the same count', () => {
+    expect(hasMatchingInterpolations('{name}', '{count}')).toBe(false);
+  });
+
+  it('reports missing keys and placeholder mismatches in an arbitrary catalog pair', () => {
+    expect(
+      auditCatalogParity(
+        { app: { greeting: 'Hello {name}', farewell: 'Goodbye' } },
+        { app: { greeting: 'Bonjour {person}' } },
+        'fr',
+      ),
+    ).toEqual([
+      { locale: 'fr', key: 'app.greeting', reason: 'interpolation-mismatch' },
+      { locale: 'fr', key: 'app.farewell', reason: 'missing' },
+    ]);
+  });
 });

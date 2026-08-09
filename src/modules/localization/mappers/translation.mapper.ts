@@ -14,5 +14,12 @@ export function toTranslationSnapshot(row: TranslationRow): TranslationSnapshot 
   if (reviewedDocument === null && row.reviewedDocument !== null) return null;
   if (publishedDocument === null && row.publishedDocument !== null) return null;
 
-  return { ...row, locale: row.locale, draftDocument, reviewedDocument, publishedDocument };
+  return {
+    ...row,
+    locale: row.locale,
+    draftDocument,
+    reviewedDocument,
+    publishedDocument,
+    isStale: false,
+  };
 }

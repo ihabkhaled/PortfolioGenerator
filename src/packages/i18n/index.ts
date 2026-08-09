@@ -8,7 +8,15 @@
  */
 
 export { APP_LOCALE, I18N_NAMESPACES, type I18nNamespace } from './i18n.constants';
-export { createTranslator, hasLocalizedMessage, interpolate } from './translator';
+export {
+  auditCatalogParity,
+  auditLocalizedCatalogs,
+  createTranslator,
+  hasLocalizedMessage,
+  hasMatchingInterpolations,
+  interpolate,
+} from './translator';
+export type { CatalogParityIssue } from './translator';
 export { useAppTranslation } from './use-app-translation.hook';
 export { I18nLocaleProvider } from './locale-context';
 export type { AppMessages, MessageCatalog, TranslateFunction } from './i18n.types';

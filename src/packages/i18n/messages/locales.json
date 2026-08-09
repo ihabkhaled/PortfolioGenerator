@@ -1,0 +1,302 @@
+{
+  "ar": {
+    "app": { "nav": { "signIn": "تسجيل الدخول", "signUp": "إنشاء حساب" } },
+    "auth": {
+      "signInTitle": "تسجيل الدخول",
+      "emailLabel": "البريد الإلكتروني",
+      "passwordLabel": "كلمة المرور",
+      "submitSignIn": "تسجيل الدخول",
+      "errors": { "unknown": "حدث خطأ. حاول مرة أخرى." }
+    },
+    "marketing": { "primaryCta": "أنشئ معرضك", "secondaryCta": "تسجيل الدخول" },
+    "dashboard": { "title": "معارضك" },
+    "editor": { "save": "حفظ", "publish": "نشر" },
+    "portfolio": {
+      "navigationLabel": "تنقل المعرض",
+      "contactCta": "تواصل",
+      "sections": {
+        "about": "نبذة",
+        "experience": "الخبرة",
+        "projects": "المشاريع",
+        "skills": "المهارات",
+        "education": "التعليم",
+        "contact": "تواصل"
+      }
+    }
+  },
+  "fr": {
+    "app": { "nav": { "signIn": "Se connecter", "signUp": "Créer un compte" } },
+    "auth": {
+      "signInTitle": "Se connecter",
+      "emailLabel": "E-mail",
+      "passwordLabel": "Mot de passe",
+      "submitSignIn": "Se connecter",
+      "errors": { "unknown": "Une erreur est survenue. Réessayez." }
+    },
+    "marketing": { "primaryCta": "Créer votre portfolio", "secondaryCta": "Se connecter" },
+    "dashboard": { "title": "Vos portfolios" },
+    "editor": { "save": "Enregistrer", "publish": "Publier" },
+    "portfolio": {
+      "navigationLabel": "Navigation du portfolio",
+      "contactCta": "Me contacter",
+      "sections": {
+        "about": "À propos",
+        "experience": "Expérience",
+        "projects": "Projets",
+        "skills": "Compétences",
+        "education": "Formation",
+        "contact": "Contact"
+      }
+    }
+  },
+  "de": {
+    "app": { "nav": { "signIn": "Anmelden", "signUp": "Konto erstellen" } },
+    "auth": {
+      "signInTitle": "Anmelden",
+      "emailLabel": "E-Mail",
+      "passwordLabel": "Passwort",
+      "submitSignIn": "Anmelden",
+      "errors": { "unknown": "Etwas ist schiefgelaufen. Versuche es erneut." }
+    },
+    "marketing": { "primaryCta": "Portfolio erstellen", "secondaryCta": "Anmelden" },
+    "dashboard": { "title": "Deine Portfolios" },
+    "editor": { "save": "Speichern", "publish": "Veröffentlichen" },
+    "portfolio": {
+      "navigationLabel": "Portfolio-Navigation",
+      "contactCta": "Kontakt",
+      "sections": {
+        "about": "Über mich",
+        "experience": "Erfahrung",
+        "projects": "Projekte",
+        "skills": "Fähigkeiten",
+        "education": "Ausbildung",
+        "contact": "Kontakt"
+      }
+    }
+  },
+  "it": {
+    "app": { "nav": { "signIn": "Accedi", "signUp": "Crea account" } },
+    "auth": {
+      "signInTitle": "Accedi",
+      "emailLabel": "Email",
+      "passwordLabel": "Password",
+      "submitSignIn": "Accedi",
+      "errors": { "unknown": "Qualcosa è andato storto. Riprova." }
+    },
+    "marketing": { "primaryCta": "Crea il tuo portfolio", "secondaryCta": "Accedi" },
+    "dashboard": { "title": "I tuoi portfolio" },
+    "editor": { "save": "Salva", "publish": "Pubblica" },
+    "portfolio": {
+      "navigationLabel": "Navigazione portfolio",
+      "contactCta": "Contattami",
+      "sections": {
+        "about": "Chi sono",
+        "experience": "Esperienza",
+        "projects": "Progetti",
+        "skills": "Competenze",
+        "education": "Formazione",
+        "contact": "Contatti"
+      }
+    }
+  },
+  "zh": {
+    "app": { "nav": { "signIn": "登录", "signUp": "创建账户" } },
+    "auth": {
+      "signInTitle": "登录",
+      "emailLabel": "电子邮箱",
+      "passwordLabel": "密码",
+      "submitSignIn": "登录",
+      "errors": { "unknown": "出现错误，请重试。" }
+    },
+    "marketing": { "primaryCta": "创建作品集", "secondaryCta": "登录" },
+    "dashboard": { "title": "你的作品集" },
+    "editor": { "save": "保存", "publish": "发布" },
+    "portfolio": {
+      "navigationLabel": "作品集导航",
+      "contactCta": "联系我",
+      "sections": {
+        "about": "关于",
+        "experience": "经历",
+        "projects": "项目",
+        "skills": "技能",
+        "education": "教育",
+        "contact": "联系"
+      }
+    }
+  },
+  "ja": {
+    "app": { "nav": { "signIn": "ログイン", "signUp": "アカウント作成" } },
+    "auth": {
+      "signInTitle": "ログイン",
+      "emailLabel": "メール",
+      "passwordLabel": "パスワード",
+      "submitSignIn": "ログイン",
+      "errors": { "unknown": "問題が発生しました。もう一度お試しください。" }
+    },
+    "marketing": { "primaryCta": "ポートフォリオを作成", "secondaryCta": "ログイン" },
+    "dashboard": { "title": "ポートフォリオ" },
+    "editor": { "save": "保存", "publish": "公開" },
+    "portfolio": {
+      "navigationLabel": "ポートフォリオ ナビゲーション",
+      "contactCta": "連絡する",
+      "sections": {
+        "about": "概要",
+        "experience": "職歴",
+        "projects": "プロジェクト",
+        "skills": "スキル",
+        "education": "学歴",
+        "contact": "連絡先"
+      }
+    }
+  },
+  "th": {
+    "app": { "nav": { "signIn": "เข้าสู่ระบบ", "signUp": "สร้างบัญชี" } },
+    "auth": {
+      "signInTitle": "เข้าสู่ระบบ",
+      "emailLabel": "อีเมล",
+      "passwordLabel": "รหัสผ่าน",
+      "submitSignIn": "เข้าสู่ระบบ",
+      "errors": { "unknown": "เกิดข้อผิดพลาด โปรดลองอีกครั้ง" }
+    },
+    "marketing": { "primaryCta": "สร้างพอร์ตโฟลิโอ", "secondaryCta": "เข้าสู่ระบบ" },
+    "dashboard": { "title": "พอร์ตโฟลิโอของคุณ" },
+    "editor": { "save": "บันทึก", "publish": "เผยแพร่" },
+    "portfolio": {
+      "navigationLabel": "การนำทางพอร์ตโฟลิโอ",
+      "contactCta": "ติดต่อ",
+      "sections": {
+        "about": "เกี่ยวกับ",
+        "experience": "ประสบการณ์",
+        "projects": "โครงการ",
+        "skills": "ทักษะ",
+        "education": "การศึกษา",
+        "contact": "ติดต่อ"
+      }
+    }
+  },
+  "pt": {
+    "app": { "nav": { "signIn": "Entrar", "signUp": "Criar conta" } },
+    "auth": {
+      "signInTitle": "Entrar",
+      "emailLabel": "E-mail",
+      "passwordLabel": "Palavra-passe",
+      "submitSignIn": "Entrar",
+      "errors": { "unknown": "Algo correu mal. Tente novamente." }
+    },
+    "marketing": { "primaryCta": "Criar o seu portfólio", "secondaryCta": "Entrar" },
+    "dashboard": { "title": "Os seus portfólios" },
+    "editor": { "save": "Guardar", "publish": "Publicar" },
+    "portfolio": {
+      "navigationLabel": "Navegação do portfólio",
+      "contactCta": "Contactar",
+      "sections": {
+        "about": "Sobre",
+        "experience": "Experiência",
+        "projects": "Projetos",
+        "skills": "Competências",
+        "education": "Formação",
+        "contact": "Contato"
+      }
+    }
+  },
+  "es": {
+    "app": { "nav": { "signIn": "Iniciar sesión", "signUp": "Crear cuenta" } },
+    "auth": {
+      "signInTitle": "Iniciar sesión",
+      "emailLabel": "Correo electrónico",
+      "passwordLabel": "Contraseña",
+      "submitSignIn": "Iniciar sesión",
+      "errors": { "unknown": "Algo salió mal. Inténtalo de nuevo." }
+    },
+    "marketing": { "primaryCta": "Crea tu portafolio", "secondaryCta": "Iniciar sesión" },
+    "dashboard": { "title": "Tus portafolios" },
+    "editor": { "save": "Guardar", "publish": "Publicar" },
+    "portfolio": {
+      "navigationLabel": "Navegación del portafolio",
+      "contactCta": "Contactar",
+      "sections": {
+        "about": "Acerca de",
+        "experience": "Experiencia",
+        "projects": "Proyectos",
+        "skills": "Habilidades",
+        "education": "Educación",
+        "contact": "Contacto"
+      }
+    }
+  },
+  "hi": {
+    "app": { "nav": { "signIn": "साइन इन", "signUp": "खाता बनाएँ" } },
+    "auth": {
+      "signInTitle": "साइन इन",
+      "emailLabel": "ईमेल",
+      "passwordLabel": "पासवर्ड",
+      "submitSignIn": "साइन इन",
+      "errors": { "unknown": "कुछ गलत हुआ। फिर से कोशिश करें।" }
+    },
+    "marketing": { "primaryCta": "अपना पोर्टफोलियो बनाएँ", "secondaryCta": "साइन इन" },
+    "dashboard": { "title": "आपके पोर्टफोलियो" },
+    "editor": { "save": "सहेजें", "publish": "प्रकाशित करें" },
+    "portfolio": {
+      "navigationLabel": "पोर्टफोलियो नेविगेशन",
+      "contactCta": "संपर्क करें",
+      "sections": {
+        "about": "परिचय",
+        "experience": "अनुभव",
+        "projects": "परियोजनाएँ",
+        "skills": "कौशल",
+        "education": "शिक्षा",
+        "contact": "संपर्क"
+      }
+    }
+  },
+  "fa": {
+    "app": { "nav": { "signIn": "ورود", "signUp": "ایجاد حساب" } },
+    "auth": {
+      "signInTitle": "ورود",
+      "emailLabel": "ایمیل",
+      "passwordLabel": "رمز عبور",
+      "submitSignIn": "ورود",
+      "errors": { "unknown": "مشکلی پیش آمد. دوباره تلاش کنید." }
+    },
+    "marketing": { "primaryCta": "نمونه‌کار خود را بسازید", "secondaryCta": "ورود" },
+    "dashboard": { "title": "نمونه‌کارهای شما" },
+    "editor": { "save": "ذخیره", "publish": "انتشار" },
+    "portfolio": {
+      "navigationLabel": "پیمایش نمونه‌کار",
+      "contactCta": "تماس",
+      "sections": {
+        "about": "درباره",
+        "experience": "تجربه",
+        "projects": "پروژه‌ها",
+        "skills": "مهارت‌ها",
+        "education": "تحصیلات",
+        "contact": "تماس"
+      }
+    }
+  },
+  "ru": {
+    "app": { "nav": { "signIn": "Войти", "signUp": "Создать аккаунт" } },
+    "auth": {
+      "signInTitle": "Войти",
+      "emailLabel": "Эл. почта",
+      "passwordLabel": "Пароль",
+      "submitSignIn": "Войти",
+      "errors": { "unknown": "Что-то пошло не так. Повторите попытку." }
+    },
+    "marketing": { "primaryCta": "Создать портфолио", "secondaryCta": "Войти" },
+    "dashboard": { "title": "Ваши портфолио" },
+    "editor": { "save": "Сохранить", "publish": "Опубликовать" },
+    "portfolio": {
+      "navigationLabel": "Навигация портфолио",
+      "contactCta": "Связаться",
+      "sections": {
+        "about": "О себе",
+        "experience": "Опыт",
+        "projects": "Проекты",
+        "skills": "Навыки",
+        "education": "Образование",
+        "contact": "Контакты"
+      }
+    }
+  }
+}

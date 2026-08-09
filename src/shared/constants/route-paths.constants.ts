@@ -12,14 +12,41 @@ export const ROUTE_PATHS = {
   signIn: '/sign-in',
   signUp: '/sign-up',
   signOut: '/sign-out',
+  forgotPassword: '/forgot-password',
+  resetPassword: '/reset-password',
   dashboard: '/dashboard',
   dashboardPortfolios: '/dashboard/portfolios',
   dashboardSettings: '/dashboard/settings',
   api: '/api',
+  apiContact: '/api/contact',
+  media: '/media',
   robots: '/robots.txt',
   sitemap: '/sitemap.xml',
+  feed: '/feed.xml',
+  ads: '/ads.txt',
   manifest: '/manifest.webmanifest',
 } as const;
+
+export const MARKETING_ROUTE_PATHS = {
+  features: '/guides/features',
+  'how-it-works': '/guides/how-it-works',
+  examples: '/guides/examples',
+  templates: '/guides/templates',
+  'cv-import': '/guides/cv-import',
+  'ai-accuracy': '/guides/ai-accuracy',
+  security: '/guides/security',
+  privacy: '/guides/privacy',
+  about: '/guides/about',
+  mission: '/guides/mission',
+  contact: '/guides/contact',
+  help: '/guides/help',
+  faq: '/guides/faq',
+  accessibility: '/guides/accessibility',
+  terms: '/guides/terms',
+  changelog: '/guides/changelog',
+} as const;
+
+export type MarketingRouteSlug = keyof typeof MARKETING_ROUTE_PATHS;
 
 export function buildDashboardPortfolioPath(portfolioId: string): string {
   return `${ROUTE_PATHS.dashboardPortfolios}/${portfolioId}`;
@@ -63,4 +90,8 @@ export function buildPortfolioPath(slug: string): string {
 
 export function buildPortfolioOgImagePath(slug: string): string {
   return `/${slug}/opengraph-image`;
+}
+
+export function buildPublicAssetPath(assetId: string): string {
+  return `${ROUTE_PATHS.media}/${assetId}`;
 }

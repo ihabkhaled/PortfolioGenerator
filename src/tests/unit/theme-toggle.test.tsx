@@ -84,4 +84,24 @@ describe('useTheme', () => {
     expect(result.current.preference).toBe('light');
     expect(result.current.resolved).toBe('light');
   });
+
+  it('follows a system theme change while the system preference is active', () => {
+    let listener: ((event: MediaQueryListEvent) => void) | undefined;
+    vi.stubGlobal('matchMedia', () => ({
+      matches: false,
+      addEventListener: (_type: string, next: (event: MediaQueryListEvent) => void) => {
+        listener = next;
+      },
+      removeEventListener: vi.fn(),
+    }));
+
+    const { result } = renderHook(() => useTheme());
+
+    act(() => {
+      listener?.({ matches: true } as MediaQueryListEvent);
+    });
+
+    expect(result.current.resolved).toBe('dark');
+    expect(globalThis.document.documentElement.getAttribute(THEME_ATTRIBUTE)).toBe('dark');
+  });
 });

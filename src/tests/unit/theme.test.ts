@@ -150,6 +150,16 @@ describe('persistPreference', () => {
       persistPreference('light');
     }).not.toThrow();
   });
+
+  it('keeps working when storage refuses to remove a system preference', () => {
+    vi.spyOn(Storage.prototype, 'removeItem').mockImplementation(() => {
+      throw new Error('denied');
+    });
+
+    expect(() => {
+      persistPreference('system');
+    }).not.toThrow();
+  });
 });
 
 describe('watchSystemTheme', () => {

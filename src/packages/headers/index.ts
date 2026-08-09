@@ -1,6 +1,6 @@
 import 'server-only';
 
-import { headers } from 'next/headers';
+import { cookies, headers } from 'next/headers';
 
 /**
  * Owner of `next/headers`. Request-scoped values are read here so route and
@@ -12,6 +12,23 @@ export async function getRequestNonce(): Promise<string | undefined> {
   const requestHeaders = await headers();
 
   return requestHeaders.get('x-nonce') ?? undefined;
+}
+
+/** Full request headers for server-only vendor facades such as authentication. */
+export async function getRequestHeaders(): Promise<Headers> {
+  return headers();
+}
+
+/** Locale resolved by the request proxy; callers validate it against their domain. */
+export async function getRequestLocale(): Promise<string | null> {
+  try {
+    const requestHeaders = await headers();
+
+    return requestHeaders.get('x-app-locale');
+  } catch {
+    // Static generation and isolated unit tests have no request context.
+    return null;
+  }
 }
 
 /**
@@ -34,4 +51,10 @@ export async function getClientAddress(): Promise<string> {
   }
 
   return requestHeaders.get('x-real-ip') ?? 'unknown';
+}
+
+export async function getRequestCookie(name: string): Promise<string | null> {
+  const requestCookies = await cookies();
+
+  return requestCookies.get(name)?.value ?? null;
 }

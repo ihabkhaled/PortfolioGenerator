@@ -1,0 +1,20 @@
+export const localizationClasses = {
+  controls:
+    'fixed end-4 bottom-4 z-50 flex max-w-[calc(100vw-2rem)] items-center gap-2 rounded-xl border border-border bg-surface-raised/95 p-2 shadow-lg backdrop-blur',
+  select: 'h-9 min-w-32 py-0',
+  panel: 'grid gap-5 rounded-xl border border-border bg-surface-raised p-5',
+  header: 'grid gap-1',
+  title: 'font-display text-lg font-semibold text-foreground',
+  hint: 'text-sm text-muted-foreground',
+  form: 'flex flex-wrap items-end gap-3',
+  field: 'grid min-w-48 flex-1 gap-1.5',
+  list: 'grid gap-3',
+  item: 'grid gap-3 rounded-lg border border-border p-4',
+  itemHeader: 'flex flex-wrap items-center justify-between gap-2',
+  itemTitle: 'font-medium text-foreground',
+  preview: 'grid gap-1 text-sm text-muted-foreground',
+  document: 'max-h-80 overflow-auto rounded-md bg-surface-sunken p-3 text-xs text-foreground',
+  actions: 'flex flex-wrap gap-2',
+  status: 'text-xs font-medium text-muted-foreground',
+  error: 'text-sm text-danger',
+} as const;

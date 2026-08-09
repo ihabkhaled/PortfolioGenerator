@@ -6,8 +6,10 @@ import { useMemo } from 'react';
 
 import type { I18nNamespace } from './i18n.constants';
 import type { TranslateFunction } from './i18n.types';
+import { useI18nLocale } from './locale-context';
 import { createTranslator } from './translator';
 
 export function useAppTranslation(namespace: I18nNamespace): TranslateFunction {
-  return useMemo(() => createTranslator(namespace), [namespace]);
+  const locale = useI18nLocale();
+  return useMemo(() => createTranslator(namespace, locale), [locale, namespace]);
 }

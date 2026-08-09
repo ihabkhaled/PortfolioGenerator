@@ -2,7 +2,16 @@ import type { Metadata, Viewport } from 'next';
 import { headers } from 'next/headers';
 import type { ReactElement, ReactNode } from 'react';
 
-import { APP_LOCALE } from '@/packages/i18n';
+import {
+  APP_LOCALES,
+  DEFAULT_LOCALE,
+  getLocaleDirection,
+  isAppLocale,
+  LocalizationControlsContainer,
+} from '@/modules/localization';
+import { AdSenseScript } from '@/modules/seo';
+import { I18nLocaleProvider, I18N_NAMESPACES } from '@/packages/i18n';
+import { getServerTranslations } from '@/packages/i18n/server';
 import { buildThemeScript } from '@/packages/theme';
 import { AppToaster } from '@/packages/toast';
 import { ADSENSE_CLIENT_ID } from '@/shared/constants/advertising.constants';
@@ -44,15 +53,36 @@ export default async function RootLayout(props: {
 }): Promise<ReactElement> {
   const requestHeaders = await headers();
   const nonce = requestHeaders.get('x-nonce') ?? undefined;
+  const requestedLocale = requestHeaders.get('x-app-locale') ?? DEFAULT_LOCALE;
+  const locale = isAppLocale(requestedLocale) ? requestedLocale : DEFAULT_LOCALE;
+  const tLocalization = await getServerTranslations(I18N_NAMESPACES.localization, locale);
 
   return (
-    <html lang={APP_LOCALE} className={appFontClassName} suppressHydrationWarning>
+    <html
+      lang={locale}
+      dir={getLocaleDirection(locale)}
+      className={appFontClassName}
+      suppressHydrationWarning
+    >
       <head>
         <script nonce={nonce} dangerouslySetInnerHTML={toInlineScript(buildThemeScript())} />
+        <AdSenseScript nonce={nonce} />
       </head>
       <body>
-        {props.children}
-        <AppToaster />
+        <I18nLocaleProvider locale={locale}>
+          {props.children}
+          <LocalizationControlsContainer
+            locale={locale}
+            options={APP_LOCALES.map((option) => ({
+              value: option,
+              label: tLocalization(`locales.${option}`),
+            }))}
+            label={tLocalization('label')}
+            copyUrl={tLocalization('copyUrl')}
+            copied={tLocalization('copied')}
+          />
+          <AppToaster />
+        </I18nLocaleProvider>
       </body>
     </html>
   );

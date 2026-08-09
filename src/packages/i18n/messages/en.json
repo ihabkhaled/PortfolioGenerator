@@ -48,6 +48,223 @@
       "honestBody": "The extractor is instructed to leave a field empty rather than guess at it.",
       "fastTitle": "Public pages are cheap and fast",
       "fastBody": "A published portfolio is served from a snapshot and needs no AI to render."
+    },
+    "landing": {
+      "directory": {
+        "eyebrow": "Explore the product",
+        "title": "The details worth checking before you upload a CV",
+        "lead": "Read about the workflow, factual-accuracy boundary, security model, accessible template, privacy choices, and practical support before creating an account.",
+        "linkLabel": "Read this guide"
+      },
+      "useCases": {
+        "eyebrow": "Different work, one clear structure",
+        "title": "A portfolio can lead with the evidence that fits the career",
+        "lead": "The template stays consistent while the reviewed document decides which sections appear and what comes first.",
+        "engineerTitle": "Engineering and technical work",
+        "engineerBody": "Lead with systems, roles, project constraints, technologies, publications, and the outcomes already supported by your CV.",
+        "designerTitle": "Design and visual practice",
+        "designerBody": "Combine project narratives with owned gallery images, useful alternative text, courses, awards, and selected social profiles.",
+        "graduateTitle": "Students and recent graduates",
+        "graduateBody": "Bring education, projects, courses, languages, volunteering, and demonstrated skills forward when work history is still short.",
+        "consultantTitle": "Consultants and independent specialists",
+        "consultantBody": "Maintain separate portfolios for different audiences from one account without mixing their drafts or published addresses."
+      },
+      "trust": {
+        "eyebrow": "Boundaries you can reason about",
+        "title": "The public page is separated from the machinery that created it",
+        "lead": "These are product behaviors, not performance claims: they describe what is stored, when it becomes public, and what a visitor request depends on.",
+        "draftTitle": "Import stops at a draft",
+        "draftBody": "Extraction can organize source facts, but only the owner can correct, compose, and publish them.",
+        "snapshotTitle": "Publication creates a validated snapshot",
+        "snapshotBody": "A visitor reads stored reviewed content; their request does not call the AI provider or parse the original PDF.",
+        "ownershipTitle": "Authoring stays owner-scoped",
+        "ownershipBody": "Dashboard operations resolve the signed-in owner before reading or changing a portfolio.",
+        "accessTitle": "Absent and private content stays absent",
+        "accessBody": "Hidden channels, empty sections, drafts, and unauthorized private pages are omitted from public output and navigation."
+      },
+      "faq": {
+        "eyebrow": "Practical questions",
+        "title": "What happens at the moments that matter",
+        "lead": "Short answers to the questions behind uploading, reviewing, publishing, and keeping a portfolio available.",
+        "publishQuestion": "Does uploading my CV publish anything?",
+        "publishAnswer": "No. Import creates a private draft. Publishing is a separate action after you have reviewed the content and public address.",
+        "missingQuestion": "What happens when the CV does not contain a field?",
+        "missingAnswer": "The field remains empty. The extractor is not allowed to complete a professional claim from plausibility alone.",
+        "cvQuestion": "Can visitors download my original CV?",
+        "cvAnswer": "The source upload remains private. A visitor can only access an attachment you explicitly add to a reviewed published document.",
+        "outageQuestion": "Does a published page need AI to load?",
+        "outageAnswer": "No. Published portfolios render from validated stored snapshots, independent of AI extraction and PDF parsing services.",
+        "manyQuestion": "Can one account publish more than one portfolio?",
+        "manyAnswer": "Yes. Each portfolio has its own draft, pages, theme choices, publication state, and public address."
+      },
+      "cta": {
+        "title": "Start with a draft you can inspect",
+        "description": "Create a portfolio, import a readable PDF or begin manually, and decide what deserves to become public.",
+        "learnMore": "See the complete workflow"
+      }
+    },
+    "pages": {
+      "features": {
+        "title": "Everything needed to publish your professional story",
+        "description": "Import facts, edit every field, compose pages, and publish one or many portfolios from one account.",
+        "sections": {
+          "first": "Reviewable CV extraction keeps every claim under your control.",
+          "second": "Flexible pages combine experience, projects, skills, education, and your own sections.",
+          "third": "Published snapshots stay fast even when authoring services are unavailable."
+        }
+      },
+      "how-it-works": {
+        "title": "From PDF to public portfolio in four deliberate steps",
+        "description": "Upload, review, compose, then publish. Each boundary is visible and reversible.",
+        "sections": {
+          "first": "Your PDF is validated and read as a private source document.",
+          "second": "Extracted facts become an editable draft with warnings, never a public page.",
+          "third": "You choose the address and publish only after the preview is accurate."
+        }
+      },
+      "examples": {
+        "title": "Portfolios shaped by the work, not a demo template",
+        "description": "See how different careers remain recognisable inside one consistent, accessible system.",
+        "sections": {
+          "first": "Engineering portfolios foreground systems, outcomes, and technical depth.",
+          "second": "Design portfolios can pair project narratives with owned gallery media.",
+          "third": "Early-career portfolios can lead with education, courses, and demonstrable projects."
+        }
+      },
+      "templates": {
+        "title": "One disciplined template with room for an individual voice",
+        "description": "A stable information architecture keeps attention on evidence while themes adjust its tone.",
+        "sections": {
+          "first": "Semantic sections create a readable hierarchy on every screen size.",
+          "second": "Named accent and theme choices preserve tested contrast.",
+          "third": "No arbitrary scripts, styles, or embeds can compromise a visitor."
+        }
+      },
+      "cv-import": {
+        "title": "CV import that treats the document as evidence",
+        "description": "The importer reports what it can support and leaves unsupported fields empty.",
+        "sections": {
+          "first": "PDF signatures and limits are checked before parsing begins.",
+          "second": "Extracted values retain warnings where a human review matters.",
+          "third": "The original CV remains private and importing never publishes."
+        }
+      },
+      "ai-accuracy": {
+        "title": "AI assists the draft; it never gets the final word",
+        "description": "Structured extraction is constrained by a simple rule: missing evidence means an empty field.",
+        "sections": {
+          "first": "The model receives extracted text through a bounded structured contract.",
+          "second": "Schema validation rejects malformed output before it reaches the editor.",
+          "third": "Writing enhancements are separate actions and cannot silently replace facts."
+        }
+      },
+      "security": {
+        "title": "Security boundaries designed around a private CV",
+        "description": "Ownership checks, validated uploads, and isolated public snapshots reduce what any request can expose.",
+        "sections": {
+          "first": "Dashboard reads and writes are scoped to the authenticated owner.",
+          "second": "Uploads are identified by content, scanned, and stored under server-generated keys.",
+          "third": "Public rendering imports no authoring, parser, AI, or private-storage path."
+        }
+      },
+      "privacy": {
+        "title": "Your source document stays private by default",
+        "description": "Only reviewed snapshot fields and explicitly public assets can reach a published address.",
+        "sections": {
+          "first": "A raw CV is never served from a public object URL.",
+          "second": "Hidden contact channels and pages are omitted rather than disguised.",
+          "third": "Account deletion removes identifying rows and owned files."
+        }
+      },
+      "about": {
+        "title": "A portfolio product built around factual authorship",
+        "description": "PortfolioGenerate exists to shorten setup without taking authorship away from the person represented.",
+        "sections": {
+          "first": "The product begins with evidence already written in a CV.",
+          "second": "Editing and publishing remain explicit human decisions.",
+          "third": "Public pages are durable reads, not live AI demonstrations."
+        }
+      },
+      "mission": {
+        "title": "Make professional publishing honest and ownable",
+        "description": "A useful portfolio should be accessible to create, straightforward to verify, and dependable to visit.",
+        "sections": {
+          "first": "Reduce the mechanical cost of turning a CV into a coherent site.",
+          "second": "Never trade speed for plausible but unsupported professional claims.",
+          "third": "Give each person a stable address and control over what it says."
+        }
+      },
+      "contact": {
+        "title": "Talk to the PortfolioGenerate team",
+        "description": "Ask about the product, report an accessibility problem, or share a security concern.",
+        "sections": {
+          "first": "Product questions receive practical answers about import, editing, and publishing.",
+          "second": "Accessibility reports should include the page, browser, and assistive technology used.",
+          "third": "Security reports are handled discreetly and never require sending your CV."
+        }
+      },
+      "help": {
+        "title": "Help for each step from import to publish",
+        "description": "Find direct guidance for common decisions and recoverable problems.",
+        "sections": {
+          "first": "Import help covers readable PDFs, limits, scans, and rejected files.",
+          "second": "Editor help explains visibility, ordering, previews, and warnings.",
+          "third": "Publishing help covers addresses, updates, private pages, and unpublishing."
+        }
+      },
+      "faq": {
+        "title": "Questions people ask before trusting a CV importer",
+        "description": "Clear answers about AI, privacy, cost, ownership, and what happens after publishing.",
+        "sections": {
+          "first": "Nothing publishes automatically: every import produces a draft.",
+          "second": "Missing CV facts stay empty rather than being completed by inference.",
+          "third": "A published portfolio keeps working without the AI provider or PDF parser."
+        }
+      },
+      "accessibility": {
+        "title": "Accessibility is part of the publishing contract",
+        "description": "The editor and every public portfolio target WCAG 2.2 AA across keyboard, touch, contrast, and structure.",
+        "sections": {
+          "first": "Landmarks, headings, labels, and current-page states support navigation.",
+          "second": "Visible focus and touch-sized controls serve keyboard and mobile readers.",
+          "third": "Gallery images require useful alternatives and motion respects reduced-motion settings."
+        }
+      },
+      "terms": {
+        "title": "Terms written around control and responsible use",
+        "description": "Use the service for content you are entitled to publish and review every fact before making it public.",
+        "sections": {
+          "first": "You retain responsibility for the professional information you publish.",
+          "second": "Do not upload malware, impersonate another person, or evade access controls.",
+          "third": "You can unpublish or delete your data using the controls provided."
+        }
+      },
+      "changelog": {
+        "title": "What changed, and why it matters",
+        "description": "A concise record of product changes that affect authoring, privacy, accessibility, or public output.",
+        "sections": {
+          "first": "Document changes explain new fields and migration behavior.",
+          "second": "Security changes identify strengthened boundaries without exposing exploit details.",
+          "third": "Renderer changes call out visible behavior and accessibility improvements."
+        }
+      }
+    }
+  },
+  "contact": {
+    "title": "Contact us",
+    "lead": "Send a question about PortfolioGenerate. We use your details only to reply to this message.",
+    "name": "Name",
+    "email": "Email",
+    "subject": "Subject",
+    "message": "Message",
+    "website": "Website",
+    "send": "Send message",
+    "sending": "Sending message",
+    "accepted": "Your message was accepted. We will reply by email.",
+    "errors": {
+      "invalid": "Check the fields and try again.",
+      "rate-limited": "Too many messages were sent from this connection. Try again later.",
+      "unavailable": "We could not send the message just now. Try again shortly."
     }
   },
   "auth": {
@@ -66,6 +283,20 @@
     "toSignUp": "No account yet? Create one.",
     "toSignIn": "Already have an account? Sign in.",
     "signOut": "Sign out",
+    "forgotPasswordLink": "Forgot your password?",
+    "reset": {
+      "requestTitle": "Reset your password",
+      "requestLead": "Enter your email. If an account exists, we will send a secure reset link.",
+      "requestSubmit": "Send reset link",
+      "requestPending": "Sending reset link",
+      "requested": "If an account exists for that email, a reset link is on its way.",
+      "resetTitle": "Choose a new password",
+      "resetLead": "Use the secure link from your email to replace your password.",
+      "newPassword": "New password",
+      "resetSubmit": "Save new password",
+      "resetPending": "Saving new password",
+      "completed": "Your password has been changed. You can now sign in."
+    },
     "errors": {
       "invalidCredentials": "That email and password combination did not match an account.",
       "emailTaken": "An account already exists for that email.",
@@ -73,6 +304,45 @@
       "invalidEmail": "Enter a valid email address.",
       "nameRequired": "Enter the name you want to sign in as.",
       "unknown": "Something went wrong. Try again."
+    }
+  },
+  "localization": {
+    "label": "Language",
+    "copyUrl": "Copy URL",
+    "copied": "Copied",
+    "locales": {
+      "en": "English",
+      "ar": "العربية",
+      "fr": "Français",
+      "de": "Deutsch",
+      "it": "Italiano",
+      "zh": "中文",
+      "ja": "日本語",
+      "th": "ไทย",
+      "pt": "Português",
+      "es": "Español",
+      "hi": "हिन्दी",
+      "fa": "فارسی",
+      "ru": "Русский"
+    },
+    "translation": {
+      "title": "Portfolio translations",
+      "hint": "Generate a draft, review the translated facts below, then mark it reviewed before publishing. Nothing is public until you publish it separately.",
+      "locale": "Translation language",
+      "generate": "Generate draft",
+      "generating": "Generating draft",
+      "draft": "Draft — review required",
+      "reviewed": "Reviewed — ready to publish",
+      "published": "Published",
+      "versions": "Draft version {draft} · published version {published}",
+      "reviewDocument": "Review the complete translated document",
+      "markReviewed": "Mark reviewed",
+      "reviewing": "Marking reviewed",
+      "publish": "Publish translation",
+      "publishing": "Publishing translation",
+      "errors": {
+        "generic": "The translation operation could not be completed. Nothing was published."
+      }
     }
   },
   "errors": {
@@ -106,7 +376,25 @@
     "skipToContent": "Skip to content",
     "builtWith": "Published with PortfolioGenerate",
     "navigationLabel": "Portfolio pages",
-    "portraitAlt": "Portrait"
+    "portraitAlt": "Portrait",
+    "privatePage": {
+      "title": "This page is private",
+      "description": "Enter the password the portfolio owner shared with you.",
+      "password": "Shared password",
+      "submit": "Open private page",
+      "denied": "That password did not match. Check it and try again."
+    },
+    "supplemental": {
+      "softSkills": "Soft skills",
+      "courses": "Courses",
+      "publications": "Publications",
+      "volunteering": "Volunteering",
+      "awards": "Awards",
+      "interests": "Interests",
+      "testimonials": "Testimonials",
+      "gallery": "Gallery",
+      "attachments": "Downloads"
+    }
   },
   "dashboard": {
     "title": "Your portfolios",
@@ -161,7 +449,7 @@
     "lead": "Upload a PDF. We read it, structure it, and hand you a draft to review — nothing becomes public until you publish it.",
     "upload": {
       "title": "Choose your CV",
-      "hint": "PDF only, up to {maxMegabytes} MB and {maxPages} pages.",
+      "hint": "PDF, DOCX, DOC or RTF, up to {maxMegabytes} MB and {maxPages} pages.",
       "fieldLabel": "CV file",
       "submit": "Import",
       "pending": "Importing"
@@ -181,6 +469,8 @@
       "empty": "That file is empty. Choose a PDF and try again.",
       "tooLarge": "That file is larger than the upload limit.",
       "notAPdf": "That file is not a readable PDF.",
+      "unreadableDocument": "We could not safely read text from that document. Export it again as PDF, DOCX, DOC or RTF and retry.",
+      "unsafeDocument": "That document contains macros, embedded objects or external resources, so it was not opened.",
       "encrypted": "That PDF is password-protected. Remove the password and upload it again.",
       "tooManyPages": "That PDF has more pages than the import limit.",
       "scanned": "That PDF looks scanned, so there is no text to read. Upload a text-based PDF, or start your portfolio manually.",
@@ -208,6 +498,10 @@
     "headline": "Headline",
     "summary": "Summary",
     "location": "Location",
+    "tagline": "Welcome tagline",
+    "availabilityEnabled": "Show that I am available for work",
+    "availabilityNote": "Availability note",
+    "coverLetter": "Cover letter or longer introduction",
     "contactTitle": "Contact",
     "contactHint": "Stored and published are different decisions. Nothing here appears on your public page unless you switch it on.",
     "email": "Email",
@@ -225,6 +519,121 @@
       "moveDown": "Move section down",
       "show": "Show",
       "hide": "Hide"
+    },
+    "collections": {
+      "title": "Portfolio content",
+      "hint": "Add, edit, remove, and order the facts in your draft. Empty required fields must be completed before saving.",
+      "experience": "Experience",
+      "projects": "Projects",
+      "skills": "Technical skill groups",
+      "softSkills": "Soft skills",
+      "education": "Education",
+      "courses": "Courses",
+      "certifications": "Certifications",
+      "languages": "Languages",
+      "awards": "Awards",
+      "publications": "Publications",
+      "volunteering": "Volunteering",
+      "testimonials": "Testimonials",
+      "socialLinks": "Social links",
+      "interests": "Interests, separated by commas",
+      "add": "Add entry",
+      "remove": "Remove entry",
+      "moveUp": "Move entry up",
+      "moveDown": "Move entry down",
+      "fields": {
+        "organization": "Organization",
+        "title": "Title",
+        "location": "Location",
+        "startDate": "Start month",
+        "endDate": "End month",
+        "current": "Current role",
+        "summary": "Summary",
+        "highlights": "Highlights, one per line",
+        "technologies": "Technologies, one per line",
+        "name": "Name",
+        "slug": "Project address",
+        "role": "Role",
+        "year": "Project month",
+        "featured": "Featured project",
+        "content": "Project paragraphs, one per line",
+        "links": "Project links, one Label | URL per line",
+        "label": "Label",
+        "tier": "Skill level",
+        "items": "Skills, one per line",
+        "detail": "Evidence or detail",
+        "institution": "Institution",
+        "degree": "Degree",
+        "field": "Field of study",
+        "details": "Details",
+        "provider": "Provider",
+        "date": "Date",
+        "url": "URL",
+        "issuer": "Issuer",
+        "credentialUrl": "Credential URL",
+        "proficiency": "Proficiency",
+        "description": "Description",
+        "publisher": "Publisher",
+        "quote": "Quote",
+        "author": "Author",
+        "kind": "Platform",
+        "visible": "Show publicly"
+      },
+      "skillTiers": {
+        "primary": "Primary",
+        "strong": "Strong",
+        "working": "Working",
+        "familiar": "Familiar"
+      },
+      "socialKinds": {
+        "github": "GitHub",
+        "gitlab": "GitLab",
+        "linkedin": "LinkedIn",
+        "behance": "Behance",
+        "dribbble": "Dribbble",
+        "youtube": "YouTube",
+        "tiktok": "TikTok",
+        "instagram": "Instagram",
+        "facebook": "Facebook",
+        "x": "X",
+        "threads": "Threads",
+        "medium": "Medium",
+        "stackoverflow": "Stack Overflow",
+        "telegram": "Telegram",
+        "whatsapp": "WhatsApp",
+        "website": "Website"
+      }
+    },
+    "pages": {
+      "title": "Portfolio pages",
+      "hint": "Create and order public or password-protected pages. Set a private page password separately so plaintext never enters the draft.",
+      "pageTitle": "Page title",
+      "navLabel": "Navigation label",
+      "slug": "Address",
+      "visibility": "Access",
+      "description": "Page description",
+      "public": "Public",
+      "private": "Private",
+      "add": "Add page",
+      "remove": "Remove page",
+      "moveUp": "Move page up",
+      "moveDown": "Move page down",
+      "show": "Show",
+      "hide": "Hide",
+      "privateAccess": {
+        "visibility": "Page access",
+        "public": "Public",
+        "private": "Private with a share password",
+        "password": "Share password",
+        "passwordHint": "Use at least 12 characters when making this page private. Leave it empty when returning the page to public access.",
+        "submit": "Update page access",
+        "success": "Page access updated.",
+        "errors": {
+          "invalidInput": "Choose an access level and use a password of at least 12 characters for a private page.",
+          "notFound": "This portfolio or page is no longer available.",
+          "versionConflict": "The portfolio changed in another tab. Reload before updating page access."
+        }
+      }
     },
     "publish": {
       "title": "Publish",
@@ -255,7 +664,53 @@
       "invalidSlug": "Use lowercase letters, numbers and single hyphens only."
     },
     "phoneCountry": "Country code",
-    "phoneCountryNone": "No country"
+    "phoneCountryNone": "No country",
+    "assets": {
+      "portraitTitle": "Portrait",
+      "portraitHint": "Upload a clear image. It is scanned and validated before it is attached to your draft.",
+      "portraitLabel": "Portrait image",
+      "portraitFormats": "PNG, JPEG, WebP, GIF or AVIF, up to 5 MB.",
+      "uploadPortrait": "Upload portrait",
+      "uploading": "Uploading portrait",
+      "removePortrait": "Remove portrait",
+      "uploaded": "Portrait uploaded. Save the draft when the preview looks right.",
+      "collectionsTitle": "Gallery and downloads",
+      "collectionsHint": "Files are validated and virus-scanned before they are attached. They become public only after you save and publish this draft.",
+      "galleryFile": "Gallery image",
+      "galleryAlt": "Image description",
+      "galleryCaption": "Caption (optional)",
+      "uploadGallery": "Upload gallery image",
+      "attachmentFile": "Downloadable file",
+      "attachmentKind": "File type",
+      "attachmentLabel": "Public download label",
+      "uploadAttachment": "Upload attachment",
+      "remove": "Remove from draft",
+      "kinds": {
+        "cv": "CV or resume",
+        "cover-letter": "Cover letter",
+        "certificate": "Certificate",
+        "portfolio": "Portfolio document",
+        "reference": "Reference",
+        "other": "Other document"
+      },
+      "errors": {
+        "invalid-input": "Choose a file and try again.",
+        "not-found": "That portfolio is no longer available.",
+        "empty": "That file is empty.",
+        "too-large": "That file is larger than the limit for this upload.",
+        "forbidden-extension": "That filename contains a forbidden file type.",
+        "unknown-extension": "That file has no recognized extension.",
+        "unsupported-type": "That file type is not accepted for this upload.",
+        "signature-mismatch": "The file content does not match its filename.",
+        "extension-mismatch": "The file type does not match its extension.",
+        "image-unreadable": "That image header could not be read.",
+        "image-too-large": "That image has dimensions too large to process safely.",
+        "image-too-small": "Choose an image at least 8 by 8 pixels.",
+        "infected": "The scanner found unsafe content, so the file was not stored.",
+        "scanner-unavailable": "The file could not be scanned. Nothing was stored; try again shortly.",
+        "rate-limited": "Too many files were uploaded from this connection. Try again later."
+      }
+    }
   },
   "account": {
     "title": "Account",
@@ -266,11 +721,71 @@
       "emailLabel": "Email",
       "portfolioCountLabel": "Portfolios"
     },
+    "profile": {
+      "title": "Profile",
+      "hint": "Update the name shown in your account and portfolio dashboard.",
+      "name": "Display name",
+      "submit": "Save profile",
+      "pending": "Saving profile",
+      "saved": "Your profile was updated."
+    },
+    "security": {
+      "title": "Security",
+      "hint": "Verify your email, change your password, and review signed-in devices.",
+      "verificationTitle": "Email verification",
+      "verified": "Verified",
+      "unverified": "Not verified",
+      "resend": "Send verification email",
+      "sending": "Sending verification email",
+      "sent": "If delivery is available, a verification email is on its way.",
+      "passwordTitle": "Change password",
+      "currentPassword": "Current password",
+      "newPassword": "New password",
+      "changePassword": "Change password",
+      "changingPassword": "Changing password",
+      "passwordChanged": "Your password was changed and other sessions were revoked.",
+      "sessionsTitle": "Signed-in devices",
+      "currentSession": "Current session",
+      "revoke": "Sign out device",
+      "revoking": "Signing out device",
+      "created": "Signed in",
+      "expires": "Expires",
+      "unknownDevice": "Unknown device",
+      "unknownAddress": "Unknown address",
+      "noSessions": "No active sessions were returned."
+    },
     "data": {
       "title": "Your data",
       "hint": "Uploaded CVs are stored privately and are only ever read by a request that has already been matched to your account. Extracted text is kept so you can re-run a review without uploading again.",
       "retentionTitle": "Retention",
       "retention": "Deleting a portfolio removes its CV files immediately and keeps the public address claimed, so nobody else can take an address your CV still points at. Deleting your account removes every file and every row we hold about you; the audit log keeps a record that the deletion happened, with no identifying data attached."
+    },
+    "preferences": {
+      "title": "Preferences",
+      "hint": "Choose the language, colour theme and default phone country used when you edit your portfolios.",
+      "locale": "Language",
+      "theme": "Colour theme",
+      "country": "Default phone country",
+      "noCountry": "No default country",
+      "submit": "Save preferences",
+      "pending": "Saving preferences",
+      "saved": "Your preferences were saved.",
+      "locales": {
+        "en": "English",
+        "ar": "Arabic",
+        "fr": "French",
+        "de": "German",
+        "it": "Italian",
+        "zh": "Chinese",
+        "ja": "Japanese",
+        "th": "Thai",
+        "pt": "Portuguese",
+        "es": "Spanish",
+        "hi": "Hindi",
+        "fa": "Persian",
+        "ru": "Russian"
+      },
+      "themes": { "light": "Light", "dark": "Dark", "system": "Use device setting" }
     },
     "portfolio": {
       "delete": "Delete",

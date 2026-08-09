@@ -10,7 +10,7 @@
   },
   "scripts": {
     "dev": "next dev --turbopack",
-    "build": "npm run typecheck:app && next build --turbopack",
+    "build": "prisma generate && npm run typecheck:app && next build --turbopack",
     "start": "next start",
     "lint": "eslint . --concurrency=off --max-warnings=0 && npm run lint:severity",
     "lint:fix": "eslint . --concurrency=off --fix --max-warnings=0 && npm run lint:severity",
@@ -46,9 +46,9 @@
     "validate": "npm run gate:push && npm run test:e2e",
     "deps:check": "npm-check-updates --errorLevel 2",
     "deps:upgrade": "npm-check-updates -u && npm install",
-    "prepare": "husky",
+    "prepare": "node support/install-git-hooks.mjs",
     "lint-staged": "lint-staged",
-    "postinstall": "prisma generate"
+    "postinstall": "node support/generate-prisma-client.mjs"
   },
   "prisma": {
     "schema": "prisma/schema.prisma"

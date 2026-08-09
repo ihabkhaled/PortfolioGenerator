@@ -213,6 +213,7 @@ export default [
             'ingestion-ui',
             'editor-ui',
             'account-ui',
+            'preferences-ui',
           ],
         },
       ],

@@ -8,6 +8,7 @@
  * bundle.
  */
 
+export { PortfolioNav } from './components/portfolio-nav.component';
 export { PortfolioTemplate } from './components/portfolio-template';
 export { SectionRenderer } from './components/section-renderer';
 export { buildPortfolioLabels } from './helpers/portfolio-labels.helper';

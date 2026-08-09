@@ -13,13 +13,16 @@ export function SiteShell(props: Readonly<SiteShellProps>): ReactElement {
       <header className={siteShellClasses.header}>
         <div className={siteShellClasses.headerInner}>
           {props.brand}
-          <nav
-            id={LANDMARK_IDS.primaryNavigation}
-            aria-label={props.navigationLabel}
-            className={siteShellClasses.nav}
-          >
-            {props.navigation}
-          </nav>
+          <div className={siteShellClasses.headerActions}>
+            <nav
+              id={LANDMARK_IDS.primaryNavigation}
+              aria-label={props.navigationLabel}
+              className={siteShellClasses.nav}
+            >
+              {props.navigation}
+            </nav>
+            {props.actions}
+          </div>
         </div>
       </header>
 

@@ -3,6 +3,8 @@ import type { ReactElement, ReactNode } from 'react';
 
 import { SignOutButtonContainer } from '@/modules/auth';
 import { getCurrentUser } from '@/modules/auth/server';
+import { buildThemeOptions } from '@/modules/preferences';
+import { ThemeToggleContainer } from '@/modules/preferences/preferences-ui';
 import { I18N_NAMESPACES } from '@/packages/i18n';
 import { getServerTranslations } from '@/packages/i18n/server';
 import { AppLink } from '@/packages/link';
@@ -48,6 +50,9 @@ export default async function DashboardLayout(props: {
           </AppLink>
         }
         navigation={<SignOutButtonContainer />}
+        actions={
+          <ThemeToggleContainer label={tApp('theme.label')} options={buildThemeOptions(tApp)} />
+        }
         footerNote={tApp('footerNote')}
         footerLinks={null}
       >

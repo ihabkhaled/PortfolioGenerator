@@ -5,6 +5,7 @@
  * markup renders correctly in both themes.
  */
 export const siteShellClasses = {
+  headerActions: 'flex min-w-0 items-center gap-2 sm:gap-3',
   header:
     'sticky top-0 z-50 border-b border-border bg-canvas/85 backdrop-blur-md supports-[backdrop-filter]:bg-canvas/70',
   headerInner:

@@ -18,9 +18,12 @@ export function PortfolioShell(props: Readonly<PortfolioShellProps>): ReactEleme
               <span className={portfolioShellClasses.brandHeadline}>{props.headline}</span>
             )}
           </div>
-          <nav aria-label={props.navigationLabel} className={portfolioShellClasses.nav}>
-            {props.navigation}
-          </nav>
+          <div className={portfolioShellClasses.headerActions}>
+            <nav aria-label={props.navigationLabel} className={portfolioShellClasses.nav}>
+              {props.navigation}
+            </nav>
+            {props.actions}
+          </div>
         </div>
       </header>
 
@@ -31,6 +34,7 @@ export function PortfolioShell(props: Readonly<PortfolioShellProps>): ReactEleme
       <footer className={portfolioShellClasses.footer}>
         <div className={portfolioShellClasses.footerInner}>
           <p className={portfolioShellClasses.footerNote}>{props.footerNote}</p>
+          <div className={portfolioShellClasses.footerLinks}>{props.footerLinks}</div>
         </div>
       </footer>
     </div>

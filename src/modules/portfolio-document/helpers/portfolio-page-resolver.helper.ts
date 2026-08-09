@@ -72,5 +72,6 @@ export function buildNavigation(
     label: page.navLabel,
     href: buildPageHref(portfolioSlug, page.slug),
     isCurrent: page.slug === currentPageSlug,
+    isHome: page.slug === HOME_PAGE_SLUG,
   }));
 }

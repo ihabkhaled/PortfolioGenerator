@@ -57,4 +57,6 @@ export interface PortfolioNavigationItem {
   readonly label: string;
   readonly href: string;
   readonly isCurrent: boolean;
+  /** The home page gets an icon as well as a label; every other page does not. */
+  readonly isHome: boolean;
 }

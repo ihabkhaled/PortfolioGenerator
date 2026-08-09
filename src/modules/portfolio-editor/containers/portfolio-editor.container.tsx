@@ -161,6 +161,8 @@ export function PortfolioEditorContainer(props: Readonly<EditorContainerProps>):
             portfolioSlug={props.portfolioId}
             pageTitle={home.page.title}
             isPreview
+            actions={null}
+            footerLinks={null}
           />
         )
       }

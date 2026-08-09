@@ -44,6 +44,8 @@ function renderPage(document: PortfolioDocument, pageSlug = ''): void {
       portfolioSlug="amina-rahman"
       pageTitle={resolved.page.title}
       isPreview={false}
+      actions={null}
+      footerLinks={null}
     />,
   );
 }

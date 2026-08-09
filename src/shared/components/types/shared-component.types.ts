@@ -49,6 +49,8 @@ export interface ManifestPanelProps {
 }
 
 export interface SiteShellProps {
+  /** Reader-owned controls rendered beside the primary navigation. */
+  readonly actions?: ReactNode;
   readonly brand: ReactNode;
   readonly navigation: ReactNode;
   readonly navigationLabel: string;

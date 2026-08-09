@@ -1,3 +1,5 @@
+import type { ReactNode } from 'react';
+
 import type {
   PortfolioDocument,
   PortfolioNavigationItem,
@@ -35,6 +37,10 @@ export interface PortfolioTemplateProps {
   readonly pageTitle: string;
   /** Draft previews render the same markup with a banner and no indexing. */
   readonly isPreview: boolean;
+  /** Reader-owned controls — the theme switch, and later the locale switch. */
+  readonly actions: ReactNode;
+  /** Social profiles and the CV download, rendered in the footer. */
+  readonly footerLinks: ReactNode;
 }
 
 export interface SectionRendererProps {

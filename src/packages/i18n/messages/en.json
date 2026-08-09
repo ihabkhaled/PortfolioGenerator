@@ -5,9 +5,10 @@
     "skipToContent": "Skip to content",
     "themeSwitchLabel": "Switch theme",
     "theme": {
+      "label": "Colour theme",
       "light": "Light",
       "dark": "Dark",
-      "system": "System"
+      "system": "Match my system"
     },
     "loading": "Loading",
     "footerNote": "Your CV stays private. Only what you review and publish becomes public.",

@@ -1,14 +1,12 @@
 import type { ReactElement } from 'react';
 
-import { AppLink, toAppRoute } from '@/packages/link';
-import { cn } from '@/packages/ui-primitives';
 import { Section } from '@/shared/components/data-display/section.component';
 import { sectionClasses } from '@/shared/components/data-display/section.variants';
 
-import { portfolioShellClasses } from '../constants/template-style.constants';
 import { hasContent } from '../helpers/section-content.helper';
 import type { PortfolioTemplateProps } from '../types/renderer.types';
 
+import { PortfolioNav } from './portfolio-nav.component';
 import { PortfolioShell } from './portfolio-shell.component';
 import { SectionRenderer } from './section-renderer';
 
@@ -35,19 +33,9 @@ export function PortfolioTemplate(props: Readonly<PortfolioTemplateProps>): Reac
       navigationLabel={props.labels.navigationLabel}
       footerNote={props.labels.builtWith}
       banner={null}
-      navigation={props.navigation.map((item) => (
-        <AppLink
-          key={item.pageId}
-          href={toAppRoute(item.href)}
-          aria-current={item.isCurrent ? 'page' : undefined}
-          className={cn(
-            portfolioShellClasses.navLink,
-            item.isCurrent ? portfolioShellClasses.navLinkCurrent : undefined,
-          )}
-        >
-          {item.label}
-        </AppLink>
-      ))}
+      navigation={<PortfolioNav label={props.labels.navigationLabel} items={props.navigation} />}
+      actions={props.actions}
+      footerLinks={props.footerLinks}
     >
       {heroSection === undefined ? null : (
         <SectionRenderer section={heroSection} document={props.document} labels={props.labels} />

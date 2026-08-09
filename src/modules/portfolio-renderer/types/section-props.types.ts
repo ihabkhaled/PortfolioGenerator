@@ -1,6 +1,10 @@
 import type { ReactNode } from 'react';
 
-import type { PortfolioCustomBlock, PortfolioSkillGroup } from '@/modules/portfolio-document';
+import type {
+  PortfolioCustomBlock,
+  PortfolioNavigationItem,
+  PortfolioSkillGroup,
+} from '@/modules/portfolio-document';
 
 import type { FactEntry, TimelineEntry } from './renderer.types';
 
@@ -65,7 +69,15 @@ export interface PortfolioShellProps {
   readonly headline: string | null;
   readonly navigation: ReactNode;
   readonly navigationLabel: string;
+  /** Controls that belong to the reader rather than to the portfolio. */
+  readonly actions: ReactNode;
   readonly footerNote: string;
+  readonly footerLinks: ReactNode;
   readonly banner: ReactNode;
   readonly children: ReactNode;
+}
+
+export interface PortfolioNavProps {
+  readonly label: string;
+  readonly items: readonly PortfolioNavigationItem[];
 }

@@ -4,6 +4,8 @@ import type { ReactElement } from 'react';
 import { buildNavigation, findVisiblePage, resolvePageSlug } from '@/modules/portfolio-document';
 import { buildPortfolioLabels, PortfolioTemplate } from '@/modules/portfolio-renderer';
 import { getPublishedPortfolio } from '@/modules/portfolios/server';
+import { buildThemeOptions } from '@/modules/preferences';
+import { ThemeToggleContainer } from '@/modules/preferences/preferences-ui';
 import {
   buildPageUrl,
   buildPersonStructuredData,
@@ -83,6 +85,7 @@ export default async function PublicPortfolioPage(
   }
 
   const translate = await getServerTranslations(I18N_NAMESPACES.portfolio);
+  const tApp = await getServerTranslations(I18N_NAMESPACES.app);
   const pageUrl = buildPageUrl(portfolioSlug, resolved.page.slug);
 
   return (
@@ -110,6 +113,10 @@ export default async function PublicPortfolioPage(
         portfolioSlug={portfolioSlug}
         pageTitle={resolved.page.title}
         isPreview={false}
+        actions={
+          <ThemeToggleContainer label={tApp('theme.label')} options={buildThemeOptions(tApp)} />
+        }
+        footerLinks={null}
       />
     </>
   );

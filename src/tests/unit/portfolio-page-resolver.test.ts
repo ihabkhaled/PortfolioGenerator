@@ -104,6 +104,7 @@ describe('buildNavigation', () => {
         label: 'Home',
         href: '/amina-rahman',
         isCurrent: false,
+        isHome: true,
       },
       {
         pageId: 'page-projects',
@@ -111,6 +112,7 @@ describe('buildNavigation', () => {
         label: 'Projects',
         href: '/amina-rahman/projects',
         isCurrent: true,
+        isHome: false,
       },
     ]);
   });

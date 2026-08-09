@@ -15,23 +15,33 @@ export const portfolioShellClasses = {
   header:
     'sticky top-0 z-40 border-b border-border bg-canvas/85 backdrop-blur-md supports-[backdrop-filter]:bg-canvas/70',
   headerInner:
-    'mx-auto flex h-16 max-w-5xl items-center justify-between gap-4 px-5 sm:px-8 lg:px-10',
+    'mx-auto flex h-16 max-w-6xl items-center justify-between gap-6 px-5 sm:px-8 lg:px-10',
   brand: 'grid min-w-0',
+  headerActions: 'flex min-w-0 items-center gap-2 sm:gap-3',
+  footerLinks: 'flex flex-wrap items-center gap-3',
   brandName: 'font-display truncate text-[0.95rem] font-bold tracking-tight text-foreground',
   brandHeadline:
     'truncate font-mono text-[0.6875rem] font-medium uppercase tracking-[0.14em] text-muted-foreground',
-  nav: 'flex items-center gap-0.5 overflow-x-auto',
+  // `overflow-x-auto` alone lets a browser decide it also needs a *vertical*
+  // scrollbar, and Windows renders that as a pair of stepper arrows next to the
+  // navigation. Pinning the vertical axis and hiding the horizontal bar keeps
+  // the overflow behaviour without the furniture.
+  nav: 'flex items-center gap-1 overflow-x-auto overflow-y-hidden [scrollbar-width:none] [&::-webkit-scrollbar]:hidden',
   navLink:
-    'relative rounded-md px-2.5 py-2 text-sm font-medium whitespace-nowrap text-muted-foreground transition-colors hover:text-foreground',
+    'relative inline-flex items-center gap-1.5 rounded-md px-2.5 py-2 text-sm font-medium whitespace-nowrap text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring',
   navLinkCurrent:
     'text-foreground after:absolute after:inset-x-3 after:-bottom-px after:h-px after:bg-primary after:content-[""]',
-  main: 'mx-auto w-full max-w-5xl px-5 sm:px-8 lg:px-10',
+  main: 'mx-auto w-full max-w-6xl px-5 sm:px-8 lg:px-10',
   footer: 'mt-24 border-t border-border bg-surface/40',
   footerInner:
-    'mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-4 px-5 py-10 sm:px-8 lg:px-10',
+    'mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-6 px-5 py-12 sm:px-8 lg:px-10',
   footerNote: 'font-mono text-[0.6875rem] uppercase tracking-[0.12em] text-muted-foreground',
   footerLink:
     'text-sm text-muted-foreground underline-offset-4 transition-colors hover:text-foreground hover:underline',
+} as const;
+
+export const navActionClasses = {
+  row: 'flex items-center gap-2',
 } as const;
 
 export const heroClasses = {

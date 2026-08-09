@@ -15,6 +15,26 @@ process.env.NEXT_PUBLIC_APP_ENV = 'local';
 
 vi.mock('server-only', () => ({}));
 
+/**
+ * jsdom does not implement `matchMedia`, and anything that asks the browser
+ * about a colour scheme calls it. A stub that reports "light" and accepts
+ * listeners is the honest default: a test that cares about dark stubs it again
+ * with the value it means.
+ */
+Object.defineProperty(globalThis, 'matchMedia', {
+  writable: true,
+  value: (query: string) => ({
+    matches: false,
+    media: query,
+    onchange: null,
+    addEventListener: () => {},
+    removeEventListener: () => {},
+    addListener: () => {},
+    removeListener: () => {},
+    dispatchEvent: () => false,
+  }),
+});
+
 afterEach(() => {
   cleanup();
   vi.clearAllMocks();

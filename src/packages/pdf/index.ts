@@ -26,7 +26,10 @@ export interface PdfTextResult {
  * indistinguishable from a scanned document that deserves a different message.
  */
 export async function extractPdfText(bytes: Uint8Array): Promise<PdfTextResult> {
-  const document = await getDocumentProxy(bytes);
+  // PDF.js may transfer its input to a worker and detach that ArrayBuffer.
+  // The caller still owns the scanned bytes for hashing and private storage,
+  // so the vendor receives an isolated copy rather than the upload buffer.
+  const document = await getDocumentProxy(Uint8Array.from(bytes));
   const { text, totalPages } = await extractText(document, { mergePages: true });
 
   return {
@@ -37,7 +40,7 @@ export async function extractPdfText(bytes: Uint8Array): Promise<PdfTextResult> 
 
 /** Page count alone, for the size check that runs before extraction. */
 export async function readPdfPageCount(bytes: Uint8Array): Promise<number> {
-  const document = await getDocumentProxy(bytes);
+  const document = await getDocumentProxy(Uint8Array.from(bytes));
 
   return document.numPages;
 }

@@ -8,6 +8,7 @@ export {
 } from './constants/ingestion.constants';
 export { readBoundedString, readExtractionWarnings } from './helpers/extraction-warnings.helper';
 export { normalizeResumeText } from './helpers/resume-text.helper';
+export { addImportedResumeAttachment } from './helpers/imported-resume-attachment.helper';
 export { canTransition, hasDraft, isFailure, isTerminal } from './policies/ingestion-state.policy';
 export { toDocumentTextRejection } from './policies/document-text-rejection.policy';
 export { toUploadRejection } from './policies/upload-rejection.policy';
@@ -23,3 +24,4 @@ export type {
   NormalizedResumeText,
   UploadRejection,
 } from './types/ingestion.types';
+export type { ImportedResumeAttachmentInput } from './types/imported-resume-attachment.types';

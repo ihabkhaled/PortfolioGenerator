@@ -181,6 +181,14 @@ export function PortfolioEditorContainer(props: Readonly<EditorContainerProps>):
                 attachments: [...removeItem(document.attachments, index)],
               });
             }}
+            onAttachmentVisibilityChange={(index, visible) => {
+              editor.update({
+                ...document,
+                attachments: document.attachments.map((attachment, attachmentIndex) =>
+                  attachmentIndex === index ? { ...attachment, visible } : attachment,
+                ),
+              });
+            }}
           />
 
           <CollectionManagerContainer document={document} onChange={editor.update} />

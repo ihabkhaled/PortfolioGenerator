@@ -8,6 +8,7 @@ export type {
   AssetRecord,
   AssetRow,
   AssetVisibility,
+  StoreScannedResumeAssetInput,
   UploadAssetInput,
   UploadAssetResult,
 } from './types/asset.types';

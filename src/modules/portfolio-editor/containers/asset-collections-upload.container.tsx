@@ -170,6 +170,17 @@ export function AssetCollectionsUploadContainer(
       {props.attachments.map((item, index) => (
         <div className={editorClasses.entryActions} key={item.id}>
           <span>{item.label}</span>
+          <Label htmlFor={`attachment-visible-${item.id}`}>
+            <Input
+              id={`attachment-visible-${item.id}`}
+              type="checkbox"
+              checked={item.visible}
+              onChange={(event) => {
+                props.onAttachmentVisibilityChange?.(index, event.target.checked);
+              }}
+            />
+            {t('collections.fields.visible')}
+          </Label>
           <Button
             type="button"
             variant="secondary"

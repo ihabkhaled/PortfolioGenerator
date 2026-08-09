@@ -1,7 +1,8 @@
-import { act, render, renderHook, screen, waitFor } from '@testing-library/react';
+import { act, render, renderHook, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
+import type { PortfolioDocument } from '@/modules/portfolio-document';
 import {
   EDITOR_ERROR_KEYS,
   type EditorActionState,
@@ -139,7 +140,7 @@ describe('draft editor save lifecycle', () => {
 
 describe('page manager controls', () => {
   it('does not create a page until all three owner-written fields are present', async () => {
-    const onChange = vi.fn();
+    const onChange = vi.fn<(value: PortfolioDocument) => void>();
     render(
       <PageManagerContainer
         portfolioId="portfolio-1"
@@ -157,43 +158,62 @@ describe('page manager controls', () => {
   });
 
   it('wires page metadata, ordering, visibility, and removal to the draft', async () => {
-    const onChange = vi.fn();
+    const documentValue = buildFullPortfolioDocument();
+    const onChange = vi.fn<(value: PortfolioDocument) => void>();
     render(
       <PageManagerContainer
         portfolioId="portfolio-1"
         expectedVersion={1}
-        document={buildFullPortfolioDocument()}
+        document={documentValue}
         onChange={onChange}
         onVersionChange={vi.fn()}
       />,
     );
 
-    const projectTitle = requireElement(screen.getAllByLabelText('Page title')[1]);
+    const projectEntry = requireElement(
+      screen
+        .getAllByRole('listitem')
+        .find((entry) => within(entry).queryByDisplayValue('projects') !== null),
+    );
+    const projectAddress = within(projectEntry).getByDisplayValue('projects');
+    const projectTitle = within(projectEntry).getByLabelText('Page title');
     await userEvent.clear(projectTitle);
     await userEvent.type(projectTitle, 'Work');
-    await userEvent.clear(requireElement(screen.getAllByLabelText('Navigation label')[1]));
-    await userEvent.type(requireElement(screen.getAllByLabelText('Navigation label')[1]), 'Work');
-    await userEvent.clear(requireElement(screen.getAllByLabelText('Address')[1]));
-    await userEvent.type(requireElement(screen.getAllByLabelText('Address')[1]), 'work');
-    await userEvent.type(
-      requireElement(screen.getAllByLabelText('Page description')[1]),
-      ' '.repeat(3),
-    );
-    await userEvent.click(
-      requireElement(screen.getAllByRole('button', { name: 'Move page up' })[1]),
-    );
-    await userEvent.click(requireElement(screen.getAllByRole('button', { name: 'Hide' })[1]));
-    await userEvent.click(
-      requireElement(screen.getAllByRole('button', { name: 'Remove page' })[1]),
-    );
+    const navigationLabel = within(projectEntry).getByLabelText('Navigation label');
+    await userEvent.clear(navigationLabel);
+    await userEvent.type(navigationLabel, 'Work');
+    await userEvent.clear(projectAddress);
+    await userEvent.type(projectAddress, 'work');
+    await userEvent.type(within(projectEntry).getByLabelText('Page description'), ' '.repeat(3));
+    await userEvent.click(within(projectEntry).getByRole('button', { name: 'Move page up' }));
+    await userEvent.click(within(projectEntry).getByRole('button', { name: 'Hide' }));
+    await userEvent.click(within(projectEntry).getByRole('button', { name: 'Remove page' }));
 
-    expect(onChange).toHaveBeenCalledTimes(7);
+    expect(
+      onChange.mock.calls.some(
+        ([value]) => value.pages[1]?.title !== documentValue.pages[1]?.title,
+      ),
+    ).toBe(true);
+    expect(
+      onChange.mock.calls.some(
+        ([value]) => value.pages[1]?.navLabel !== documentValue.pages[1]?.navLabel,
+      ),
+    ).toBe(true);
+    expect(
+      onChange.mock.calls.some(([value]) => value.pages[1]?.slug !== documentValue.pages[1]?.slug),
+    ).toBe(true);
+    expect(onChange.mock.calls.some(([value]) => value.pages[1]?.description === null)).toBe(true);
+    expect(onChange.mock.calls.some(([value]) => value.pages[0]?.id === 'page-projects')).toBe(
+      true,
+    );
+    expect(onChange.mock.calls.some(([value]) => value.pages[1]?.visible === false)).toBe(true);
+    expect(onChange.mock.calls.some(([value]) => value.pages.length === 2)).toBe(true);
   });
 });
 
 describe('collection controls', () => {
   it('updates interests and adds a blank owner-controlled entry', async () => {
-    const onChange = vi.fn();
+    const onChange = vi.fn<(value: PortfolioDocument) => void>();
     render(
       <CollectionManagerContainer document={buildFullPortfolioDocument()} onChange={onChange} />,
     );
@@ -205,12 +225,13 @@ describe('collection controls', () => {
     );
     await userEvent.click(requireElement(screen.getAllByRole('button', { name: 'Add entry' })[0]));
 
-    expect(onChange).toHaveBeenCalledTimes(2);
+    expect(onChange.mock.calls.some(([value]) => value.interests.length !== 1)).toBe(true);
+    expect(onChange.mock.calls.some(([value]) => value.experience.length === 3)).toBe(true);
   });
 
   it('wires boolean, select, multiline, move, and remove controls for an entry', async () => {
     const documentValue = buildFullPortfolioDocument();
-    const onChange = vi.fn();
+    const onChange = vi.fn<(value: PortfolioDocument) => void>();
     render(
       <CollectionEntryContainer
         document={documentValue}
@@ -232,7 +253,24 @@ describe('collection controls', () => {
     await userEvent.click(screen.getByRole('button', { name: 'Move entry down' }));
     await userEvent.click(screen.getByRole('button', { name: 'Remove entry' }));
 
-    expect(onChange).toHaveBeenCalledTimes(5);
+    expect(onChange.mock.calls.some(([value]) => value.projects[0]?.featured === false)).toBe(true);
+    expect(
+      onChange.mock.calls.some(
+        ([value]) =>
+          value.projects[0]?.content.length !== documentValue.projects[0]?.content.length,
+      ),
+    ).toBe(true);
+    expect(
+      onChange.mock.calls.some(
+        ([value]) => value.projects[0]?.name !== documentValue.projects[0]?.name,
+      ),
+    ).toBe(true);
+    expect(
+      onChange.mock.calls.some(
+        ([value]) => value.projects[1]?.id === documentValue.projects[0]?.id,
+      ),
+    ).toBe(true);
+    expect(onChange.mock.calls.some(([value]) => value.projects.length === 1)).toBe(true);
   });
 
   it('wires the skill tier select to the owning collection', async () => {
@@ -248,9 +286,14 @@ describe('collection controls', () => {
       />,
     );
 
-    await userEvent.selectOptions(screen.getByLabelText('Skill level'), 'secondary');
+    await userEvent.selectOptions(screen.getByLabelText('Skill level'), 'strong');
 
-    expect(onChange).toHaveBeenCalledOnce();
+    expect(onChange).toHaveBeenCalledWith({
+      ...documentValue,
+      skills: documentValue.skills.map((skill, index) =>
+        index === 0 ? { ...skill, tier: 'strong' } : skill,
+      ),
+    });
   });
 });
 

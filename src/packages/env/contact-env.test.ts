@@ -53,3 +53,18 @@ describe('contact email environment', () => {
     expect(parsed.CONTACT_RATE_LIMIT_WINDOW_MS).toBe(1_800_000);
   });
 });
+
+describe('virus scanner environment', () => {
+  it('allows production route collection while upload services enforce scanning', () => {
+    expect(
+      parseServerEnvironment({ ...base, NODE_ENV: 'production', CLAMAV_ENABLED: 'false' })
+        .CLAMAV_ENABLED,
+    ).toBe(false);
+  });
+
+  it('retains an explicit scanner opt-out outside production', () => {
+    expect(
+      parseServerEnvironment({ ...base, NODE_ENV: 'test', CLAMAV_ENABLED: 'false' }).CLAMAV_ENABLED,
+    ).toBe(false);
+  });
+});

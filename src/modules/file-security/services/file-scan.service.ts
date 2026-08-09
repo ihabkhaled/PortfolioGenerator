@@ -8,6 +8,7 @@ import { SCANNER_REGISTRY } from '../constants/scanner-registry.constants';
 import { inspectUpload, inspectUploadForPurpose } from '../policies/file-inspection.policy';
 import { createClamAvScanner } from '../providers/clamav-scanner.provider';
 import { createDisabledScanner } from '../providers/disabled-scanner.provider';
+import { createRequiredScanner } from '../providers/required-scanner.provider';
 import type {
   FileInspection,
   FileKind,
@@ -31,13 +32,16 @@ export function getFileScanner(): FileScanner {
 
   const env = getServerEnv();
 
-  SCANNER_REGISTRY.current = env.CLAMAV_ENABLED
-    ? createClamAvScanner({
-        host: env.CLAMAV_HOST,
-        port: env.CLAMAV_PORT,
-        timeoutMs: env.CLAMAV_TIMEOUT_MS,
-      })
-    : createDisabledScanner();
+  if (env.CLAMAV_ENABLED) {
+    SCANNER_REGISTRY.current = createClamAvScanner({
+      host: env.CLAMAV_HOST,
+      port: env.CLAMAV_PORT,
+      timeoutMs: env.CLAMAV_TIMEOUT_MS,
+    });
+  } else {
+    SCANNER_REGISTRY.current =
+      env.NODE_ENV === 'production' ? createRequiredScanner() : createDisabledScanner();
+  }
 
   return SCANNER_REGISTRY.current;
 }

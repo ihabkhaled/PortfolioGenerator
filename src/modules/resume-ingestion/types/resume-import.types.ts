@@ -1,3 +1,4 @@
+import type { FileInspection } from '@/modules/file-security';
 import type { PortfolioDocument } from '@/modules/portfolio-document';
 
 import type { ExtractionWarning, UploadRejection } from './ingestion.types';
@@ -34,4 +35,5 @@ export type ResumeImportOutcome =
 export type ResumeImportFailure = Extract<ResumeImportOutcome, { readonly ok: false }>;
 
 export type ResumePreflightResult =
-  ResumeImportFailure | { readonly ok: true; readonly contentType: string };
+  | ResumeImportFailure
+  | { readonly ok: true; readonly inspection: Extract<FileInspection, { readonly ok: true }> };

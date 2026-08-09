@@ -80,6 +80,9 @@ test.describe('Word document import', () => {
     await page.waitForURL('**/editor', { timeout: 60_000 });
 
     await expect(page.getByLabel('Display name')).toHaveValue('Ada Lovelace');
+    const importedAttachment = page.getByText('ada-lovelace.docx', { exact: true }).locator('..');
+    await expect(importedAttachment).toBeVisible();
+    await expect(importedAttachment.getByRole('checkbox')).not.toBeChecked();
   });
 });
 

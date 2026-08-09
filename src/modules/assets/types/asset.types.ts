@@ -30,6 +30,14 @@ export interface UploadAssetInput {
   readonly bytes: Uint8Array;
 }
 
+export interface StoreScannedResumeAssetInput {
+  readonly ownerId: string;
+  readonly portfolioId: string;
+  readonly fileName: string;
+  readonly bytes: Uint8Array;
+  readonly inspection: Extract<FileInspection, { readonly ok: true }>;
+}
+
 export type UploadAssetResult =
   | { readonly ok: true; readonly asset: AssetRecord }
   | { readonly ok: false; readonly reason: 'not-found' }

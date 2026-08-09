@@ -3,6 +3,7 @@ import 'server-only';
 import { createHash } from 'node:crypto';
 
 import { extractResumeToDraft } from '@/modules/ai/server';
+import { storeScannedResumeAsset } from '@/modules/assets/server';
 import { recordAuditEvent } from '@/modules/audit/server';
 import { inspectAndScanForPurpose } from '@/modules/file-security/server';
 import { getOwnedPortfolio } from '@/modules/portfolios/server';
@@ -18,6 +19,7 @@ import { getServerEnv } from '@/packages/env/server';
 import { logger } from '@/packages/logger';
 
 import { WARNING_CODES } from '../constants/import-warning.constants';
+import { addImportedResumeAttachment } from '../helpers/imported-resume-attachment.helper';
 import { normalizeResumeText } from '../helpers/resume-text.helper';
 import { toDocumentTextRejection } from '../policies/document-text-rejection.policy';
 import { looksEncrypted, validateUploadSize } from '../policies/pdf-validation.policy';
@@ -79,7 +81,7 @@ async function inspectResumeUpload(request: ResumeImportRequest): Promise<Resume
     return { ok: false, rejection: 'not-found' };
   }
 
-  return { ok: true, contentType: inspection.contentType };
+  return { ok: true, inspection };
 }
 
 /**
@@ -111,7 +113,7 @@ export async function importResume(request: ResumeImportRequest): Promise<Resume
   const sha256 = createHash('sha256').update(request.bytes).digest('hex');
   const storageKey = generateStorageKey(request.ownerId, RESUME_KEY_PREFIX);
 
-  await storage.putPrivate(storageKey, request.bytes, inspection.contentType);
+  await storage.putPrivate(storageKey, request.bytes, inspection.inspection.contentType);
 
   let upload: ResumeUploadRecord;
 
@@ -122,7 +124,7 @@ export async function importResume(request: ResumeImportRequest): Promise<Resume
       storageKey,
       originalFilename: request.originalFilename,
       // Recorded as what we verified it to be, not as what the browser claimed.
-      mimeType: inspection.contentType,
+      mimeType: inspection.inspection.contentType,
       sizeBytes: request.bytes.length,
       sha256,
       status: 'VALIDATED',
@@ -147,7 +149,7 @@ export async function importResume(request: ResumeImportRequest): Promise<Resume
   try {
     const extracted = await extractDocumentText({
       bytes: request.bytes,
-      contentType: inspection.contentType,
+      contentType: inspection.inspection.contentType,
       maxCharacters: env.EXTRACTION_MAX_INPUT_CHARS,
       maxPages: env.UPLOAD_MAX_PAGES,
     });
@@ -286,6 +288,21 @@ export async function importResume(request: ResumeImportRequest): Promise<Resume
     metadata: { uploadId: upload.id, warningCount: extraction.warnings.length },
   });
 
+  const resumeAsset = await storeScannedResumeAsset({
+    ownerId: request.ownerId,
+    portfolioId: request.portfolioId,
+    fileName: request.originalFilename,
+    bytes: request.bytes,
+    inspection: inspection.inspection,
+  });
+
+  const document = addImportedResumeAttachment(extraction.document, {
+    assetId: resumeAsset.id,
+    fileName: resumeAsset.originalFilename,
+    contentType: resumeAsset.contentType,
+    sizeBytes: resumeAsset.sizeBytes,
+  });
+
   logger.info('resume.import.completed', {
     portfolioId: request.portfolioId,
     uploadId: upload.id,
@@ -295,7 +312,7 @@ export async function importResume(request: ResumeImportRequest): Promise<Resume
   return {
     ok: true,
     uploadId: upload.id,
-    document: extraction.document,
+    document,
     warnings: extraction.warnings,
   };
 }

@@ -6,19 +6,32 @@ import type { PortfolioDocument } from '@/modules/portfolio-document';
  * must not become public merely because another portfolio is published.
  */
 export function isPublishedAssetReferenced(document: PortfolioDocument, assetId: string): boolean {
-  if (document.identity.portraitAssetId === assetId) {
+  const visibleSections = document.pages
+    .filter((page) => page.visible && page.visibility === 'public')
+    .flatMap((page) => page.sections.filter((section) => section.visible));
+
+  if (
+    document.identity.portraitAssetId === assetId &&
+    visibleSections.some((section) => section.type === 'hero' && section.config.showPortrait)
+  ) {
     return true;
   }
 
-  if (document.projects.some((project) => project.coverAssetId === assetId)) {
+  if (
+    document.projects.some((project) => project.coverAssetId === assetId) &&
+    visibleSections.some((section) => section.type === 'projects')
+  ) {
     return true;
   }
 
-  if (document.gallery.some((item) => item.assetId === assetId)) {
+  const hasVisibleAboutSection = visibleSections.some((section) => section.type === 'about');
+
+  if (hasVisibleAboutSection && document.gallery.some((item) => item.assetId === assetId)) {
     return true;
   }
 
-  return document.attachments.some(
-    (attachment) => attachment.assetId === assetId && attachment.visible,
+  return (
+    hasVisibleAboutSection &&
+    document.attachments.some((attachment) => attachment.assetId === assetId && attachment.visible)
   );
 }

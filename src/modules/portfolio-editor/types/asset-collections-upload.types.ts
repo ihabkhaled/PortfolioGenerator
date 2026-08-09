@@ -14,4 +14,5 @@ export interface AssetCollectionsUploadProps {
   ) => void;
   readonly onGalleryRemove: (index: number) => void;
   readonly onAttachmentRemove: (index: number) => void;
+  readonly onAttachmentVisibilityChange?: (index: number, visible: boolean) => void;
 }

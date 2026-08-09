@@ -5,6 +5,7 @@ import { prismaAdapter } from 'better-auth/adapters/prisma';
 import { nextCookies } from 'better-auth/next-js';
 
 import { getDatabase } from '@/packages/database';
+import { createConfiguredEmailSender } from '@/packages/email/server';
 import { getServerEnv } from '@/packages/env/server';
 
 import { AUTH_MIN_PASSWORD_LENGTH, SESSION_MAX_AGE_SECONDS } from './auth.constants';
@@ -29,10 +30,20 @@ function createAuth() {
     emailAndPassword: {
       enabled: true,
       minPasswordLength: AUTH_MIN_PASSWORD_LENGTH,
-      // Verification email delivery is not wired yet; requiring it would lock
-      // every new account out. Tracked as a launch prerequisite in
-      // docs/launch-readiness.md rather than silently left on.
-      requireEmailVerification: false,
+      requireEmailVerification: env.CONTACT_EMAIL_ENABLED,
+      sendResetPassword: async ({ user, url }) => {
+        await createConfiguredEmailSender().sendPasswordReset({ email: user.email, resetUrl: url });
+      },
+    },
+    emailVerification: {
+      sendOnSignUp: env.CONTACT_EMAIL_ENABLED,
+      autoSignInAfterVerification: true,
+      sendVerificationEmail: async ({ user, url }) => {
+        await createConfiguredEmailSender().sendEmailVerification({
+          email: user.email,
+          verificationUrl: url,
+        });
+      },
     },
     session: {
       expiresIn: SESSION_MAX_AGE_SECONDS,

@@ -23,3 +23,10 @@ export const signUpSchema = z.object({
   email,
   password,
 });
+
+export const passwordResetRequestSchema = z.object({ email });
+
+export const passwordResetSchema = z.object({
+  token: z.string().min(1, 'errors.invalidResetToken').max(256, 'errors.invalidResetToken'),
+  newPassword: password,
+});

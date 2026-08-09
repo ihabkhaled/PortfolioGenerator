@@ -27,6 +27,7 @@ export async function getOptionalUser(requestHeaders: Headers): Promise<Authenti
       id: session.user.id,
       email: session.user.email,
       name: session.user.name,
+      emailVerified: session.user.emailVerified,
     };
   } catch (error) {
     // A failed session lookup is "signed out", never a 500: an expired or

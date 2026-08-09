@@ -33,9 +33,14 @@ export function SignInFormContainer(): ReactElement {
         passwordHint: t('passwordHint'),
       }}
       footer={
-        <AppLink href={ROUTE_PATHS.signUp} className={authClasses.switchLink}>
-          {t('toSignUp')}
-        </AppLink>
+        <>
+          <AppLink href={{ pathname: '/forgot-password' }} className={authClasses.switchLink}>
+            {t('forgotPasswordLink')}
+          </AppLink>
+          <AppLink href={ROUTE_PATHS.signUp} className={authClasses.switchLink}>
+            {t('toSignUp')}
+          </AppLink>
+        </>
       }
     />
   );

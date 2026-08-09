@@ -1,0 +1,17 @@
+export interface PasswordRecoveryFormProps {
+  readonly mode: 'request' | 'reset';
+  readonly token: string | null;
+  readonly action: (formData: FormData) => void;
+  readonly isPending: boolean;
+  readonly errorMessage: string | null;
+  readonly successMessage: string | null;
+  readonly emailLabel: string;
+  readonly passwordLabel: string;
+  readonly passwordHint: string;
+  readonly submitLabel: string;
+  readonly pendingLabel: string;
+}
+
+export interface PasswordResetContainerProps {
+  readonly token: string | null;
+}

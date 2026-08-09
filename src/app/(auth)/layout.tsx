@@ -2,6 +2,8 @@ import type { Metadata } from 'next';
 import type { ReactElement, ReactNode } from 'react';
 
 import { authClasses } from '@/modules/auth';
+import { buildThemeOptions } from '@/modules/preferences';
+import { ThemeToggleContainer } from '@/modules/preferences/preferences-ui';
 import { I18N_NAMESPACES } from '@/packages/i18n';
 import { getServerTranslations } from '@/packages/i18n/server';
 import { AppLink } from '@/packages/link';
@@ -31,6 +33,9 @@ export default async function AuthLayout(props: {
         <AppLink href={ROUTE_PATHS.home} className={siteShellClasses.navLink}>
           {tApp('tagline')}
         </AppLink>
+      }
+      actions={
+        <ThemeToggleContainer label={tApp('theme.label')} options={buildThemeOptions(tApp)} />
       }
       footerNote={tApp('footerNote')}
       footerLinks={null}

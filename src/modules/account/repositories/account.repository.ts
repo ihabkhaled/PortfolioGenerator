@@ -1,6 +1,10 @@
 import 'server-only';
 
 import { getDatabase } from '@/packages/database';
+import { parseSchema } from '@/packages/zod';
+
+import { accountPreferencesSchema } from '../schemas/account.schema';
+import type { AccountPreferences } from '../types/settings.types';
 
 /**
  * Account-level data access.
@@ -22,4 +26,27 @@ export async function userExists(userId: string): Promise<boolean> {
   const row = await getDatabase().user.findFirst({ where: { id: userId }, select: { id: true } });
 
   return row !== null;
+}
+
+export async function getOwnedAccountPreferences(
+  ownerId: string,
+): Promise<AccountPreferences | null> {
+  const row = await getDatabase().user.findFirst({
+    where: { id: ownerId },
+    select: { locale: true, themePreference: true, defaultCountryIso: true },
+  });
+  if (row === null) return null;
+  const parsed = parseSchema(accountPreferencesSchema, row);
+  return parsed.ok ? parsed.value : null;
+}
+
+export async function updateOwnedAccountPreferences(
+  ownerId: string,
+  preferences: AccountPreferences,
+): Promise<boolean> {
+  const updated = await getDatabase().user.updateMany({
+    where: { id: ownerId },
+    data: preferences,
+  });
+  return updated.count > 0;
 }

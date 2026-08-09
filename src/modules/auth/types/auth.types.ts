@@ -10,4 +10,9 @@ export interface AuthFormState {
   readonly error: string | null;
 }
 
+export interface PasswordRecoveryState {
+  readonly status: 'idle' | 'submitted' | 'error' | 'success';
+  readonly error: string | null;
+}
+
 export { type AuthenticatedUser } from '@/packages/auth';

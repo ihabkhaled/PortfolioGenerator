@@ -9,9 +9,58 @@ import { parseSchema } from '@/packages/zod';
 import { ROUTE_PATHS } from '@/shared/constants/route-paths.constants';
 
 import { AUTH_ERROR_KEYS, AUTH_FIELD_NAMES } from '../constants/auth.constants';
-import { signInSchema, signUpSchema } from '../schemas/auth.schema';
+import {
+  passwordResetRequestSchema,
+  passwordResetSchema,
+  signInSchema,
+  signUpSchema,
+} from '../schemas/auth.schema';
+import {
+  consumePasswordRecovery,
+  requestPasswordRecovery,
+} from '../services/password-recovery.service';
 import { signOutCurrentSession } from '../services/session.service';
-import type { AuthFormState } from '../types/auth.types';
+import type { AuthFormState, PasswordRecoveryState } from '../types/auth.types';
+
+export async function requestPasswordResetAction(
+  _previous: PasswordRecoveryState,
+  formData: FormData,
+): Promise<PasswordRecoveryState> {
+  const parsed = parseSchema(passwordResetRequestSchema, {
+    email: formData.get(AUTH_FIELD_NAMES.email),
+  });
+
+  if (parsed.ok) {
+    await requestPasswordRecovery(parsed.value.email, await headers());
+  }
+
+  return { status: 'submitted', error: null };
+}
+
+export async function resetPasswordAction(
+  _previous: PasswordRecoveryState,
+  formData: FormData,
+): Promise<PasswordRecoveryState> {
+  const parsed = parseSchema(passwordResetSchema, {
+    token: formData.get(AUTH_FIELD_NAMES.resetToken),
+    newPassword: formData.get(AUTH_FIELD_NAMES.newPassword),
+  });
+
+  if (!parsed.ok) {
+    return { status: 'error', error: AUTH_ERROR_KEYS.unknown };
+  }
+
+  const consumed = await consumePasswordRecovery(
+    parsed.value.token,
+    parsed.value.newPassword,
+    await headers(),
+  );
+  if (!consumed) {
+    return { status: 'error', error: AUTH_ERROR_KEYS.unknown };
+  }
+
+  return { status: 'success', error: null };
+}
 
 /**
  * Credential server actions.

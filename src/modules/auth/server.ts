@@ -8,3 +8,7 @@ import 'server-only';
 
 export { getCurrentUser, requireOwner } from './services/require-owner.service';
 export { getOptionalUser, signOutCurrentSession } from './services/session.service';
+export {
+  consumePasswordRecovery,
+  requestPasswordRecovery,
+} from './services/password-recovery.service';

@@ -1,5 +1,10 @@
 import 'server-only';
 
+import {
+  listOwnedAssetKeys,
+  listOwnedAssetKeysForPortfolio,
+  softDeleteOwnedAssetsForPortfolio,
+} from '@/modules/assets/server';
 import { recordAuditEvent } from '@/modules/audit/server';
 import {
   getOwnedPortfolio,
@@ -52,9 +57,16 @@ export async function deletePortfolio(
 
   invalidateTagImmediately(portfolioCacheTag(portfolio.slug));
 
-  const keys = await listOwnedUploadKeysForPortfolio(ownerId, portfolioId);
+  const [uploadKeys, assetKeys] = await Promise.all([
+    listOwnedUploadKeysForPortfolio(ownerId, portfolioId),
+    listOwnedAssetKeysForPortfolio(ownerId, portfolioId),
+  ]);
+  const keys = [...uploadKeys, ...assetKeys];
   const objects = await purgeObjects(keys);
-  const uploads = await softDeleteUploadsForPortfolio(ownerId, portfolioId, now);
+  const [uploads] = await Promise.all([
+    softDeleteUploadsForPortfolio(ownerId, portfolioId, now),
+    softDeleteOwnedAssetsForPortfolio(ownerId, portfolioId, now),
+  ]);
 
   await recordAuditEvent({
     eventType: 'portfolio.deleted',
@@ -84,7 +96,11 @@ export async function deletePortfolio(
  */
 export async function deleteAccount(ownerId: string, now: Date): Promise<DeletionOutcome> {
   const slugs = await listOwnedSlugs(ownerId);
-  const keys = await listOwnedUploadKeys(ownerId);
+  const [uploadKeys, assetKeys] = await Promise.all([
+    listOwnedUploadKeys(ownerId),
+    listOwnedAssetKeys(ownerId),
+  ]);
+  const keys = [...uploadKeys, ...assetKeys];
   const objects = await purgeObjects(keys);
 
   await recordAuditEvent({

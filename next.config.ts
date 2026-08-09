@@ -28,6 +28,9 @@ const nextConfig: NextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
   typedRoutes: true,
+  typescript: {
+    tsconfigPath: 'tsconfig.app.json',
+  },
   turbopack: {},
   experimental: {
     // The editor posts whole draft documents; the default 1 MB action body

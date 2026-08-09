@@ -25,6 +25,7 @@ export const ROUTE_PATHS = {
   feed: '/feed.xml',
   ads: '/ads.txt',
   manifest: '/manifest.webmanifest',
+  offline: '/offline',
 } as const;
 
 export const MARKETING_ROUTE_PATHS = {

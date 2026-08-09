@@ -9,6 +9,7 @@ import {
   isAppLocale,
   LocalizationControlsContainer,
 } from '@/modules/localization';
+import { PwaRegistrationContainer } from '@/modules/pwa/pwa-ui';
 import { AdSenseScript } from '@/modules/seo';
 import { I18nLocaleProvider, I18N_NAMESPACES } from '@/packages/i18n';
 import { getServerTranslations } from '@/packages/i18n/server';
@@ -32,6 +33,9 @@ import './styles.css';
  */
 
 export const metadata: Metadata = {
+  manifest: '/manifest.webmanifest',
+  appleWebApp: { capable: true, statusBarStyle: 'default', title: 'PortfolioGenerate' },
+  icons: { icon: [{ url: '/icon.svg', type: 'image/svg+xml' }], apple: '/icon.svg' },
   title: {
     default: 'PortfolioGenerate',
     template: '%s · PortfolioGenerate',
@@ -56,6 +60,7 @@ export default async function RootLayout(props: {
   const requestedLocale = requestHeaders.get('x-app-locale') ?? DEFAULT_LOCALE;
   const locale = isAppLocale(requestedLocale) ? requestedLocale : DEFAULT_LOCALE;
   const tLocalization = await getServerTranslations(I18N_NAMESPACES.localization, locale);
+  const tErrors = await getServerTranslations(I18N_NAMESPACES.errors, locale);
 
   return (
     <html
@@ -82,6 +87,11 @@ export default async function RootLayout(props: {
             copied={tLocalization('copied')}
           />
           <AppToaster />
+          <PwaRegistrationContainer
+            updateTitle={tErrors('title')}
+            updateDescription={tErrors('lead')}
+            updateAction={tErrors('retry')}
+          />
         </I18nLocaleProvider>
       </body>
     </html>

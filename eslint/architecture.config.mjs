@@ -216,6 +216,7 @@ export default [
             'contact-ui',
             'preferences-ui',
             'private-page-access-ui',
+            'pwa-ui',
           ],
         },
       ],

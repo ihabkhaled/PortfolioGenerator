@@ -100,13 +100,20 @@ describe('reserved slug policy', () => {
   const routeSegments = Object.values(ROUTE_PATHS)
     .map((path) => path.split('/').find(Boolean))
     .filter((segment): segment is string => segment !== undefined);
+  const marketingRouteSegments = [
+    ...new Set(
+      Object.values(MARKETING_ROUTE_PATHS)
+        .map((path) => path.split('/').find(Boolean))
+        .filter((segment): segment is string => segment !== undefined),
+    ),
+  ];
 
   it.each(routeSegments)('reserves the platform route segment %s', (segment) => {
     expect(isReservedSlug(segment)).toBe(true);
   });
 
-  it.each(Object.values(MARKETING_ROUTE_PATHS))('reserves the marketing route %s', (path) => {
-    expect(isReservedSlug(path.slice(1))).toBe(true);
+  it.each(marketingRouteSegments)('reserves the marketing route segment %s', (segment) => {
+    expect(isReservedSlug(segment)).toBe(true);
   });
 
   it('covers every platform route except the root', () => {

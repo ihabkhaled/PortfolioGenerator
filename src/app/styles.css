@@ -206,11 +206,21 @@
 
 body {
   min-height: 100dvh;
+  padding-top: env(safe-area-inset-top);
+  padding-right: env(safe-area-inset-right);
+  padding-bottom: env(safe-area-inset-bottom);
+  padding-left: env(safe-area-inset-left);
   background-color: var(--role-canvas);
   color: var(--role-foreground);
   font-family: var(--role-font-body);
   line-height: var(--role-line-height-body, 1.7);
   -webkit-font-smoothing: antialiased;
+}
+
+@media (display-mode: standalone) {
+  body {
+    overscroll-behavior-y: none;
+  }
 }
 
 /*

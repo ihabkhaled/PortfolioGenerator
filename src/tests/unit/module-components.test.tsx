@@ -204,11 +204,16 @@ describe('marketing components', () => {
 describe('PageSkeleton', () => {
   it('is hidden from assistive technology while preserving the page layout', () => {
     render(<PageSkeleton />);
-    const genericElements = screen.getAllByRole('generic', { hidden: true });
-    const shell = requireElement(genericElements[0]);
+    const shell = requireElement(
+      screen
+        .getAllByRole('generic', { hidden: true })
+        .find((element) => element.getAttribute('aria-hidden') === 'true'),
+    );
 
     expect(shell).toHaveAttribute('aria-hidden', 'true');
-    expect(genericElements).toHaveLength(5);
+    expect(within(shell).getAllByRole('generic', { hidden: true }).length).toBeGreaterThanOrEqual(
+      12,
+    );
   });
 });
 

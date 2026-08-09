@@ -7,6 +7,18 @@ import js from '@eslint/js';
 
 export default [
   {
+    /** The service worker runs in a WorkerGlobalScope rather than Window or Node. */
+    files: ['public/sw.js'],
+    languageOptions: {
+      globals: {
+        URL: 'readonly',
+        caches: 'readonly',
+        fetch: 'readonly',
+        self: 'readonly',
+      },
+    },
+  },
+  {
     ...js.configs.recommended,
     files: ['**/*.{js,mjs,cjs,ts,tsx,mts}'],
   },

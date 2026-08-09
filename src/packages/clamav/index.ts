@@ -20,5 +20,6 @@ export {
   CLAMAV_STREAM_TERMINATOR,
 } from './clamav.constants';
 export { interpretClamAvResponse } from './clamav-response';
-export { pingClamAv, scanBufferWithClamAv } from './clamav-client';
+export { getClamAvVersion, pingClamAv, scanBufferWithClamAv } from './clamav-client';
+export { parseClamAvSignatureDate, signatureDatabaseIsFresh } from './clamav-version';
 export type { ClamAvConnection, ClamAvVerdict } from './clamav.types';

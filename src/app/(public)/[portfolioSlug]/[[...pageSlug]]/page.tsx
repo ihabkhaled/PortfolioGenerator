@@ -31,6 +31,7 @@ import { getRequestCookie } from '@/packages/headers';
 import { I18N_NAMESPACES } from '@/packages/i18n';
 import { getServerTranslations } from '@/packages/i18n/server';
 import { appNotFound } from '@/packages/navigation';
+import { buildPrivatePageAssetPath } from '@/shared/constants/route-paths.constants';
 
 /**
  * Every published portfolio, at the root of the domain.
@@ -129,6 +130,7 @@ export default async function PublicPortfolioPage(
       portfolioSlug,
       pageId: resolved.page.id,
       pageSlug: resolved.page.slug,
+      locale,
     };
     const cookieName = buildPrivatePageCookieName(portfolioSlug, resolved.page.id);
     const grant = await getRequestCookie(cookieName);
@@ -147,6 +149,7 @@ export default async function PublicPortfolioPage(
         <PrivatePageChallenge
           portfolioSlug={portfolioSlug}
           pageSlug={resolved.page.slug}
+          locale={locale}
           denied={searchParams.access === 'denied'}
           labels={{
             title: translate('privatePage.title'),
@@ -197,6 +200,14 @@ export default async function PublicPortfolioPage(
           <ThemeToggleContainer label={tApp('theme.label')} options={buildThemeOptions(tApp)} />
         }
         footerLinks={null}
+        {...(resolved.page.visibility === 'private'
+          ? {
+              buildAssetPath: (assetId: string): string => {
+                const path = buildPrivatePageAssetPath(portfolioSlug, resolved.page.slug, assetId);
+                return locale === DEFAULT_LOCALE ? path : localizePath(path, locale);
+              },
+            }
+          : {})}
       />
     </>
   );

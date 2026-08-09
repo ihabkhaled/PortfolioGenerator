@@ -280,6 +280,40 @@ export function parseSkills(lines: readonly string[]): readonly string[] {
   ];
 }
 
+export function parsePublications(
+  lines: readonly string[],
+): ResumeExtractionResult['publications'] {
+  return lines.flatMap((line) => {
+    const [title, publisher, possibleUrl] = line
+      .split('|')
+      .map((field) => field.trim())
+      .filter(Boolean);
+    if (title === undefined) return [];
+    return [
+      {
+        title,
+        publisher: publisher ?? null,
+        date: null,
+        url: possibleUrl?.startsWith('https://') === true ? possibleUrl : null,
+        summary: null,
+      },
+    ];
+  });
+}
+
+export function parseVolunteering(
+  lines: readonly string[],
+): ResumeExtractionResult['volunteering'] {
+  return lines.flatMap((line) => {
+    const [organization, role] = line
+      .split('|')
+      .map((field) => field.trim())
+      .filter(Boolean);
+    if (organization === undefined) return [];
+    return [{ organization, role: role ?? null, startDate: null, endDate: null, summary: null }];
+  });
+}
+
 export function parseExperience(lines: readonly string[]): ParsedExperience {
   const entries: ResumeExtractionResult['experience'] = [];
   const warnings: ResumeExtractionResult['warnings'] = [];
@@ -379,6 +413,9 @@ export function parseDeterministicResume(resumeText: string): ResumeExtractionRe
     certifications: [],
     languages: [],
     awards: [],
+    publications: parsePublications(sectionLines(sections, 'publications')),
+    volunteering: parseVolunteering(sectionLines(sections, 'volunteering')),
+    interests: [...parseSkills(sectionLines(sections, 'interests'))],
     warnings,
   };
 }

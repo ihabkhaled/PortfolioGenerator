@@ -1,5 +1,8 @@
 import { COUNTRY_DIAL_CODES } from '@/shared/constants/country-codes.constants';
-import type { CountryDialCode } from '@/shared/types/country-code.types';
+import type {
+  CountryDialCode,
+  SplitInternationalPhoneResult,
+} from '@/shared/types/country-code.types';
 
 /**
  * Phone numbers, treated as text a reader copies.
@@ -58,4 +61,47 @@ export function sortCountriesByName(locale: string): readonly CountryDialCode[] 
   return [...COUNTRY_DIAL_CODES].toSorted((left, right) =>
     left.name.localeCompare(right.name, locale),
   );
+}
+
+/**
+ * Separates an explicit international prefix only when it identifies one ISO
+ * entry. Shared calling plans preserve the complete evidence and leave the
+ * country unset; choosing a plausible country would invent a fact.
+ */
+export function splitInternationalPhone(value: string): SplitInternationalPhoneResult {
+  const trimmed = value.trim();
+  const compact = trimmed.replaceAll(/[\s().-]/gu, '');
+
+  if (!compact.startsWith('+') || !/^\+\d+$/u.test(compact)) {
+    return { countryIso: null, nationalNumber: trimmed };
+  }
+
+  const longest = selectLongestDialPrefix(
+    [...new Set(COUNTRY_DIAL_CODES.map((country) => country.dial))],
+    compact,
+  );
+
+  if (longest === undefined) {
+    return { countryIso: null, nationalNumber: trimmed };
+  }
+
+  const countries = COUNTRY_DIAL_CODES.filter((country) => country.dial === longest);
+
+  if (countries.length !== 1) {
+    return { countryIso: null, nationalNumber: trimmed };
+  }
+
+  return {
+    countryIso: countries.map((country) => country.iso).join(''),
+    nationalNumber: compact.slice(longest.length),
+  };
+}
+
+export function selectLongestDialPrefix(
+  dials: readonly string[],
+  compactPhone: string,
+): string | undefined {
+  return dials
+    .filter((dial) => compactPhone.startsWith(dial))
+    .toSorted((left, right) => right.length - left.length)[0];
 }

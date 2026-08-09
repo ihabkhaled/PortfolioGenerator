@@ -12,6 +12,12 @@ const optionalString = z
   .trim()
   .transform((value) => (value === '' ? undefined : value))
   .optional();
+const optionalSecret = z
+  .string()
+  .trim()
+  .transform((value) => (value === '' ? undefined : value))
+  .pipe(z.string().min(32).optional())
+  .optional();
 
 const booleanFlag = z
   .union([z.boolean(), z.enum(['true', 'false', '1', '0'])])
@@ -26,6 +32,7 @@ export const publicEnvSchema = z.object({
 
 export const serverEnvSchema = z.object({
   NODE_ENV: z.enum(['development', 'test', 'production']).default('development'),
+  NEXT_PUBLIC_APP_ENV: z.enum(['local', 'staging', 'production']).default('local'),
 
   DATABASE_URL: nonEmpty,
 
@@ -33,6 +40,7 @@ export const serverEnvSchema = z.object({
   // one is a silent downgrade of every session in the system.
   BETTER_AUTH_SECRET: z.string().min(32),
   BETTER_AUTH_URL: z.url(),
+  AUTH_REQUIRE_EMAIL_VERIFICATION: booleanFlag.default(false),
 
   STORAGE_DRIVER: z.enum(['local', 's3']).default('local'),
   STORAGE_LOCAL_ROOT: z.string().trim().default('.storage'),
@@ -54,8 +62,6 @@ export const serverEnvSchema = z.object({
   UPLOAD_MAX_BYTES: positiveInt.default(8_388_608),
   UPLOAD_MAX_PAGES: positiveInt.default(15),
   EXTRACTION_MAX_INPUT_CHARS: positiveInt.default(60_000),
-  OCR_ENABLED: booleanFlag.default(false),
-
   QUOTA_IMPORTS_PER_USER_PER_DAY: positiveInt.default(5),
   QUOTA_AI_OPERATIONS_PER_USER_PER_DAY: positiveInt.default(20),
   QUOTA_UPLOADS_PER_IP_PER_HOUR: positiveInt.default(20),
@@ -63,6 +69,7 @@ export const serverEnvSchema = z.object({
   BUDGET_MAX_AI_OPERATIONS_PER_DAY: positiveInt.default(2000),
 
   RESUME_RETENTION_DAYS: positiveInt.default(90),
+  CRON_SECRET: optionalSecret,
 
   /*
    * Virus scanning.
@@ -76,6 +83,7 @@ export const serverEnvSchema = z.object({
   CLAMAV_HOST: z.string().trim().default('127.0.0.1'),
   CLAMAV_PORT: positiveInt.default(3310),
   CLAMAV_TIMEOUT_MS: positiveInt.default(20_000),
+  CLAMAV_MAX_SIGNATURE_AGE_HOURS: positiveInt.default(48),
 
   UPLOAD_IMAGE_MAX_BYTES: positiveInt.default(6_291_456),
 
@@ -90,6 +98,7 @@ export const serverEnvSchema = z.object({
   CONTACT_SMTP_SECURE: booleanFlag.default(false),
   CONTACT_SMTP_USER: optionalString,
   CONTACT_SMTP_PASS: optionalString,
+  EMAIL_CAPTURE_PATH: z.literal('test-results/email-capture.jsonl').optional(),
 });
 
 export const s3ConfiguredSchema = z.object({

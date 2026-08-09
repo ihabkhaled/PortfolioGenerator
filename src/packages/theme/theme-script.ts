@@ -1,4 +1,10 @@
-import { COLOR_SCHEME_QUERY, THEME_ATTRIBUTE, THEME_STORAGE_KEY } from './theme.constants';
+import {
+  COLOR_SCHEME_QUERY,
+  SAVED_THEME_COOKIE,
+  THEME_ATTRIBUTE,
+  THEME_STORAGE_KEY,
+  THEME_SYSTEM_OVERRIDE_KEY,
+} from './theme.constants';
 
 /**
  * The anti-flash script.
@@ -16,8 +22,12 @@ export function buildThemeScript(): string {
   return [
     '(function(){try{',
     `var p=localStorage.getItem('${THEME_STORAGE_KEY}');`,
+    `var o=localStorage.getItem('${THEME_SYSTEM_OVERRIDE_KEY}')==='1';`,
+    `var c=document.cookie.split('; ').find(function(v){return v.indexOf('${SAVED_THEME_COOKIE}=')===0;});`,
+    "var s=c?decodeURIComponent(c.slice(c.indexOf('=')+1)):'system';",
     `var d=window.matchMedia('${COLOR_SCHEME_QUERY}').matches;`,
-    "var t=p==='light'||p==='dark'?p:(d?'dark':'light');",
+    "var q=p==='light'||p==='dark'?p:(o?'system':(s==='light'||s==='dark'?s:'system'));",
+    "var t=q==='system'?(d?'dark':'light'):q;",
     `document.documentElement.setAttribute('${THEME_ATTRIBUTE}',t);`,
     'document.documentElement.style.colorScheme=t;',
     '}catch(e){}})();',

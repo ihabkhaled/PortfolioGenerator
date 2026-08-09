@@ -30,13 +30,13 @@ function createAuth() {
     emailAndPassword: {
       enabled: true,
       minPasswordLength: AUTH_MIN_PASSWORD_LENGTH,
-      requireEmailVerification: env.CONTACT_EMAIL_ENABLED,
+      requireEmailVerification: env.AUTH_REQUIRE_EMAIL_VERIFICATION,
       sendResetPassword: async ({ user, url }) => {
         await createConfiguredEmailSender().sendPasswordReset({ email: user.email, resetUrl: url });
       },
     },
     emailVerification: {
-      sendOnSignUp: env.CONTACT_EMAIL_ENABLED,
+      sendOnSignUp: env.AUTH_REQUIRE_EMAIL_VERIFICATION,
       autoSignInAfterVerification: true,
       sendVerificationEmail: async ({ user, url }) => {
         await createConfiguredEmailSender().sendEmailVerification({
@@ -50,7 +50,7 @@ function createAuth() {
       updateAge: SESSION_MAX_AGE_SECONDS / 4,
     },
     advanced: {
-      useSecureCookies: env.NODE_ENV === 'production',
+      useSecureCookies: env.NEXT_PUBLIC_APP_ENV === 'production',
       defaultCookieAttributes: { sameSite: 'lax', httpOnly: true },
     },
     // Must stay last: it forwards Set-Cookie from server actions.

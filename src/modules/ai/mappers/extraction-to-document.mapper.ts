@@ -6,11 +6,12 @@ import {
   type PortfolioDocument,
   type PortfolioExperience,
   type PortfolioLink,
-  type PortfolioProject,
   type PortfolioPage,
+  type PortfolioProject,
   type PortfolioSection,
   type PortfolioSkillGroup,
 } from '@/modules/portfolio-document';
+import { splitInternationalPhone } from '@/shared/utils/phone-number.util';
 import { normalizeSafeUrl } from '@/shared/utils/safe-url.util';
 
 import { WARNING_CODES } from '../constants/extraction.constants';
@@ -52,6 +53,8 @@ export function mapExtractionToDocument(
   const experience = mapExperience(extraction, warnings);
   const projects = mapProjects(extraction, warnings);
   const skills = mapSkills(extraction);
+  const phone =
+    extraction.contact.phone === null ? null : splitInternationalPhone(extraction.contact.phone);
 
   const document: PortfolioDocument = {
     ...base,
@@ -70,12 +73,12 @@ export function mapExtractionToDocument(
       // page reads as a broken portfolio, and the editor makes turning it on
       // one click.
       email: { value: extraction.contact.email, visible: extraction.contact.email !== null },
-      // The country is not inferred from a leading `+20`: two countries share
-      // several prefixes, and a wrong flag next to someone's number is worse
-      // than no flag. The editor asks; the extractor keeps what it read.
+      // A uniquely identifying international prefix can be separated as
+      // evidence. Shared plans stay intact with no country rather than turning
+      // a plausible location into a professional fact.
       phone: {
-        countryIso: null,
-        nationalNumber: extraction.contact.phone,
+        countryIso: phone?.countryIso ?? null,
+        nationalNumber: phone?.nationalNumber ?? null,
         visible: false,
       },
     },
@@ -135,6 +138,47 @@ export function mapExtractionToDocument(
       date: normalizeMonth(entry.date),
       description: entry.description,
     })),
+    publications: extraction.publications
+      .slice(0, DOCUMENT_COUNTS.publications)
+      .flatMap((entry, index) => {
+        const title = entry.title?.trim() ?? '';
+        if (title === '') return [];
+        warnings.push(reviewWarning(`publications.${index}`));
+        return [
+          {
+            id: `publication-${index + 1}`,
+            title,
+            publisher: entry.publisher,
+            date: normalizeMonth(entry.date),
+            url: entry.url === null ? null : normalizeSafeUrl(entry.url),
+            summary: entry.summary,
+          },
+        ];
+      }),
+    volunteering: extraction.volunteering
+      .slice(0, DOCUMENT_COUNTS.volunteering)
+      .flatMap((entry, index) => {
+        const organization = entry.organization?.trim() ?? '';
+        if (organization === '') return [];
+        warnings.push(reviewWarning(`volunteering.${index}`));
+        return [
+          {
+            id: `volunteering-${index + 1}`,
+            organization,
+            role: entry.role,
+            startDate: normalizeMonth(entry.startDate),
+            endDate: normalizeMonth(entry.endDate),
+            summary: entry.summary,
+          },
+        ];
+      }),
+    interests: [...new Set(extraction.interests.map((interest) => interest.trim()))]
+      .filter(Boolean)
+      .slice(0, DOCUMENT_COUNTS.interests)
+      .map((interest, index) => {
+        warnings.push(reviewWarning(`interests.${index}`));
+        return interest;
+      }),
     source: { kind: 'resume-import', resumeUploadId },
   };
 
@@ -148,41 +192,44 @@ export function buildImportedPages(document: PortfolioDocument): PortfolioPage[]
   const pages: PortfolioPage[] = [home];
 
   if (document.experience.length > 0)
-    pages.push(createImportedPage(home, IMPORTED_PAGE_DEFINITIONS.experience, pages.length));
+    pages.push(createImportedPage(document, IMPORTED_PAGE_DEFINITIONS.experience, pages.length));
   if (document.projects.length > 0)
-    pages.push(createImportedPage(home, IMPORTED_PAGE_DEFINITIONS.projects, pages.length));
-  if (document.skills.length > 0 || document.softSkills.length > 0)
-    pages.push(createImportedPage(home, IMPORTED_PAGE_DEFINITIONS.skills, pages.length));
+    pages.push(createImportedPage(document, IMPORTED_PAGE_DEFINITIONS.projects, pages.length));
+  if (document.skills.length > 0 || document.softSkills.length > 0 || document.languages.length > 0)
+    pages.push(createImportedPage(document, IMPORTED_PAGE_DEFINITIONS.skills, pages.length));
   if (
     document.identity.summary !== null ||
     document.education.length > 0 ||
     document.certifications.length > 0 ||
-    document.courses.length > 0
+    document.courses.length > 0 ||
+    document.awards.length > 0 ||
+    document.publications.length > 0 ||
+    document.volunteering.length > 0 ||
+    document.interests.length > 0 ||
+    document.testimonials.length > 0 ||
+    document.gallery.length > 0 ||
+    document.attachments.length > 0
   )
-    pages.push(createImportedPage(home, IMPORTED_PAGE_DEFINITIONS.about, pages.length));
+    pages.push(createImportedPage(document, IMPORTED_PAGE_DEFINITIONS.about, pages.length));
   if (
     document.contact.email.visible ||
     document.contact.phone.visible ||
     document.links.length > 0 ||
     document.socialLinks.length > 0
   )
-    pages.push(createImportedPage(home, IMPORTED_PAGE_DEFINITIONS.contact, pages.length));
+    pages.push(createImportedPage(document, IMPORTED_PAGE_DEFINITIONS.contact, pages.length));
 
   return pages;
 }
 
 export function createImportedPage(
-  home: PortfolioPage,
+  document: PortfolioDocument,
   definition: ImportedPageDefinition,
   index: number,
 ): PortfolioPage {
-  const sections: PortfolioSection[] = home.sections
-    .filter((section) => definition.sectionTypes.includes(section.type))
-    .map((section, sectionIndex) => ({
-      ...structuredClone(section),
-      id: `section-${definition.slug}-${section.type}`,
-      order: sectionIndex * 10,
-    }));
+  const sections = definition.sectionTypes
+    .filter((type) => hasSectionContent(document, type))
+    .map((type, sectionIndex) => createImportedSection(type, definition.slug, sectionIndex));
 
   return {
     id: `page-${definition.slug}`,
@@ -196,6 +243,116 @@ export function createImportedPage(
     order: index * 10,
     sections,
   };
+}
+
+export function reviewWarning(path: string): ExtractionMappingResult['warnings'][number] {
+  return {
+    code: WARNING_CODES.reviewExtractedFact,
+    path,
+    message: 'Review this extracted fact against the source document before publishing.',
+  };
+}
+
+export function hasSectionContent(
+  document: PortfolioDocument,
+  type: PortfolioSection['type'],
+): boolean {
+  switch (type) {
+    case 'about': {
+      return document.identity.summary !== null;
+    }
+    case 'experience': {
+      return document.experience.length > 0;
+    }
+    case 'projects': {
+      return document.projects.length > 0;
+    }
+    case 'skills': {
+      return document.skills.length > 0;
+    }
+    case 'soft-skills': {
+      return document.softSkills.length > 0;
+    }
+    case 'education': {
+      return document.education.length > 0;
+    }
+    case 'courses': {
+      return document.courses.length > 0;
+    }
+    case 'certifications': {
+      return document.certifications.length > 0;
+    }
+    case 'languages': {
+      return document.languages.length > 0;
+    }
+    case 'publications': {
+      return document.publications.length > 0;
+    }
+    case 'volunteering': {
+      return document.volunteering.length > 0;
+    }
+    case 'awards': {
+      return document.awards.length > 0;
+    }
+    case 'interests': {
+      return document.interests.length > 0;
+    }
+    case 'testimonials': {
+      return document.testimonials.length > 0;
+    }
+    case 'gallery': {
+      return document.gallery.length > 0;
+    }
+    case 'attachments': {
+      return document.attachments.some((entry) => entry.visible);
+    }
+    case 'social': {
+      return document.socialLinks.some((entry) => entry.visible);
+    }
+    case 'contact': {
+      return (
+        document.contact.email.visible ||
+        document.contact.phone.visible ||
+        document.links.some((entry) => entry.visible)
+      );
+    }
+    case 'hero': {
+      return true;
+    }
+    case 'custom': {
+      return false;
+    }
+  }
+}
+
+export function createImportedSection(
+  type: PortfolioSection['type'],
+  slug: string,
+  index: number,
+): PortfolioSection {
+  const base = { id: `section-${slug}-${type}`, visible: true, order: index * 10 };
+  switch (type) {
+    case 'experience':
+    case 'projects': {
+      return { ...base, type, config: { title: null, limit: null } };
+    }
+    case 'contact': {
+      return {
+        ...base,
+        type,
+        config: { title: null, showEmail: true, showPhone: false, showLinks: true },
+      };
+    }
+    case 'hero': {
+      return { ...base, type, config: { showPortrait: true, showAvailability: false } };
+    }
+    case 'custom': {
+      return { ...base, type, config: { title: null, blocks: [] } };
+    }
+    default: {
+      return { ...base, type, config: { title: null } };
+    }
+  }
 }
 
 /** A date the model could not express as `YYYY-MM` becomes absent, never invented. */

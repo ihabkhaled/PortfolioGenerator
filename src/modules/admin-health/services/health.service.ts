@@ -1,8 +1,14 @@
 import 'server-only';
 
 import { getObjectStorage } from '@/modules/storage/server';
-import { pingClamAv } from '@/packages/clamav';
+import {
+  getClamAvVersion,
+  parseClamAvSignatureDate,
+  pingClamAv,
+  signatureDatabaseIsFresh,
+} from '@/packages/clamav';
 import { getDatabase } from '@/packages/database';
+import { checkConfiguredEmailTransport } from '@/packages/email/server';
 import { getServerEnv } from '@/packages/env/server';
 import { logger } from '@/packages/logger';
 
@@ -26,9 +32,16 @@ export async function checkHealth(): Promise<HealthReport> {
   const env = getServerEnv();
   const probes = [checkDatabase(), checkStorage()];
   if (env.CLAMAV_ENABLED) probes.push(checkScanner());
+  if (env.AUTH_REQUIRE_EMAIL_VERIFICATION) probes.push(checkEmail());
   const checks = await Promise.all(probes);
 
   return { state: combineHealth(checks), checks };
+}
+
+export async function checkEmail(): Promise<HealthCheck> {
+  return timed(HEALTH_CHECK_NAMES.email, async () => {
+    await checkConfiguredEmailTransport(HEALTH_CHECK_TIMEOUT_MS);
+  });
 }
 
 export async function checkScanner(): Promise<HealthCheck> {
@@ -40,6 +53,19 @@ export async function checkScanner(): Promise<HealthCheck> {
       timeoutMs: Math.min(env.CLAMAV_TIMEOUT_MS, HEALTH_CHECK_TIMEOUT_MS),
     });
     if (!alive) throw new Error('scanner unavailable');
+    const version = await getClamAvVersion({
+      host: env.CLAMAV_HOST,
+      port: env.CLAMAV_PORT,
+      timeoutMs: Math.min(env.CLAMAV_TIMEOUT_MS, HEALTH_CHECK_TIMEOUT_MS),
+    });
+    if (
+      !signatureDatabaseIsFresh(
+        version === null ? null : parseClamAvSignatureDate(version),
+        new Date(),
+        env.CLAMAV_MAX_SIGNATURE_AGE_HOURS,
+      )
+    )
+      throw new Error('scanner signatures stale');
   });
 }
 

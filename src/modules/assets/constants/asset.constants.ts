@@ -5,6 +5,11 @@ import type { AssetVisibility } from '../types/asset.types';
 
 export const ASSET_UPLOAD_INITIAL_STATE: AssetUploadFormState = { status: 'idle' };
 
+export const ASSET_DELETION_MIN_RETRY_DELAY_MS = 60_000;
+export const ASSET_DELETION_MAX_RETRY_DELAY_MS = 86_400_000;
+export const ASSET_DELETION_BATCH_SIZE = 50;
+export const ASSET_DELETION_NO_STORE_HEADERS = { 'Cache-Control': 'no-store' } as const;
+
 export const UPLOAD_PURPOSE_SET: ReadonlySet<UploadPurpose> = new Set([
   'resume',
   'portrait',
@@ -56,4 +61,7 @@ export const ASSET_SELECT = {
   height: true,
   createdAt: true,
   deletedAt: true,
+  objectDeletedAt: true,
+  deletionAttempts: true,
+  deletionRetryAt: true,
 } as const;

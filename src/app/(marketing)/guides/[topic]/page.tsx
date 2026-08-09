@@ -54,7 +54,11 @@ export default async function TopicPage(props: TopicPageProps): Promise<ReactEle
         eyebrow={t('eyebrow')}
         title={t(page.titleKey)}
         description={t(page.descriptionKey)}
-        sections={page.sections.map((key) => t(key))}
+        sections={page.sections.map((section) => ({
+          kind: section.kind,
+          title: t(section.titleKey),
+          body: t(section.bodyKey),
+        }))}
         related={page.relatedSlugs.map((slug) => {
           const related = findMarketingPage(slug);
           if (related === null) return null;

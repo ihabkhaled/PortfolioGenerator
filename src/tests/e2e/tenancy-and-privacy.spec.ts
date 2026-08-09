@@ -1,6 +1,15 @@
 import { expect, test } from '@playwright/test';
 
+import { buildFullPortfolioDocument } from '../fixtures/portfolio-document.fixtures';
+
 import { buildAccount, createPortfolio, signUp } from './support/accounts';
+import { buildResumePdf } from './support/pdf.fixture';
+
+function portfolioIdFromEditorUrl(url: string): string {
+  const portfolioId = /portfolios\/([^/]+)\/editor/u.exec(url)?.[1];
+  if (portfolioId === undefined) throw new Error('Expected an owner portfolio id');
+  return portfolioId;
+}
 
 /**
  * The promises that would be worth the most to break.
@@ -68,6 +77,106 @@ test.describe('what an anonymous visitor can reach', () => {
 });
 
 test.describe('one tenant cannot reach another', () => {
+  test('rejects tampered page access, asset upload and deletion forms', async ({
+    page,
+    browser,
+  }) => {
+    const owner = buildAccount('tamper-owner');
+    await signUp(page, owner);
+    await createPortfolio(page, 'Tamper Owner Portfolio');
+    const ownerEditorUrl = page.url();
+    const ownerPortfolioId = portfolioIdFromEditorUrl(ownerEditorUrl);
+    const foreignDocument = {
+      ...buildFullPortfolioDocument(),
+      identity: { ...buildFullPortfolioDocument().identity, headline: 'Foreign mutation' },
+    };
+    await page.locator('#new-page-title').fill('Owner notes');
+    await page.locator('#new-page-nav').fill('Notes');
+    await page.locator('#new-page-slug').fill('notes');
+    await page.getByRole('button', { name: 'Add page' }).click();
+    await page.getByRole('button', { name: 'Save', exact: true }).click();
+    await expect(page.getByText('Saved').first()).toBeVisible();
+    const ownerAccessForm = page.locator('form').filter({
+      has: page.getByRole('button', { name: 'Update page access' }),
+    });
+    const ownerPageId = await ownerAccessForm.locator('input[name="pageId"]').inputValue();
+    const ownerVersion = await ownerAccessForm
+      .locator('input[name="expectedVersion"]')
+      .inputValue();
+
+    const strangerContext = await browser.newContext();
+    const strangerPage = await strangerContext.newPage();
+    const stranger = buildAccount('tamper-stranger');
+    await signUp(strangerPage, stranger);
+    await createPortfolio(strangerPage, 'Tamper Stranger Portfolio');
+    const foreignSave = await strangerPage.request.post('/api/test/editor-save', {
+      data: { portfolioId: ownerPortfolioId, expectedVersion: 1, document: foreignDocument },
+    });
+    expect(foreignSave.status()).toBe(404);
+    expect(await foreignSave.json()).toEqual({ error: 'rejected' });
+    await strangerPage.locator('#new-page-title').fill('Stranger notes');
+    await strangerPage.locator('#new-page-nav').fill('Notes');
+    await strangerPage.locator('#new-page-slug').fill('notes');
+    await strangerPage.getByRole('button', { name: 'Add page' }).click();
+    await strangerPage.getByRole('button', { name: 'Save', exact: true }).click();
+
+    const strangerAccessForm = strangerPage.locator('form').filter({
+      has: strangerPage.getByRole('button', { name: 'Update page access' }),
+    });
+    await strangerAccessForm.locator('input[name="portfolioId"]').evaluate((input, value) => {
+      (input as HTMLInputElement).value = value;
+    }, ownerPortfolioId);
+    await strangerAccessForm.locator('input[name="pageId"]').evaluate((input, value) => {
+      (input as HTMLInputElement).value = value;
+    }, ownerPageId);
+    await strangerAccessForm.locator('input[name="expectedVersion"]').evaluate((input, value) => {
+      (input as HTMLInputElement).value = value;
+    }, ownerVersion);
+    await strangerAccessForm.getByLabel('Page access').selectOption('private');
+    await strangerAccessForm.getByLabel('Share password').fill('attempted owner password');
+    await strangerAccessForm.getByRole('button', { name: 'Update page access' }).click();
+    await expect(strangerAccessForm.getByRole('alert')).toContainText(
+      'This portfolio or page is no longer available.',
+    );
+
+    const uploadForm = strangerPage.locator('form').filter({
+      has: strangerPage.getByRole('button', { name: 'Upload attachment' }),
+    });
+    await uploadForm.locator('input[name="portfolioId"]').evaluate((input, value) => {
+      (input as HTMLInputElement).value = value;
+    }, ownerPortfolioId);
+    await uploadForm.getByLabel('Downloadable file').setInputFiles({
+      name: 'tampered.pdf',
+      mimeType: 'application/pdf',
+      buffer: buildResumePdf(['Cross-tenant upload attempt']),
+    });
+    await strangerPage.getByLabel('Public download label').fill('Tampered upload');
+    await uploadForm.getByRole('button', { name: 'Upload attachment' }).click();
+    await expect(uploadForm.getByRole('alert')).toContainText(
+      'That portfolio is no longer available.',
+    );
+
+    await strangerPage.goto('/dashboard');
+    const strangerRow = strangerPage.locator('li').filter({
+      hasText: 'Tamper Stranger Portfolio',
+    });
+    await strangerRow.getByRole('button', { name: 'Delete', exact: true }).click();
+    const deletionForm = strangerRow.locator('form');
+    await deletionForm.locator('input[name="portfolioId"]').evaluate((input, value) => {
+      (input as HTMLInputElement).value = value;
+    }, ownerPortfolioId);
+    await deletionForm.getByRole('button', { name: 'Delete permanently' }).click();
+    await expect(strangerPage).toHaveURL(/\/dashboard$/u);
+
+    await page.goto(ownerEditorUrl);
+    await expect(page.getByLabel('Headline')).toHaveValue('');
+    await expect(page.getByLabel('Page access')).toHaveValue('public');
+    await expect(page.getByText('Tampered upload')).toHaveCount(0);
+    await page.goto('/dashboard');
+    await expect(page.getByText('Tamper Owner Portfolio')).toBeVisible();
+    await strangerContext.close();
+  });
+
   test('a portfolio id belonging to someone else is a 404, not a 403', async ({
     page,
     browser,

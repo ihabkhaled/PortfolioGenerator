@@ -5,3 +5,8 @@ export interface CountryDialCode {
   /** Including the leading `+`, so a call site never has to add one. */
   readonly dial: string;
 }
+
+export interface SplitInternationalPhoneResult {
+  readonly countryIso: string | null;
+  readonly nationalNumber: string;
+}

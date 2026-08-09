@@ -24,9 +24,28 @@ export const MARKETING_PAGES: readonly MarketingPageDefinition[] = slugs.map((sl
   titleKey: `pages.${slug}.title`,
   descriptionKey: `pages.${slug}.description`,
   sections: [
-    `pages.${slug}.sections.first`,
-    `pages.${slug}.sections.second`,
-    `pages.${slug}.sections.third`,
+    {
+      kind: 'use-case',
+      titleKey: 'landing.useCases.title',
+      bodyKey: `pages.${slug}.sections.first`,
+    },
+    {
+      kind: 'trust-boundary',
+      titleKey: 'landing.trust.title',
+      bodyKey: `pages.${slug}.sections.second`,
+    },
+    { kind: 'comparison', titleKey: 'principlesTitle', bodyKey: `pages.${slug}.sections.third` },
+    { kind: 'faq', titleKey: 'landing.faq.title', bodyKey: `pages.${slug}.sections.first` },
+    {
+      kind: 'resource',
+      titleKey: 'landing.directory.title',
+      bodyKey: `pages.${slug}.sections.second`,
+    },
+    {
+      kind: 'internal-links',
+      titleKey: 'landing.cta.title',
+      bodyKey: `pages.${slug}.sections.third`,
+    },
   ],
   relatedSlugs: [
     slugs[(index + 1) % slugs.length] ?? 'features',

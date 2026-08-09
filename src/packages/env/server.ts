@@ -23,6 +23,31 @@ import type { ServerEnv } from './env.types';
 
 const cache: { value: ServerEnv | null } = { value: null };
 
+function validateProductionRequirements(environment: ServerEnv): void {
+  if (
+    environment.EMAIL_CAPTURE_PATH &&
+    (environment.NODE_ENV !== 'test' || environment.NEXT_PUBLIC_APP_ENV === 'production')
+  ) {
+    throw new Error('EMAIL_CAPTURE_PATH requires test mode outside public production');
+  }
+  // Next sets NODE_ENV=production while collecting route data during every
+  // production build. Deployment requirements belong to the explicit public
+  // environment so local and preview builds do not require runtime services.
+  const isProduction = environment.NEXT_PUBLIC_APP_ENV === 'production';
+  if (isProduction && !environment.CLAMAV_ENABLED) {
+    throw new Error('CLAMAV_ENABLED=true is required in production');
+  }
+  if (isProduction && environment.CRON_SECRET === undefined) {
+    throw new Error('CRON_SECRET is required in production');
+  }
+  if (isProduction && !environment.AUTH_REQUIRE_EMAIL_VERIFICATION) {
+    throw new Error('AUTH_REQUIRE_EMAIL_VERIFICATION=true is required in production');
+  }
+  if (environment.AUTH_REQUIRE_EMAIL_VERIFICATION && !environment.CONTACT_EMAIL_ENABLED) {
+    throw new Error('AUTH_REQUIRE_EMAIL_VERIFICATION=true requires CONTACT_EMAIL_ENABLED=true');
+  }
+}
+
 export function parseServerEnvironment(input: unknown): ServerEnv {
   const parsed = parseSchema(serverEnvSchema, input);
 
@@ -49,13 +74,15 @@ export function parseServerEnvironment(input: unknown): ServerEnv {
     }
   }
 
-  if (parsed.value.CONTACT_EMAIL_ENABLED) {
+  if (parsed.value.CONTACT_EMAIL_ENABLED && parsed.value.EMAIL_CAPTURE_PATH === undefined) {
     const contactEmail = parseSchema(contactEmailConfiguredSchema, parsed.value);
 
     if (!contactEmail.ok) {
       throw new Error(`CONTACT_EMAIL_ENABLED=true requires: ${formatIssues(contactEmail.issues)}`);
     }
   }
+
+  validateProductionRequirements(parsed.value);
 
   return parsed.value;
 }

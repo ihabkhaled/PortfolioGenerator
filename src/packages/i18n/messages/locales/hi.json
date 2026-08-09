@@ -1,5 +1,15 @@
 {
   "app": {
+    "pwaUpdate": {
+      "title": "अपडेट उपलब्ध है",
+      "description": "PortfolioGenerate का नया संस्करण तैयार है।",
+      "action": "रीफ़्रेश करें"
+    },
+    "pwa": {
+      "installTitle": "PortfolioGenerate \u0907\u0902\u0938\u094d\u091f\u0949\u0932 \u0915\u0930\u0947\u0902",
+      "installDescription": "\u0905\u092a\u0928\u0947 \u092a\u094b\u0930\u094d\u091f\u092b\u094b\u0932\u093f\u092f\u094b \u0915\u093e\u0930\u094d\u092f\u0915\u094d\u0937\u0947\u0924\u094d\u0930 \u0915\u094b \u0907\u0938 \u0921\u093f\u0935\u093e\u0907\u0938 \u092a\u0930 \u0924\u0948\u092f\u093e\u0930 \u0930\u0916\u0947\u0902\u0964",
+      "installAction": "\u0907\u0902\u0938\u094d\u091f\u0949\u0932"
+    },
     "name": "PortfolioGenerate",
     "tagline": "\u0938\u0940\u0935\u0940 \u0915\u094b \u0905\u092a\u0928\u0947 \u0928\u093f\u092f\u0902\u0924\u094d\u0930\u0923 \u0935\u093e\u0932\u0947 \u092a\u094b\u0930\u094d\u091f\u092b\u094b\u0932\u093f\u092f\u094b \u092e\u0947\u0902 \u092c\u0926\u0932\u0947\u0902",
     "skipToContent": "\u0938\u093e\u092e\u0917\u094d\u0930\u0940 \u092a\u0930 \u091c\u093e\u090f\u0902",
@@ -603,6 +613,8 @@
         "threads": "\u0927\u093e\u0917\u0947",
         "medium": "\u092e\u0927\u094d\u092f\u092e",
         "stackoverflow": "Stack Overflow",
+        "mastodon": "Mastodon",
+        "bluesky": "Bluesky",
         "telegram": "Telegram",
         "whatsapp": "WhatsApp",
         "website": "\u0935\u0947\u092c\u0938\u093e\u0907\u091f"

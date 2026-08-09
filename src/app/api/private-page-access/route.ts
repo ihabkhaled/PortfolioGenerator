@@ -1,3 +1,4 @@
+import { DEFAULT_LOCALE, localizePath } from '@/modules/localization';
 import { buildPageHref, findVisiblePage } from '@/modules/portfolio-document';
 import { getPublishedPortfolio } from '@/modules/portfolios/server';
 import {
@@ -16,6 +17,7 @@ export async function POST(request: Request): Promise<Response> {
     portfolioSlug: form.get('portfolioSlug'),
     pageSlug: form.get('pageSlug'),
     password: form.get('password'),
+    locale: form.get('locale'),
   });
 
   if (!parsed.ok) {
@@ -34,6 +36,7 @@ export async function POST(request: Request): Promise<Response> {
     portfolioSlug: parsed.value.portfolioSlug,
     pageId: resolved.page.id,
     pageSlug: resolved.page.slug,
+    locale: parsed.value.locale,
   };
   const address = await getClientAddress();
   const attemptAllowed = await consumePrivatePageUnlockQuota(address, scope, new Date());
@@ -46,7 +49,11 @@ export async function POST(request: Request): Promise<Response> {
         secret: env.BETTER_AUTH_SECRET,
       })
     : null;
-  const target = new URL(buildPageHref(scope.portfolioSlug, scope.pageSlug), request.url);
+  const pageHref = buildPageHref(scope.portfolioSlug, scope.pageSlug);
+  const target = new URL(
+    scope.locale === DEFAULT_LOCALE ? pageHref : localizePath(pageHref, scope.locale),
+    request.url,
+  );
 
   if (grant === null) {
     target.searchParams.set('access', 'denied');

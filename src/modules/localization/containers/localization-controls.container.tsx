@@ -38,7 +38,11 @@ export function LocalizationControlsContainer(
   }
 
   return (
-    <aside className={localizationClasses.controls} aria-label={props.label}>
+    <aside
+      className={localizationClasses.controls}
+      aria-label={props.label}
+      data-fixed-surface="locale"
+    >
       <Select
         aria-label={props.label}
         value={props.locale}

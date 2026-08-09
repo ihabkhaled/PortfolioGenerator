@@ -57,6 +57,19 @@ npm run validate     # format check + lint + typecheck + coverage + build
 
 ## Configuration
 
+Before configuration sign-off, run the focused production proof:
+
+```bash
+npx playwright test src/tests/e2e/pwa.spec.ts src/tests/accessibility/responsive.spec.ts
+npm run lighthouse
+```
+
+Browser failure artifacts live under `test-results/`; CI's HTML reporter additionally writes
+`playwright-report/`, while local runs use the terminal list reporter. Lighthouse mobile and desktop
+artifacts live under `test-results/lighthouse/`. Do not record or publish scores until these commands
+have run against the final production build. The median-run checked-in floors are accessibility 100,
+best-practices 100, SEO 100, mobile performance 85 and desktop performance 90 on the 0–100 scale.
+
 - [ ] `NEXT_PUBLIC_APP_URL` is the real origin. It is inlined at build time; a
       wrong value ships localhost URLs into the sitemap.
 - [ ] `NEXT_PUBLIC_APP_ENV=production`, so `robots.txt` allows crawling.
@@ -65,7 +78,12 @@ npm run validate     # format check + lint + typecheck + coverage + build
 - [ ] The database is not reachable from the public internet.
 - [ ] Quotas and the budget ceiling are set to numbers someone has thought about.
 - [ ] `CLAMAV_ENABLED=true`; an EICAR canary is rejected and a scanner outage
-      refuses uploads without writing storage or database rows.
+      refuses uploads without writing storage or database rows. Run
+      `npm run smoke:clamav -- readiness`, then follow the outage procedure in
+      [deployment.md](./deployment.md).
+- [ ] `CRON_SECRET` is 32+ random bytes, matches Vercel's cron
+      bearer secret, and an unauthorized call to the deletion endpoint returns
+      401 without processing work.
 - [ ] The clamd endpoint is private or behind authenticated TLS; public TCP 3310
       is blocked at the firewall.
 - [ ] `CONTACT_EMAIL_ENABLED=true` and the SMTP relay delivers both contact and
@@ -90,6 +108,8 @@ These are the things a person has to look at. See
 - [ ] A published portfolio looks right on a phone, a laptop and a wide monitor.
 - [ ] It looks right in dark mode, and in the reader's own OS preference.
 - [ ] A long name, a long headline and an RTL name do not break the layout.
+- [ ] Standalone mode respects every safe-area inset, and fixed locale/install/update controls do
+      not cover content or each other in portrait or landscape.
 - [ ] The share card renders and is legible at the size a social platform shows
       it.
 - [ ] Someone unfamiliar with the product can get from the landing page to a
@@ -98,6 +118,8 @@ These are the things a person has to look at. See
 ## Operations
 
 - [ ] `/api/health` is wired to the load balancer.
+- [ ] The 15-minute asset deletion retry cron has a successful invocation and
+      its response contains only the processed count.
 - [ ] Someone knows how to run the retention job, and when.
 - [ ] The runbooks in [operations.md](./operations.md) name a person, not a role
       that does not exist yet.

@@ -44,6 +44,10 @@ describe('combineHealth', () => {
     expect(combineHealth([check('database', 'degraded')])).toBe('down');
   });
 
+  it('is down when mandatory email verification cannot be delivered', () => {
+    expect(combineHealth([check('database', 'ok'), check('email', 'down')])).toBe('down');
+  });
+
   it('is ok with no checks at all rather than inventing a failure', () => {
     expect(combineHealth([])).toBe('ok');
   });

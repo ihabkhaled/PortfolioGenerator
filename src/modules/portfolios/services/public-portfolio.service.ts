@@ -31,15 +31,23 @@ export async function getPublishedPortfolio(slug: string): Promise<PublishedPort
   const requestHeaders = await headers();
   const requestedLocale = requestHeaders.get('x-app-locale') ?? 'en';
   const locale = isAppLocale(requestedLocale) ? requestedLocale : 'en';
+  return getPublishedPortfolioForLocale(slug, locale);
+}
+
+export async function getPublishedPortfolioForLocale(
+  slug: string,
+  locale: string,
+): Promise<PublishedPortfolio | null> {
+  const safeLocale = isAppLocale(locale) ? locale : 'en';
   const load = cacheBySlug(
     async () => {
       const portfolio = await findPublishedBySlugUnscoped(slug);
-      if (portfolio === null || locale === 'en') return portfolio;
+      if (portfolio === null || safeLocale === 'en') return portfolio;
 
-      const document = await findPublishedTranslationBySlugAndLocaleUnscoped(slug, locale);
+      const document = await findPublishedTranslationBySlugAndLocaleUnscoped(slug, safeLocale);
       return document === null ? null : { ...portfolio, document };
     },
-    [PORTFOLIO_CACHE_KEY_PREFIX, slug, locale],
+    [PORTFOLIO_CACHE_KEY_PREFIX, slug, safeLocale],
     portfolioCacheTag(slug),
   );
 

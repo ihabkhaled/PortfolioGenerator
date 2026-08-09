@@ -111,7 +111,6 @@ describe('environment defaults and coercions', () => {
     expect(env.UPLOAD_MAX_PAGES).toBe(15);
     expect(env.AI_PRIMARY_MODEL).toBe('gpt-5-mini');
     expect(env.RESUME_RETENTION_DAYS).toBe(90);
-    expect(env.OCR_ENABLED).toBe(false);
   });
 
   // Everything arrives from the process as a string; the limits are numbers.
@@ -125,15 +124,15 @@ describe('environment defaults and coercions', () => {
   });
 
   it.each(['true', '1'])('reads %s as an enabled flag', (value) => {
-    applyEnv({ OCR_ENABLED: value });
+    applyEnv({ CONTACT_SMTP_SECURE: value });
 
-    expect(getServerEnv().OCR_ENABLED).toBe(true);
+    expect(getServerEnv().CONTACT_SMTP_SECURE).toBe(true);
   });
 
   it.each(['false', '0'])('reads %s as a disabled flag', (value) => {
-    applyEnv({ OCR_ENABLED: value });
+    applyEnv({ CONTACT_SMTP_SECURE: value });
 
-    expect(getServerEnv().OCR_ENABLED).toBe(false);
+    expect(getServerEnv().CONTACT_SMTP_SECURE).toBe(false);
   });
 
   // A limit of zero would disable the feature by accident rather than by
@@ -171,12 +170,14 @@ describe('serverEnvSchema', () => {
   // The schema is also parsed in tests and scripts, where a flag arrives as a
   // real boolean rather than as the string a process hands over.
   it('accepts a boolean flag as well as its string form', () => {
-    const result = parseSchema(serverEnvSchema, { ...BASE_ENV, OCR_ENABLED: true });
+    const result = parseSchema(serverEnvSchema, { ...BASE_ENV, CONTACT_EMAIL_ENABLED: true });
 
-    expect(result.ok && result.value.OCR_ENABLED).toBe(true);
+    expect(result.ok && result.value.CONTACT_EMAIL_ENABLED).toBe(true);
   });
 
   it('rejects a flag value that is neither', () => {
-    expect(parseSchema(serverEnvSchema, { ...BASE_ENV, OCR_ENABLED: 'maybe' }).ok).toBe(false);
+    expect(parseSchema(serverEnvSchema, { ...BASE_ENV, CONTACT_EMAIL_ENABLED: 'maybe' }).ok).toBe(
+      false,
+    );
   });
 });

@@ -23,6 +23,7 @@ import { addImportedResumeAttachment } from '../helpers/imported-resume-attachme
 import { normalizeResumeText } from '../helpers/resume-text.helper';
 import { toDocumentTextRejection } from '../policies/document-text-rejection.policy';
 import { looksEncrypted, validateUploadSize } from '../policies/pdf-validation.policy';
+import { shouldRejectScannedResume } from '../policies/scanned-resume.policy';
 import { toUploadRejection } from '../policies/upload-rejection.policy';
 import {
   createResumeUpload,
@@ -177,7 +178,7 @@ export async function importResume(request: ResumeImportRequest): Promise<Resume
   // A scanned document has no text layer, and OCR is off by default. Telling
   // the user that plainly beats sending an empty page to a model and handing
   // back an empty draft they cannot explain.
-  if (normalized.looksScanned && !env.OCR_ENABLED) {
+  if (shouldRejectScannedResume(normalized)) {
     await updateOwnedResumeUpload(request.ownerId, upload.id, {
       status: 'FAILED_TEXT_EXTRACTION',
       pageCount: normalized.pageCount,

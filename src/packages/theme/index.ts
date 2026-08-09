@@ -8,9 +8,11 @@
 
 export {
   COLOR_SCHEME_QUERY,
+  SAVED_THEME_COOKIE,
   THEME_ATTRIBUTE,
   THEME_PREFERENCES,
   THEME_STORAGE_KEY,
+  THEME_SYSTEM_OVERRIDE_KEY,
 } from './theme.constants';
 export { buildThemeScript } from './theme-script';
 export {

@@ -188,13 +188,16 @@ describe('marketing components', () => {
         eyebrow="Guides"
         title="Portfolio guidance"
         description="A practical introduction."
-        sections={['Use facts', 'Review first']}
+        sections={[
+          { kind: 'use-case', title: 'Use cases', body: 'Use facts' },
+          { kind: 'trust-boundary', title: 'Trust boundaries', body: 'Review first' },
+        ]}
         related={createElement('a', { href: '/examples' }, 'Examples')}
       />,
     );
 
     expect(screen.getByRole('heading', { level: 1, name: 'Portfolio guidance' })).toBeVisible();
-    expect(screen.getByRole('heading', { name: 'Use facts' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Use cases' })).toBeInTheDocument();
     expect(screen.getByRole('navigation', { name: 'Portfolio guidance' })).toContainElement(
       screen.getByRole('link', { name: 'Examples' }),
     );

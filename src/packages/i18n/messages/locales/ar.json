@@ -1,5 +1,15 @@
 {
   "app": {
+    "pwaUpdate": {
+      "title": "تحديث متاح",
+      "description": "إصدار جديد من PortfolioGenerate جاهز.",
+      "action": "تحديث"
+    },
+    "pwa": {
+      "installTitle": "\u062a\u062b\u0628\u064a\u062a PortfolioGenerate",
+      "installDescription": "\u0627\u062d\u062a\u0641\u0638 \u0628\u0645\u0633\u0627\u062d\u0629 \u0645\u062d\u0641\u0638\u062a\u0643 \u062c\u0627\u0647\u0632\u0629 \u0639\u0644\u0649 \u0647\u0630\u0627 \u0627\u0644\u062c\u0647\u0627\u0632.",
+      "installAction": "\u062a\u062b\u0628\u064a\u062a"
+    },
     "name": "PortfolioGenerate",
     "footerNote": "سيرتك الذاتية تبقى خاصة. فقط ما تقوم بمراجعته ونشره يصبح عامًا.",
     "themeSwitchLabel": "تبديل الموضوع",
@@ -603,6 +613,8 @@
         "threads": "المواضيع",
         "medium": "واسطة",
         "stackoverflow": "تجاوز سعة المكدس",
+        "mastodon": "ماستودون",
+        "bluesky": "بلو سكاي",
         "telegram": "برقية",
         "website": "موقع إلكتروني",
         "whatsapp": "واتساب"

@@ -1,5 +1,15 @@
 {
   "app": {
+    "pwaUpdate": {
+      "title": "Aktualisierung verfügbar",
+      "description": "Eine neue Version von PortfolioGenerate ist bereit.",
+      "action": "Aktualisieren"
+    },
+    "pwa": {
+      "installTitle": "PortfolioGenerate installieren",
+      "installDescription": "Halten Sie Ihren Portfolio-Arbeitsbereich auf diesem Ger\u00e4t bereit.",
+      "installAction": "Installieren"
+    },
     "name": "PortfolioGenerate",
     "tagline": "Verwandeln Sie einen Lebenslauf in ein Portfolio, das Sie kontrollieren",
     "skipToContent": "Zum Inhalt springen",
@@ -603,6 +613,8 @@
         "threads": "Themen",
         "medium": "Mittel",
         "stackoverflow": "Stack Overflow",
+        "mastodon": "Mastodon",
+        "bluesky": "Bluesky",
         "telegram": "Telegram",
         "whatsapp": "WhatsApp",
         "website": "Website"

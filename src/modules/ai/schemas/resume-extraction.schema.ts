@@ -87,6 +87,22 @@ export const extractedAwardSchema = z.object({
   description: longText,
 });
 
+export const extractedPublicationSchema = z.object({
+  title: shortText,
+  publisher: shortText,
+  date: month,
+  url: z.string().max(EXTRACTION_LIMITS.url).nullable(),
+  summary: longText,
+});
+
+export const extractedVolunteeringSchema = z.object({
+  organization: shortText,
+  role: shortText,
+  startDate: month,
+  endDate: month,
+  summary: longText,
+});
+
 export const extractionWarningSchema = z.object({
   code: z.string().max(EXTRACTION_LIMITS.shortText),
   path: z.string().max(EXTRACTION_LIMITS.shortText),
@@ -118,5 +134,8 @@ export const resumeExtractionSchema = z.object({
   certifications: z.array(extractedCertificationSchema).max(EXTRACTION_LIMITS.certifications),
   languages: z.array(extractedLanguageSchema).max(EXTRACTION_LIMITS.languages),
   awards: z.array(extractedAwardSchema).max(EXTRACTION_LIMITS.awards),
+  publications: z.array(extractedPublicationSchema).max(EXTRACTION_LIMITS.publications),
+  volunteering: z.array(extractedVolunteeringSchema).max(EXTRACTION_LIMITS.volunteering),
+  interests: z.array(z.string().max(EXTRACTION_LIMITS.shortText)).max(EXTRACTION_LIMITS.interests),
   warnings: z.array(extractionWarningSchema).max(EXTRACTION_LIMITS.warnings),
 });

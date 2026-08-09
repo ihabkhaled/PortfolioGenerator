@@ -4,6 +4,7 @@ export const HEALTH_CHECK_NAMES = {
   database: 'database',
   storage: 'storage',
   scanner: 'scanner',
+  email: 'email',
 } as const;
 
 /**

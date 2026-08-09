@@ -19,6 +19,29 @@ import { buildFullPortfolioDocument } from '../fixtures/portfolio-document.fixtu
  */
 
 const labels = buildPortfolioLabels((key: string) => key);
+const buildPrivateAssetPath = (assetId: string): string => `/private-media/${assetId}`;
+
+function findImportedSectionContent(
+  type: PortfolioSection['type'],
+  expected: string | RegExp,
+): HTMLElement | null {
+  switch (type) {
+    case 'gallery': {
+      return screen.queryByRole('img', { name: expected });
+    }
+    case 'attachments':
+    case 'social': {
+      return screen.queryByRole('link', { name: expected });
+    }
+    case 'courses':
+    case 'publications': {
+      return screen.queryAllByText(expected).at(0) ?? null;
+    }
+    default: {
+      return screen.queryByText(expected);
+    }
+  }
+}
 
 function renderSection(section: PortfolioSection, document = buildFullPortfolioDocument()): void {
   render(<SectionRenderer section={section} document={document} labels={labels} />);
@@ -232,6 +255,105 @@ describe('the fact-list bands', () => {
     });
 
     expect(screen.getByText('Portuguese')).toBeInTheDocument();
+  });
+});
+
+describe('the imported collection bands', () => {
+  it.each([
+    ['soft-skills', 'Writing things down'],
+    ['courses', 'Distributed Systems'],
+    ['publications', 'Reconciling a ledger you did not design'],
+    ['volunteering', 'Code Club Lisbon'],
+    ['interests', 'Long-distance running'],
+    ['testimonials', /rounding bug/],
+    ['gallery', /settlement state machine/i],
+    ['attachments', /Curriculum vitae/],
+    ['social', 'GitHub'],
+  ] as const)('renders the dedicated %s section', (type, expected) => {
+    renderSection({
+      id: `section-${type}`,
+      type,
+      visible: true,
+      order: 0,
+      config: { title: null },
+    });
+
+    expect(findImportedSectionContent(type, expected)).toBeInTheDocument();
+  });
+
+  it('renders the dedicated awards section', () => {
+    const document = buildFullPortfolioDocument();
+    renderSection(
+      { id: 'section-awards', type: 'awards', visible: true, order: 0, config: { title: null } },
+      {
+        ...document,
+        awards: [
+          {
+            id: 'award-1',
+            name: 'Reliability award',
+            issuer: 'Northwind Payments',
+            date: '2024-06',
+            description: 'For recoverable settlements.',
+          },
+        ],
+      },
+    );
+
+    expect(screen.getByText('Reliability award')).toBeInTheDocument();
+  });
+
+  it('uses the private page asset builder for gallery images and attachments', () => {
+    const document = buildFullPortfolioDocument();
+    const { rerender } = render(
+      <SectionRenderer
+        section={{
+          id: 'gallery',
+          type: 'gallery',
+          visible: true,
+          order: 0,
+          config: { title: null },
+        }}
+        document={document}
+        labels={labels}
+        buildAssetPath={buildPrivateAssetPath}
+      />,
+    );
+    expect(screen.getByRole('img')).toHaveAttribute(
+      'src',
+      expect.stringContaining('private-media'),
+    );
+
+    rerender(
+      <SectionRenderer
+        section={{
+          id: 'attachments',
+          type: 'attachments',
+          visible: true,
+          order: 0,
+          config: { title: null },
+        }}
+        document={document}
+        labels={labels}
+        buildAssetPath={buildPrivateAssetPath}
+      />,
+    );
+    expect(screen.getByRole('link', { name: /Curriculum vitae/ })).toHaveAttribute(
+      'href',
+      '/private-media/asset-cv',
+    );
+  });
+
+  it('omits a missing caption in the dedicated gallery section', () => {
+    const document = buildFullPortfolioDocument();
+    renderSection(
+      { id: 'gallery', type: 'gallery', visible: true, order: 0, config: { title: null } },
+      { ...document, gallery: document.gallery.map((entry) => ({ ...entry, caption: null })) },
+    );
+
+    expect(screen.getByRole('img', { name: /settlement state machine/i })).toBeInTheDocument();
+    expect(
+      screen.queryByText('The settlement state machine, before it was code'),
+    ).not.toBeInTheDocument();
   });
 });
 

@@ -1,5 +1,15 @@
 {
   "app": {
+    "pwaUpdate": {
+      "title": "Mise à jour disponible",
+      "description": "Une nouvelle version de PortfolioGenerate est prête.",
+      "action": "Actualiser"
+    },
+    "pwa": {
+      "installTitle": "Installer PortfolioGenerate",
+      "installDescription": "Gardez votre espace portfolio pr\u00eat sur cet appareil.",
+      "installAction": "Installer"
+    },
     "name": "PortefeuilleGénérer",
     "tagline": "Transformez un CV en un portfolio que vous contrôlez",
     "skipToContent": "Passer au contenu",
@@ -603,6 +613,8 @@
         "threads": "Sujets",
         "medium": "Moyen",
         "stackoverflow": "Débordement de pile",
+        "mastodon": "Mastodon",
+        "bluesky": "Bluesky",
         "telegram": "Télégramme",
         "whatsapp": "WhatsApp",
         "website": "Site web"

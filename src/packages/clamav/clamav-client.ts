@@ -7,6 +7,7 @@ import {
   CLAMAV_CHUNK_BYTES,
   CLAMAV_COMMAND_INSTREAM,
   CLAMAV_COMMAND_PING,
+  CLAMAV_COMMAND_VERSION,
   CLAMAV_PONG_RESPONSE,
   CLAMAV_STREAM_TERMINATOR,
 } from './clamav.constants';
@@ -96,6 +97,32 @@ export async function pingClamAv(connection: ClamAvConnection): Promise<boolean>
     });
     socket.on('connect', () => {
       socket.write(CLAMAV_COMMAND_PING);
+    });
+  });
+}
+
+export async function getClamAvVersion(connection: ClamAvConnection): Promise<string | null> {
+  return new Promise<string | null>((resolve) => {
+    const socket = connect({ host: connection.host, port: connection.port });
+    let settled = false;
+    function settle(value: string | null): void {
+      if (settled) return;
+      settled = true;
+      socket.destroy();
+      resolve(value);
+    }
+    socket.setTimeout(connection.timeoutMs);
+    socket.on('timeout', () => {
+      settle(null);
+    });
+    socket.on('error', () => {
+      settle(null);
+    });
+    socket.on('data', (chunk: Buffer) => {
+      settle(chunk.toString('utf8'));
+    });
+    socket.on('connect', () => {
+      socket.write(CLAMAV_COMMAND_VERSION);
     });
   });
 }

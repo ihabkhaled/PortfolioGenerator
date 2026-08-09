@@ -3,7 +3,12 @@
 
 import { useEffect, useState, type ReactElement } from 'react';
 
-import { observeBrowserServiceWorker, type BrowserServiceWorkerUpdate } from '@/packages/browser';
+import {
+  observeBrowserInstallPrompt,
+  observeBrowserServiceWorker,
+  type BrowserInstallPrompt,
+  type BrowserServiceWorkerUpdate,
+} from '@/packages/browser';
 import { Button } from '@/packages/ui-primitives';
 import { ErrorState } from '@/shared/components/feedback/error-state.component';
 
@@ -17,6 +22,7 @@ export function PwaRegistrationContainer(
   const [serviceWorkerUpdate, setServiceWorkerUpdate] = useState<BrowserServiceWorkerUpdate | null>(
     null,
   );
+  const [installPrompt, setInstallPrompt] = useState<BrowserInstallPrompt | null>(null);
 
   useEffect(() => {
     const showUpdate = (update: BrowserServiceWorkerUpdate): void => {
@@ -26,14 +32,44 @@ export function PwaRegistrationContainer(
     return observeBrowserServiceWorker(PWA_SERVICE_WORKER_PATH, showUpdate);
   }, []);
 
-  if (!serviceWorkerUpdate) return null;
+  useEffect(() => observeBrowserInstallPrompt(setInstallPrompt), []);
+
+  if (!serviceWorkerUpdate && !installPrompt) return null;
+
+  const title = serviceWorkerUpdate ? props.updateTitle : props.installTitle;
+  const description = serviceWorkerUpdate ? props.updateDescription : props.installDescription;
+  const actionLabel = serviceWorkerUpdate ? props.updateAction : props.installAction;
+  const runAction = async (): Promise<void> => {
+    if (serviceWorkerUpdate) {
+      await serviceWorkerUpdate.activate();
+      return;
+    }
+
+    try {
+      await installPrompt?.prompt();
+    } catch {
+      // Browsers may withdraw their install UI between the event and the click.
+    } finally {
+      setInstallPrompt(null);
+    }
+  };
 
   return (
-    <aside className={pwaClasses.updateRegion} aria-live="polite">
+    <aside className={pwaClasses.updateRegion} aria-live="polite" data-fixed-surface="pwa">
       <ErrorState
-        title={props.updateTitle}
-        description={props.updateDescription}
-        action={<Button onClick={serviceWorkerUpdate.activate}>{props.updateAction}</Button>}
+        title={title}
+        description={description}
+        action={
+          serviceWorkerUpdate || installPrompt ? (
+            <Button
+              onClick={() => {
+                void runAction();
+              }}
+            >
+              {actionLabel}
+            </Button>
+          ) : undefined
+        }
       />
     </aside>
   );

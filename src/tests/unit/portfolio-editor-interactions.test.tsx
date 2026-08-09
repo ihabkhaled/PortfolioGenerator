@@ -302,16 +302,19 @@ describe('asset controls', () => {
     const documentValue = buildFullPortfolioDocument();
     const onGalleryRemove = vi.fn();
     const onAttachmentRemove = vi.fn();
+    const onPlacementChange = vi.fn();
     render(
       <AssetCollectionsUploadContainer
         portfolioId="portfolio-1"
         gallery={documentValue.gallery}
         attachments={documentValue.attachments}
+        pages={documentValue.pages}
         uploadAction={leaveUploadIdle}
         onGalleryUploaded={vi.fn()}
         onAttachmentUploaded={vi.fn()}
         onGalleryRemove={onGalleryRemove}
         onAttachmentRemove={onAttachmentRemove}
+        onPlacementChange={onPlacementChange}
       />,
     );
 
@@ -322,9 +325,11 @@ describe('asset controls', () => {
     const draftRemovalButtons = screen.getAllByRole('button', { name: 'Remove from draft' });
     await userEvent.click(requireElement(draftRemovalButtons[0]));
     await userEvent.click(requireElement(draftRemovalButtons.at(-1)));
+    await userEvent.click(screen.getByLabelText('Downloadable file: Projects'));
 
     expect(onGalleryRemove).toHaveBeenCalledWith(0);
     expect(onAttachmentRemove).toHaveBeenCalledWith(0);
+    expect(onPlacementChange).toHaveBeenCalledWith('attachments', 'page-projects', true);
   });
 
   it('removes an existing portrait only through its explicit control', async () => {

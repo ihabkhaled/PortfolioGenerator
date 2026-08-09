@@ -29,11 +29,23 @@ export const DEFAULT_SKILL_GROUP_LABEL = 'Skills';
 export const IMPORTED_PAGE_DEFINITIONS = {
   experience: { slug: 'experience', title: 'Experience', sectionTypes: ['experience'] },
   projects: { slug: 'projects', title: 'Projects', sectionTypes: ['projects'] },
-  skills: { slug: 'skills', title: 'Skills', sectionTypes: ['skills', 'languages'] },
+  skills: { slug: 'skills', title: 'Skills', sectionTypes: ['skills', 'soft-skills', 'languages'] },
   about: {
     slug: 'about',
     title: 'About',
-    sectionTypes: ['about', 'education', 'certifications'],
+    sectionTypes: [
+      'about',
+      'education',
+      'courses',
+      'certifications',
+      'publications',
+      'volunteering',
+      'awards',
+      'interests',
+      'testimonials',
+      'gallery',
+      'attachments',
+    ],
   },
-  contact: { slug: 'contact', title: 'Contact', sectionTypes: ['contact'] },
+  contact: { slug: 'contact', title: 'Contact', sectionTypes: ['social', 'contact'] },
 } as const;

@@ -307,6 +307,22 @@ const languagesSectionSchema = z.object({
   config: titledConfig,
 });
 
+const softSkillsSectionSchema = z.object({
+  ...sectionBase,
+  type: z.literal('soft-skills'),
+  config: titledConfig,
+});
+
+const coursesSectionSchema = z.object({ ...sectionBase, type: z.literal('courses'), config: titledConfig });
+const publicationsSectionSchema = z.object({ ...sectionBase, type: z.literal('publications'), config: titledConfig });
+const volunteeringSectionSchema = z.object({ ...sectionBase, type: z.literal('volunteering'), config: titledConfig });
+const awardsSectionSchema = z.object({ ...sectionBase, type: z.literal('awards'), config: titledConfig });
+const interestsSectionSchema = z.object({ ...sectionBase, type: z.literal('interests'), config: titledConfig });
+const testimonialsSectionSchema = z.object({ ...sectionBase, type: z.literal('testimonials'), config: titledConfig });
+const gallerySectionSchema = z.object({ ...sectionBase, type: z.literal('gallery'), config: titledConfig });
+const attachmentsSectionSchema = z.object({ ...sectionBase, type: z.literal('attachments'), config: titledConfig });
+const socialSectionSchema = z.object({ ...sectionBase, type: z.literal('social'), config: titledConfig });
+
 const contactSectionSchema = z.object({
   ...sectionBase,
   type: z.literal('contact'),
@@ -338,9 +354,19 @@ export const sectionSchema = z.discriminatedUnion('type', [
   experienceSectionSchema,
   projectsSectionSchema,
   skillsSectionSchema,
+  softSkillsSectionSchema,
   educationSectionSchema,
+  coursesSectionSchema,
   certificationsSectionSchema,
   languagesSectionSchema,
+  publicationsSectionSchema,
+  volunteeringSectionSchema,
+  awardsSectionSchema,
+  interestsSectionSchema,
+  testimonialsSectionSchema,
+  gallerySectionSchema,
+  attachmentsSectionSchema,
+  socialSectionSchema,
   contactSectionSchema,
   customSectionSchema,
 ]);

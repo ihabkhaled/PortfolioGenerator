@@ -185,6 +185,52 @@ describe('hasContent', () => {
   });
 
   it.each([
+    'soft-skills',
+    'courses',
+    'publications',
+    'volunteering',
+    'awards',
+    'interests',
+    'testimonials',
+    'gallery',
+    'attachments',
+    'social',
+  ] as const)('reports the new %s band as empty on a new portfolio', (type) => {
+    expect(hasContent(section(type, { title: null }), minimal)).toBe(false);
+  });
+
+  it.each([
+    'soft-skills',
+    'courses',
+    'publications',
+    'volunteering',
+    'interests',
+    'testimonials',
+    'gallery',
+    'attachments',
+    'social',
+  ] as const)('reports the populated %s band as present', (type) => {
+    expect(hasContent(section(type, { title: null }), full)).toBe(true);
+  });
+
+  it('reports an awards band as present when the document has an award', () => {
+    expect(
+      hasContent(section('awards', { title: null }), {
+        ...full,
+        awards: [
+          {
+            id: 'award-1',
+            name: 'Reliability award',
+            issuer: null,
+            date: null,
+            description: null,
+          },
+        ],
+      }),
+    ).toBe(true);
+  });
+
+  it.each([
     ['experience', { title: null, limit: null }],
     ['projects', { title: null, limit: null }],
   ] as const)('reports %s as empty on a new portfolio', (type, config) => {
@@ -322,6 +368,6 @@ describe('buildPortfolioLabels', () => {
 
     expect(labels.sections.experience).toBe('t:sections.experience');
     expect(labels.present).toBe('t:present');
-    expect(Object.keys(labels.sections)).toHaveLength(10);
+    expect(Object.keys(labels.sections)).toHaveLength(20);
   });
 });

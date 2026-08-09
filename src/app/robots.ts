@@ -11,6 +11,10 @@ import { ROUTE_PATHS } from '@/shared/constants/route-paths.constants';
  * access control — the dashboard is protected by auth and sends
  * `X-Robots-Tag: noindex` besides — but a crawler that respects this file
  * should not be spending its budget on pages it will be redirected away from.
+ * Private portfolio pages intentionally share the public slug namespace, so
+ * there is no safe path prefix to disallow here. Their challenge, content, and
+ * grant-scoped media responses instead send noindex/nofollow and private,
+ * no-store headers; adding tenant slugs here would disclose them.
  *
  * Non-production deployments disallow everything. A preview URL indexed
  * alongside production splits ranking between two copies of the same portfolio

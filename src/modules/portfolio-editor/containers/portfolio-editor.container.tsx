@@ -28,6 +28,7 @@ import {
   setEmailValue,
   setPhoneNumber,
   setPortraitAsset,
+  setAssetSectionPlacement,
   setIdentityField,
   setIndexable,
   setSectionVisibility,
@@ -156,6 +157,7 @@ export function PortfolioEditorContainer(props: Readonly<EditorContainerProps>):
             portfolioId={props.portfolioId}
             gallery={document.gallery}
             attachments={document.attachments}
+            pages={document.pages}
             uploadAction={props.uploadAssetAction}
             onGalleryUploaded={(asset, alt, caption) => {
               editor.update(appendGalleryAsset(document, { assetId: asset.id, alt, caption }));
@@ -188,6 +190,9 @@ export function PortfolioEditorContainer(props: Readonly<EditorContainerProps>):
                   attachmentIndex === index ? { ...attachment, visible } : attachment,
                 ),
               });
+            }}
+            onPlacementChange={(type, pageId, placed) => {
+              editor.update(setAssetSectionPlacement(document, pageId, type, placed));
             }}
           />
 

@@ -8,6 +8,7 @@
  */
 export const CLAMAV_COMMAND_INSTREAM = 'zINSTREAM\0';
 export const CLAMAV_COMMAND_PING = 'zPING\0';
+export const CLAMAV_COMMAND_VERSION = 'zVERSION\0';
 
 /** clamd's own chunk ceiling. Larger frames are rejected by the daemon. */
 export const CLAMAV_CHUNK_BYTES = 65_536;

@@ -2,16 +2,18 @@
 
 ## What this needs
 
-| Dependency                    | Notes                                        |
-| ----------------------------- | -------------------------------------------- |
-| Node.js 24+                   | `.nvmrc` and `.node-version` pin the version |
-| PostgreSQL 16+                | The only required datastore                  |
-| S3-compatible object storage  | AWS S3, Cloudflare R2 or MinIO               |
-| An OpenAI-compatible endpoint | Optional; `deterministic` works without one  |
-| ClamAV 1.4 service            | Required when production uploads are enabled |
-| SMTP relay                    | Required for contact and password recovery   |
+| Dependency                    | Notes                                                    |
+| ----------------------------- | -------------------------------------------------------- |
+| Node.js 24+                   | `.nvmrc` and `.node-version` pin the version             |
+| PostgreSQL 16+                | The only required datastore                              |
+| S3-compatible object storage  | AWS S3, Cloudflare R2 or MinIO                           |
+| An OpenAI-compatible endpoint | Optional; `deterministic` works without one              |
+| ClamAV 1.4 service            | Required when production uploads are enabled             |
+| SMTP relay                    | Required for verification, contact and password recovery |
 
-No Redis, no queue, no cron. See [ADR-0003](../architecture/adrs/0003-postgres-rate-limiting.md).
+No Redis or queue. Vercel Cron invokes the bounded asset-object deletion retry;
+see [ADR-0003](../architecture/adrs/0003-postgres-rate-limiting.md) for why rate
+limiting remains in PostgreSQL.
 
 ## Environment
 
@@ -21,14 +23,24 @@ failing at the first request that happens to need it.
 
 The values that must be set for production, and what goes wrong if they are not:
 
-| Variable                                             | If wrong                                                                                                                  |
-| ---------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
-| `NEXT_PUBLIC_APP_URL`                                | Canonical URLs, the sitemap and OG images point at localhost. Inlined at build time — a rebuild is required to change it. |
-| `NEXT_PUBLIC_APP_ENV`                                | Anything other than `production` makes `robots.txt` disallow everything. That is deliberate for preview deployments.      |
-| `DATABASE_URL`                                       | Boot failure.                                                                                                             |
-| `BETTER_AUTH_SECRET`                                 | Boot failure below 32 characters. Rotating it invalidates every session.                                                  |
-| `STORAGE_DRIVER=s3` without the S3 block             | Boot failure, naming the missing variables.                                                                               |
-| `AI_PROVIDER=openai-compatible` without `AI_API_KEY` | Boot failure.                                                                                                             |
+| Variable                                              | If wrong                                                                                                                  |
+| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| `NEXT_PUBLIC_APP_URL`                                 | Canonical URLs, the sitemap and OG images point at localhost. Inlined at build time — a rebuild is required to change it. |
+| `NEXT_PUBLIC_APP_ENV`                                 | Anything other than `production` makes `robots.txt` disallow everything. That is deliberate for preview deployments.      |
+| `DATABASE_URL`                                        | Boot failure.                                                                                                             |
+| `BETTER_AUTH_SECRET`                                  | Boot failure below 32 characters. Rotating it invalidates every session.                                                  |
+| `AUTH_REQUIRE_EMAIL_VERIFICATION=false` in production | Boot failure. Mandatory verification also requires enabled, fully configured SMTP delivery.                               |
+| `STORAGE_DRIVER=s3` without the S3 block              | Boot failure, naming the missing variables.                                                                               |
+| `AI_PROVIDER=openai-compatible` without `AI_API_KEY`  | Boot failure.                                                                                                             |
+| `CRON_SECRET`                                         | Boot failure in production when absent or shorter than 32 characters.                                                     |
+| `CLAMAV_ENABLED=false` in production                  | Boot failure. Both `NODE_ENV` and `NEXT_PUBLIC_APP_ENV` enforce this.                                                     |
+| `CLAMAV_ENABLED=true` without reachable clamd         | Uploads fail closed; no unscanned bytes are stored.                                                                       |
+| `CONTACT_EMAIL_ENABLED=true` without the SMTP block   | Boot failure, naming the missing relay values.                                                                            |
+
+Private portfolio pages cannot be listed as a `robots.txt` prefix because they
+share the same slug namespace as public portfolios. They are excluded by
+response-level `X-Robots-Tag: noindex, nofollow` and private no-store caching;
+publishing their tenant-specific paths in `robots.txt` would itself leak them.
 
 Gemini uses the existing OpenAI-compatible AI boundary; do not install or import a
 Gemini SDK. Set `AI_PROVIDER=openai-compatible`, `AI_BASE_URL` to
@@ -37,8 +49,6 @@ Gemini API key, and optionally `AI_TRANSLATION_MODEL` to a translation-specific
 Gemini model id. When omitted, translations use `AI_PRIMARY_MODEL`. These values
 are runtime environment variables on Vercel and are not required while `next build`
 imports route modules.
-| `CLAMAV_ENABLED=true` without reachable clamd | Uploads fail closed; no unscanned bytes are stored. |
-| `CONTACT_EMAIL_ENABLED=true` without the SMTP block | Boot failure, naming the missing relay values. |
 
 The supported contact contract includes `CONTACT_EMAIL_PROVIDER=smtp`,
 `CONTACT_RATE_LIMIT_MAX`, `CONTACT_RATE_LIMIT_WINDOW_MS`, and the
@@ -65,6 +75,40 @@ access, Postgres, object storage, SMTP credentials, Gemini/OpenAI-compatible AI
 credentials, DNS, and the private scanner network cannot be provisioned from a
 source checkout.
 
+## Scheduled asset deletion retry
+
+`vercel.json` invokes `GET /api/operations/asset-deletions` every 15 minutes.
+Vercel supplies `Authorization: Bearer <CRON_SECRET>`; configure
+`CRON_SECRET` to that value. The endpoint refuses missing or
+incorrect credentials, processes at most 50 due tombstones, disables caching,
+and returns only the number processed. It never returns object keys, asset ids,
+or tenant data. Manual invocations use the same bearer header; never put the
+secret in a query string.
+
+## ClamAV smoke runbook
+
+With the configured scanner reachable, run:
+
+```bash
+npm run smoke:clamav -- readiness
+```
+
+This sends one harmless probe and an EICAR canary directly to clamd, requires a
+clean verdict followed by an infected verdict, and holds both payloads only in
+memory. The command caps its socket timeout at five seconds.
+
+To probe scanner outage detection, stop or firewall the configured clamd endpoint, then
+run:
+
+```bash
+npm run smoke:clamav -- outage
+```
+
+This command proves only that the bounded scanner probe reports the endpoint
+unavailable. It does not exercise the application upload path. Separately
+confirm an application upload is refused and that no object-storage or database
+row was created, then restore clamd and repeat the readiness command.
+
 ## Build and start
 
 ```bash
@@ -76,6 +120,33 @@ npm run start
 
 `npm run build` runs the TypeScript 7 typecheck first and refuses to build on a
 type error.
+
+## Production browser and Lighthouse proof
+
+After one production build, run the repository-owned browser evidence. Playwright starts the
+production server on port 3100 and writes failure artifacts and traces under `test-results/`. CI's
+HTML reporter additionally writes `playwright-report/`; the local reporter is the terminal list:
+
+```bash
+npx playwright test src/tests/e2e/pwa.spec.ts src/tests/accessibility/responsive.spec.ts
+```
+
+Then run both Lighthouse CI profiles. Each profile checks the landing page and dense accessibility
+guide three times against a production server, fails regressions against its checked-in thresholds,
+and writes artifacts to `test-results/lighthouse/mobile/` or
+`test-results/lighthouse/desktop/`:
+
+```bash
+npm run lighthouse:mobile
+npm run lighthouse:desktop
+# or both, sequentially
+npm run lighthouse
+```
+
+The mobile performance floor is 85/100 and the desktop floor is 90/100. Accessibility,
+best-practices and SEO each require 100/100. These are release thresholds, not recorded live scores;
+do not claim production results until the commands have run against the final build and their
+artifacts have been reviewed.
 
 ## Migrations
 
@@ -89,7 +160,10 @@ later release — so a rollback never lands on a schema that has lost data.
 
 ## Health
 
-`GET /api/health` returns 200 for `ok` and `degraded`, 503 for `down`. Point the
+`GET /api/health` returns 200 for `ok` and `degraded`, 503 for `down`. When email
+verification is mandatory, the probe performs a bounded SMTP authentication and
+QUIT without sending a message; an unreachable relay or rejected credentials make
+the instance unready. Point the
 load balancer at it. A failing object store is `degraded` and keeps serving:
 published pages render from the database, and pulling instances would take the
 site down to protect a feature nobody was using at that moment.

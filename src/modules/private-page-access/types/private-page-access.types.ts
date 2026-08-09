@@ -1,7 +1,10 @@
+import type { AppLocale } from '@/modules/localization';
+
 export interface PrivatePageScope {
   readonly portfolioSlug: string;
   readonly pageId: string;
   readonly pageSlug: string;
+  readonly locale: AppLocale;
 }
 
 export interface PrivatePageGrantInput {
@@ -24,6 +27,7 @@ export interface PrivatePageUnlockSubmission {
   readonly portfolioSlug: string;
   readonly pageSlug: string;
   readonly password: string;
+  readonly locale: AppLocale;
 }
 
 export interface PrivatePageCookieInput {

@@ -58,3 +58,22 @@ export async function getRequestCookie(name: string): Promise<string | null> {
 
   return requestCookies.get(name)?.value ?? null;
 }
+
+export async function setResponseCookie(
+  name: string,
+  value: string,
+  options: {
+    readonly httpOnly: boolean;
+    readonly maxAge: number;
+    readonly secure: boolean;
+  },
+): Promise<void> {
+  const responseCookies = await cookies();
+  responseCookies.set(name, value, {
+    httpOnly: options.httpOnly,
+    maxAge: options.maxAge,
+    sameSite: 'lax',
+    secure: options.secure,
+    path: '/',
+  });
+}

@@ -1,5 +1,15 @@
 {
   "app": {
+    "pwaUpdate": {
+      "title": "Atualização disponível",
+      "description": "Uma nova versão do PortfolioGenerate está pronta.",
+      "action": "Atualizar"
+    },
+    "pwa": {
+      "installTitle": "Instalar PortfolioGenerate",
+      "installDescription": "Mantenha seu espa\u00e7o de portf\u00f3lio pronto neste dispositivo.",
+      "installAction": "Instalar"
+    },
     "name": "Gerar portfólio",
     "tagline": "Transforme um currículo em um portfólio que você controla",
     "skipToContent": "Pular para o conteúdo",
@@ -603,6 +613,8 @@
         "threads": "Tópicos",
         "medium": "Médio",
         "stackoverflow": "Estouro de pilha",
+        "mastodon": "Mastodon",
+        "bluesky": "Bluesky",
         "telegram": "Telegrama",
         "whatsapp": "WhatsApp",
         "website": "Site"

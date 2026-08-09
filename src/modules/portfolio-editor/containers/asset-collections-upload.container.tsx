@@ -116,6 +116,21 @@ export function AssetCollectionsUploadContainer(
           </Button>
         </div>
       ))}
+      {props.gallery.length === 0
+        ? null
+        : props.pages.map((page) => (
+            <Label key={`gallery-${page.id}`} htmlFor={`gallery-page-${page.id}`}>
+              <Input
+                id={`gallery-page-${page.id}`}
+                type="checkbox"
+                checked={page.sections.some((section) => section.type === 'gallery')}
+                onChange={(event) => {
+                  props.onPlacementChange('gallery', page.id, event.target.checked);
+                }}
+              />
+              {t('assets.galleryFile')}: {page.navLabel}
+            </Label>
+          ))}
 
       <form action={attachmentAction} className={editorClasses.collection}>
         <input type="hidden" name="portfolioId" value={props.portfolioId} />
@@ -192,6 +207,21 @@ export function AssetCollectionsUploadContainer(
           </Button>
         </div>
       ))}
+      {props.attachments.length === 0
+        ? null
+        : props.pages.map((page) => (
+            <Label key={`attachments-${page.id}`} htmlFor={`attachments-page-${page.id}`}>
+              <Input
+                id={`attachments-page-${page.id}`}
+                type="checkbox"
+                checked={page.sections.some((section) => section.type === 'attachments')}
+                onChange={(event) => {
+                  props.onPlacementChange('attachments', page.id, event.target.checked);
+                }}
+              />
+              {t('assets.attachmentFile')}: {page.navLabel}
+            </Label>
+          ))}
     </section>
   );
 }

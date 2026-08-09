@@ -18,6 +18,9 @@ export interface AssetRecord {
   readonly height: number | null;
   readonly createdAt: Date;
   readonly deletedAt: Date | null;
+  readonly objectDeletedAt: Date | null;
+  readonly deletionAttempts: number;
+  readonly deletionRetryAt: Date | null;
 }
 
 export interface UploadAssetInput {
@@ -52,6 +55,7 @@ export interface CreateAssetInput extends UploadAssetInput {
 export interface PublishedAssetRecord {
   readonly asset: AssetRecord;
   readonly publishedDocument: unknown;
+  readonly portfolioSlug: string;
 }
 
 export interface AssetRow extends Omit<AssetRecord, 'purpose' | 'visibility'> {

@@ -5,6 +5,8 @@ import {
   findCountryByIso,
   formatPhoneNumber,
   sortCountriesByName,
+  selectLongestDialPrefix,
+  splitInternationalPhone,
   toTelHref,
 } from '@/shared/utils/phone-number.util';
 
@@ -15,6 +17,9 @@ import {
  */
 
 describe('COUNTRY_DIAL_CODES', () => {
+  it('covers the complete ISO 3166-1 assigned inventory', () => {
+    expect(COUNTRY_DIAL_CODES).toHaveLength(249);
+  });
   it('carries a usable dialling prefix for every entry', () => {
     for (const country of COUNTRY_DIAL_CODES) {
       expect(country.dial).toMatch(/^\+\d{1,4}$/u);
@@ -35,6 +40,41 @@ describe('COUNTRY_DIAL_CODES', () => {
     const plusOne = COUNTRY_DIAL_CODES.filter((country) => country.dial === '+1');
 
     expect(plusOne.length).toBeGreaterThan(1);
+  });
+});
+
+describe('splitInternationalPhone', () => {
+  it('splits a unique longest evidence-backed prefix', () => {
+    expect(splitInternationalPhone('+351 912 345 678')).toEqual({
+      countryIso: 'PT',
+      nationalNumber: '912345678',
+    });
+  });
+
+  it('selects the longest matching prefix independent of dataset ordering', () => {
+    expect(selectLongestDialPrefix(['+3', '+358', '+35'], '+3581812345')).toBe('+358');
+    expect(selectLongestDialPrefix(['+1'], '+99912345')).toBeUndefined();
+  });
+
+  it('preserves an unknown international prefix', () => {
+    expect(splitInternationalPhone('+99912345')).toEqual({
+      countryIso: null,
+      nationalNumber: '+99912345',
+    });
+  });
+
+  it.each(['+1 202 555 0100', '+7 701 123 4567', '+44 20 7946 0958'])(
+    'does not guess within a shared calling plan: %s',
+    (phone) => {
+      expect(splitInternationalPhone(phone)).toEqual({ countryIso: null, nationalNumber: phone });
+    },
+  );
+
+  it('preserves non-international evidence unchanged', () => {
+    expect(splitInternationalPhone('(020) 7946 0958')).toEqual({
+      countryIso: null,
+      nationalNumber: '(020) 7946 0958',
+    });
   });
 });
 

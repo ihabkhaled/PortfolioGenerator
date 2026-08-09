@@ -38,15 +38,30 @@ export interface MarketingPageDefinition {
   readonly slug: MarketingRouteSlug;
   readonly titleKey: string;
   readonly descriptionKey: string;
-  readonly sections: readonly [string, string, string];
+  readonly sections: readonly MarketingTopicSectionDefinition[];
   readonly relatedSlugs: readonly [MarketingRouteSlug, MarketingRouteSlug];
+}
+
+export type MarketingTopicSectionKind =
+  'use-case' | 'trust-boundary' | 'comparison' | 'faq' | 'resource' | 'internal-links';
+
+export interface MarketingTopicSectionDefinition {
+  readonly kind: MarketingTopicSectionKind;
+  readonly titleKey: string;
+  readonly bodyKey: string;
+}
+
+export interface MarketingTopicSection {
+  readonly kind: MarketingTopicSectionKind;
+  readonly title: string;
+  readonly body: string;
 }
 
 export interface MarketingTopicPageProps {
   readonly eyebrow: string;
   readonly title: string;
   readonly description: string;
-  readonly sections: readonly string[];
+  readonly sections: readonly MarketingTopicSection[];
   readonly related: ReactNode;
 }
 

@@ -25,12 +25,17 @@
     cursor: pointer;
   }
 
+  :where(a[href], label, summary) {
+    min-block-size: 1.5rem;
+    line-height: max(1.5rem, 1em);
+  }
+
   input[type='checkbox'],
   input[type='radio'] {
     accent-color: var(--role-primary);
-    block-size: 1.125rem;
+    block-size: 1.5rem;
     cursor: pointer;
-    inline-size: 1.125rem;
+    inline-size: 1.5rem;
   }
 
   input[type='file'] {
@@ -208,13 +213,23 @@ body {
   min-height: 100dvh;
   padding-top: env(safe-area-inset-top);
   padding-right: env(safe-area-inset-right);
-  padding-bottom: env(safe-area-inset-bottom);
+  /* The locale control is fixed, so the document needs a real final scroll
+     position where its last line sits above that control rather than beneath
+     it. This reserve is only one control high and remains modest on desktop. */
+  padding-bottom: calc(env(safe-area-inset-bottom) + 5.5rem);
   padding-left: env(safe-area-inset-left);
   background-color: var(--role-canvas);
   color: var(--role-foreground);
   font-family: var(--role-font-body);
   line-height: var(--role-line-height-body, 1.7);
   -webkit-font-smoothing: antialiased;
+}
+
+/* Install/update UI is taller and sits above the locale control. Reserve its
+   full stack only while it exists; :has() removes the extra space as soon as
+   the prompt is dismissed or the update activates. */
+body:has([data-fixed-surface='pwa']) {
+  padding-bottom: calc(env(safe-area-inset-bottom) + 18rem);
 }
 
 @media (display-mode: standalone) {

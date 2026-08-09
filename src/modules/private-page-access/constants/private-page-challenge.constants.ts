@@ -4,6 +4,7 @@ export const PRIVATE_PAGE_FIELD_NAMES = {
   portfolioSlug: 'portfolioSlug',
   pageSlug: 'pageSlug',
   password: 'password',
+  locale: 'locale',
 } as const;
 
 export const privatePageChallengeClasses = {

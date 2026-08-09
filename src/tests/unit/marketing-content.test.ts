@@ -12,7 +12,15 @@ describe('marketing route inventory', () => {
   it('gives every topic substantial sections, distinct metadata, and internal links', () => {
     expect(new Set(MARKETING_PAGES.map((page) => page.titleKey)).size).toBe(16);
     for (const page of MARKETING_PAGES) {
-      expect(page.sections).toHaveLength(3);
+      expect(page.sections).toHaveLength(6);
+      expect(page.sections.map((section) => section.kind)).toEqual([
+        'use-case',
+        'trust-boundary',
+        'comparison',
+        'faq',
+        'resource',
+        'internal-links',
+      ]);
       expect(page.relatedSlugs.length).toBeGreaterThanOrEqual(2);
       expect(page.titleKey).not.toBe(page.descriptionKey);
     }

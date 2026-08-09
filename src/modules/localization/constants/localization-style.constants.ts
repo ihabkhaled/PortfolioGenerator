@@ -1,6 +1,6 @@
 export const localizationClasses = {
   controls:
-    'fixed end-4 bottom-4 z-50 flex max-w-[calc(100vw-2rem)] items-center gap-2 rounded-xl border border-border bg-surface-raised/95 p-2 shadow-lg backdrop-blur',
+    'fixed end-[max(1rem,env(safe-area-inset-right))] bottom-[max(1rem,env(safe-area-inset-bottom))] z-50 flex max-w-[calc(100vw-2rem)] items-center gap-2 rounded-xl border border-border bg-surface-raised/95 p-2 shadow-lg backdrop-blur rtl:end-[max(1rem,env(safe-area-inset-left))]',
   select: 'h-9 min-w-32 py-0',
   panel: 'grid gap-5 rounded-xl border border-border bg-surface-raised p-5',
   header: 'grid gap-1',

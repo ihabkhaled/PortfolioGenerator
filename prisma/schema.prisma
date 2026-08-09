@@ -97,6 +97,18 @@ model Verification {
   @@map("verifications")
 }
 
+model EmailVerificationTokenClaim {
+  tokenDigest    String    @id @map("token_digest")
+  leaseId        String?   @map("lease_id")
+  leaseExpiresAt DateTime? @map("lease_expires_at")
+  consumedAt     DateTime? @map("consumed_at")
+  createdAt      DateTime  @default(now()) @map("created_at")
+  updatedAt      DateTime  @updatedAt @map("updated_at")
+
+  @@index([leaseExpiresAt])
+  @@map("email_verification_token_claims")
+}
+
 // ---------------------------------------------------------------------------
 // Portfolios
 // ---------------------------------------------------------------------------
@@ -282,11 +294,15 @@ model Asset {
   createdAt DateTime  @default(now()) @map("created_at")
   updatedAt DateTime  @updatedAt @map("updated_at")
   deletedAt DateTime? @map("deleted_at")
+  objectDeletedAt DateTime? @map("object_deleted_at")
+  deletionAttempts Int @default(0) @map("deletion_attempts")
+  deletionRetryAt DateTime? @map("deletion_retry_at")
 
   owner     User      @relation(fields: [ownerId], references: [id], onDelete: Cascade)
   portfolio Portfolio @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
 
   @@index([ownerId, portfolioId, deletedAt])
+  @@index([deletionRetryAt, objectDeletedAt])
   @@index([ownerId, sha256])
   @@map("assets")
 }

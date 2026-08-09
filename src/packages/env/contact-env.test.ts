@@ -52,14 +52,99 @@ describe('contact email environment', () => {
     expect(parsed.CONTACT_RATE_LIMIT_MAX).toBe(5);
     expect(parsed.CONTACT_RATE_LIMIT_WINDOW_MS).toBe(1_800_000);
   });
+
+  it('accepts capture only in a test runtime at the fixed test-results path', () => {
+    expect(
+      parseServerEnvironment({
+        ...base,
+        EMAIL_CAPTURE_PATH: 'test-results/email-capture.jsonl',
+      }).EMAIL_CAPTURE_PATH,
+    ).toBe('test-results/email-capture.jsonl');
+    expect(() =>
+      parseServerEnvironment({
+        ...base,
+        NODE_ENV: 'development',
+        EMAIL_CAPTURE_PATH: 'test-results/email-capture.jsonl',
+      }),
+    ).toThrow('EMAIL_CAPTURE_PATH requires test mode outside public production');
+    expect(() =>
+      parseServerEnvironment({ ...base, EMAIL_CAPTURE_PATH: 'elsewhere/messages.jsonl' }),
+    ).toThrow('Invalid server environment');
+  });
+
+  it('rejects capture in a public production deployment even in a test runtime', () => {
+    expect(() =>
+      parseServerEnvironment({
+        ...base,
+        NEXT_PUBLIC_APP_ENV: 'production',
+        EMAIL_CAPTURE_PATH: 'test-results/email-capture.jsonl',
+        CLAMAV_ENABLED: 'true',
+        CRON_SECRET: 'x'.repeat(32),
+        AUTH_REQUIRE_EMAIL_VERIFICATION: 'true',
+        CONTACT_EMAIL_ENABLED: 'true',
+        CONTACT_EMAIL_FROM: 'sender@example.com',
+        CONTACT_EMAIL_TO: 'support@example.com',
+        CONTACT_SMTP_HOST: 'smtp.example.com',
+        CONTACT_SMTP_USER: 'smtp-user',
+        CONTACT_SMTP_PASS: 'smtp-password',
+      }),
+    ).toThrow('EMAIL_CAPTURE_PATH requires test mode outside public production');
+  });
+
+  it('requires verification on a public production deployment', () => {
+    expect(() =>
+      parseServerEnvironment({
+        ...base,
+        NEXT_PUBLIC_APP_ENV: 'production',
+        CLAMAV_ENABLED: 'true',
+        CRON_SECRET: 'x'.repeat(32),
+      }),
+    ).toThrow('AUTH_REQUIRE_EMAIL_VERIFICATION=true is required in production');
+  });
+
+  it('requires a configured transport whenever verification is mandatory', () => {
+    expect(() =>
+      parseServerEnvironment({ ...base, AUTH_REQUIRE_EMAIL_VERIFICATION: 'true' }),
+    ).toThrow('AUTH_REQUIRE_EMAIL_VERIFICATION=true requires CONTACT_EMAIL_ENABLED=true');
+    expect(() =>
+      parseServerEnvironment({
+        ...base,
+        AUTH_REQUIRE_EMAIL_VERIFICATION: 'true',
+        CONTACT_EMAIL_ENABLED: 'true',
+      }),
+    ).toThrow('CONTACT_EMAIL_ENABLED=true requires');
+    expect(
+      parseServerEnvironment({
+        ...base,
+        AUTH_REQUIRE_EMAIL_VERIFICATION: 'true',
+        CONTACT_EMAIL_ENABLED: 'true',
+        CONTACT_EMAIL_PROVIDER: 'smtp',
+        CONTACT_EMAIL_FROM: 'sender@example.com',
+        CONTACT_EMAIL_TO: 'support@example.com',
+        CONTACT_SMTP_HOST: 'smtp.example.com',
+        CONTACT_SMTP_USER: 'smtp-user',
+        CONTACT_SMTP_PASS: 'smtp-password',
+      }).AUTH_REQUIRE_EMAIL_VERIFICATION,
+    ).toBe(true);
+  });
 });
 
 describe('virus scanner environment', () => {
-  it('allows production route collection while upload services enforce scanning', () => {
+  it('does not treat the Next production build mode as a public deployment', () => {
     expect(
       parseServerEnvironment({ ...base, NODE_ENV: 'production', CLAMAV_ENABLED: 'false' })
         .CLAMAV_ENABLED,
     ).toBe(false);
+  });
+
+  it('refuses an explicit scanner opt-out for a production public deployment', () => {
+    expect(() =>
+      parseServerEnvironment({
+        ...base,
+        NEXT_PUBLIC_APP_ENV: 'production',
+        CLAMAV_ENABLED: 'false',
+      }),
+    ).toThrow('CLAMAV_ENABLED=true is required in production');
   });
 
   it('retains an explicit scanner opt-out outside production', () => {

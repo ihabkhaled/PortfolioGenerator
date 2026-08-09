@@ -16,6 +16,7 @@ export interface EmailVerificationEmail {
 }
 
 export interface EmailSender {
+  checkReadiness: (timeoutMs: number) => Promise<void>;
   sendContact: (message: ContactEmail) => Promise<void>;
   sendPasswordReset: (message: PasswordResetEmail) => Promise<void>;
   sendEmailVerification: (message: EmailVerificationEmail) => Promise<void>;

@@ -8,13 +8,22 @@ import {
   parseDateRange,
   parseDeterministicResume,
   parseMonth,
+  parsePublications,
   parseSkills,
+  parseVolunteering,
   splitIntoSections,
   splitRoleLine,
   stripBullet,
   stripSurroundingPunctuation,
 } from '../helpers/deterministic-extraction.helper';
 import { resumeExtractionSchema } from '../schemas/resume-extraction.schema';
+
+import {
+  FULL_RESUME_TEXT,
+  MULTILINGUAL_RESUME_TEXT,
+  PROMPT_INJECTION_RESUME_TEXT,
+  SPARSE_RESUME_TEXT,
+} from './resume-text.fixtures';
 
 const SAMPLE_RESUME = `Amina Rahman
 Backend engineer, payments and reliability
@@ -189,6 +198,37 @@ describe('parseSkills', () => {
   });
 });
 
+describe('explicit supplemental collections', () => {
+  it('drops blank publication lines and preserves only stated fields', () => {
+    expect(parsePublications([' '.repeat(3)])).toEqual([]);
+    expect(parsePublications(['A paper'])).toEqual([
+      {
+        title: 'A paper',
+        publisher: null,
+        date: null,
+        url: null,
+        summary: null,
+      },
+    ]);
+    expect(parsePublications(['A paper | Journal | http://example.com'])).toEqual([
+      expect.objectContaining({ publisher: 'Journal', url: null }),
+    ]);
+  });
+
+  it('drops blank volunteering lines and never invents an absent role', () => {
+    expect(parseVolunteering([''])).toEqual([]);
+    expect(parseVolunteering(['Code Club'])).toEqual([
+      {
+        organization: 'Code Club',
+        role: null,
+        startDate: null,
+        endDate: null,
+        summary: null,
+      },
+    ]);
+  });
+});
+
 describe('splitIntoSections', () => {
   it('separates the header from the named sections', () => {
     const headings = splitIntoSections(SAMPLE_RESUME).map((section) => section.heading);
@@ -263,6 +303,29 @@ describe('parseDeterministicResume', () => {
     expect(hostile.identity.displayName).toBe('Amina Rahman');
   });
 
+  it('extracts explicit factual supplemental sections without inferring absent facts', () => {
+    const supplemental = parseDeterministicResume(`Amina Rahman
+Engineer
+
+Publications
+Reliable Ledgers | Systems Journal | https://example.com/paper
+
+Volunteering
+Code Club | Mentor
+
+Interests
+Typography, Distributed systems`);
+
+    expect(supplemental.publications).toEqual([
+      expect.objectContaining({ title: 'Reliable Ledgers', publisher: 'Systems Journal' }),
+    ]);
+    expect(supplemental.volunteering).toEqual([
+      expect.objectContaining({ organization: 'Code Club', role: 'Mentor' }),
+    ]);
+    expect(supplemental.interests).toEqual(['Typography', 'Distributed systems']);
+    expect(supplemental.publications[0]?.date).toBeNull();
+  });
+
   it('warns rather than inventing when no headline is present', () => {
     const sparse = parseDeterministicResume('Amina Rahman');
 
@@ -275,5 +338,17 @@ describe('parseDeterministicResume', () => {
 
     expect(parseSchema(resumeExtractionSchema, empty).ok).toBe(true);
     expect(empty.experience).toEqual([]);
+  });
+
+  it.each([
+    ['full', FULL_RESUME_TEXT],
+    ['sparse', SPARSE_RESUME_TEXT],
+    ['multilingual', MULTILINGUAL_RESUME_TEXT],
+    ['prompt-injection', PROMPT_INJECTION_RESUME_TEXT],
+  ])('keeps the explicit %s fixture within the evidence-bound schema', (_name, text) => {
+    const extracted = parseDeterministicResume(text);
+
+    expect(parseSchema(resumeExtractionSchema, extracted).ok).toBe(true);
+    expect(extracted.experience.some((entry) => entry.organization === 'Example Corp')).toBe(false);
   });
 });

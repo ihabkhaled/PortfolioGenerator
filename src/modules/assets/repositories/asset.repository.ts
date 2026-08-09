@@ -84,10 +84,41 @@ export async function softDeleteOwnedAsset(
 ): Promise<AssetRecord | null> {
   const updated = await getDatabase().asset.updateMany({
     where: { id: assetId, ownerId, deletedAt: null },
-    data: { deletedAt },
+    data: { deletedAt, deletionRetryAt: deletedAt },
   });
 
   return updated.count === 0 ? null : getOwnedAssetIncludingDeleted(ownerId, assetId);
+}
+
+export async function markAssetObjectDeleted(assetId: string, deletedAt: Date): Promise<void> {
+  await getDatabase().asset.updateMany({
+    where: { id: assetId, deletedAt: { not: null }, objectDeletedAt: null },
+    data: { objectDeletedAt: deletedAt, deletionRetryAt: null },
+  });
+}
+
+export async function scheduleAssetDeletionRetry(
+  assetId: string,
+  attempts: number,
+  retryAt: Date,
+): Promise<void> {
+  await getDatabase().asset.updateMany({
+    where: { id: assetId, deletedAt: { not: null }, objectDeletedAt: null },
+    data: { deletionAttempts: attempts, deletionRetryAt: retryAt },
+  });
+}
+
+export async function listDueAssetDeletionTombstones(
+  now: Date,
+  limit: number,
+): Promise<readonly AssetRecord[]> {
+  const rows = await getDatabase().asset.findMany({
+    where: { deletedAt: { not: null }, objectDeletedAt: null, deletionRetryAt: { lte: now } },
+    orderBy: { deletionRetryAt: 'asc' },
+    take: limit,
+    select: ASSET_SELECT,
+  });
+  return rows.map((row) => toAssetRecord(row));
 }
 
 async function getOwnedAssetIncludingDeleted(
@@ -113,10 +144,14 @@ export async function findPublishedAssetUnscoped(
       deletedAt: null,
       portfolio: { status: 'PUBLISHED', deletedAt: null, publishedDocument: { not: DbNull } },
     },
-    select: { ...ASSET_SELECT, portfolio: { select: { publishedDocument: true } } },
+    select: { ...ASSET_SELECT, portfolio: { select: { publishedDocument: true, slug: true } } },
   });
 
   return row === null
     ? null
-    : { asset: toAssetRecord(row), publishedDocument: row.portfolio.publishedDocument };
+    : {
+        asset: toAssetRecord(row),
+        publishedDocument: row.portfolio.publishedDocument,
+        portfolioSlug: row.portfolio.slug,
+      };
 }

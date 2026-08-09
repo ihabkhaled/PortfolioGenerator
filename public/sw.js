@@ -1,9 +1,16 @@
-const CACHE_NAME = 'portfolio-generate-shell-v1';
-const PRECACHE_URLS = ['/offline', '/manifest.webmanifest', '/icon.svg'];
+const CACHE_NAME = 'portfolio-generate-shell-v2';
+const PRECACHE_URLS = [
+  '/offline',
+  '/manifest.webmanifest',
+  '/icon-192.png',
+  '/icon-512.png',
+  '/icon-maskable-512.png',
+  '/apple-touch-icon.png',
+];
 
 const isStaticAsset = (url) =>
   url.origin === self.location.origin &&
-  (url.pathname.startsWith('/_next/static/') || url.pathname === '/icon.svg');
+  (url.pathname.startsWith('/_next/static/') || PRECACHE_URLS.includes(url.pathname));
 
 const isPublicPlatformPage = (request, url) =>
   request.mode === 'navigate' &&
@@ -54,4 +61,3 @@ self.addEventListener('fetch', (event) => {
       .catch(() => caches.match(event.request).then((cached) => cached ?? caches.match('/offline'))),
   );
 });
-

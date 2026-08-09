@@ -3,16 +3,22 @@
 
 import type {
   BrowserLocationSnapshot,
+  BrowserInstallPromptListener,
   BrowserServiceWorkerUpdate,
   BrowserServiceWorkerUpdateListener,
 } from './browser.types';
 
 const NO_BROWSER_CLEANUP = (): void => undefined;
 
+interface InstallPromptEvent extends Event {
+  prompt(): Promise<void>;
+}
+
 function toServiceWorkerUpdate(worker: ServiceWorker): BrowserServiceWorkerUpdate {
   return {
-    activate: (): void => {
+    activate: (): Promise<void> => {
       worker.postMessage({ type: 'SKIP_WAITING' });
+      return Promise.resolve();
     },
   };
 }
@@ -93,4 +99,34 @@ export function observeBrowserServiceWorker(
   };
 }
 
-export type { BrowserServiceWorkerUpdate } from './browser.types';
+export function observeBrowserInstallPrompt(onChange: BrowserInstallPromptListener): () => void {
+  const handlePrompt = (event: Event): void => {
+    event.preventDefault();
+    const installEvent = event as InstallPromptEvent;
+    onChange({
+      prompt: async (): Promise<void> => {
+        try {
+          await installEvent.prompt();
+        } catch {
+          // The browser owns this UI and may withdraw the prompt between the
+          // event and the user's click. Dismissing our stale action is enough.
+        } finally {
+          onChange(null);
+        }
+      },
+    });
+  };
+  const handleInstalled = (): void => {
+    onChange(null);
+  };
+
+  globalThis.addEventListener('beforeinstallprompt', handlePrompt);
+  globalThis.addEventListener('appinstalled', handleInstalled);
+
+  return (): void => {
+    globalThis.removeEventListener('beforeinstallprompt', handlePrompt);
+    globalThis.removeEventListener('appinstalled', handleInstalled);
+  };
+}
+
+export type { BrowserInstallPrompt, BrowserServiceWorkerUpdate } from './browser.types';

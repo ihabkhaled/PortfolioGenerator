@@ -15,9 +15,14 @@ export function MarketingTopicPage(props: Readonly<MarketingTopicPageProps>): Re
         <p className={topicClasses.lead}>{props.description}</p>
       </header>
       <div className={sectionClasses.page}>
-        {props.sections.map((content) => (
-          <Section key={content} headingId={content} eyebrow={props.eyebrow} title={content}>
-            <p className={topicClasses.sectionBody}>{content}</p>
+        {props.sections.map((section) => (
+          <Section
+            key={section.kind}
+            headingId={`${props.title}-${section.kind}`}
+            eyebrow={props.eyebrow}
+            title={section.title}
+          >
+            <p className={topicClasses.sectionBody}>{section.body}</p>
           </Section>
         ))}
         <Section headingId={`${props.title}-related`} eyebrow={props.eyebrow} title={props.title}>

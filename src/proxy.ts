@@ -1,6 +1,15 @@
 import { NextResponse, type NextRequest } from 'next/server';
 
-import { buildLocaleRewrite, getLocaleDirection, resolveLocalePath } from '@/modules/localization';
+import {
+  buildLocaleRewrite,
+  getLocaleDirection,
+  isPublicPortfolioCandidatePath,
+  resolveLocalePath,
+} from '@/modules/localization';
+import { findVisiblePage } from '@/modules/portfolio-document';
+import { getPublishedPortfolioForLocale } from '@/modules/portfolios/server';
+import { resolveRuntimeLocale, SAVED_LOCALE_COOKIE } from '@/modules/preferences';
+import { PRIVATE_PAGE_RESPONSE_HEADERS } from '@/modules/private-page-access';
 import { isDevelopmentEnvironment } from '@/packages/env';
 
 /**
@@ -44,16 +53,37 @@ export function buildLocaleRewriteUrl(requestUrl: string | URL, pathname: string
   return rewritten;
 }
 
-export default function proxy(request: NextRequest): NextResponse {
+async function applyPrivatePageResponseHeaders(
+  response: NextResponse,
+  pathname: string,
+  locale: string,
+): Promise<void> {
+  if (!isPublicPortfolioCandidatePath(pathname)) return;
+  const segments = resolveLocalePath(pathname).pathname.split('/').filter(Boolean);
+  const [portfolioSlug, pageSlug] = segments;
+  if (!portfolioSlug || !pageSlug || segments.length !== 2) return;
+  const portfolio = await getPublishedPortfolioForLocale(portfolioSlug, locale);
+  const page = portfolio === null ? null : findVisiblePage(portfolio.document, pageSlug);
+  if (page?.page.visibility !== 'private') return;
+  for (const [name, value] of Object.entries(PRIVATE_PAGE_RESPONSE_HEADERS)) {
+    response.headers.set(name, value);
+  }
+}
+
+export default async function proxy(request: NextRequest): Promise<NextResponse> {
   const nonce = Buffer.from(crypto.randomUUID()).toString('base64');
   const contentSecurityPolicy = buildContentSecurityPolicy(nonce);
 
   const requestHeaders = new Headers(request.headers);
   requestHeaders.set('x-nonce', nonce);
   requestHeaders.set('content-security-policy', contentSecurityPolicy);
-  const resolvedLocale = resolveLocalePath(request.nextUrl.pathname);
-  requestHeaders.set('x-app-locale', resolvedLocale.locale);
-  requestHeaders.set('x-app-direction', getLocaleDirection(resolvedLocale.locale));
+  const resolvedPath = resolveLocalePath(request.nextUrl.pathname);
+  const locale = resolveRuntimeLocale(
+    resolvedPath.explicit ? resolvedPath.locale : null,
+    request.cookies.get(SAVED_LOCALE_COOKIE)?.value ?? null,
+  );
+  requestHeaders.set('x-app-locale', locale);
+  requestHeaders.set('x-app-direction', getLocaleDirection(locale));
 
   const localeRewrite = buildLocaleRewrite(request.nextUrl.pathname);
   const response = localeRewrite
@@ -63,7 +93,9 @@ export default function proxy(request: NextRequest): NextResponse {
     : NextResponse.next({ request: { headers: requestHeaders } });
 
   response.headers.set('content-security-policy', contentSecurityPolicy);
-  response.headers.set('content-language', resolvedLocale.locale);
+  response.headers.set('content-language', locale);
+
+  await applyPrivatePageResponseHeaders(response, request.nextUrl.pathname, locale);
 
   return response;
 }

@@ -6,5 +6,7 @@ export const THEME_ATTRIBUTE = 'data-theme';
 
 /** Where the choice is remembered. Read by the inline script before paint. */
 export const THEME_STORAGE_KEY = 'pg-theme';
+export const THEME_SYSTEM_OVERRIDE_KEY = 'pg-theme-system';
+export const SAVED_THEME_COOKIE = 'pg-saved-theme';
 
 export const COLOR_SCHEME_QUERY = '(prefers-color-scheme: dark)';

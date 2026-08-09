@@ -2,6 +2,7 @@ import type { ReactElement } from 'react';
 
 import { Section } from '@/shared/components/data-display/section.component';
 import { sectionClasses } from '@/shared/components/data-display/section.variants';
+import { buildPublicAssetPath } from '@/shared/constants/route-paths.constants';
 
 import { hasContent } from '../helpers/section-content.helper';
 import type { PortfolioTemplateProps } from '../types/renderer.types';
@@ -22,6 +23,7 @@ import { SectionRenderer } from './section-renderer';
  * masthead, not one band among several.
  */
 export function PortfolioTemplate(props: Readonly<PortfolioTemplateProps>): ReactElement {
+  const buildAssetPath = props.buildAssetPath ?? buildPublicAssetPath;
   const renderable = props.sections.filter((section) => hasContent(section, props.document));
   const heroSection = renderable.find((section) => section.type === 'hero');
   const bandSections = renderable.filter((section) => section.type !== 'hero');
@@ -38,7 +40,12 @@ export function PortfolioTemplate(props: Readonly<PortfolioTemplateProps>): Reac
       footerLinks={props.footerLinks}
     >
       {heroSection === undefined ? null : (
-        <SectionRenderer section={heroSection} document={props.document} labels={props.labels} />
+        <SectionRenderer
+          section={heroSection}
+          document={props.document}
+          labels={props.labels}
+          buildAssetPath={buildAssetPath}
+        />
       )}
 
       <div className={sectionClasses.page}>
@@ -53,7 +60,12 @@ export function PortfolioTemplate(props: Readonly<PortfolioTemplateProps>): Reac
                 : props.labels.sections[section.type]
             }
           >
-            <SectionRenderer section={section} document={props.document} labels={props.labels} />
+            <SectionRenderer
+              section={section}
+              document={props.document}
+              labels={props.labels}
+              buildAssetPath={buildAssetPath}
+            />
           </Section>
         ))}
       </div>

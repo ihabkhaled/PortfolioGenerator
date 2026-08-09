@@ -52,12 +52,14 @@ export interface PortfolioTemplateProps {
   readonly actions: ReactNode;
   /** Social profiles and the CV download, rendered in the footer. */
   readonly footerLinks: ReactNode;
+  readonly buildAssetPath?: (assetId: string) => string;
 }
 
 export interface SectionRendererProps {
   readonly section: PortfolioSection;
   readonly document: PortfolioDocument;
   readonly labels: PortfolioLabels;
+  readonly buildAssetPath?: (assetId: string) => string;
 }
 
 export interface TimelineEntry {

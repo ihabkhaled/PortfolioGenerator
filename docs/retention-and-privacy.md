@@ -55,9 +55,10 @@ rather than swallowed, so a sweep can finish the work.
 
 ## Scheduled retention
 
-Configured by `RESUME_RETENTION_DAYS` (default 90). There is no scheduler in the
-product — deliberately, because a silent automatic deleter of user data is a
-thing you want to be able to see and stop. Run it as a platform cron:
+Configured by `RESUME_RETENTION_DAYS` (default 90). There is no scheduler for
+retention-row removal — deliberately, because a silent automatic deleter of
+user data is a thing you want to be able to see and stop. Run it as a platform
+cron:
 
 ```sql
 -- Objects to remove, then rows. Take the keys first: deleting the rows first
@@ -75,6 +76,10 @@ WHERE deleted_at IS NOT NULL AND deleted_at < now() - interval '180 days';
 -- Expired rate-limit counters.
 DELETE FROM rate_limit_counters WHERE expires_at < now();
 ```
+
+This is separate from the authenticated 15-minute asset deletion retry. That
+bounded job only finishes object deletions already requested by a user; it does
+not decide that retained data has expired.
 
 ## Subject requests
 

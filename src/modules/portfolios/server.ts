@@ -25,4 +25,8 @@ export {
   unpublishOwnedPortfolio,
   updateOwnedSlug,
 } from './repositories/portfolio.repository';
-export { getPublishedPortfolio, portfolioCacheTag } from './services/public-portfolio.service';
+export {
+  getPublishedPortfolio,
+  getPublishedPortfolioForLocale,
+  portfolioCacheTag,
+} from './services/public-portfolio.service';

@@ -1,3 +1,4 @@
+import { APP_LOCALES } from '@/modules/localization';
 import { parseSchema, z } from '@/packages/zod';
 
 import type { PrivatePageUnlockSubmission } from '../types/private-page-access.types';
@@ -13,6 +14,7 @@ const privatePageUnlockSchema = z.object({
   portfolioSlug: routeSegment,
   pageSlug: routeSegment,
   password: z.string().min(1).max(200),
+  locale: z.enum(APP_LOCALES),
 });
 
 export function parsePrivatePageUnlockSubmission(input: unknown):

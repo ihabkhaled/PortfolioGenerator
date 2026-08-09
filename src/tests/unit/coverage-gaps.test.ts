@@ -38,6 +38,9 @@ function extraction(overrides: Partial<ResumeExtractionResult> = {}): ResumeExtr
     certifications: [],
     languages: [],
     awards: [],
+    publications: [],
+    volunteering: [],
+    interests: [],
     warnings: [],
     ...overrides,
   };

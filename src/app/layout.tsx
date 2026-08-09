@@ -11,6 +11,7 @@ import {
 } from '@/modules/localization';
 import { PwaRegistrationContainer } from '@/modules/pwa/pwa-ui';
 import { AdSenseScript } from '@/modules/seo';
+import { appOrigin } from '@/packages/env';
 import { I18nLocaleProvider, I18N_NAMESPACES } from '@/packages/i18n';
 import { getServerTranslations } from '@/packages/i18n/server';
 import { buildThemeScript } from '@/packages/theme';
@@ -33,19 +34,43 @@ import './styles.css';
  */
 
 export const metadata: Metadata = {
+  metadataBase: new URL(appOrigin),
   manifest: '/manifest.webmanifest',
   appleWebApp: { capable: true, statusBarStyle: 'default', title: 'PortfolioGenerate' },
-  icons: { icon: [{ url: '/icon.svg', type: 'image/svg+xml' }], apple: '/icon.svg' },
+  icons: {
+    icon: [
+      { url: '/icon-192.png', type: 'image/png', sizes: '192x192' },
+      { url: '/icon-512.png', type: 'image/png', sizes: '512x512' },
+    ],
+    apple: [{ url: '/apple-touch-icon.png', type: 'image/png', sizes: '180x180' }],
+  },
   title: {
     default: 'PortfolioGenerate',
     template: '%s · PortfolioGenerate',
   },
   description: 'Turn a CV into a portfolio you control.',
+  alternates: {
+    types: { 'application/rss+xml': '/feed.xml' },
+  },
+  openGraph: {
+    type: 'website',
+    siteName: 'PortfolioGenerate',
+    title: 'PortfolioGenerate',
+    description: 'Turn a CV into a portfolio you control.',
+    images: [{ url: '/platform-share-card.svg', width: 1200, height: 630 }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'PortfolioGenerate',
+    description: 'Turn a CV into a portfolio you control.',
+    images: ['/platform-share-card.svg'],
+  },
   robots: { index: true, follow: true },
   other: { 'google-adsense-account': ADSENSE_CLIENT_ID },
 };
 
 export const viewport: Viewport = {
+  viewportFit: 'cover',
   themeColor: [
     { media: '(prefers-color-scheme: light)', color: '#f7f8fa' },
     { media: '(prefers-color-scheme: dark)', color: '#0d1117' },
@@ -59,8 +84,8 @@ export default async function RootLayout(props: {
   const nonce = requestHeaders.get('x-nonce') ?? undefined;
   const requestedLocale = requestHeaders.get('x-app-locale') ?? DEFAULT_LOCALE;
   const locale = isAppLocale(requestedLocale) ? requestedLocale : DEFAULT_LOCALE;
+  const tApp = await getServerTranslations(I18N_NAMESPACES.app, locale);
   const tLocalization = await getServerTranslations(I18N_NAMESPACES.localization, locale);
-  const tErrors = await getServerTranslations(I18N_NAMESPACES.errors, locale);
 
   return (
     <html
@@ -88,9 +113,12 @@ export default async function RootLayout(props: {
           />
           <AppToaster />
           <PwaRegistrationContainer
-            updateTitle={tErrors('title')}
-            updateDescription={tErrors('lead')}
-            updateAction={tErrors('retry')}
+            installTitle={tApp('pwa.installTitle')}
+            installDescription={tApp('pwa.installDescription')}
+            installAction={tApp('pwa.installAction')}
+            updateTitle={tApp('pwaUpdate.title')}
+            updateDescription={tApp('pwaUpdate.description')}
+            updateAction={tApp('pwaUpdate.action')}
           />
         </I18nLocaleProvider>
       </body>

@@ -1,11 +1,17 @@
 import { describe, expect, it } from 'vitest';
 
-import { portfolioDocumentSchema } from '@/modules/portfolio-document';
+import {
+  createEmptyPortfolioDocument,
+  portfolioDocumentSchema,
+} from '@/modules/portfolio-document';
 import { parseSchema } from '@/packages/zod';
+import { buildFullPortfolioDocument } from '@/tests/fixtures/portfolio-document.fixtures';
 
 import { WARNING_CODES } from '../constants/extraction.constants';
 import {
   buildImportedPages,
+  createImportedSection,
+  hasSectionContent,
   mapExtractionToDocument,
   normalizeMonth,
 } from '../mappers/extraction-to-document.mapper';
@@ -30,6 +36,9 @@ function extraction(overrides: Partial<ResumeExtractionResult> = {}): ResumeExtr
     certifications: [],
     languages: [],
     awards: [],
+    publications: [],
+    volunteering: [],
+    interests: [],
     warnings: [],
     ...overrides,
   };
@@ -49,6 +58,105 @@ describe('normalizeMonth', () => {
 
   it('passes an absent date through', () => {
     expect(normalizeMonth(null)).toBeNull();
+  });
+});
+
+describe('imported section composition', () => {
+  it.each([
+    'about',
+    'experience',
+    'projects',
+    'skills',
+    'soft-skills',
+    'education',
+    'courses',
+    'certifications',
+    'languages',
+    'publications',
+    'volunteering',
+    'awards',
+    'interests',
+    'testimonials',
+    'gallery',
+    'attachments',
+    'social',
+  ] as const)('detects populated and empty %s content', (type) => {
+    const full = buildFullPortfolioDocument();
+    const populated =
+      type === 'awards'
+        ? {
+            ...full,
+            awards: [
+              {
+                id: 'award-1',
+                name: 'Reliability Award',
+                issuer: null,
+                date: null,
+                description: null,
+              },
+            ],
+          }
+        : full;
+    expect(hasSectionContent(populated, type)).toBe(true);
+    expect(hasSectionContent(createEmptyPortfolioDocument('Amina'), type)).toBe(false);
+  });
+
+  it('covers contact visibility alternatives without treating hidden data as content', () => {
+    const empty = createEmptyPortfolioDocument('Amina');
+    expect(hasSectionContent(empty, 'contact')).toBe(false);
+    expect(
+      hasSectionContent(
+        {
+          ...empty,
+          contact: { ...empty.contact, email: { value: 'a@example.com', visible: true } },
+        },
+        'contact',
+      ),
+    ).toBe(true);
+    expect(
+      hasSectionContent(
+        {
+          ...empty,
+          contact: {
+            email: { value: null, visible: false },
+            phone: { countryIso: null, nationalNumber: '123', visible: true },
+          },
+        },
+        'contact',
+      ),
+    ).toBe(true);
+    expect(
+      hasSectionContent(
+        {
+          ...empty,
+          links: [
+            {
+              id: 'link-1',
+              kind: 'website',
+              label: 'Website',
+              url: 'https://example.com',
+              visible: true,
+            },
+          ],
+        },
+        'contact',
+      ),
+    ).toBe(true);
+  });
+
+  it('defines the always-present hero and never-inferred custom section decisions', () => {
+    const empty = createEmptyPortfolioDocument('Amina');
+    expect(hasSectionContent(empty, 'hero')).toBe(true);
+    expect(hasSectionContent(empty, 'custom')).toBe(false);
+    expect(createImportedSection('hero', 'home', 0)).toMatchObject({
+      type: 'hero',
+      config: { showPortrait: true, showAvailability: false },
+    });
+    expect(createImportedSection('custom', 'custom', 1)).toMatchObject({
+      type: 'custom',
+      order: 10,
+      config: { title: null, blocks: [] },
+    });
   });
 });
 
@@ -177,14 +285,15 @@ describe('mapExtractionToDocument', () => {
       });
     });
 
-    it('falls back to the raw kind for an unfamiliar link type', () => {
+    it.each(['mastodon', 'bluesky'] as const)('maps %s as a bounded social platform', (kind) => {
       const result = mapExtractionToDocument(
-        extraction({ links: [{ kind: 'mastodon', url: 'https://example.com/a' }] }),
+        extraction({ links: [{ kind, url: 'https://example.com/a' }] }),
         'Fallback',
         'upload-1',
       );
 
-      expect(result.document.links[0]?.label).toBe('mastodon');
+      expect(result.document.socialLinks[0]?.kind).toBe(kind);
+      expect(result.document.links).toEqual([]);
     });
   });
 
@@ -324,6 +433,111 @@ describe('mapExtractionToDocument', () => {
     });
   });
 
+  it('maps only explicit publications, volunteering, and interests and marks them for review', () => {
+    const result = mapExtractionToDocument(
+      extraction({
+        publications: [
+          {
+            title: 'Reliable Ledgers',
+            publisher: 'Systems Journal',
+            date: '2024-03',
+            url: 'https://example.com/paper',
+            summary: null,
+          },
+        ],
+        volunteering: [
+          {
+            organization: 'Code Club',
+            role: 'Mentor',
+            startDate: null,
+            endDate: null,
+            summary: 'Mentored students.',
+          },
+        ],
+        interests: ['Distributed systems', ' Typography ', ''],
+      }),
+      'Fallback',
+      'upload-1',
+    );
+
+    expect(result.document.publications[0]).toMatchObject({ title: 'Reliable Ledgers' });
+    expect(result.document.volunteering[0]).toMatchObject({ organization: 'Code Club' });
+    expect(result.document.interests).toEqual(['Distributed systems', 'Typography']);
+    expect(result.warnings.map((warning) => warning.path)).toEqual(
+      expect.arrayContaining(['publications.0', 'volunteering.0', 'interests.0']),
+    );
+  });
+
+  it('drops supplemental entries without required evidence and rejects unsafe publication URLs', () => {
+    const result = mapExtractionToDocument(
+      extraction({
+        publications: [
+          { title: null, publisher: null, date: null, url: null, summary: null },
+          {
+            title: 'Unsafe link',
+            publisher: null,
+            date: null,
+            url: 'http://example.com',
+            summary: null,
+          },
+        ],
+        volunteering: [
+          { organization: null, role: 'Mentor', startDate: null, endDate: null, summary: null },
+        ],
+        interests: [' ', 'Typography', 'Typography'],
+      }),
+      'Fallback',
+      'upload-1',
+    );
+
+    expect(result.document.publications).toEqual([
+      expect.objectContaining({ title: 'Unsafe link', url: null }),
+    ]);
+    expect(result.document.volunteering).toEqual([]);
+    expect(result.document.interests).toEqual(['Typography']);
+  });
+
+  it('composes every populated canonical collection into at most twelve pages', () => {
+    const result = mapExtractionToDocument(
+      extraction({
+        softSkills: [{ label: 'Mentoring', detail: 'Mentored two engineers.' }],
+        courses: [{ name: 'Security', provider: null, date: null, url: null, summary: null }],
+        languages: [{ name: 'Arabic', proficiency: 'Native' }],
+        awards: [{ name: 'Award', issuer: null, date: null, description: null }],
+        publications: [{ title: 'Paper', publisher: null, date: null, url: null, summary: null }],
+        volunteering: [
+          {
+            organization: 'Code Club',
+            role: null,
+            startDate: null,
+            endDate: null,
+            summary: null,
+          },
+        ],
+        interests: ['Typography'],
+      }),
+      'Fallback',
+      'upload-1',
+    );
+    const types = result.document.pages.flatMap((page) =>
+      page.sections.map((section) => section.type),
+    );
+
+    expect(types).toEqual(
+      expect.arrayContaining([
+        'soft-skills',
+        'courses',
+        'languages',
+        'awards',
+        'publications',
+        'volunteering',
+        'interests',
+      ]),
+    );
+    expect(result.document.pages.length).toBeLessThanOrEqual(12);
+    expect(parseSchema(portfolioDocumentSchema, result.document).ok).toBe(true);
+  });
+
   it('drops blank optional collections and normalizes a safe course URL', () => {
     const result = mapExtractionToDocument(
       extraction({
@@ -443,5 +657,30 @@ describe('mapExtractionToDocument', () => {
     );
 
     expect(result.document.contact.phone.visible).toBe(false);
+  });
+
+  it('separates a uniquely evidenced international prefix without publishing it', () => {
+    const result = mapExtractionToDocument(
+      extraction({ contact: { email: null, phone: '+351 912 345 678' } }),
+      'Fallback',
+      'upload-1',
+    );
+
+    expect(result.document.contact.phone).toEqual({
+      countryIso: 'PT',
+      nationalNumber: '912345678',
+      visible: false,
+    });
+  });
+
+  it('preserves an ambiguous shared calling plan without guessing a country', () => {
+    const result = mapExtractionToDocument(
+      extraction({ contact: { email: null, phone: '+1 202 555 0100' } }),
+      'Fallback',
+      'upload-1',
+    );
+
+    expect(result.document.contact.phone.countryIso).toBeNull();
+    expect(result.document.contact.phone.nationalNumber).toBe('+1 202 555 0100');
   });
 });

@@ -26,6 +26,7 @@ const scope = {
   portfolioSlug: 'amina-rahman',
   pageId: 'page-projects',
   pageSlug: 'projects',
+  locale: 'en' as const,
 };
 const now = new Date('2026-08-09T12:00:00.000Z');
 
@@ -72,6 +73,7 @@ describe('private page unlock', () => {
         portfolioSlug: '../admin',
         pageSlug: 'projects',
         password: 'secret',
+        locale: 'en',
       }),
     ).toEqual({ ok: false });
     expect(
@@ -79,6 +81,7 @@ describe('private page unlock', () => {
         portfolioSlug: 'amina-rahman',
         pageSlug: 'projects',
         password: 'secret',
+        locale: 'en',
       }),
     ).toEqual({
       ok: true,
@@ -86,6 +89,7 @@ describe('private page unlock', () => {
         portfolioSlug: 'amina-rahman',
         pageSlug: 'projects',
         password: 'secret',
+        locale: 'en',
       },
     });
   });
@@ -174,6 +178,24 @@ describe('private page response policy', () => {
     expect(cookie).not.toContain('Secure');
     expect(cookie).toContain('Max-Age=3600');
   });
+
+  it('scopes localized grants and cookies to the localized page address', () => {
+    const localizedScope = { ...scope, locale: 'ar' as const };
+    const grant = createPrivatePageGrant({ scope: localizedScope, secret, now });
+
+    expect(verifyPrivatePageGrant({ grant, scope: localizedScope, secret, now })).toBe(true);
+    expect(
+      verifyPrivatePageGrant({
+        grant,
+        scope: { ...localizedScope, locale: 'en' },
+        secret,
+        now,
+      }),
+    ).toBe(false);
+    expect(buildPrivatePageCookie({ grant, scope: localizedScope, secure: true })).toContain(
+      'Path=/ar/amina-rahman/projects',
+    );
+  });
 });
 
 describe('private page challenge', () => {
@@ -182,6 +204,7 @@ describe('private page challenge', () => {
       <PrivatePageChallenge
         portfolioSlug="amina-rahman"
         pageSlug="projects"
+        locale="en"
         denied
         labels={{
           title: 'Private page',
@@ -206,6 +229,7 @@ describe('private page challenge', () => {
       <PrivatePageChallenge
         portfolioSlug="amina-rahman"
         pageSlug="projects"
+        locale="en"
         denied={false}
         labels={{
           title: 'Private page',

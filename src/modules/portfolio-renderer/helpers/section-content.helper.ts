@@ -183,6 +183,10 @@ export function hasContent(section: PortfolioSection, document: PortfolioDocumen
       );
     }
 
+    case 'soft-skills': {
+      return document.softSkills.length > 0;
+    }
+
     case 'education': {
       return document.education.length > 0;
     }
@@ -191,8 +195,44 @@ export function hasContent(section: PortfolioSection, document: PortfolioDocumen
       return document.certifications.length > 0 || document.courses.length > 0;
     }
 
+    case 'courses': {
+      return document.courses.length > 0;
+    }
+
     case 'languages': {
       return document.languages.length > 0;
+    }
+
+    case 'publications': {
+      return document.publications.length > 0;
+    }
+
+    case 'volunteering': {
+      return document.volunteering.length > 0;
+    }
+
+    case 'awards': {
+      return document.awards.length > 0;
+    }
+
+    case 'interests': {
+      return document.interests.length > 0;
+    }
+
+    case 'testimonials': {
+      return document.testimonials.length > 0;
+    }
+
+    case 'gallery': {
+      return document.gallery.length > 0;
+    }
+
+    case 'attachments': {
+      return document.attachments.some((entry) => entry.visible);
+    }
+
+    case 'social': {
+      return document.socialLinks.some((entry) => entry.visible);
     }
 
     case 'contact': {

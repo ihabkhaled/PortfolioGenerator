@@ -1,3 +1,5 @@
+import 'dotenv/config';
+
 import process from 'node:process';
 
 import { defineConfig, devices } from '@playwright/test';
@@ -35,13 +37,17 @@ export default defineConfig({
   },
   projects: [{ name: 'chromium', use: { ...devices['Desktop Chrome'] } }],
   webServer: {
-    command: `npm run build && npm run start -- --port ${PORT}`,
+    command: `npm run db:migrate:deploy && npm run build && npm run start -- --port ${PORT}`,
     url: BASE_URL,
     reuseExistingServer: !isContinuousIntegration,
     timeout: 300_000,
     env: {
       AI_PROVIDER: 'deterministic',
+      BETTER_AUTH_URL: BASE_URL,
       NEXT_PUBLIC_APP_URL: BASE_URL,
+      NODE_ENV: 'test',
+      AUTH_REQUIRE_EMAIL_VERIFICATION: 'false',
+      EMAIL_CAPTURE_PATH: 'test-results/email-capture.jsonl',
     },
   },
 });

@@ -2,7 +2,13 @@
 // client-boundary-reason: localStorage, matchMedia and the document element are
 // browser APIs, and this package is the only place allowed to touch them.
 
-import { COLOR_SCHEME_QUERY, THEME_ATTRIBUTE, THEME_STORAGE_KEY } from './theme.constants';
+import {
+  COLOR_SCHEME_QUERY,
+  SAVED_THEME_COOKIE,
+  THEME_ATTRIBUTE,
+  THEME_STORAGE_KEY,
+  THEME_SYSTEM_OVERRIDE_KEY,
+} from './theme.constants';
 import type { ResolvedTheme, ThemePreference } from './theme.types';
 
 /**
@@ -18,7 +24,13 @@ export function readPreference(): ThemePreference {
   try {
     const stored = globalThis.localStorage.getItem(THEME_STORAGE_KEY);
 
-    return stored === 'light' || stored === 'dark' ? stored : 'system';
+    if (stored === 'light' || stored === 'dark') return stored;
+    if (globalThis.localStorage.getItem(THEME_SYSTEM_OVERRIDE_KEY) === '1') return 'system';
+    const saved = globalThis.document.cookie
+      .split('; ')
+      .find((entry) => entry.startsWith(`${SAVED_THEME_COOKIE}=`))
+      ?.split('=', 2)[1];
+    return saved === 'light' || saved === 'dark' ? saved : 'system';
   } catch {
     return 'system';
   }
@@ -43,10 +55,10 @@ export function persistPreference(preference: ThemePreference): void {
   try {
     if (preference === 'system') {
       globalThis.localStorage.removeItem(THEME_STORAGE_KEY);
-
+      globalThis.localStorage.setItem(THEME_SYSTEM_OVERRIDE_KEY, '1');
       return;
     }
-
+    globalThis.localStorage.removeItem(THEME_SYSTEM_OVERRIDE_KEY);
     globalThis.localStorage.setItem(THEME_STORAGE_KEY, preference);
   } catch {
     // A reader with storage disabled keeps the choice for this page only.

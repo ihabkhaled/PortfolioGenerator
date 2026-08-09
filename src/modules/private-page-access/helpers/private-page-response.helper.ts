@@ -1,3 +1,4 @@
+import { DEFAULT_LOCALE, localizePath } from '@/modules/localization';
 import { sha256Hex } from '@/packages/cryptography';
 
 import {
@@ -8,7 +9,11 @@ import type { PrivatePageCookieInput } from '../types/private-page-access.types'
 
 export function buildPrivatePageCookie(input: PrivatePageCookieInput): string {
   const cookieName = buildPrivatePageCookieName(input.scope.portfolioSlug, input.scope.pageId);
-  const path = `/${encodeURIComponent(input.scope.portfolioSlug)}/${encodeURIComponent(input.scope.pageSlug)}`;
+  const canonicalPath = `/${encodeURIComponent(input.scope.portfolioSlug)}/${encodeURIComponent(input.scope.pageSlug)}`;
+  const path =
+    input.scope.locale === DEFAULT_LOCALE
+      ? canonicalPath
+      : localizePath(canonicalPath, input.scope.locale);
   const attributes = [
     `${cookieName}=${encodeURIComponent(input.grant)}`,
     `Path=${path}`,

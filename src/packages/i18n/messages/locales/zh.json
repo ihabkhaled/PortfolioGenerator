@@ -1,5 +1,15 @@
 {
   "app": {
+    "pwaUpdate": {
+      "title": "有可用更新",
+      "description": "新版 PortfolioGenerate 已准备就绪。",
+      "action": "更新"
+    },
+    "pwa": {
+      "installTitle": "\u5b89\u88c5 PortfolioGenerate",
+      "installDescription": "\u8ba9\u60a8\u7684\u4f5c\u54c1\u96c6\u5de5\u4f5c\u533a\u5728\u6b64\u8bbe\u5907\u4e0a\u968f\u65f6\u53ef\u7528\u3002",
+      "installAction": "\u5b89\u88c5"
+    },
     "skipToContent": "跳至内容",
     "theme": {
       "dark": "黑暗的",
@@ -603,6 +613,8 @@
         "medium": "中等的",
         "x": "X",
         "stackoverflow": "堆栈溢出",
+        "mastodon": "Mastodon",
+        "bluesky": "Bluesky",
         "telegram": "电报",
         "website": "网站",
         "whatsapp": "WhatsApp"

@@ -1,3 +1,4 @@
+import { isAppLocale } from '@/modules/localization';
 import { constantTimeEqual, hmacSha256Base64Url } from '@/packages/cryptography';
 
 import { PRIVATE_PAGE_GRANT_MAX_AGE_SECONDS } from '../constants/private-page-access.constants';
@@ -41,7 +42,8 @@ export function verifyPrivatePageGrant(input: PrivatePageGrantVerificationInput)
     payload.expiresAt >= nowSeconds &&
     payload.portfolioSlug === input.scope.portfolioSlug &&
     payload.pageId === input.scope.pageId &&
-    payload.pageSlug === input.scope.pageSlug
+    payload.pageSlug === input.scope.pageSlug &&
+    payload.locale === input.scope.locale
   );
 }
 
@@ -61,11 +63,14 @@ export function readPrivatePageGrantPayload(
       !('portfolioSlug' in value) ||
       !('pageId' in value) ||
       !('pageSlug' in value) ||
+      !('locale' in value) ||
       !('expiresAt' in value) ||
       typeof value.portfolioSlug !== 'string' ||
       typeof value.pageId !== 'string' ||
       typeof value.pageSlug !== 'string' ||
-      typeof value.expiresAt !== 'number'
+      typeof value.expiresAt !== 'number' ||
+      typeof value.locale !== 'string' ||
+      !isAppLocale(value.locale)
     ) {
       return null;
     }

@@ -22,6 +22,9 @@ export const EXTRACTION_LIMITS = {
   certifications: 50,
   languages: 30,
   awards: 50,
+  publications: 40,
+  volunteering: 30,
+  interests: 30,
   warnings: 100,
 } as const;
 
@@ -49,4 +52,5 @@ export const WARNING_CODES = {
   droppedInvalidUrl: 'DROPPED_INVALID_URL',
   droppedIncompleteEntry: 'DROPPED_INCOMPLETE_ENTRY',
   missingHeadline: 'MISSING_HEADLINE',
+  reviewExtractedFact: 'REVIEW_EXTRACTED_FACT',
 } as const;

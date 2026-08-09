@@ -1,5 +1,15 @@
 {
   "app": {
+    "pwaUpdate": {
+      "title": "Update available",
+      "description": "A new version of PortfolioGenerate is ready.",
+      "action": "Refresh"
+    },
+    "pwa": {
+      "installTitle": "Install PortfolioGenerate",
+      "installDescription": "Keep your portfolio workspace ready on this device.",
+      "installAction": "Install"
+    },
     "name": "PortfolioGenerate",
     "tagline": "Turn a CV into a portfolio you control",
     "skipToContent": "Skip to content",
@@ -603,6 +613,8 @@
         "threads": "Threads",
         "medium": "Medium",
         "stackoverflow": "Stack Overflow",
+        "mastodon": "Mastodon",
+        "bluesky": "Bluesky",
         "telegram": "Telegram",
         "whatsapp": "WhatsApp",
         "website": "Website"

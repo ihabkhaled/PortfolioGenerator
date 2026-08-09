@@ -1,5 +1,15 @@
 {
   "app": {
+    "pwaUpdate": {
+      "title": "更新があります",
+      "description": "新しい PortfolioGenerate を利用できます。",
+      "action": "更新"
+    },
+    "pwa": {
+      "installTitle": "PortfolioGenerate \u3092\u30a4\u30f3\u30b9\u30c8\u30fc\u30eb",
+      "installDescription": "\u3053\u306e\u30c7\u30d0\u30a4\u30b9\u3067\u30dd\u30fc\u30c8\u30d5\u30a9\u30ea\u30aa\u4f5c\u696d\u30b9\u30da\u30fc\u30b9\u3092\u3059\u3050\u306b\u4f7f\u3048\u308b\u3088\u3046\u306b\u3057\u307e\u3059\u3002",
+      "installAction": "\u30a4\u30f3\u30b9\u30c8\u30fc\u30eb"
+    },
     "theme": {
       "dark": "暗い",
       "light": "ライト",
@@ -602,7 +612,9 @@
         "instagram": "インスタグラム",
         "whatsapp": "ワッツアップ",
         "website": "Webサイト",
-        "stackoverflow": "スタックオーバーフロー"
+        "stackoverflow": "スタックオーバーフロー",
+        "mastodon": "Mastodon",
+        "bluesky": "Bluesky"
       }
     },
     "seoHint": "ポートフォリオが検索結果とリンク プレビューにどのように表示されるか。自分の名前と見出しを使用するには空白のままにしてください。",

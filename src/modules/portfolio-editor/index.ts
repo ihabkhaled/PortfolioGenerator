@@ -29,6 +29,7 @@ export {
   setIdentityField,
   setIndexable,
   setSectionVisibility,
+  setAssetSectionPlacement,
   setSeoField,
 } from './helpers/document-edit.helper';
 export { claimSlugSchema, portfolioIdSchema, saveDraftSchema } from './schemas/editor.schema';

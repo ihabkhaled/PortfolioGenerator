@@ -38,6 +38,7 @@ export function PrivatePageChallenge(props: PrivatePageChallengeProps): ReactEle
               value={props.portfolioSlug}
             />
             <input type="hidden" name={PRIVATE_PAGE_FIELD_NAMES.pageSlug} value={props.pageSlug} />
+            <input type="hidden" name={PRIVATE_PAGE_FIELD_NAMES.locale} value={props.locale} />
             {props.denied ? (
               <p className={privatePageChallengeClasses.error} role="alert">
                 {props.labels.denied}

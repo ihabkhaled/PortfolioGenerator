@@ -17,6 +17,9 @@ export const SECTION_HEADINGS = {
   certifications: ['certifications', 'certificates', 'licenses'],
   languages: ['languages'],
   awards: ['awards', 'honours', 'honors'],
+  publications: ['publications', 'writing'],
+  volunteering: ['volunteering', 'volunteer experience', 'community service'],
+  interests: ['interests', 'hobbies'],
 } as const;
 
 /** `Company — Title` / `Title at Company`, the two shapes worth handling. */

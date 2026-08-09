@@ -11,7 +11,11 @@ import type { HealthCheck, HealthState } from '../types/health.types';
  * offline to protect a feature nobody was using at that moment.
  */
 export function combineHealth(checks: readonly HealthCheck[]): HealthState {
-  if (checks.some((check) => check.name === 'database' && check.state !== 'ok')) {
+  if (
+    checks.some(
+      (check) => (check.name === 'database' || check.name === 'email') && check.state !== 'ok',
+    )
+  ) {
     return 'down';
   }
 

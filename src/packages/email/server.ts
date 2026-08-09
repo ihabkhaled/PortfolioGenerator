@@ -2,10 +2,12 @@ import 'server-only';
 
 import { getServerEnv } from '@/packages/env/server';
 
+import { createEmailCaptureSender } from './email-capture';
 import type { EmailSender } from './email.types';
 import { createSmtpEmailSender } from './smtp-client';
 
 const disabledSender: EmailSender = {
+  checkReadiness: () => Promise.resolve(),
   sendContact: () => Promise.resolve(),
   sendPasswordReset: () => Promise.resolve(),
   sendEmailVerification: () => Promise.resolve(),
@@ -13,6 +15,9 @@ const disabledSender: EmailSender = {
 
 export function createConfiguredEmailSender(): EmailSender {
   const env = getServerEnv();
+  if (env.EMAIL_CAPTURE_PATH !== undefined) {
+    return createEmailCaptureSender();
+  }
   if (!env.CONTACT_EMAIL_ENABLED) return disabledSender;
 
   const {
@@ -43,6 +48,10 @@ export function createConfiguredEmailSender(): EmailSender {
     resetBaseUrl: env.BETTER_AUTH_URL,
     allowInsecureResetUrl: env.NODE_ENV !== 'production',
   });
+}
+
+export async function checkConfiguredEmailTransport(timeoutMs: number): Promise<void> {
+  await createConfiguredEmailSender().checkReadiness(timeoutMs);
 }
 
 export type {

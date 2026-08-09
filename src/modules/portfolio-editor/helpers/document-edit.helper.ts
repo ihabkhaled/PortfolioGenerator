@@ -357,6 +357,37 @@ export function removePage(document: PortfolioDocument, pageId: string): Portfol
   return { ...document, pages: document.pages.filter((candidate) => candidate.id !== pageId) };
 }
 
+export function setAssetSectionPlacement(
+  document: PortfolioDocument,
+  pageId: string,
+  type: 'gallery' | 'attachments',
+  placed: boolean,
+): PortfolioDocument {
+  return {
+    ...document,
+    pages: document.pages.map((page) => {
+      if (page.id !== pageId) return page;
+      const withoutSection = page.sections.filter((section) => section.type !== type);
+      if (!placed) return { ...page, sections: withoutSection };
+      if (withoutSection.length !== page.sections.length) return page;
+      const order = Math.max(-10, ...page.sections.map((section) => section.order)) + 10;
+      return {
+        ...page,
+        sections: [
+          ...page.sections,
+          {
+            id: `section-${type}-${page.id}`,
+            type,
+            visible: true,
+            order,
+            config: { title: null },
+          },
+        ],
+      };
+    }),
+  };
+}
+
 /**
  * Immutable edits to a document.
  *

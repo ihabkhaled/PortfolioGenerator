@@ -41,6 +41,17 @@ Then, with the long-content fixture:
       layout.
 - [ ] A summary with several paragraphs keeps its paragraph breaks.
 
+Repeat the responsive pass at 320, 360, 375, 390 and 768 CSS pixels, plus a phone in landscape.
+On each profile, verify the main landmark remains singular, controls remain reachable, and the
+locale/install/update surfaces stay inside the safe area without covering each other. Repeat one
+dense guide and one published portfolio in Arabic and Persian, in both light and dark themes.
+
+With reduced motion enabled at operating-system level, navigate, change locale and change theme.
+Transitions should resolve immediately and no looping animation should remain. Install the app,
+launch it standalone, update it after a new worker is deployed, and take the network offline. Public
+shell pages may fall back to the offline screen; dashboard, API, media, authentication and private
+page responses must be unavailable and absent from Cache Storage.
+
 ## 3. The editor
 
 - [ ] Type in every field. The preview updates and matches.

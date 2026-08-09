@@ -19,6 +19,7 @@ export const ROUTE_PATHS = {
   dashboardSettings: '/dashboard/settings',
   api: '/api',
   apiContact: '/api/contact',
+  apiAssetDeletionRetry: '/api/operations/asset-deletions',
   media: '/media',
   robots: '/robots.txt',
   sitemap: '/sitemap.xml',
@@ -95,4 +96,12 @@ export function buildPortfolioOgImagePath(slug: string): string {
 
 export function buildPublicAssetPath(assetId: string): string {
   return `${ROUTE_PATHS.media}/${assetId}`;
+}
+
+export function buildPrivatePageAssetPath(
+  portfolioSlug: string,
+  pageSlug: string,
+  assetId: string,
+): string {
+  return `/${portfolioSlug}/${pageSlug}/media/${assetId}`;
 }

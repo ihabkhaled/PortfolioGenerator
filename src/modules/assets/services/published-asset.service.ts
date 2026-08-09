@@ -3,7 +3,10 @@ import 'server-only';
 import { tryMigratePortfolioDocument } from '@/modules/portfolio-document';
 import { getObjectStorage } from '@/modules/storage/server';
 
-import { isPublishedAssetReferenced } from '../policies/published-asset.policy';
+import {
+  isAssetReferencedOnPage,
+  isPublishedAssetReferenced,
+} from '../policies/published-asset.policy';
 import { findPublishedAssetUnscoped } from '../repositories/asset.repository';
 import type { PublishedAssetBytes } from '../types/asset.types';
 
@@ -24,5 +27,18 @@ export async function getPublishedAssetBytesUnscoped(
 
   const bytes = await getObjectStorage().getPrivate(found.asset.storageKey);
 
+  return bytes === null ? null : { asset: found.asset, bytes };
+}
+
+export async function getPrivatePageAssetBytesUnscoped(
+  assetId: string,
+  portfolioSlug: string,
+  pageSlug: string,
+): Promise<PublishedAssetBytes | null> {
+  const found = await findPublishedAssetUnscoped(assetId);
+  if (found?.portfolioSlug !== portfolioSlug) return null;
+  const document = tryMigratePortfolioDocument(found.publishedDocument);
+  if (document === null || !isAssetReferencedOnPage(document, pageSlug, assetId)) return null;
+  const bytes = await getObjectStorage().getPrivate(found.asset.storageKey);
   return bytes === null ? null : { asset: found.asset, bytes };
 }

@@ -169,6 +169,8 @@ export const SOCIAL_LINK_KINDS = [
   'telegram',
   'whatsapp',
   'website',
+  'mastodon',
+  'bluesky',
 ] as const;
 
 /** What a downloadable file on a portfolio is. */

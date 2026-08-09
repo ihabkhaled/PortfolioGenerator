@@ -26,6 +26,7 @@ import {
   setIdentityField,
   setIndexable,
   setSectionVisibility,
+  setAssetSectionPlacement,
   setSeoField,
 } from '@/modules/portfolio-editor';
 import { parseSchema } from '@/packages/zod';
@@ -367,6 +368,41 @@ describe('canonical collection edits', () => {
 });
 
 describe('page edits', () => {
+  it('places and removes gallery or attachment sections on an exact page', () => {
+    const document = buildFullPortfolioDocument();
+    const placed = setAssetSectionPlacement(document, 'page-projects', 'attachments', true);
+    const untouchedPage = pageBySlug(placed, '');
+    const targetPage = pageBySlug(placed, 'projects');
+
+    expect(targetPage.sections.at(-1)).toMatchObject({
+      type: 'attachments',
+      visible: true,
+      config: { title: null },
+    });
+    expect(setAssetSectionPlacement(placed, 'page-projects', 'attachments', true)).toEqual(placed);
+    expect(untouchedPage.sections).toEqual(pageBySlug(document, '').sections);
+    expect(
+      setAssetSectionPlacement(placed, 'page-projects', 'attachments', false)
+        .pages.find((page) => page.id === 'page-projects')
+        ?.sections.some((section) => section.type === 'attachments'),
+    ).toBe(false);
+    expect(portfolioDocumentSchema.safeParse(placed).success).toBe(true);
+  });
+
+  it('places the first asset section on a page with no existing sections', () => {
+    const document = createPage(buildFullPortfolioDocument(), {
+      id: 'page-gallery',
+      slug: 'gallery',
+      title: 'Gallery',
+      navLabel: 'Gallery',
+    });
+    const placed = setAssetSectionPlacement(document, 'page-gallery', 'gallery', true);
+
+    expect(pageBySlug(placed, 'gallery').sections).toMatchObject([
+      { type: 'gallery', order: 0, visible: true },
+    ]);
+  });
+
   it('creates a public page without accepting a client-side password hash', () => {
     const next = createPage(buildFullPortfolioDocument(), {
       id: 'page-speaking',

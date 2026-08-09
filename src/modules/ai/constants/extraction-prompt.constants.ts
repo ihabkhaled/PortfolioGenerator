@@ -44,6 +44,11 @@ Return only data matching the supplied schema.
     exact kind of text appears in the document. Do not write one for the person.
 15. Never output HTML or markup.
 16. Keep every warning under one sentence.
+17. Extract publications, volunteering, and interests only when the document
+    explicitly labels or states them. Do not turn ordinary prose into an interest,
+    and do not infer a publication or volunteer role from an employer or project.
+18. Testimonials and media stay empty unless the document directly contains the
+    testimonial or identifies the media as portfolio material.
 
 The user reviews and edits everything you return before any of it is published.`;
 

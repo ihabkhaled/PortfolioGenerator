@@ -132,6 +132,8 @@ export const EDITOR_SOCIAL_KINDS = [
   'telegram',
   'whatsapp',
   'website',
+  'mastodon',
+  'bluesky',
 ] as const;
 export const EDITOR_SKILL_TIERS = ['primary', 'strong', 'working', 'familiar'] as const;
 

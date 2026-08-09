@@ -44,12 +44,30 @@ export default [
       'src/modules/storage/providers/local-object-storage.provider.ts',
       'support/*.mts',
       // The alias resolver stats candidate module paths built from an import
-      // specifier that the TypeScript compiler has already resolved. It runs at
-      // build time in a developer's own checkout, never on a request.
-      'support/alias-resolver.mjs',
+      // specifier that the TypeScript compiler has already resolved, and the
+      // install scripts stat paths built from this repository's own directory
+      // and a package name from its own manifest. All of them run at build time
+      // in a checkout, never on a request, and none of them sees user input.
+      'support/*.mjs',
     ],
     rules: {
       'security/detect-non-literal-fs-filename': 'off',
+    },
+  },
+  {
+    /**
+     * EXC-0007 — the install and build scripts under support/.
+     *
+     * These are command-line programs. `no-console` exists so that application
+     * code goes through the logger, and `no-process-exit` exists so that a
+     * request handler cannot take the process down — neither applies to a
+     * script whose entire interface is stdout and an exit status, and whose job
+     * on a build machine is specifically to exit zero without doing anything.
+     */
+    files: ['support/**/*.{mjs,mts}'],
+    rules: {
+      'no-console': 'off',
+      'unicorn/no-process-exit': 'off',
     },
   },
   {

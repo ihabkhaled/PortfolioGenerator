@@ -108,7 +108,17 @@ export async function softDeleteOwnedUpload(
     data: { deletedAt },
   });
 
-  return updated.count === 0 ? null : getOwnedResumeUpload(ownerId, uploadId);
+  return updated.count === 0 ? null : getOwnedResumeUploadIncludingDeleted(ownerId, uploadId);
+}
+
+async function getOwnedResumeUploadIncludingDeleted(
+  ownerId: string,
+  uploadId: string,
+): Promise<ResumeUploadRecord | null> {
+  return getDatabase().resumeUpload.findFirst({
+    where: { id: uploadId, ownerId },
+    select: RESUME_UPLOAD_SELECT,
+  });
 }
 
 /** Every upload an owner has, for the account-deletion sweep. */

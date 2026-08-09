@@ -1,5 +1,7 @@
 import { expect, test } from '@playwright/test';
 
+import { buildDocxFixture } from '@/packages/document-text/test-support';
+
 import {
   buildAccount,
   createPortfolio,
@@ -54,6 +56,30 @@ test.describe('upload validation', () => {
     await page.getByRole('button', { name: 'Import' }).click();
 
     await expect(page.getByRole('alert')).toBeVisible();
+  });
+});
+
+test.describe('Word document import', () => {
+  test('extracts a scanner-validated DOCX into an owner-reviewable draft', async ({ page }) => {
+    const account = buildAccount('docx-import');
+
+    await signUp(page, account);
+    await createPortfolio(page, 'DOCX Import');
+    await openImport(page);
+
+    await page.getByLabel('CV file').setInputFiles({
+      name: 'ada-lovelace.docx',
+      mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+      buffer: Buffer.from(
+        buildDocxFixture(
+          'Ada Lovelace\nAnalytical engine programmer\nLondon\nExperience\nMathematician',
+        ),
+      ),
+    });
+    await page.getByRole('button', { name: 'Import' }).click();
+    await page.waitForURL('**/editor', { timeout: 60_000 });
+
+    await expect(page.getByLabel('Display name')).toHaveValue('Ada Lovelace');
   });
 });
 

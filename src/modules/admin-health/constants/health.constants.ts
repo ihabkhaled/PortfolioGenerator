@@ -3,6 +3,7 @@ export const HEALTH_STATES = ['ok', 'degraded', 'down'] as const;
 export const HEALTH_CHECK_NAMES = {
   database: 'database',
   storage: 'storage',
+  scanner: 'scanner',
 } as const;
 
 /**

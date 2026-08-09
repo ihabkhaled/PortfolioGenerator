@@ -1,19 +1,47 @@
-import { FILE_REJECTIONS } from '../constants/file-security.constants';
+import { FILE_REJECTIONS, UPLOAD_PURPOSE_POLICIES } from '../constants/file-security.constants';
 import type {
   FileInspection,
   FileKind,
   FileRejection,
+  PurposeUploadCandidate,
   UploadCandidate,
 } from '../types/file-security.types';
 
 import {
   contentTypeForExtension,
   detectSignatures,
+  findForbiddenExtension,
+  hasExpectedDocumentMarker,
   isConsistent,
   isForbiddenExtension,
   readExtension,
 } from './file-signature.policy';
 import { isTooSmall, isWithinBounds, readImageDimensions } from './image-dimensions.policy';
+
+/** Applies the exact allowlist and byte ceiling for the file's intended use. */
+export function inspectUploadForPurpose(candidate: PurposeUploadCandidate): FileInspection {
+  const forbiddenExtension = findForbiddenExtension(candidate.fileName);
+
+  if (forbiddenExtension !== null) {
+    return reject(FILE_REJECTIONS.forbiddenExtension, forbiddenExtension);
+  }
+
+  const policy = UPLOAD_PURPOSE_POLICIES[candidate.purpose];
+  const extension = readExtension(candidate.fileName);
+  let kind: FileKind | null = null;
+
+  if (contentTypeForExtension('image', extension) !== null) {
+    kind = 'image';
+  } else if (contentTypeForExtension('document', extension) !== null) {
+    kind = 'document';
+  }
+
+  if (kind === null || policy.kinds.every((acceptedKind) => acceptedKind !== kind)) {
+    return reject(FILE_REJECTIONS.unsupportedType, extension || null);
+  }
+
+  return inspectUpload(candidate, kind, policy.maxBytes);
+}
 
 /**
  * Everything that can be decided from the bytes alone, in the order that fails
@@ -58,6 +86,10 @@ export function inspectUpload(
 
   if (!isConsistent(kind, extension, signatures)) {
     return reject(FILE_REJECTIONS.signatureMismatch, signatures.join(',') || 'none');
+  }
+
+  if (kind === 'document' && !hasExpectedDocumentMarker(extension, candidate.bytes)) {
+    return reject(FILE_REJECTIONS.signatureMismatch, 'document-container');
   }
 
   // The browser's claim only has to *agree*; it never gets to decide. A client

@@ -24,6 +24,9 @@ if (!parsed.ok) {
 
 export const publicEnv = parsed.value;
 
+/** Build mode exposed through the environment facade for edge entrypoints. */
+export const isDevelopmentEnvironment = process.env.NODE_ENV !== 'production';
+
 /**
  * A trailing slash on the configured origin would produce `//path` in every
  * canonical URL and sitemap entry. Trimmed with a loop rather than an anchored

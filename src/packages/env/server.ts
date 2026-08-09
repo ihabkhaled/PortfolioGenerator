@@ -13,17 +13,18 @@ import 'server-only';
 
 import { formatIssues, parseSchema } from '@/packages/zod';
 
-import { aiRemoteConfiguredSchema, s3ConfiguredSchema, serverEnvSchema } from './env.schema';
+import {
+  aiRemoteConfiguredSchema,
+  contactEmailConfiguredSchema,
+  s3ConfiguredSchema,
+  serverEnvSchema,
+} from './env.schema';
 import type { ServerEnv } from './env.types';
 
 const cache: { value: ServerEnv | null } = { value: null };
 
-export function getServerEnv(): ServerEnv {
-  if (cache.value) {
-    return cache.value;
-  }
-
-  const parsed = parseSchema(serverEnvSchema, process.env);
+export function parseServerEnvironment(input: unknown): ServerEnv {
+  const parsed = parseSchema(serverEnvSchema, input);
 
   if (!parsed.ok) {
     throw new Error(`Invalid server environment: ${formatIssues(parsed.issues)}`);
@@ -48,9 +49,25 @@ export function getServerEnv(): ServerEnv {
     }
   }
 
-  cache.value = parsed.value;
+  if (parsed.value.CONTACT_EMAIL_ENABLED) {
+    const contactEmail = parseSchema(contactEmailConfiguredSchema, parsed.value);
+
+    if (!contactEmail.ok) {
+      throw new Error(`CONTACT_EMAIL_ENABLED=true requires: ${formatIssues(contactEmail.issues)}`);
+    }
+  }
 
   return parsed.value;
+}
+
+export function getServerEnv(): ServerEnv {
+  if (cache.value) {
+    return cache.value;
+  }
+
+  cache.value = parseServerEnvironment(process.env);
+
+  return cache.value;
 }
 
 /** Test-only hook so a suite can exercise a different configuration. */

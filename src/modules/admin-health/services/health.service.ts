@@ -1,7 +1,9 @@
 import 'server-only';
 
 import { getObjectStorage } from '@/modules/storage/server';
+import { pingClamAv } from '@/packages/clamav';
 import { getDatabase } from '@/packages/database';
+import { getServerEnv } from '@/packages/env/server';
 import { logger } from '@/packages/logger';
 
 import { HEALTH_CHECK_NAMES, HEALTH_CHECK_TIMEOUT_MS } from '../constants/health.constants';
@@ -21,9 +23,24 @@ import type { HealthCheck, HealthReport } from '../types/health.types';
  * gives an anonymous caller nothing to work with.
  */
 export async function checkHealth(): Promise<HealthReport> {
-  const checks = await Promise.all([checkDatabase(), checkStorage()]);
+  const env = getServerEnv();
+  const probes = [checkDatabase(), checkStorage()];
+  if (env.CLAMAV_ENABLED) probes.push(checkScanner());
+  const checks = await Promise.all(probes);
 
   return { state: combineHealth(checks), checks };
+}
+
+export async function checkScanner(): Promise<HealthCheck> {
+  const env = getServerEnv();
+  return timed(HEALTH_CHECK_NAMES.scanner, async () => {
+    const alive = await pingClamAv({
+      host: env.CLAMAV_HOST,
+      port: env.CLAMAV_PORT,
+      timeoutMs: Math.min(env.CLAMAV_TIMEOUT_MS, HEALTH_CHECK_TIMEOUT_MS),
+    });
+    if (!alive) throw new Error('scanner unavailable');
+  });
 }
 
 export async function checkDatabase(): Promise<HealthCheck> {

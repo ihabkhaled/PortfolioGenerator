@@ -24,20 +24,25 @@ datasource db {
 // ---------------------------------------------------------------------------
 
 model User {
-  id            String   @id
-  name          String
-  email         String   @unique
-  emailVerified Boolean  @default(false)
-  image         String?
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  id                String   @id
+  name              String
+  email             String   @unique
+  emailVerified     Boolean  @default(false)
+  image             String?
+  locale            String   @default("en")
+  themePreference   String   @default("system") @map("theme_preference")
+  defaultCountryIso String?  @map("default_country_iso")
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
 
-  sessions      Session[]
-  accounts      Account[]
-  portfolios    Portfolio[]
-  resumeUploads ResumeUpload[]
-  aiRuns        AiRun[]
-  auditEvents   AuditEvent[]
+  sessions              Session[]
+  accounts              Account[]
+  portfolios            Portfolio[]
+  resumeUploads         ResumeUpload[]
+  aiRuns                AiRun[]
+  auditEvents           AuditEvent[]
+  assets                Asset[]
+  portfolioTranslations PortfolioTranslation[]
 
   @@map("users")
 }
@@ -131,14 +136,44 @@ model Portfolio {
   updatedAt DateTime  @updatedAt @map("updated_at")
   deletedAt DateTime? @map("deleted_at")
 
-  owner         User           @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  owner         User                   @relation(fields: [ownerId], references: [id], onDelete: Cascade)
   resumeUploads ResumeUpload[]
   aiRuns        AiRun[]
   auditEvents   AuditEvent[]
+  assets        Asset[]
+  translations  PortfolioTranslation[]
 
   @@index([ownerId, deletedAt])
   @@index([status, publishedAt])
   @@map("portfolios")
+}
+
+model PortfolioTranslation {
+  id          String @id @default(uuid())
+  ownerId     String @map("owner_id")
+  portfolioId String @map("portfolio_id")
+  locale      String
+
+  draftDocument Json @map("draft_document")
+  draftVersion  Int  @default(1) @map("draft_version")
+
+  reviewedDocument Json?     @map("reviewed_document")
+  reviewedAt       DateTime? @map("reviewed_at")
+
+  publishedDocument Json?     @map("published_document")
+  publishedVersion  Int       @default(0) @map("published_version")
+  publishedAt       DateTime? @map("published_at")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  owner     User      @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  portfolio Portfolio @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
+
+  @@unique([portfolioId, locale])
+  @@index([ownerId, portfolioId])
+  @@index([locale, publishedAt])
+  @@map("portfolio_translations")
 }
 
 // ---------------------------------------------------------------------------
@@ -200,6 +235,62 @@ model ResumeUpload {
 }
 
 // ---------------------------------------------------------------------------
+// Owner-scoped uploaded assets
+// ---------------------------------------------------------------------------
+
+enum AssetPurpose {
+  RESUME
+  PORTRAIT
+  GALLERY
+  CERTIFICATE
+  ATTACHMENT
+
+  @@map("asset_purpose")
+}
+
+enum AssetVisibility {
+  PRIVATE
+  PUBLIC
+
+  @@map("asset_visibility")
+}
+
+enum AssetScanStatus {
+  CLEAN
+
+  @@map("asset_scan_status")
+}
+
+model Asset {
+  id          String @id @default(uuid())
+  ownerId     String @map("owner_id")
+  portfolioId String @map("portfolio_id")
+
+  purpose          AssetPurpose
+  visibility       AssetVisibility @default(PRIVATE)
+  scanStatus       AssetScanStatus @default(CLEAN) @map("scan_status")
+  storageKey       String          @unique @map("storage_key")
+  originalFilename String          @map("original_filename")
+  contentType      String          @map("content_type")
+  extension        String
+  sizeBytes        Int             @map("size_bytes")
+  sha256           String
+  width            Int?
+  height           Int?
+
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  owner     User      @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  portfolio Portfolio @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
+
+  @@index([ownerId, portfolioId, deletedAt])
+  @@index([ownerId, sha256])
+  @@map("assets")
+}
+
+// ---------------------------------------------------------------------------
 // AI observability
 // ---------------------------------------------------------------------------
 
@@ -216,10 +307,10 @@ enum AiRunStatus {
 /// cost and how often do we escalate" without building a finance subsystem —
 /// and deliberately holding no prompt text, no completion text and no secrets.
 model AiRun {
-  id                 String  @id @default(uuid())
-  ownerId            String  @map("owner_id")
-  portfolioId        String? @map("portfolio_id")
-  resumeUploadId     String? @map("resume_upload_id")
+  id             String  @id @default(uuid())
+  ownerId        String  @map("owner_id")
+  portfolioId    String? @map("portfolio_id")
+  resumeUploadId String? @map("resume_upload_id")
 
   operation String
   provider  String

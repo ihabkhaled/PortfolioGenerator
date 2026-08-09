@@ -2,11 +2,15 @@ import { describe, expect, it } from 'vitest';
 
 import {
   contentTypeForExtension,
+  containsBytes,
+  findForbiddenExtension,
+  hasExpectedDocumentMarker,
   detectSignatures,
   FILE_REJECTIONS,
   formatsFor,
   hasRtfPrefix,
   inspectUpload,
+  inspectUploadForPurpose,
   isConsistent,
   isForbiddenExtension,
   isStartOfFrame,
@@ -90,6 +94,31 @@ describe('isForbiddenExtension', () => {
 
   it.each(['.pdf', '.png', '.docx'])('allows %s', (extension) => {
     expect(isForbiddenExtension(extension)).toBe(false);
+  });
+});
+
+describe('searching file names and container bytes', () => {
+  it('finds dangerous extensions only at a file-name boundary', () => {
+    expect(findForbiddenExtension('resume.EXE.pdf')).toBe('.exe');
+    expect(findForbiddenExtension('resume.executable.pdf')).toBeNull();
+    expect(findForbiddenExtension('resume.pdf')).toBeNull();
+  });
+
+  it('finds a complete byte marker and refuses empty, oversized, and partial markers', () => {
+    const source = bytes(1, 2, 3, 4);
+
+    expect(containsBytes(source, bytes(2, 3))).toBe(true);
+    expect(containsBytes(source, bytes(3, 5))).toBe(false);
+    expect(containsBytes(source, bytes())).toBe(false);
+    expect(containsBytes(source, bytes(1, 2, 3, 4, 5))).toBe(false);
+  });
+
+  it('requires the format-specific marker for legacy Word files', () => {
+    const marker = new TextEncoder().encode('W\0o\0r\0d\0D\0o\0c\0u\0m\0e\0n\0t\0');
+
+    expect(hasExpectedDocumentMarker('.doc', marker)).toBe(true);
+    expect(hasExpectedDocumentMarker('.doc', bytes(1, 2, 3))).toBe(false);
+    expect(hasExpectedDocumentMarker('.pdf', bytes(1, 2, 3))).toBe(true);
   });
 });
 
@@ -322,6 +351,112 @@ describe('inspectUpload', () => {
   });
 });
 
+describe('inspectUploadForPurpose', () => {
+  const pdf = padded([0x25, 0x50, 0x44, 0x46, 0x2d, 0x31, 0x2e, 0x37], 1024);
+
+  it('rejects a dangerous double extension even when the final extension is allowed', () => {
+    const result = inspectUploadForPurpose({
+      purpose: 'resume',
+      fileName: 'resume.exe.pdf',
+      declaredContentType: 'application/pdf',
+      bytes: pdf,
+    });
+
+    expect(result).toMatchObject({
+      ok: false,
+      rejection: FILE_REJECTIONS.forbiddenExtension,
+      detail: '.exe',
+    });
+  });
+
+  it('accepts a measured image for a portrait', () => {
+    const result = inspectUploadForPurpose({
+      purpose: 'portrait',
+      fileName: 'portrait.png',
+      declaredContentType: 'image/png',
+      bytes: buildPng(800, 800),
+    });
+
+    expect(result).toMatchObject({
+      ok: true,
+      contentType: 'image/png',
+      dimensions: { width: 800, height: 800 },
+    });
+  });
+
+  it('rejects a document used where a gallery image is required', () => {
+    const result = inspectUploadForPurpose({
+      purpose: 'gallery',
+      fileName: 'portfolio.pdf',
+      declaredContentType: 'application/pdf',
+      bytes: pdf,
+    });
+
+    expect(result).toMatchObject({ ok: false, rejection: FILE_REJECTIONS.unsupportedType });
+  });
+
+  it('accepts a PDF certificate but rejects an executable certificate', () => {
+    expect(
+      inspectUploadForPurpose({
+        purpose: 'certificate',
+        fileName: 'certificate.pdf',
+        declaredContentType: 'application/pdf',
+        bytes: pdf,
+      }).ok,
+    ).toBe(true);
+
+    expect(
+      inspectUploadForPurpose({
+        purpose: 'certificate',
+        fileName: 'certificate.exe',
+        declaredContentType: 'application/octet-stream',
+        bytes: pdf,
+      }),
+    ).toMatchObject({ ok: false, rejection: FILE_REJECTIONS.forbiddenExtension });
+  });
+
+  it('accepts Word containers only when their internal document markers agree', () => {
+    const docx = new TextEncoder().encode(
+      `PK\u{3}\u{4}[Content_Types].xml word/document.xml application/vnd.openxmlformats-officedocument.wordprocessingml.document`,
+    );
+    const xlsx = new TextEncoder().encode(`PK\u{3}\u{4}[Content_Types].xml xl/workbook.xml`);
+
+    expect(
+      inspectUploadForPurpose({
+        purpose: 'resume',
+        fileName: 'resume.docx',
+        declaredContentType:
+          'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+        bytes: docx,
+      }).ok,
+    ).toBe(true);
+    expect(
+      inspectUploadForPurpose({
+        purpose: 'resume',
+        fileName: 'spreadsheet.docx',
+        declaredContentType:
+          'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+        bytes: xlsx,
+      }),
+    ).toMatchObject({ ok: false, rejection: FILE_REJECTIONS.signatureMismatch });
+  });
+
+  it('applies a smaller byte ceiling to portraits than general attachments', () => {
+    const oversizedPortrait = new Uint8Array(5 * 1024 * 1024 + 1);
+
+    oversizedPortrait.set(buildPng(800, 800));
+
+    expect(
+      inspectUploadForPurpose({
+        purpose: 'portrait',
+        fileName: 'portrait.png',
+        declaredContentType: 'image/png',
+        bytes: oversizedPortrait,
+      }),
+    ).toMatchObject({ ok: false, rejection: FILE_REJECTIONS.tooLarge });
+  });
+});
+
 describe('reading dimensions without decoding', () => {
   it('reads a PNG header', () => {
     expect(readPngDimensions(buildPng(1920, 1080))).toEqual({ width: 1920, height: 1080 });
@@ -538,5 +673,18 @@ describe('the lossy WebP chunk', () => {
     webp.set([0xf0, 0x00], 28);
 
     expect(readWebpDimensions(webp)).toEqual({ width: 320, height: 240 });
+  });
+});
+
+describe('purpose inspection without a recognizable extension', () => {
+  it('reports no extension detail when the filename has no suffix', () => {
+    expect(
+      inspectUploadForPurpose({
+        purpose: 'resume',
+        fileName: 'resume',
+        declaredContentType: 'application/octet-stream',
+        bytes: new Uint8Array(32),
+      }),
+    ).toMatchObject({ ok: false, rejection: FILE_REJECTIONS.unsupportedType, detail: null });
   });
 });

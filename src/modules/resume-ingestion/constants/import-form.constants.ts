@@ -19,6 +19,9 @@ export const IMPORT_REJECTION_KEYS = {
   'not-a-pdf': 'errors.notAPdf',
   encrypted: 'errors.encrypted',
   'too-many-pages': 'errors.tooManyPages',
+  'unreadable-document': 'errors.unreadableDocument',
+  'unsafe-document': 'errors.unsafeDocument',
+  'not-found': 'errors.notFound',
   'quota-exceeded': 'errors.quotaExceeded',
   'rate-limited': 'errors.rateLimited',
   'type-mismatch': 'errors.typeMismatch',
@@ -31,4 +34,13 @@ export const IMPORT_REJECTION_KEYS = {
 } as const;
 
 /** Client-side hint only; the server re-checks the real bytes. */
-export const ACCEPTED_UPLOAD_MIME = 'application/pdf';
+export const ACCEPTED_UPLOAD_MIME = [
+  'application/pdf',
+  'application/msword',
+  'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+  'application/rtf',
+  '.pdf',
+  '.doc',
+  '.docx',
+  '.rtf',
+].join(',');

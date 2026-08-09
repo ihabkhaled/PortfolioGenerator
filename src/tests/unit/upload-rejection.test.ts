@@ -1,7 +1,11 @@
 import { describe, expect, it } from 'vitest';
 
 import { FILE_REJECTIONS } from '@/modules/file-security';
-import { toUploadRejection, UPLOAD_REJECTIONS } from '@/modules/resume-ingestion';
+import {
+  toDocumentTextRejection,
+  toUploadRejection,
+  UPLOAD_REJECTIONS,
+} from '@/modules/resume-ingestion';
 
 /**
  * The seam between two vocabularies.
@@ -50,5 +54,16 @@ describe('toUploadRejection', () => {
     for (const rejection of Object.values(FILE_REJECTIONS)) {
       expect(UPLOAD_REJECTIONS).toContain(toUploadRejection(rejection));
     }
+  });
+});
+
+describe('toDocumentTextRejection', () => {
+  it.each([
+    ['too-many-pages', 'too-many-pages'],
+    ['unsafe-container', 'unsafe-document'],
+    ['corrupt-document', 'unreadable-document'],
+    ['unsupported-type', 'unreadable-document'],
+  ] as const)('maps %s to an actionable ingestion rejection', (code, expected) => {
+    expect(toDocumentTextRejection(code)).toBe(expected);
   });
 });

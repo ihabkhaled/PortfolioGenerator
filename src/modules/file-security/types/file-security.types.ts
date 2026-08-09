@@ -4,11 +4,22 @@ export type FileRejection = (typeof FILE_REJECTIONS)[keyof typeof FILE_REJECTION
 
 export type FileKind = 'document' | 'image';
 
+export type UploadPurpose = 'resume' | 'portrait' | 'gallery' | 'certificate' | 'attachment';
+
 export interface UploadCandidate {
   readonly fileName: string;
   /** What the browser claimed. A hint, never a decision. */
   readonly declaredContentType: string;
   readonly bytes: Uint8Array;
+}
+
+export interface PurposeUploadCandidate extends UploadCandidate {
+  readonly purpose: UploadPurpose;
+}
+
+export interface UploadPurposePolicy {
+  readonly kinds: readonly FileKind[];
+  readonly maxBytes: number;
 }
 
 export interface ImageDimensions {

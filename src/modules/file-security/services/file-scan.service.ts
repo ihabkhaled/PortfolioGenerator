@@ -5,10 +5,15 @@ import { logger } from '@/packages/logger';
 
 import { FILE_REJECTIONS } from '../constants/file-security.constants';
 import { SCANNER_REGISTRY } from '../constants/scanner-registry.constants';
-import { inspectUpload } from '../policies/file-inspection.policy';
+import { inspectUpload, inspectUploadForPurpose } from '../policies/file-inspection.policy';
 import { createClamAvScanner } from '../providers/clamav-scanner.provider';
 import { createDisabledScanner } from '../providers/disabled-scanner.provider';
-import type { FileInspection, FileKind, UploadCandidate } from '../types/file-security.types';
+import type {
+  FileInspection,
+  FileKind,
+  PurposeUploadCandidate,
+  UploadCandidate,
+} from '../types/file-security.types';
 import type { FileScanner, ScanResult } from '../types/scanner.types';
 
 /**
@@ -74,6 +79,44 @@ export async function inspectAndScan(
    */
   if (scan.outcome === 'unavailable') {
     logger.error('upload.scanner_unavailable', { detail: scan.detail, kind });
+
+    return { ok: false, rejection: FILE_REJECTIONS.scannerUnavailable, detail: scan.detail };
+  }
+
+  return inspection;
+}
+
+/** Purpose-aware gate used by portraits, galleries and downloadable assets. */
+export async function inspectAndScanForPurpose(
+  candidate: PurposeUploadCandidate,
+): Promise<FileInspection> {
+  const inspection = inspectUploadForPurpose(candidate);
+
+  if (!inspection.ok) {
+    logger.info('upload.rejected', {
+      rejection: inspection.rejection,
+      purpose: candidate.purpose,
+    });
+
+    return inspection;
+  }
+
+  const scan = await getFileScanner().scan(candidate.bytes);
+
+  if (scan.outcome === 'infected') {
+    logger.warn('upload.infected', {
+      signature: scan.signature,
+      purpose: candidate.purpose,
+    });
+
+    return { ok: false, rejection: FILE_REJECTIONS.infected, detail: scan.signature };
+  }
+
+  if (scan.outcome === 'unavailable') {
+    logger.error('upload.scanner_unavailable', {
+      detail: scan.detail,
+      purpose: candidate.purpose,
+    });
 
     return { ok: false, rejection: FILE_REJECTIONS.scannerUnavailable, detail: scan.detail };
   }

@@ -1,6 +1,7 @@
 /** Public surface of the storage module (types and pure policy only). */
 
 export {
+  ASSET_KEY_PREFIX,
   EXTRACTED_TEXT_KEY_PREFIX,
   PDF_CONTENT_TYPE,
   RESUME_KEY_PREFIX,

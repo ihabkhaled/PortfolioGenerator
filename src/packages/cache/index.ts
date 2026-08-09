@@ -1,6 +1,12 @@
 import 'server-only';
 
-import { revalidatePath, revalidateTag, unstable_cache, updateTag } from 'next/cache';
+import {
+  revalidatePath,
+  revalidateTag,
+  unstable_cache,
+  unstable_noStore,
+  updateTag,
+} from 'next/cache';
 
 import { PUBLISHED_SNAPSHOT_REVALIDATE_SECONDS } from './cache.constants';
 
@@ -41,6 +47,10 @@ export function invalidateTag(tag: string): void {
 
 export function invalidatePath(path: string): void {
   revalidatePath(path);
+}
+
+export function preventResponseCaching(): void {
+  unstable_noStore();
 }
 
 export { PUBLISHED_SNAPSHOT_REVALIDATE_SECONDS } from './cache.constants';

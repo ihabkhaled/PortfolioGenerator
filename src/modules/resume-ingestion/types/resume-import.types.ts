@@ -30,3 +30,8 @@ export type ResumeImportOutcome =
       /** Lets the UI explain a scan specifically rather than generically. */
       readonly looksScanned?: boolean;
     };
+
+export type ResumeImportFailure = Extract<ResumeImportOutcome, { readonly ok: false }>;
+
+export type ResumePreflightResult =
+  ResumeImportFailure | { readonly ok: true; readonly contentType: string };

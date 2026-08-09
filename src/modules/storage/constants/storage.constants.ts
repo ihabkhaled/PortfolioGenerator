@@ -11,6 +11,7 @@ export const STORAGE_KEY_RANDOM_BYTES = 16;
 export const STORAGE_KEY_PATTERN = /^[\w-]+\/[\w-]+\/[\w-]+$/u;
 
 export const RESUME_KEY_PREFIX = 'resumes';
+export const ASSET_KEY_PREFIX = 'assets';
 export const EXTRACTED_TEXT_KEY_PREFIX = 'extracted-text';
 
 /** Content type stored for uploaded CVs; the browser's claim is never trusted. */

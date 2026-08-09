@@ -56,12 +56,10 @@ export function looksEncrypted(bytes: Uint8Array): boolean {
  * encryption.
  */
 export function validateUpload(input: UploadValidationInput): UploadRejection | null {
-  if (input.sizeBytes === 0) {
-    return 'empty';
-  }
+  const sizeRejection = validateUploadSize(input.sizeBytes, input.maxBytes);
 
-  if (input.sizeBytes > input.maxBytes) {
-    return 'too-large';
+  if (sizeRejection !== null) {
+    return sizeRejection;
   }
 
   if (!hasPdfSignature(input.bytes)) {
@@ -73,4 +71,15 @@ export function validateUpload(input: UploadValidationInput): UploadRejection | 
   }
 
   return null;
+}
+
+export function validateUploadSize(
+  sizeBytes: number,
+  maxBytes: number,
+): 'empty' | 'too-large' | null {
+  if (sizeBytes === 0) {
+    return 'empty';
+  }
+
+  return sizeBytes > maxBytes ? 'too-large' : null;
 }

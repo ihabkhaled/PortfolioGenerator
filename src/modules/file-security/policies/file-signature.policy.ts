@@ -5,6 +5,7 @@ import {
   IMAGE_FORMATS,
   RTF_PREFIX,
 } from '../constants/file-signature.constants';
+import { containsBytes } from '../helpers/byte-search.helper';
 import type { FileFormatTable, FileKind } from '../types/file-security.types';
 
 /**
@@ -38,6 +39,22 @@ export function readExtension(fileName: string): string {
   const index = fileName.lastIndexOf('.');
 
   return index === -1 ? '' : fileName.slice(index).toLowerCase();
+}
+
+/** Rejects dangerous extensions hidden before an apparently safe final one. */
+export function findForbiddenExtension(fileName: string): string | null {
+  const normalized = fileName.toLowerCase();
+
+  for (const extension of FORBIDDEN_EXTENSIONS) {
+    const index = normalized.indexOf(extension);
+    const boundary = normalized[index + extension.length];
+
+    if (index !== -1 && (boundary === undefined || boundary === '.')) {
+      return extension;
+    }
+  }
+
+  return null;
 }
 
 /**
@@ -90,4 +107,27 @@ export function isConsistent(
   const expected = formatsFor(kind)[contentType]?.signature;
 
   return expected !== undefined && signatures.includes(expected);
+}
+
+/**
+ * ZIP and OLE2 are containers shared by unrelated Office formats. Their magic
+ * bytes prove only the container, so require the format-specific directory
+ * marker before allowing a Word extension to reach a parser or storage.
+ */
+export function hasExpectedDocumentMarker(extension: string, bytes: Uint8Array): boolean {
+  if (extension === '.docx') {
+    const text = new TextDecoder('latin1').decode(bytes);
+    return (
+      text.includes('[Content_Types].xml') &&
+      text.includes('word/document.xml') &&
+      !text.includes('xl/workbook.xml')
+    );
+  }
+
+  if (extension === '.doc') {
+    const unicodeMarker = new TextEncoder().encode('W\0o\0r\0d\0D\0o\0c\0u\0m\0e\0n\0t\0');
+    return containsBytes(bytes, unicodeMarker);
+  }
+
+  return true;
 }

@@ -4,24 +4,83 @@ import { createHash } from 'node:crypto';
 
 import { extractResumeToDraft } from '@/modules/ai/server';
 import { recordAuditEvent } from '@/modules/audit/server';
-import { inspectAndScan } from '@/modules/file-security/server';
+import { inspectAndScanForPurpose } from '@/modules/file-security/server';
+import { getOwnedPortfolio } from '@/modules/portfolios/server';
 import { consumeAiOperationQuota, consumePlatformAiBudget } from '@/modules/rate-limit/server';
 import { EXTRACTED_TEXT_KEY_PREFIX, RESUME_KEY_PREFIX, TEXT_CONTENT_TYPE } from '@/modules/storage';
 import { generateStorageKey, getObjectStorage } from '@/modules/storage/server';
+import {
+  DocumentTextError,
+  extractDocumentText,
+  inspectDocumentForText,
+} from '@/packages/document-text';
 import { getServerEnv } from '@/packages/env/server';
 import { logger } from '@/packages/logger';
-import { extractPdfText } from '@/packages/pdf';
 
 import { WARNING_CODES } from '../constants/import-warning.constants';
 import { normalizeResumeText } from '../helpers/resume-text.helper';
-import { validateUpload } from '../policies/pdf-validation.policy';
+import { toDocumentTextRejection } from '../policies/document-text-rejection.policy';
+import { looksEncrypted, validateUploadSize } from '../policies/pdf-validation.policy';
 import { toUploadRejection } from '../policies/upload-rejection.policy';
 import {
   createResumeUpload,
   updateOwnedResumeUpload,
 } from '../repositories/resume-upload.repository';
 import type { ExtractionWarning } from '../types/ingestion.types';
-import type { ResumeImportRequest, ResumeImportOutcome } from '../types/resume-import.types';
+import type {
+  ResumeImportOutcome,
+  ResumeImportRequest,
+  ResumePreflightResult,
+} from '../types/resume-import.types';
+import type { ResumeUploadRecord } from '../types/resume-upload.types';
+
+async function inspectResumeUpload(request: ResumeImportRequest): Promise<ResumePreflightResult> {
+  const sizeRejection = validateUploadSize(request.bytes.length, getServerEnv().UPLOAD_MAX_BYTES);
+  if (sizeRejection !== null) return { ok: false, rejection: sizeRejection };
+
+  const inspection = await inspectAndScanForPurpose({
+    purpose: 'resume',
+    fileName: request.originalFilename,
+    declaredContentType: request.declaredContentType,
+    bytes: request.bytes,
+  });
+
+  if (!inspection.ok) {
+    await recordAuditEvent({
+      eventType: 'resume.rejected',
+      ownerId: request.ownerId,
+      portfolioId: request.portfolioId,
+      metadata: { rejection: inspection.rejection, detail: inspection.detail },
+    });
+    return { ok: false, rejection: toUploadRejection(inspection.rejection) };
+  }
+
+  if (inspection.contentType === 'application/pdf' && looksEncrypted(request.bytes)) {
+    return { ok: false, rejection: 'encrypted' };
+  }
+
+  try {
+    inspectDocumentForText(request.bytes, inspection.contentType);
+  } catch (error) {
+    const rejection =
+      error instanceof DocumentTextError
+        ? toDocumentTextRejection(error.code)
+        : 'unreadable-document';
+    await recordAuditEvent({
+      eventType: 'resume.rejected',
+      ownerId: request.ownerId,
+      portfolioId: request.portfolioId,
+      metadata: { rejection },
+    });
+    return { ok: false, rejection };
+  }
+
+  if ((await getOwnedPortfolio(request.ownerId, request.portfolioId)) === null) {
+    return { ok: false, rejection: 'not-found' };
+  }
+
+  return { ok: true, contentType: inspection.contentType };
+}
 
 /**
  * The import pipeline.
@@ -38,63 +97,40 @@ export async function importResume(request: ResumeImportRequest): Promise<Resume
   const env = getServerEnv();
   const storage = getObjectStorage();
 
-  const rejection = validateUpload({
-    bytes: request.bytes,
-    sizeBytes: request.bytes.length,
-    maxBytes: env.UPLOAD_MAX_BYTES,
-  });
-
-  if (rejection !== null) {
-    return { ok: false, rejection };
-  }
-
   /*
    * The full gate: extension, declared type and magic bytes must agree, and
    * the bytes must survive a virus scan.
    *
    * It runs before anything is written, so an infected file never reaches
    * object storage, never gets a row, and never gets a storage key that some
-   * later code path could serve. The PDF check above stays: it is cheap, it
-   * runs first, and it produces the specific message a user who uploaded a
-   * Word document actually needs.
+   * later code path could serve.
    */
-  const inspection = await inspectAndScan(
-    {
-      fileName: request.originalFilename,
-      declaredContentType: request.declaredContentType,
-      bytes: request.bytes,
-    },
-    'document',
-    env.UPLOAD_MAX_BYTES,
-  );
-
-  if (!inspection.ok) {
-    await recordAuditEvent({
-      eventType: 'resume.rejected',
-      ownerId: request.ownerId,
-      portfolioId: request.portfolioId,
-      metadata: { rejection: inspection.rejection, detail: inspection.detail },
-    });
-
-    return { ok: false, rejection: toUploadRejection(inspection.rejection) };
-  }
+  const inspection = await inspectResumeUpload(request);
+  if (!inspection.ok) return inspection;
 
   const sha256 = createHash('sha256').update(request.bytes).digest('hex');
   const storageKey = generateStorageKey(request.ownerId, RESUME_KEY_PREFIX);
 
   await storage.putPrivate(storageKey, request.bytes, inspection.contentType);
 
-  const upload = await createResumeUpload({
-    ownerId: request.ownerId,
-    portfolioId: request.portfolioId,
-    storageKey,
-    originalFilename: request.originalFilename,
-    // Recorded as what we verified it to be, not as what the browser claimed.
-    mimeType: inspection.contentType,
-    sizeBytes: request.bytes.length,
-    sha256,
-    status: 'VALIDATED',
-  });
+  let upload: ResumeUploadRecord;
+
+  try {
+    upload = await createResumeUpload({
+      ownerId: request.ownerId,
+      portfolioId: request.portfolioId,
+      storageKey,
+      originalFilename: request.originalFilename,
+      // Recorded as what we verified it to be, not as what the browser claimed.
+      mimeType: inspection.contentType,
+      sizeBytes: request.bytes.length,
+      sha256,
+      status: 'VALIDATED',
+    });
+  } catch (error) {
+    await storage.delete(storageKey);
+    throw error;
+  }
 
   await recordAuditEvent({
     eventType: 'resume.uploaded',
@@ -106,31 +142,34 @@ export async function importResume(request: ResumeImportRequest): Promise<Resume
   const warnings: ExtractionWarning[] = [];
   let normalized;
 
+  let parserWasTruncated: boolean;
+
   try {
-    const extracted = await extractPdfText(request.bytes);
+    const extracted = await extractDocumentText({
+      bytes: request.bytes,
+      contentType: inspection.contentType,
+      maxCharacters: env.EXTRACTION_MAX_INPUT_CHARS,
+      maxPages: env.UPLOAD_MAX_PAGES,
+    });
 
     normalized = normalizeResumeText(
       extracted.text,
       extracted.pageCount,
       env.EXTRACTION_MAX_INPUT_CHARS,
     );
-  } catch {
+    parserWasTruncated = extracted.wasTruncated;
+  } catch (error) {
+    const extractionRejection =
+      error instanceof DocumentTextError
+        ? toDocumentTextRejection(error.code)
+        : 'unreadable-document';
     await updateOwnedResumeUpload(request.ownerId, upload.id, {
-      status: 'FAILED_TEXT_EXTRACTION',
-      errorCode: 'text-extraction-failed',
+      status:
+        extractionRejection === 'too-many-pages' ? 'FAILED_VALIDATION' : 'FAILED_TEXT_EXTRACTION',
+      errorCode: extractionRejection,
     });
 
-    return { ok: false, rejection: 'not-a-pdf', uploadId: upload.id };
-  }
-
-  if (normalized.pageCount > env.UPLOAD_MAX_PAGES) {
-    await updateOwnedResumeUpload(request.ownerId, upload.id, {
-      status: 'FAILED_VALIDATION',
-      pageCount: normalized.pageCount,
-      errorCode: 'too-many-pages',
-    });
-
-    return { ok: false, rejection: 'too-many-pages', uploadId: upload.id };
+    return { ok: false, rejection: extractionRejection, uploadId: upload.id };
   }
 
   // A scanned document has no text layer, and OCR is off by default. Telling
@@ -144,10 +183,10 @@ export async function importResume(request: ResumeImportRequest): Promise<Resume
       errorCode: 'looks-scanned',
     });
 
-    return { ok: false, rejection: 'not-a-pdf', uploadId: upload.id, looksScanned: true };
+    return { ok: false, rejection: 'unreadable-document', uploadId: upload.id, looksScanned: true };
   }
 
-  if (normalized.wasTruncated) {
+  if (parserWasTruncated || normalized.wasTruncated) {
     warnings.push({
       code: WARNING_CODES.truncatedInput,
       path: '',
@@ -159,12 +198,17 @@ export async function importResume(request: ResumeImportRequest): Promise<Resume
 
   await storage.putPrivate(textKey, new TextEncoder().encode(normalized.text), TEXT_CONTENT_TYPE);
 
-  await updateOwnedResumeUpload(request.ownerId, upload.id, {
+  const textSaved = await updateOwnedResumeUpload(request.ownerId, upload.id, {
     status: 'TEXT_EXTRACTED',
     pageCount: normalized.pageCount,
     characterCount: normalized.characterCount,
     extractedTextStorageKey: textKey,
   });
+
+  if (textSaved === null) {
+    await storage.delete(textKey);
+    return { ok: false, rejection: 'unreadable-document', uploadId: upload.id };
+  }
 
   await recordAuditEvent({
     eventType: 'resume.text_extracted',

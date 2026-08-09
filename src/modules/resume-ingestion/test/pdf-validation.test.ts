@@ -1,7 +1,12 @@
 import { describe, expect, it } from 'vitest';
 
 import { PDF_HEADER_SEARCH_WINDOW } from '../constants/ingestion.constants';
-import { hasPdfSignature, looksEncrypted, validateUpload } from '../policies/pdf-validation.policy';
+import {
+  hasPdfSignature,
+  looksEncrypted,
+  validateUpload,
+  validateUploadSize,
+} from '../policies/pdf-validation.policy';
 
 /**
  * Upload validation is the first thing a hostile file meets. Every case here is
@@ -86,5 +91,16 @@ describe('validateUpload', () => {
     const bytes = bytesFrom('not a pdf at all');
 
     expect(validateUpload({ bytes, sizeBytes: maxBytes + 1, maxBytes })).toBe('too-large');
+  });
+});
+
+describe('validateUploadSize', () => {
+  it('allows a non-PDF document when its byte length is within the upload ceiling', () => {
+    expect(validateUploadSize(512, 1024)).toBeNull();
+  });
+
+  it('rejects empty and oversized documents without inspecting their format', () => {
+    expect(validateUploadSize(0, 1024)).toBe('empty');
+    expect(validateUploadSize(1025, 1024)).toBe('too-large');
   });
 });

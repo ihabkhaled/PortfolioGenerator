@@ -58,6 +58,9 @@ export const UPLOAD_REJECTIONS = [
   'not-a-pdf',
   'encrypted',
   'too-many-pages',
+  'unreadable-document',
+  'unsafe-document',
+  'not-found',
   'quota-exceeded',
   'rate-limited',
   // The file is not what its name and its content type claim it is.

@@ -6,6 +6,7 @@ export { createClamAvScanner } from './providers/clamav-scanner.provider';
 export {
   getFileScanner,
   inspectAndScan,
+  inspectAndScanForPurpose,
   scanBytes,
   setFileScanner,
 } from './services/file-scan.service';

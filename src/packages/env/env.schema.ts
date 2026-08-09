@@ -77,6 +77,18 @@ export const serverEnvSchema = z.object({
   CLAMAV_TIMEOUT_MS: positiveInt.default(20_000),
 
   UPLOAD_IMAGE_MAX_BYTES: positiveInt.default(6_291_456),
+
+  CONTACT_EMAIL_ENABLED: booleanFlag.default(false),
+  CONTACT_EMAIL_PROVIDER: z.enum(['smtp']).default('smtp'),
+  CONTACT_EMAIL_FROM: optionalString,
+  CONTACT_EMAIL_TO: optionalString,
+  CONTACT_RATE_LIMIT_MAX: positiveInt.default(3),
+  CONTACT_RATE_LIMIT_WINDOW_MS: positiveInt.default(3_600_000),
+  CONTACT_SMTP_HOST: optionalString,
+  CONTACT_SMTP_PORT: positiveInt.default(587),
+  CONTACT_SMTP_SECURE: booleanFlag.default(false),
+  CONTACT_SMTP_USER: optionalString,
+  CONTACT_SMTP_PASS: optionalString,
 });
 
 export const s3ConfiguredSchema = z.object({
@@ -88,4 +100,13 @@ export const s3ConfiguredSchema = z.object({
 
 export const aiRemoteConfiguredSchema = z.object({
   AI_API_KEY: nonEmpty,
+});
+
+export const contactEmailConfiguredSchema = z.object({
+  CONTACT_EMAIL_PROVIDER: z.literal('smtp'),
+  CONTACT_EMAIL_FROM: z.email(),
+  CONTACT_EMAIL_TO: z.email(),
+  CONTACT_SMTP_HOST: nonEmpty,
+  CONTACT_SMTP_USER: nonEmpty,
+  CONTACT_SMTP_PASS: nonEmpty,
 });

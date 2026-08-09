@@ -1,10 +1,19 @@
 import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { createElement } from 'react';
 import { describe, expect, it, vi } from 'vitest';
 
 import { AccountSummary } from '@/modules/account/account-ui';
 import { CredentialForm } from '@/modules/auth';
-import { LandingHero, LandingPrincipleList, LandingStepList } from '@/modules/marketing';
+import {
+  LandingCta,
+  LandingDirectory,
+  LandingFaq,
+  LandingHero,
+  LandingPrincipleList,
+  LandingStepList,
+  MarketingTopicPage,
+} from '@/modules/marketing';
 import {
   ContactFields,
   EditorShell,
@@ -15,6 +24,7 @@ import {
 } from '@/modules/portfolio-editor/editor-ui';
 import { PortfolioList } from '@/modules/portfolios/dashboard';
 import { ImportFactList } from '@/modules/resume-ingestion/ingestion-ui';
+import { PageSkeleton } from '@/shared/components/feedback/page-skeleton.component';
 
 import { requireElement } from '../fixtures/dom.fixtures';
 
@@ -31,6 +41,10 @@ const editorLabels = {
   headline: 'Headline',
   summary: 'Summary',
   location: 'Location',
+  tagline: 'Tagline',
+  availabilityEnabled: 'Available for work',
+  availabilityNote: 'Availability note',
+  coverLetter: 'Cover letter',
   contactTitle: 'Contact',
   contactHint: 'How people reach you.',
   email: 'Email',
@@ -115,6 +129,86 @@ describe('marketing components', () => {
 
     expect(list.tagName).toBe('OL');
     expect(within(list).getAllByRole('listitem')).toHaveLength(2);
+  });
+
+  it('renders each frequently asked question as expandable content', () => {
+    render(
+      <LandingFaq
+        items={[
+          { id: 'review', question: 'Can I review it?', answer: 'Nothing is public first.' },
+          { id: 'own', question: 'Do I own it?', answer: 'Yes.' },
+        ]}
+      />,
+    );
+
+    expect(screen.getAllByText(/Can I review it\?|Do I own it\?/)).toHaveLength(2);
+    const firstQuestion = requireElement(screen.getAllByRole('group')[0]);
+
+    expect(firstQuestion).not.toHaveAttribute('open');
+  });
+
+  it('renders directory entries as labelled links', () => {
+    render(
+      <LandingDirectory
+        linkLabel="Read guide"
+        items={[
+          {
+            id: 'developers',
+            title: 'Developer portfolios',
+            description: 'Examples for engineers.',
+            href: '/developer-portfolios',
+          },
+        ]}
+      />,
+    );
+
+    expect(screen.getByRole('listitem')).toHaveTextContent('Examples for engineers.');
+    expect(screen.getByRole('link', { name: 'Read guide' })).toHaveAttribute(
+      'href',
+      '/developer-portfolios',
+    );
+  });
+
+  it('keeps the call to action copy and supplied actions together', () => {
+    render(
+      <LandingCta
+        title="Build yours"
+        description="Start with the facts in your CV."
+        actions={<button type="button">Upload CV</button>}
+      />,
+    );
+
+    expect(screen.getByRole('heading', { level: 2, name: 'Build yours' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Upload CV' })).toBeInTheDocument();
+  });
+
+  it('renders topic sections and related navigation under one page heading', () => {
+    render(
+      <MarketingTopicPage
+        eyebrow="Guides"
+        title="Portfolio guidance"
+        description="A practical introduction."
+        sections={['Use facts', 'Review first']}
+        related={createElement('a', { href: '/examples' }, 'Examples')}
+      />,
+    );
+
+    expect(screen.getByRole('heading', { level: 1, name: 'Portfolio guidance' })).toBeVisible();
+    expect(screen.getByRole('heading', { name: 'Use facts' })).toBeInTheDocument();
+    expect(screen.getByRole('navigation', { name: 'Portfolio guidance' })).toContainElement(
+      screen.getByRole('link', { name: 'Examples' }),
+    );
+  });
+});
+
+describe('PageSkeleton', () => {
+  it('is hidden from assistive technology while preserving the page layout', () => {
+    render(<PageSkeleton />);
+    const genericElements = screen.getAllByRole('generic', { hidden: true });
+    const shell = requireElement(genericElements[0]);
+
+    expect(shell).toHaveAttribute('aria-hidden', 'true');
+    expect(genericElements).toHaveLength(5);
   });
 });
 
@@ -270,10 +364,18 @@ describe('editor field components', () => {
         headline="Engineer"
         summary=""
         location="Lisbon"
+        tagline="Welcome"
+        availabilityEnabled
+        availabilityNote="Open to work"
+        coverLetter="Introduction"
         onDisplayNameChange={onDisplayNameChange}
         onHeadlineChange={noop}
         onSummaryChange={noop}
         onLocationChange={noop}
+        onTaglineChange={noop}
+        onAvailabilityEnabledChange={noop}
+        onAvailabilityNoteChange={noop}
+        onCoverLetterChange={noop}
       />,
     );
 
@@ -384,9 +486,9 @@ describe('SectionList', () => {
 
 describe('WarningList', () => {
   it('renders nothing when the extractor was sure about everything', () => {
-    const { container } = render(<WarningList title="Worth a second look" warnings={[]} />);
+    render(<WarningList title="Worth a second look" warnings={[]} />);
 
-    expect(container).toBeEmptyDOMElement();
+    expect(screen.queryByRole('heading', { name: 'Worth a second look' })).not.toBeInTheDocument();
   });
 
   it('lists each warning message', () => {

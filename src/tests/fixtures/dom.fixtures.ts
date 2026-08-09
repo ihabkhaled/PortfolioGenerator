@@ -7,10 +7,10 @@
  * confusing null-property error three lines later. Throwing names the problem.
  */
 export function requireElement<TElement>(
-  candidate: TElement | undefined,
+  candidate: TElement | null | undefined,
   what = 'element',
 ): TElement {
-  if (candidate === undefined) {
+  if (candidate === undefined || candidate === null) {
     throw new Error(`Expected a ${what} to be in the document`);
   }
 

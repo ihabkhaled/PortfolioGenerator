@@ -3,7 +3,12 @@
 The checklist before the first real user. Every line is either automated — in
 which case the command is named — or a human judgement that no test can make.
 
-## Last full run
+## Last full run (pre-expansion baseline)
+
+The results below predate the 2026-08-09 product-expansion workspace changes.
+They must not be treated as verification of the current tree. The user asked
+that processor-heavy gates not be rerun during implementation; run the single
+`npm run validate` gate only when preparing an authorized commit or push.
 
 **2026-08-09**, against Node 24, PostgreSQL 17 and a production build.
 
@@ -59,6 +64,14 @@ npm run validate     # format check + lint + typecheck + coverage + build
 - [ ] `STORAGE_DRIVER=s3` with a real bucket, and the bucket is **private**.
 - [ ] The database is not reachable from the public internet.
 - [ ] Quotas and the budget ceiling are set to numbers someone has thought about.
+- [ ] `CLAMAV_ENABLED=true`; an EICAR canary is rejected and a scanner outage
+      refuses uploads without writing storage or database rows.
+- [ ] The clamd endpoint is private or behind authenticated TLS; public TCP 3310
+      is blocked at the firewall.
+- [ ] `CONTACT_EMAIL_ENABLED=true` and the SMTP relay delivers both contact and
+      password-reset messages without exposing credentials in logs.
+- [ ] AI translation credentials and models are configured, and translated
+      drafts are reviewed before their separately published snapshots go live.
 - [ ] `.env` is not committed. (`git ls-files | grep -c '^\.env$'` is 0.)
 
 ## Data
@@ -94,7 +107,6 @@ These are the things a person has to look at. See
 
 Listed so nobody discovers them at the worst moment:
 
-- No email verification and no password reset flow.
 - No custom domains.
 - No team accounts.
 - No scheduled retention job — it is a query someone runs.

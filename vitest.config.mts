@@ -72,6 +72,10 @@ export default defineConfig({
         // A raw TCP client for clamd. Exercised against a real daemon in the
         // E2E suite; a socket mocked here would assert the mock.
         'src/packages/clamav/clamav-client.ts',
+        // SMTP is likewise a network adapter. Its protocol and deployment
+        // behavior require a real relay; contact behavior is covered through
+        // the module boundary and production smoke checks.
+        'src/packages/email/**',
         'src/packages/og/**',
         'src/packages/pdf/**',
         'src/packages/i18n/request.ts',

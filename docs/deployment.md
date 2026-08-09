@@ -8,6 +8,8 @@
 | PostgreSQL 16+                | The only required datastore                  |
 | S3-compatible object storage  | AWS S3, Cloudflare R2 or MinIO               |
 | An OpenAI-compatible endpoint | Optional; `deterministic` works without one  |
+| ClamAV 1.4 service            | Required when production uploads are enabled |
+| SMTP relay                    | Required for contact and password recovery   |
 
 No Redis, no queue, no cron. See [ADR-0003](../architecture/adrs/0003-postgres-rate-limiting.md).
 
@@ -27,6 +29,33 @@ The values that must be set for production, and what goes wrong if they are not:
 | `BETTER_AUTH_SECRET`                                 | Boot failure below 32 characters. Rotating it invalidates every session.                                                  |
 | `STORAGE_DRIVER=s3` without the S3 block             | Boot failure, naming the missing variables.                                                                               |
 | `AI_PROVIDER=openai-compatible` without `AI_API_KEY` | Boot failure.                                                                                                             |
+| `CLAMAV_ENABLED=true` without reachable clamd        | Uploads fail closed; no unscanned bytes are stored.                                                                       |
+| `CONTACT_EMAIL_ENABLED=true` without the SMTP block  | Boot failure, naming the missing relay values.                                                                            |
+
+The supported contact contract includes `CONTACT_EMAIL_PROVIDER=smtp`,
+`CONTACT_RATE_LIMIT_MAX`, `CONTACT_RATE_LIMIT_WINDOW_MS`, and the
+`CONTACT_SMTP_*` variables shown in `.env.example`. Port 587 with
+`CONTACT_SMTP_SECURE=false` still upgrades with STARTTLS before credentials are
+sent.
+
+## Vercel and ClamAV
+
+Deploy the Next.js application to Vercel and run ClamAV as a separate private
+service using [`deploy/clamav/compose.yaml`](../deploy/clamav/compose.yaml).
+Vercel Functions cannot host a long-running clamd daemon. The application must
+reach it through a private-network connector or an authenticated TLS gateway;
+never expose raw TCP port 3310 to the public internet because clamd provides no
+authentication or transport encryption.
+
+The deployment needs enough memory for signatures and scans (the supplied
+container reserves 3 GB and limits at 4 GB), a persistent signatures volume,
+and a health monitor. Copy `deploy/clamav/.env.example`, bind the gateway to its
+private interface, then point `CLAMAV_HOST` and `CLAMAV_PORT` at that gateway.
+
+Production secrets and endpoints remain human-owned steps: Vercel project
+access, Postgres, object storage, SMTP credentials, Gemini/OpenAI-compatible AI
+credentials, DNS, and the private scanner network cannot be provisioned from a
+source checkout.
 
 ## Build and start
 

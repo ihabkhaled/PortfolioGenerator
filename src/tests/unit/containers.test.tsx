@@ -28,6 +28,10 @@ const editorPageLabels: EditorLabels = {
   headline: 'Headline',
   summary: 'Summary',
   location: 'Location',
+  tagline: 'Tagline',
+  availabilityEnabled: 'Available for work',
+  availabilityNote: 'Availability note',
+  coverLetter: 'Cover letter',
   contactTitle: 'Contact',
   contactHint: 'How people reach you.',
   email: 'Email',
@@ -47,6 +51,10 @@ const editorPageLabels: EditorLabels = {
   warningsTitle: 'Worth a second look',
 };
 
+function leaveAssetUploadIdle(): Promise<{ readonly status: 'idle' }> {
+  return Promise.resolve({ status: 'idle' });
+}
+
 function renderEditor(
   warnings: readonly { code: string; path: string; message: string }[] = [],
 ): void {
@@ -57,6 +65,7 @@ function renderEditor(
       initialVersion={1}
       labels={editorPageLabels}
       warnings={warnings}
+      uploadAssetAction={leaveAssetUploadIdle}
     />,
   );
 }
@@ -221,7 +230,8 @@ describe('PortfolioEditorContainer', () => {
   it('reports unsaved changes after an edit', async () => {
     renderEditor();
 
-    await userEvent.type(screen.getByLabelText('Location'), '!');
+    await userEvent.clear(screen.getByLabelText('Location'));
+    await userEvent.type(screen.getByLabelText('Location'), 'Lisbon, Portugal!');
 
     expect(screen.getAllByText('Unsaved changes').length).toBeGreaterThan(0);
   });
@@ -247,6 +257,32 @@ describe('PortfolioEditorContainer', () => {
 
     expect(screen.getByText('The start date could not be read confidently.')).toBeInTheDocument();
   });
+
+  it('edits and adds canonical collection entries', async () => {
+    renderEditor();
+
+    const project = screen.getByDisplayValue('Ledger Replay');
+    await userEvent.clear(project);
+    await userEvent.type(project, 'Ledger Replay 2');
+    await userEvent.click(requireElement(screen.getAllByRole('button', { name: 'Add entry' })[0]));
+
+    expect(project).toHaveValue('Ledger Replay 2');
+    expect(screen.getAllByText('Unsaved changes').length).toBeGreaterThan(0);
+  });
+
+  it('creates a subpage without collecting a password in draft state', async () => {
+    renderEditor();
+    const title = requireElement(screen.getAllByLabelText('Page title')[0]);
+    const navigationLabel = requireElement(screen.getAllByLabelText('Navigation label')[0]);
+    const address = requireElement(screen.getAllByLabelText('Address')[0]);
+    await userEvent.type(title, 'Speaking');
+    await userEvent.type(navigationLabel, 'Speaking');
+    await userEvent.type(address, 'speaking');
+    await userEvent.click(screen.getByRole('button', { name: 'Add page' }));
+
+    expect(screen.getAllByDisplayValue('Speaking').length).toBeGreaterThanOrEqual(2);
+    expect(screen.queryByLabelText('Password')).not.toBeInTheDocument();
+  });
 });
 
 describe('PublishPanelContainer', () => {
@@ -265,7 +301,7 @@ describe('PublishPanelContainer', () => {
   it('offers claim and publish as separate controls, with no unpublish yet', () => {
     renderPanel(false);
 
-    const buttons = screen.getAllByRole('button').map((button) => button.textContent);
+    const buttons = screen.getAllByRole('button');
 
     expect(buttons).toHaveLength(2);
   });
@@ -292,37 +328,38 @@ describe('every control in the editor is wired to the draft', () => {
   it('accepts a summary edit', async () => {
     renderEditor();
 
-    await userEvent.clear(screen.getByLabelText('Summary'));
-    await userEvent.type(screen.getByLabelText('Summary'), 'One paragraph.');
+    const summary = screen.getByLabelText('Summary');
+    await userEvent.type(summary, 'One paragraph.');
 
-    expect(screen.getByLabelText('Summary')).toHaveValue('One paragraph.');
+    expect(summary).toHaveValue('One paragraph.');
   });
 
   it('accepts a contact edit and a visibility toggle', async () => {
     renderEditor();
 
-    await userEvent.clear(screen.getByLabelText('Phone'));
-    await userEvent.type(screen.getByLabelText('Phone'), '+201000000000');
+    const phone = screen.getByLabelText('Phone');
+    await userEvent.type(phone, '+201000000000');
 
     const checkboxes = screen.getAllByRole('checkbox');
 
     await userEvent.click(requireElement(checkboxes[0]));
     await userEvent.click(requireElement(checkboxes[1]));
 
-    expect(screen.getByLabelText('Phone')).toHaveValue('+201000000000');
+    expect(phone).toHaveValue('+201000000000');
   });
 
   it('accepts search metadata and the indexing opt-out', async () => {
     renderEditor();
 
-    await userEvent.type(screen.getByLabelText('Title'), 'Amina Rahman, backend engineer');
+    const seoTitle = screen.getByLabelText('Title');
+    await userEvent.type(seoTitle, 'Amina Rahman, backend engineer');
     await userEvent.type(screen.getByLabelText('Description'), 'Payments and reliability.');
 
     const checkboxes = screen.getAllByRole('checkbox');
 
     await userEvent.click(requireElement(checkboxes.at(-1)));
 
-    expect(screen.getByLabelText('Title')).toHaveValue('Amina Rahman, backend engineer');
+    expect(seoTitle).toHaveValue('Amina Rahman, backend engineer');
   });
 
   it('hides a section from the preview when its visibility is toggled off', async () => {
@@ -362,6 +399,7 @@ describe('the editor on a portfolio that has almost nothing in it', () => {
         initialVersion={1}
         labels={editorPageLabels}
         warnings={[]}
+        uploadAssetAction={leaveAssetUploadIdle}
       />,
     );
 

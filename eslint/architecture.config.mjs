@@ -213,7 +213,9 @@ export default [
             'ingestion-ui',
             'editor-ui',
             'account-ui',
+            'contact-ui',
             'preferences-ui',
+            'private-page-access-ui',
           ],
         },
       ],
@@ -255,6 +257,11 @@ export default [
             'src/modules/publishing/',
             'src/modules/seo/',
             'src/modules/admin-health/',
+            // Public asset reads are constrained by a clean asset row and a
+            // reference in the validated published portfolio snapshot.
+            'src/modules/assets/repositories/',
+            'src/modules/assets/server.ts',
+            'src/modules/assets/services/published-asset.service.ts',
             'src/app/(public)/',
             'src/app/sitemap.ts',
           ],

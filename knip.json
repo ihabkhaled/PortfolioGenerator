@@ -6,7 +6,7 @@
     "src/tests/**/*.{ts,tsx}"
   ],
   "project": ["src/**/*.{ts,tsx}", "eslint/**/*.mjs", "support/**/*.{mjs,mts}"],
-  "ignoreDependencies": ["tailwindcss"],
+  "ignoreDependencies": ["tailwindcss", "husky"],
   "rules": {
     "exports": "off",
     "nsExports": "off",

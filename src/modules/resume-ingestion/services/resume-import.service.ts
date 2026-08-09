@@ -4,13 +4,9 @@ import { createHash } from 'node:crypto';
 
 import { extractResumeToDraft } from '@/modules/ai/server';
 import { recordAuditEvent } from '@/modules/audit/server';
+import { inspectAndScan } from '@/modules/file-security/server';
 import { consumeAiOperationQuota, consumePlatformAiBudget } from '@/modules/rate-limit/server';
-import {
-  EXTRACTED_TEXT_KEY_PREFIX,
-  PDF_CONTENT_TYPE,
-  RESUME_KEY_PREFIX,
-  TEXT_CONTENT_TYPE,
-} from '@/modules/storage';
+import { EXTRACTED_TEXT_KEY_PREFIX, RESUME_KEY_PREFIX, TEXT_CONTENT_TYPE } from '@/modules/storage';
 import { generateStorageKey, getObjectStorage } from '@/modules/storage/server';
 import { getServerEnv } from '@/packages/env/server';
 import { logger } from '@/packages/logger';
@@ -19,6 +15,7 @@ import { extractPdfText } from '@/packages/pdf';
 import { WARNING_CODES } from '../constants/import-warning.constants';
 import { normalizeResumeText } from '../helpers/resume-text.helper';
 import { validateUpload } from '../policies/pdf-validation.policy';
+import { toUploadRejection } from '../policies/upload-rejection.policy';
 import {
   createResumeUpload,
   updateOwnedResumeUpload,
@@ -51,10 +48,41 @@ export async function importResume(request: ResumeImportRequest): Promise<Resume
     return { ok: false, rejection };
   }
 
+  /*
+   * The full gate: extension, declared type and magic bytes must agree, and
+   * the bytes must survive a virus scan.
+   *
+   * It runs before anything is written, so an infected file never reaches
+   * object storage, never gets a row, and never gets a storage key that some
+   * later code path could serve. The PDF check above stays: it is cheap, it
+   * runs first, and it produces the specific message a user who uploaded a
+   * Word document actually needs.
+   */
+  const inspection = await inspectAndScan(
+    {
+      fileName: request.originalFilename,
+      declaredContentType: request.declaredContentType,
+      bytes: request.bytes,
+    },
+    'document',
+    env.UPLOAD_MAX_BYTES,
+  );
+
+  if (!inspection.ok) {
+    await recordAuditEvent({
+      eventType: 'resume.rejected',
+      ownerId: request.ownerId,
+      portfolioId: request.portfolioId,
+      metadata: { rejection: inspection.rejection, detail: inspection.detail },
+    });
+
+    return { ok: false, rejection: toUploadRejection(inspection.rejection) };
+  }
+
   const sha256 = createHash('sha256').update(request.bytes).digest('hex');
   const storageKey = generateStorageKey(request.ownerId, RESUME_KEY_PREFIX);
 
-  await storage.putPrivate(storageKey, request.bytes, PDF_CONTENT_TYPE);
+  await storage.putPrivate(storageKey, request.bytes, inspection.contentType);
 
   const upload = await createResumeUpload({
     ownerId: request.ownerId,
@@ -62,7 +90,7 @@ export async function importResume(request: ResumeImportRequest): Promise<Resume
     storageKey,
     originalFilename: request.originalFilename,
     // Recorded as what we verified it to be, not as what the browser claimed.
-    mimeType: PDF_CONTENT_TYPE,
+    mimeType: inspection.contentType,
     sizeBytes: request.bytes.length,
     sha256,
     status: 'VALIDATED',

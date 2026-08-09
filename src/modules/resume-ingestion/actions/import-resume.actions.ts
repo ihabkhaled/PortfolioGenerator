@@ -69,6 +69,7 @@ export async function importResumeAction(
     portfolioId,
     bytes,
     originalFilename: file.name,
+    declaredContentType: file.type,
     displayNameFallback: owner.name,
     now,
   });

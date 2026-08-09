@@ -60,4 +60,12 @@ export const UPLOAD_REJECTIONS = [
   'too-many-pages',
   'quota-exceeded',
   'rate-limited',
+  // The file is not what its name and its content type claim it is.
+  'type-mismatch',
+  // Something was found in it.
+  'infected',
+  // The scanner could not answer, so nothing was stored. Deliberately distinct
+  // from 'infected': one means the file is dangerous, the other means we do not
+  // know, and a user who is told the wrong one cannot act correctly.
+  'scanner-unavailable',
 ] as const;

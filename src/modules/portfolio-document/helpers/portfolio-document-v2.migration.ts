@@ -1,4 +1,4 @@
-import { DEFAULT_SOCIAL_KIND_BY_LINK_KIND } from '../constants/portfolio-migration.constants';
+import { DEFAULT_SOCIAL_KIND_BY_LINK_KIND } from '../constants/portfolio-social-kind.constants';
 import type { LegacyRecord } from '../types/portfolio-migration.types';
 
 /**

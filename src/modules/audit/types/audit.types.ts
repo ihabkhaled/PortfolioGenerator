@@ -12,6 +12,7 @@ export type AuditEventType =
   | 'portfolio.slug_changed'
   | 'portfolio.deleted'
   | 'resume.uploaded'
+  | 'resume.rejected'
   | 'resume.text_extracted'
   | 'resume.deleted'
   | 'ai.extraction.started'

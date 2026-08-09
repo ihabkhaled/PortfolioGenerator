@@ -20,6 +20,8 @@ A commit compiles, passes lint and typecheck, and does one thing.
 `npm run quality:dead-code` (knip) fails on unused **files**, unused
 **dependencies** and **unlisted** imports. Those are unambiguous rot.
 
+husky is listed in `ignoreDependencies`. It is invoked by `support/install-git-hooks.mjs` through a path resolved at run time — the script has to check whether husky exists before calling it, because on a build machine it does not — and a static analyser cannot see a call it never wrote.
+
 Its unused-**exports** check is switched off, because it contradicts two rules
 this repository enforces deliberately: pure-logic files must export every
 function so a test can reach it, and a module surface publishes an API whether

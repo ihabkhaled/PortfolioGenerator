@@ -188,7 +188,10 @@
       "rateLimited": "Too many uploads right now. Try again in a little while.",
       "invalid": "Something about that request was not right. Try again.",
       "notFound": "That portfolio no longer exists.",
-      "conflict": "This portfolio changed in another tab. Reload before importing again."
+      "conflict": "This portfolio changed in another tab. Reload before importing again.",
+      "typeMismatch": "That file is not what its name says it is. Upload the original PDF rather than a renamed copy.",
+      "infected": "Our scanner found something in that file, so it was not stored. Check the file on your own machine before trying again.",
+      "scannerUnavailable": "We could not scan that file just now, so nothing was stored. Please try again in a few minutes."
     }
   },
   "editor": {

@@ -7,6 +7,8 @@ export interface ResumeImportRequest {
   readonly portfolioId: string;
   readonly bytes: Uint8Array;
   readonly originalFilename: string;
+  /** What the browser claimed. Checked for agreement, never trusted. */
+  readonly declaredContentType: string;
   /** Used when the CV has no readable name. */
   readonly displayNameFallback: string;
   /** Injected so quota windows and tests agree on "now". */

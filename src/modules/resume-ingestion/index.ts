@@ -9,6 +9,7 @@ export {
 export { readBoundedString, readExtractionWarnings } from './helpers/extraction-warnings.helper';
 export { normalizeResumeText } from './helpers/resume-text.helper';
 export { canTransition, hasDraft, isFailure, isTerminal } from './policies/ingestion-state.policy';
+export { toUploadRejection } from './policies/upload-rejection.policy';
 export { hasPdfSignature, looksEncrypted, validateUpload } from './policies/pdf-validation.policy';
 export type {
   ExtractionWarning,

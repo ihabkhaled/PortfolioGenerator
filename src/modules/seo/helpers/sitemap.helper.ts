@@ -1,8 +1,15 @@
+import {
+  APP_LOCALES,
+  DEFAULT_LOCALE,
+  localizePlatformPath,
+  type AppLocale,
+} from '@/modules/localization';
 import type { PortfolioDocument } from '@/modules/portfolio-document';
 import { absoluteUrl } from '@/packages/env';
-import { ROUTE_PATHS } from '@/shared/constants/route-paths.constants';
+import { MARKETING_ROUTE_PATHS, ROUTE_PATHS } from '@/shared/constants/route-paths.constants';
 
 import { SITEMAP_CHANGE_FREQUENCY } from '../constants/seo.constants';
+import type { PlatformMetadataAlternates } from '../types/seo.types';
 import type { SitemapEntry, SitemapPortfolio } from '../types/sitemap.types';
 
 /**
@@ -20,26 +27,43 @@ import type { SitemapEntry, SitemapPortfolio } from '../types/sitemap.types';
  * not to a tenant, and their lifecycle is unrelated.
  */
 export function buildPlatformSitemapEntries(now: Date): readonly SitemapEntry[] {
-  return [
-    {
-      url: absoluteUrl(ROUTE_PATHS.home),
-      lastModified: now,
+  const routes = [
+    { path: ROUTE_PATHS.home, changeFrequency: 'monthly' as const, priority: 1 },
+    { path: ROUTE_PATHS.signIn, changeFrequency: 'yearly' as const, priority: 0.3 },
+    { path: ROUTE_PATHS.signUp, changeFrequency: 'yearly' as const, priority: 0.3 },
+    ...Object.values(MARKETING_ROUTE_PATHS).map((path) => ({
+      path,
       changeFrequency: 'monthly' as const,
-      priority: 1,
-    },
-    {
-      url: absoluteUrl(ROUTE_PATHS.signIn),
-      lastModified: now,
-      changeFrequency: 'yearly' as const,
-      priority: 0.3,
-    },
-    {
-      url: absoluteUrl(ROUTE_PATHS.signUp),
-      lastModified: now,
-      changeFrequency: 'yearly' as const,
-      priority: 0.3,
-    },
+      priority: 0.7,
+    })),
   ];
+
+  return APP_LOCALES.flatMap((locale) =>
+    routes.map((route) => ({
+      url: absoluteUrl(localizePlatformPath(route.path, locale)),
+      lastModified: now,
+      changeFrequency: route.changeFrequency,
+      priority: route.priority,
+    })),
+  );
+}
+
+/** Canonical and hreflang values shared by every platform-owned public page. */
+export function buildPlatformMetadataAlternates(
+  pathname: string,
+  locale: AppLocale = DEFAULT_LOCALE,
+): PlatformMetadataAlternates {
+  const englishUrl = absoluteUrl(localizePlatformPath(pathname, DEFAULT_LOCALE));
+  const languages: Record<string, string> = { 'x-default': englishUrl };
+
+  for (const supportedLocale of APP_LOCALES) {
+    languages[supportedLocale] = absoluteUrl(localizePlatformPath(pathname, supportedLocale));
+  }
+
+  return {
+    canonical: absoluteUrl(localizePlatformPath(pathname, locale)),
+    languages,
+  };
 }
 
 export function buildPortfolioSitemapEntries(
@@ -54,10 +78,10 @@ export function entriesForPortfolio(portfolio: SitemapPortfolio): readonly Sitem
   }
 
   return portfolio.document.pages
-    .filter((page) => page.visible)
+    .filter((page) => page.visible && page.visibility === 'public')
     .toSorted((left, right) => left.order - right.order)
     .map((page) => ({
-      url: absoluteUrl(pagePath(portfolio.slug, page.slug)),
+      url: absoluteUrl(pagePath(portfolio.slug, page.slug, portfolio.locale)),
       lastModified: portfolio.publishedAt,
       changeFrequency: SITEMAP_CHANGE_FREQUENCY,
       // The home page is the portfolio; a subpage is part of it.
@@ -65,8 +89,9 @@ export function entriesForPortfolio(portfolio: SitemapPortfolio): readonly Sitem
     }));
 }
 
-export function pagePath(portfolioSlug: string, pageSlug: string): string {
-  return pageSlug === '' ? `/${portfolioSlug}` : `/${portfolioSlug}/${pageSlug}`;
+export function pagePath(portfolioSlug: string, pageSlug: string, locale = 'en'): string {
+  const portfolioPath = pageSlug === '' ? `/${portfolioSlug}` : `/${portfolioSlug}/${pageSlug}`;
+  return locale === 'en' ? portfolioPath : `/${locale}${portfolioPath}`;
 }
 
 /** Convenience for callers holding the whole published row. */

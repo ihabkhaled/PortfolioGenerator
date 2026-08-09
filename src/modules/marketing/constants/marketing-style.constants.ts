@@ -35,3 +35,40 @@ export const principleListClasses = {
   title: 'font-display text-base font-semibold tracking-tight text-foreground',
   description: 'text-sm leading-relaxed text-muted-foreground text-pretty',
 } as const;
+
+export const topicClasses = {
+  hero: 'surface-grid grid gap-5 border-b border-border px-5 py-20 sm:px-8 lg:px-10 lg:py-28',
+  eyebrow: 'font-mono text-xs font-medium uppercase tracking-[0.18em] text-primary-readable',
+  title:
+    'max-w-4xl font-display text-[clamp(2.5rem,7vw,4.5rem)] font-bold leading-none tracking-tight',
+  lead: 'max-w-2xl text-lg leading-relaxed text-muted-foreground',
+  related: 'flex flex-wrap gap-3',
+  relatedLink:
+    'rounded-md border border-border px-4 py-3 text-sm text-primary-readable hover:bg-muted',
+  sectionBody: 'max-w-2xl leading-relaxed text-muted-foreground',
+} as const;
+
+export const directoryClasses = {
+  grid: 'grid gap-px overflow-hidden rounded-lg border border-border bg-border sm:grid-cols-2 lg:grid-cols-3',
+  item: 'grid min-h-56 content-start gap-3 bg-surface-raised p-5',
+  title: 'font-display text-lg font-semibold tracking-tight text-foreground',
+  description: 'text-sm leading-relaxed text-muted-foreground text-pretty',
+  link: 'mt-auto inline-flex min-h-11 w-fit cursor-pointer items-center font-mono text-xs font-medium uppercase tracking-[0.12em] text-primary-readable underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring',
+} as const;
+
+export const faqClasses = {
+  list: 'divide-y divide-border overflow-hidden rounded-lg border border-border bg-surface-raised',
+  item: 'px-5 py-1 sm:px-7',
+  question:
+    'flex min-h-14 cursor-pointer items-center font-display font-semibold text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring',
+  answer: 'max-w-3xl pb-5 text-sm leading-relaxed text-muted-foreground text-pretty',
+} as const;
+
+export const ctaClasses = {
+  panel:
+    'grid gap-6 rounded-lg border border-border bg-surface-raised p-6 sm:p-8 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center',
+  copy: 'grid gap-2',
+  title: 'font-display text-2xl font-bold tracking-tight text-foreground',
+  description: 'max-w-2xl leading-relaxed text-muted-foreground',
+  actions: 'flex flex-wrap gap-3',
+} as const;

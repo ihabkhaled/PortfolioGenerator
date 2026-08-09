@@ -4,6 +4,9 @@ export interface PortfolioMetadataInput {
   readonly document: PortfolioDocument;
   readonly page: PortfolioPage;
   readonly portfolioSlug: string;
+  readonly locale?: string;
+  readonly availableLocales?: readonly string[];
+  readonly includeEnglishAlternate?: boolean;
 }
 
 export interface PortfolioMetadataValues {
@@ -13,6 +16,7 @@ export interface PortfolioMetadataValues {
   readonly indexable: boolean;
   readonly imageUrl: string;
   readonly displayName: string;
+  readonly languageAlternates: Readonly<Record<string, string>>;
 }
 
 export interface PersonStructuredData {
@@ -24,4 +28,9 @@ export interface PersonStructuredData {
   readonly description?: string;
   readonly address?: { readonly '@type': 'PostalAddress'; readonly addressLocality: string };
   readonly sameAs?: readonly string[];
+}
+
+export interface PlatformMetadataAlternates {
+  readonly canonical: string;
+  readonly languages: Readonly<Record<string, string>>;
 }

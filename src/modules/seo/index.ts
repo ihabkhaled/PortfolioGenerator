@@ -12,8 +12,11 @@ export {
   SITEMAP_CHANGE_FREQUENCY,
 } from './constants/seo.constants';
 export { StructuredData } from './components/structured-data.component';
+export { AdSenseScript } from './components/adsense-script.component';
+export { buildPortfolioFeedItems, escapeXml, serializeRssFeed } from './helpers/feed.helper';
 export { buildOgCardValues } from './helpers/og-card.helper';
 export {
+  buildPlatformMetadataAlternates,
   buildPlatformSitemapEntries,
   buildPortfolioSitemapEntries,
   toSitemapPortfolio,
@@ -32,8 +35,11 @@ export {
 export type { OgCardValues } from './types/og-card.types';
 export type { StructuredDataProps } from './types/structured-data.types';
 export type { SitemapEntry, SitemapPortfolio } from './types/sitemap.types';
+export type { FeedItem } from './types/feed.types';
+export type { AdSenseScriptProps } from './types/adsense.types';
 export type {
   PersonStructuredData,
+  PlatformMetadataAlternates,
   PortfolioMetadataInput,
   PortfolioMetadataValues,
 } from './types/seo.types';

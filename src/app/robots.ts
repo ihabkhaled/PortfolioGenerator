@@ -26,7 +26,16 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: '*',
         allow: '/',
-        disallow: [`${ROUTE_PATHS.dashboard}/`, ROUTE_PATHS.dashboard, `${ROUTE_PATHS.api}/`],
+        disallow: [
+          `${ROUTE_PATHS.dashboard}/`,
+          ROUTE_PATHS.dashboard,
+          `${ROUTE_PATHS.api}/`,
+          ROUTE_PATHS.signOut,
+          ROUTE_PATHS.signIn,
+          ROUTE_PATHS.signUp,
+          ROUTE_PATHS.forgotPassword,
+          ROUTE_PATHS.resetPassword,
+        ],
       },
     ],
     sitemap: absoluteUrl(ROUTE_PATHS.sitemap),

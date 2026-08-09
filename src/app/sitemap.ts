@@ -1,6 +1,10 @@
 import type { MetadataRoute } from 'next';
 
-import { listPublishedPortfoliosUnscoped } from '@/modules/portfolios/server';
+import { isAppLocale } from '@/modules/localization';
+import {
+  listPublishedPortfoliosUnscoped,
+  listPublishedTranslationsUnscoped,
+} from '@/modules/portfolios/server';
 import { buildPlatformSitemapEntries, buildPortfolioSitemapEntries } from '@/modules/seo';
 
 /**
@@ -19,6 +23,7 @@ export const dynamic = 'force-dynamic';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const portfolios = await listPublishedPortfoliosUnscoped();
+  const translations = await listPublishedTranslationsUnscoped();
   const generatedAt = new Date();
 
   return [
@@ -29,6 +34,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         document: portfolio.document,
         publishedAt: portfolio.publishedAt,
       })),
+    ),
+    ...buildPortfolioSitemapEntries(
+      translations.flatMap((translation) =>
+        isAppLocale(translation.locale) && translation.locale !== 'en'
+          ? [{ ...translation, locale: translation.locale }]
+          : [],
+      ),
     ),
   ].map((entry) => ({ ...entry }));
 }

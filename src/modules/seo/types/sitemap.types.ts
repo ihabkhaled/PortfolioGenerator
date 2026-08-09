@@ -16,4 +16,5 @@ export interface SitemapPortfolio {
   readonly slug: string;
   readonly document: PortfolioDocument;
   readonly publishedAt: Date;
+  readonly locale?: string;
 }

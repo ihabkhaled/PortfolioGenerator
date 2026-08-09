@@ -26,7 +26,7 @@ export function buildPortfolioMetadata(input: PortfolioMetadataInput): Metadata 
      */
     title: { absolute: values.title },
     description: values.description,
-    alternates: { canonical: values.canonical },
+    alternates: { canonical: values.canonical, languages: values.languageAlternates },
     robots: values.indexable
       ? { index: true, follow: true }
       : { index: false, follow: false, nocache: true },
@@ -50,3 +50,4 @@ export function buildPortfolioMetadata(input: PortfolioMetadataInput): Metadata 
 export { PortfolioOgCard } from './components/portfolio-og-card.component';
 export { buildOgCardValues } from './helpers/og-card.helper';
 export { buildPortfolioMetadataValues } from './helpers/portfolio-metadata.helper';
+export { getPublicRssFeed } from './services/public-feed.service';

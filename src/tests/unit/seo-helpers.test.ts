@@ -27,6 +27,12 @@ describe('buildPageUrl', () => {
       'https://portfoliogenerate.test/amina-rahman/projects',
     );
   });
+
+  it('prefixes translated portfolio pages with their locale', () => {
+    expect(buildPageUrl('amina-rahman', 'projects', 'fr')).toBe(
+      'https://portfoliogenerate.test/fr/amina-rahman/projects',
+    );
+  });
 });
 
 describe('buildDefaultTitle', () => {
@@ -125,6 +131,25 @@ describe('buildPortfolioMetadataValues', () => {
     });
 
     expect(values.indexable).toBe(false);
+  });
+
+  it('builds localized canonical, image, and language alternate URLs', () => {
+    const values = buildPortfolioMetadataValues({
+      document,
+      page: pageBySlug(document, ''),
+      portfolioSlug: 'amina-rahman',
+      locale: 'fr',
+      availableLocales: ['en', 'fr', 'ar'],
+      includeEnglishAlternate: false,
+    });
+
+    expect(values.canonical).toBe('https://portfoliogenerate.test/fr/amina-rahman');
+    expect(values.imageUrl).toBe('https://portfoliogenerate.test/fr/amina-rahman/opengraph-image');
+    expect(values.languageAlternates).toEqual({
+      'x-default': 'https://portfoliogenerate.test/fr/amina-rahman',
+      fr: 'https://portfoliogenerate.test/fr/amina-rahman',
+      ar: 'https://portfoliogenerate.test/ar/amina-rahman',
+    });
   });
 });
 

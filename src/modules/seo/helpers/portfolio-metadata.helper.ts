@@ -12,8 +12,9 @@ import type { PortfolioMetadataInput, PortfolioMetadataValues } from '../types/s
  * user read in the editor and chose to publish.
  */
 
-export function buildPageUrl(portfolioSlug: string, pageSlug: string): string {
-  const path = pageSlug === '' ? `/${portfolioSlug}` : `/${portfolioSlug}/${pageSlug}`;
+export function buildPageUrl(portfolioSlug: string, pageSlug: string, locale = 'en'): string {
+  const portfolioPath = pageSlug === '' ? `/${portfolioSlug}` : `/${portfolioSlug}/${pageSlug}`;
+  const path = locale === 'en' ? portfolioPath : `/${locale}${portfolioPath}`;
 
   return absoluteUrl(path);
 }
@@ -54,9 +55,26 @@ export function buildPortfolioMetadataValues(
   input: PortfolioMetadataInput,
 ): PortfolioMetadataValues {
   const { document, page, portfolioSlug } = input;
-  const canonical = buildPageUrl(portfolioSlug, page.slug);
+  const locale = input.locale ?? 'en';
+  const canonical = buildPageUrl(portfolioSlug, page.slug, locale);
   const title = document.seo.title ?? buildDefaultTitle(document, page);
   const description = document.seo.description ?? buildDefaultDescription(document);
+  const englishUrl = buildPageUrl(portfolioSlug, page.slug, 'en');
+  const languageAlternates: Record<string, string> = {};
+  const availableLocales = input.availableLocales ?? [];
+
+  if (input.includeEnglishAlternate === false) {
+    languageAlternates['x-default'] = canonical;
+  } else {
+    languageAlternates['en'] = englishUrl;
+    languageAlternates['x-default'] = englishUrl;
+  }
+
+  for (const availableLocale of availableLocales) {
+    if (availableLocale !== 'en') {
+      languageAlternates[availableLocale] = buildPageUrl(portfolioSlug, page.slug, availableLocale);
+    }
+  }
 
   return {
     canonical,
@@ -65,7 +83,12 @@ export function buildPortfolioMetadataValues(
     // A user can opt out of indexing; the platform additionally refuses to
     // index anything that is not a published, visible page.
     indexable: document.seo.indexable && page.visible,
-    imageUrl: absoluteUrl(`/${portfolioSlug}/opengraph-image`),
+    imageUrl: absoluteUrl(
+      locale === 'en'
+        ? `/${portfolioSlug}/opengraph-image`
+        : `/${locale}/${portfolioSlug}/opengraph-image`,
+    ),
     displayName: document.identity.displayName,
+    languageAlternates,
   };
 }

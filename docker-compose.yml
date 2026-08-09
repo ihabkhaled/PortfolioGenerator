@@ -1,0 +1,46 @@
+# Local dependencies, so a fresh checkout is one command from a working stack.
+#
+# Both services are pinned to a major tag rather than `latest`: a scanner that
+# silently changes version between two developers' machines is a difference
+# nobody will think to check when an upload starts behaving differently.
+
+services:
+  postgres:
+    image: postgres:17-alpine
+    container_name: pg-portfolio-generate
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: portfolio_generate
+    # 5433 on purpose: 5432 is usually already taken by another project's
+    # stack, and a port collision reads as "the database is broken".
+    ports:
+      - '5433:5432'
+    volumes:
+      - portfolio-postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U postgres']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  clamav:
+    image: clamav/clamav:1.4
+    container_name: clamav-portfolio-generate
+    ports:
+      - '3310:3310'
+    volumes:
+      - portfolio-clamav:/var/lib/clamav
+    # The first start downloads the signature database, which takes minutes.
+    # The generous start period stops the orchestrator from killing it midway
+    # and restarting the download from nothing.
+    healthcheck:
+      test: ['CMD-SHELL', 'clamdscan --ping 1 || exit 1']
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 300s
+
+volumes:
+  portfolio-postgres:
+  portfolio-clamav:

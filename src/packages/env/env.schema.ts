@@ -62,6 +62,21 @@ export const serverEnvSchema = z.object({
   BUDGET_MAX_AI_OPERATIONS_PER_DAY: positiveInt.default(2000),
 
   RESUME_RETENTION_DAYS: positiveInt.default(90),
+
+  /*
+   * Virus scanning.
+   *
+   * Off by default so a fresh checkout runs without a daemon, and pinned on in
+   * production by configuration rather than by code. When it is on and clamd is
+   * unreachable, uploads are refused — see `inspectAndScan` for why that is the
+   * safe direction.
+   */
+  CLAMAV_ENABLED: booleanFlag.default(false),
+  CLAMAV_HOST: z.string().trim().default('127.0.0.1'),
+  CLAMAV_PORT: positiveInt.default(3310),
+  CLAMAV_TIMEOUT_MS: positiveInt.default(20_000),
+
+  UPLOAD_IMAGE_MAX_BYTES: positiveInt.default(6_291_456),
 });
 
 export const s3ConfiguredSchema = z.object({

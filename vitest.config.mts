@@ -69,6 +69,9 @@ export default defineConfig({
         'src/packages/database/**',
         'src/packages/auth/**',
         'src/packages/ai/client.ts',
+        // A raw TCP client for clamd. Exercised against a real daemon in the
+        // E2E suite; a socket mocked here would assert the mock.
+        'src/packages/clamav/clamav-client.ts',
         'src/packages/og/**',
         'src/packages/pdf/**',
         'src/packages/i18n/request.ts',

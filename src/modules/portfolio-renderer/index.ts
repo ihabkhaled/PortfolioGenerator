@@ -18,6 +18,7 @@ export {
   buildEducationEntries,
   buildExperienceEntries,
   buildLanguageEntries,
+  buildVolunteeringEntries,
   hasContent,
   joinNonEmpty,
   splitParagraphs,

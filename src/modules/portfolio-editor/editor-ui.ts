@@ -13,8 +13,14 @@ export { SectionList } from './components/section-list.component';
 export { SeoFields } from './components/seo-fields.component';
 export { WarningList } from './components/warning-list.component';
 export { editorClasses } from './constants/editor-style.constants';
+export { AssetCollectionsUploadContainer } from './containers/asset-collections-upload.container';
+export { CollectionEntryContainer } from './containers/collection-entry.container';
+export { CollectionManagerContainer } from './containers/collection-manager.container';
+export { PageManagerContainer } from './containers/page-manager.container';
 export { PortfolioEditorContainer } from './containers/portfolio-editor.container';
+export { PortraitUploadContainer } from './containers/portrait-upload.container';
 export { PublishPanelContainer } from './containers/publish-panel.container';
+export { useDraftEditor } from './hooks/use-draft-editor.hook';
 export type {
   ContactFieldsProps,
   IdentityFieldsProps,
@@ -28,3 +34,4 @@ export type {
 } from './types/editor-view.types';
 export type { SectionListEntry, SectionListProps } from './types/section-list.types';
 export type { PublishPanelProps } from './types/publish-panel.types';
+export type { PortraitUploadProps } from './types/portrait-upload.types';

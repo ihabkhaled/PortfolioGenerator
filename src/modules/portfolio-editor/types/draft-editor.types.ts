@@ -14,5 +14,6 @@ export interface DraftEditor {
   /** A message key, or null. */
   readonly error: string | null;
   readonly update: (next: PortfolioDocument) => void;
+  readonly adoptVersion: (version: number) => void;
   readonly save: () => void;
 }

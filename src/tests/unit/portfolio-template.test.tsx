@@ -84,6 +84,98 @@ describe.each([
 });
 
 describe('the template on a full portfolio', () => {
+  it('renders every reviewed v2 profile collection', () => {
+    const document = buildFullPortfolioDocument();
+    renderPage({
+      ...document,
+      awards: [
+        {
+          id: 'award-1',
+          name: 'Reliability award',
+          issuer: null,
+          date: null,
+          description: null,
+        },
+      ],
+    });
+
+    expect(screen.getByText('Writing things down')).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Distributed Systems' })).toBeInTheDocument();
+    expect(
+      screen.getByRole('link', { name: 'Reconciling a ledger you did not design' }),
+    ).toBeInTheDocument();
+    expect(screen.getByText('Code Club Lisbon')).toBeInTheDocument();
+    expect(screen.getByText('Reliability award')).toBeInTheDocument();
+    expect(screen.getByText(/Amina found the rounding bug/)).toBeInTheDocument();
+    expect(screen.getByText('Long-distance running')).toBeInTheDocument();
+    const gallerySource = screen
+      .getByRole('img', { name: 'A whiteboard showing the settlement state machine' })
+      .getAttribute('src');
+    expect(decodeURIComponent(gallerySource ?? '')).toContain('/media/asset-gallery-1');
+    expect(screen.getByRole('link', { name: /Curriculum vitae/ })).toHaveAttribute(
+      'href',
+      '/media/asset-cv',
+    );
+  });
+
+  it('renders accessible visible social profiles and omits hidden ones', () => {
+    renderPage(buildFullPortfolioDocument());
+
+    expect(screen.getAllByRole('link', { name: 'GitHub' }).length).toBeGreaterThan(0);
+    expect(screen.getAllByRole('link', { name: 'LinkedIn' }).length).toBeGreaterThan(0);
+    expect(screen.queryByRole('link', { name: 'Behance' })).not.toBeInTheDocument();
+  });
+
+  it('renders every supported social icon family with an accessible label', () => {
+    const document = buildFullPortfolioDocument();
+    const kinds = [
+      'gitlab',
+      'stackoverflow',
+      'youtube',
+      'tiktok',
+      'instagram',
+      'behance',
+      'dribbble',
+      'facebook',
+      'x',
+      'threads',
+      'medium',
+      'telegram',
+      'whatsapp',
+      'website',
+    ] as const;
+
+    renderPage({
+      ...document,
+      socialLinks: kinds.map((kind) => ({
+        id: `social-${kind}`,
+        kind,
+        label: kind,
+        url: `https://example.com/${kind}`,
+        visible: true,
+      })),
+    });
+
+    for (const kind of kinds) {
+      expect(screen.getAllByRole('link', { name: kind }).length).toBeGreaterThan(0);
+    }
+  });
+
+  it('keeps a band when only its v2 collection has content', () => {
+    const document = buildFullPortfolioDocument();
+    renderPage({
+      ...document,
+      identity: { ...document.identity, summary: null },
+      experience: [],
+      skills: [],
+      certifications: [],
+    });
+
+    expect(screen.getByText('Writing things down')).toBeInTheDocument();
+    expect(screen.getByText('Code Club Lisbon')).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Distributed Systems' })).toBeInTheDocument();
+  });
+
   it('renders the reviewed experience entries', () => {
     renderPage(buildFullPortfolioDocument());
 

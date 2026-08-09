@@ -26,6 +26,17 @@ export interface PortfolioLabels {
   readonly builtWith: string;
   readonly navigationLabel: string;
   readonly portraitAlt: string;
+  readonly supplemental: Readonly<{
+    softSkills: string;
+    courses: string;
+    publications: string;
+    volunteering: string;
+    awards: string;
+    interests: string;
+    testimonials: string;
+    gallery: string;
+    attachments: string;
+  }>;
 }
 
 export interface PortfolioTemplateProps {

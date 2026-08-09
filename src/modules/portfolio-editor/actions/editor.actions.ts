@@ -1,7 +1,8 @@
 'use server';
 
 import { requireOwner } from '@/modules/auth/server';
-import { saveDraftDocument } from '@/modules/portfolios/server';
+import { getOwnedPortfolio, saveDraftDocument } from '@/modules/portfolios/server';
+import { restoreServerPageAccess } from '@/modules/private-page-access';
 import { claimSlug, publishPortfolio, unpublishPortfolio } from '@/modules/publishing/server';
 import { logger } from '@/packages/logger';
 import { parseSchema } from '@/packages/zod';
@@ -28,11 +29,16 @@ export async function saveDraftAction(payload: SaveDraftPayload): Promise<Editor
     return { status: 'error', error: EDITOR_ERROR_KEYS.invalidDocument, version: null };
   }
 
+  const current = await getOwnedPortfolio(owner.id, parsed.value.portfolioId);
+  if (current === null) {
+    return { status: 'error', error: EDITOR_ERROR_KEYS.notFound, version: null };
+  }
+
   const saved = await saveDraftDocument({
     ownerId: owner.id,
     portfolioId: parsed.value.portfolioId,
     expectedVersion: parsed.value.expectedVersion,
-    document: parsed.value.document,
+    document: restoreServerPageAccess(parsed.value.document, current.draftDocument),
   });
 
   if (!saved.ok) {

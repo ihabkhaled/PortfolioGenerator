@@ -1,0 +1,70 @@
+import { buildPageHref, findVisiblePage } from '@/modules/portfolio-document';
+import { getPublishedPortfolio } from '@/modules/portfolios/server';
+import {
+  buildPrivatePageCookie,
+  buildPrivatePageHeaders,
+  parsePrivatePageUnlockSubmission,
+  unlockPrivatePage,
+} from '@/modules/private-page-access';
+import { consumePrivatePageUnlockQuota } from '@/modules/private-page-access/server';
+import { getServerEnv } from '@/packages/env/server';
+import { getClientAddress } from '@/packages/headers';
+
+export async function POST(request: Request): Promise<Response> {
+  const form = await request.formData();
+  const parsed = parsePrivatePageUnlockSubmission({
+    portfolioSlug: form.get('portfolioSlug'),
+    pageSlug: form.get('pageSlug'),
+    password: form.get('password'),
+  });
+
+  if (!parsed.ok) {
+    return new Response(null, { status: 404, headers: buildPrivatePageHeaders() });
+  }
+
+  const portfolio = await getPublishedPortfolio(parsed.value.portfolioSlug);
+  const resolved =
+    portfolio === null ? null : findVisiblePage(portfolio.document, parsed.value.pageSlug);
+
+  if (resolved?.page.visibility !== 'private' || resolved.page.passwordHash === null) {
+    return new Response(null, { status: 404, headers: buildPrivatePageHeaders() });
+  }
+
+  const scope = {
+    portfolioSlug: parsed.value.portfolioSlug,
+    pageId: resolved.page.id,
+    pageSlug: resolved.page.slug,
+  };
+  const address = await getClientAddress();
+  const attemptAllowed = await consumePrivatePageUnlockQuota(address, scope, new Date());
+  const env = getServerEnv();
+  const grant = attemptAllowed
+    ? await unlockPrivatePage({
+        password: parsed.value.password,
+        passwordHash: resolved.page.passwordHash,
+        scope,
+        secret: env.BETTER_AUTH_SECRET,
+      })
+    : null;
+  const target = new URL(buildPageHref(scope.portfolioSlug, scope.pageSlug), request.url);
+
+  if (grant === null) {
+    target.searchParams.set('access', 'denied');
+  }
+
+  const headers = new Headers(buildPrivatePageHeaders());
+  headers.set('Location', target.href);
+
+  if (grant !== null) {
+    headers.set(
+      'Set-Cookie',
+      buildPrivatePageCookie({
+        grant,
+        scope,
+        secure: env.NODE_ENV === 'production',
+      }),
+    );
+  }
+
+  return new Response(null, { status: 303, headers });
+}

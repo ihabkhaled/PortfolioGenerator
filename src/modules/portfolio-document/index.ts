@@ -14,6 +14,7 @@ export {
   PAGE_SLUG_MAX_LENGTH,
   PORTFOLIO_SCHEMA_VERSION,
   SECTION_TYPES,
+  SOCIAL_LINK_KINDS,
   SOURCE_KINDS,
   THEME_ACCENTS,
   THEME_MODES,
@@ -45,8 +46,10 @@ export {
 
 export {
   buildNavigation,
+  buildPublicNavigation,
   buildPageHref,
   findVisiblePage,
+  findPublicPage,
   resolvePageSlug,
   sortVisiblePages,
   sortVisibleSections,

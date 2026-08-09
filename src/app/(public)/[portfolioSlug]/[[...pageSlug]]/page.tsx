@@ -1,11 +1,23 @@
 import type { Metadata } from 'next';
+import { headers } from 'next/headers';
 import type { ReactElement } from 'react';
 
-import { buildNavigation, findVisiblePage, resolvePageSlug } from '@/modules/portfolio-document';
+import { DEFAULT_LOCALE, isAppLocale, localizePath } from '@/modules/localization';
+import {
+  buildPublicNavigation,
+  findVisiblePage,
+  resolvePageSlug,
+} from '@/modules/portfolio-document';
 import { buildPortfolioLabels, PortfolioTemplate } from '@/modules/portfolio-renderer';
-import { getPublishedPortfolio } from '@/modules/portfolios/server';
+import {
+  getPublishedPortfolio,
+  findPublishedBySlugUnscoped,
+  listPublishedTranslationsBySlugUnscoped,
+} from '@/modules/portfolios/server';
 import { buildThemeOptions } from '@/modules/preferences';
 import { ThemeToggleContainer } from '@/modules/preferences/preferences-ui';
+import { buildPrivatePageCookieName, verifyPrivatePageGrant } from '@/modules/private-page-access';
+import { PrivatePageChallenge } from '@/modules/private-page-access/private-page-access-ui';
 import {
   buildPageUrl,
   buildPersonStructuredData,
@@ -13,6 +25,9 @@ import {
   StructuredData,
 } from '@/modules/seo';
 import { buildPortfolioMetadata } from '@/modules/seo/server';
+import { preventResponseCaching } from '@/packages/cache';
+import { getServerEnv } from '@/packages/env/server';
+import { getRequestCookie } from '@/packages/headers';
 import { I18N_NAMESPACES } from '@/packages/i18n';
 import { getServerTranslations } from '@/packages/i18n/server';
 import { appNotFound } from '@/packages/navigation';
@@ -33,6 +48,7 @@ import { appNotFound } from '@/packages/navigation';
 
 interface PortfolioPageProps {
   readonly params: Promise<{ portfolioSlug: string; pageSlug?: string[] }>;
+  readonly searchParams: Promise<{ access?: string }>;
 }
 
 export async function generateMetadata(props: PortfolioPageProps): Promise<Metadata> {
@@ -43,6 +59,10 @@ export async function generateMetadata(props: PortfolioPageProps): Promise<Metad
     return { robots: { index: false, follow: false } };
   }
 
+  const requestHeaders = await headers();
+  const requestedLocale = requestHeaders.get('x-app-locale') ?? DEFAULT_LOCALE;
+  const locale = isAppLocale(requestedLocale) ? requestedLocale : DEFAULT_LOCALE;
+
   const portfolio = await getPublishedPortfolio(portfolioSlug);
 
   if (portfolio === null) {
@@ -51,14 +71,28 @@ export async function generateMetadata(props: PortfolioPageProps): Promise<Metad
 
   const resolved = findVisiblePage(portfolio.document, resolvedPageSlug);
 
-  if (resolved === null) {
+  if (resolved === null || resolved.page.visibility === 'private') {
     return { robots: { index: false, follow: false } };
   }
+
+  const translatedSnapshots = await listPublishedTranslationsBySlugUnscoped(portfolioSlug);
+  const englishPortfolio = await findPublishedBySlugUnscoped(portfolioSlug);
+  const englishPage =
+    englishPortfolio === null ? null : findVisiblePage(englishPortfolio.document, resolvedPageSlug);
+  const availableLocales = translatedSnapshots.flatMap((translation) => {
+    const translatedPage = findVisiblePage(translation.document, resolvedPageSlug);
+    return translatedPage !== null && translatedPage.page.visibility === 'public'
+      ? [translation.locale]
+      : [];
+  });
 
   return buildPortfolioMetadata({
     document: portfolio.document,
     page: resolved.page,
     portfolioSlug,
+    locale,
+    availableLocales: availableLocales.filter(isAppLocale),
+    includeEnglishAlternate: englishPage !== null && englishPage.page.visibility === 'public',
   });
 }
 
@@ -67,6 +101,9 @@ export default async function PublicPortfolioPage(
 ): Promise<ReactElement> {
   const { portfolioSlug, pageSlug } = await props.params;
   const resolvedPageSlug = resolvePageSlug(pageSlug);
+  const requestHeaders = await headers();
+  const requestedLocale = requestHeaders.get('x-app-locale') ?? DEFAULT_LOCALE;
+  const locale = isAppLocale(requestedLocale) ? requestedLocale : DEFAULT_LOCALE;
 
   if (resolvedPageSlug === null) {
     appNotFound();
@@ -85,8 +122,46 @@ export default async function PublicPortfolioPage(
   }
 
   const translate = await getServerTranslations(I18N_NAMESPACES.portfolio);
+
+  if (resolved.page.visibility === 'private') {
+    preventResponseCaching();
+    const scope = {
+      portfolioSlug,
+      pageId: resolved.page.id,
+      pageSlug: resolved.page.slug,
+    };
+    const cookieName = buildPrivatePageCookieName(portfolioSlug, resolved.page.id);
+    const grant = await getRequestCookie(cookieName);
+    const authorized =
+      grant !== null &&
+      verifyPrivatePageGrant({
+        grant,
+        scope,
+        secret: getServerEnv().BETTER_AUTH_SECRET,
+      });
+
+    if (!authorized) {
+      const searchParams = await props.searchParams;
+
+      return (
+        <PrivatePageChallenge
+          portfolioSlug={portfolioSlug}
+          pageSlug={resolved.page.slug}
+          denied={searchParams.access === 'denied'}
+          labels={{
+            title: translate('privatePage.title'),
+            description: translate('privatePage.description'),
+            password: translate('privatePage.password'),
+            submit: translate('privatePage.submit'),
+            denied: translate('privatePage.denied'),
+          }}
+        />
+      );
+    }
+  }
+
   const tApp = await getServerTranslations(I18N_NAMESPACES.app);
-  const pageUrl = buildPageUrl(portfolioSlug, resolved.page.slug);
+  const pageUrl = buildPageUrl(portfolioSlug, resolved.page.slug, locale);
 
   return (
     <>
@@ -100,7 +175,7 @@ export default async function PublicPortfolioPage(
        * machine-readable claims about someone who opted out would be a strange
        * way to honour that.
        */}
-      {portfolio.document.seo.indexable ? (
+      {resolved.page.visibility === 'public' && portfolio.document.seo.indexable ? (
         <StructuredData
           json={serializeStructuredData(buildPersonStructuredData(portfolio.document, pageUrl))}
         />
@@ -108,7 +183,12 @@ export default async function PublicPortfolioPage(
       <PortfolioTemplate
         document={portfolio.document}
         sections={resolved.sections}
-        navigation={buildNavigation(portfolio.document, portfolioSlug, resolvedPageSlug)}
+        navigation={buildPublicNavigation(portfolio.document, portfolioSlug, resolvedPageSlug).map(
+          (item) => ({
+            ...item,
+            href: locale === DEFAULT_LOCALE ? item.href : localizePath(item.href, locale),
+          }),
+        )}
         labels={buildPortfolioLabels(translate)}
         portfolioSlug={portfolioSlug}
         pageTitle={resolved.page.title}

@@ -15,9 +15,9 @@ export const portfolioShellClasses = {
   header:
     'sticky top-0 z-40 border-b border-border bg-canvas/85 backdrop-blur-md supports-[backdrop-filter]:bg-canvas/70',
   headerInner:
-    'mx-auto flex h-16 max-w-6xl items-center justify-between gap-6 px-5 sm:px-8 lg:px-10',
+    'mx-auto flex min-h-16 max-w-6xl flex-wrap items-center justify-between gap-3 px-5 py-2 sm:px-8 lg:px-10',
   brand: 'grid min-w-0',
-  headerActions: 'flex min-w-0 items-center gap-2 sm:gap-3',
+  headerActions: 'flex min-w-0 flex-wrap items-center justify-end gap-2 sm:gap-3',
   footerLinks: 'flex flex-wrap items-center gap-3',
   brandName: 'font-display truncate text-[0.95rem] font-bold tracking-tight text-foreground',
   brandHeadline:
@@ -28,7 +28,7 @@ export const portfolioShellClasses = {
   // the overflow behaviour without the furniture.
   nav: 'flex items-center gap-1 overflow-x-auto overflow-y-hidden [scrollbar-width:none] [&::-webkit-scrollbar]:hidden',
   navLink:
-    'relative inline-flex items-center gap-1.5 rounded-md px-2.5 py-2 text-sm font-medium whitespace-nowrap text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring',
+    'relative inline-flex min-h-11 cursor-pointer items-center gap-1.5 rounded-md px-2.5 py-2 text-sm font-medium whitespace-nowrap text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring',
   navLinkCurrent:
     'text-foreground after:absolute after:inset-x-3 after:-bottom-px after:h-px after:bg-primary after:content-[""]',
   main: 'mx-auto w-full max-w-6xl px-5 sm:px-8 lg:px-10',
@@ -139,4 +139,23 @@ export const customBlockClasses = {
   statValue: 'font-display text-lg font-semibold tracking-tight text-foreground',
   links: 'flex flex-wrap gap-x-5 gap-y-2',
   link: 'inline-flex items-center gap-1.5 text-sm text-primary-readable underline-offset-4 hover:underline',
+} as const;
+
+export const supplementalClasses = {
+  stack: 'grid gap-8',
+  section: 'grid gap-3',
+  heading: 'font-display text-lg font-semibold tracking-tight text-foreground',
+  chips: 'flex flex-wrap gap-2',
+  chip: 'rounded-full border border-border bg-surface-raised px-3 py-1 text-sm text-foreground',
+  quotes: 'grid gap-4 sm:grid-cols-2',
+  quote: 'grid gap-3 rounded-lg border border-border bg-surface-raised p-5',
+  quoteText: 'leading-relaxed text-foreground',
+  quoteByline: 'text-sm text-muted-foreground',
+  gallery: 'grid gap-4 sm:grid-cols-2',
+  figure: 'overflow-hidden rounded-lg border border-border bg-surface-raised',
+  galleryImage: 'aspect-[4/3] w-full object-cover',
+  caption: 'p-3 text-sm text-muted-foreground',
+  attachments: 'grid gap-2',
+  attachment:
+    'inline-flex w-fit items-center gap-2 rounded-md border border-border px-3 py-2 text-sm text-primary-readable hover:bg-muted',
 } as const;

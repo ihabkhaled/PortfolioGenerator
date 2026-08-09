@@ -2,8 +2,10 @@ import { describe, expect, it } from 'vitest';
 
 import {
   buildNavigation,
+  buildPublicNavigation,
   buildPageHref,
   findVisiblePage,
+  findPublicPage,
   resolvePageSlug,
   sortVisiblePages,
   sortVisibleSections,
@@ -60,6 +62,34 @@ describe('findVisiblePage', () => {
 
     expect(orders).toEqual([...orders].toSorted((left, right) => left - right));
     expect(resolved?.sections.every((section) => section.visible)).toBe(true);
+  });
+});
+
+describe('public page resolution', () => {
+  const document = buildFullPortfolioDocument();
+  const privateDocument = {
+    ...document,
+    pages: document.pages.map((page) =>
+      page.slug === 'projects'
+        ? { ...page, visibility: 'private' as const, passwordHash: 'argon2id$hash' }
+        : page,
+    ),
+  };
+
+  it('does not resolve a private page before a password challenge authorizes it', () => {
+    expect(findPublicPage(privateDocument, 'projects')).toBeNull();
+    expect(findVisiblePage(privateDocument, 'projects')?.page.id).toBe('page-projects');
+  });
+
+  it('returns a public page and treats a missing page as absent', () => {
+    expect(findPublicPage(document, 'projects')?.page.id).toBe('page-projects');
+    expect(findPublicPage(document, 'missing')).toBeNull();
+  });
+
+  it('does not advertise private pages in anonymous navigation', () => {
+    expect(
+      buildPublicNavigation(privateDocument, 'amina-rahman', '').map((item) => item.slug),
+    ).toEqual(['']);
   });
 });
 

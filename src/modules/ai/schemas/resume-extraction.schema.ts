@@ -62,6 +62,19 @@ export const extractedCertificationSchema = z.object({
   credentialUrl: z.string().max(EXTRACTION_LIMITS.url).nullable(),
 });
 
+export const extractedSoftSkillSchema = z.object({
+  label: shortText,
+  detail: longText,
+});
+
+export const extractedCourseSchema = z.object({
+  name: shortText,
+  provider: shortText,
+  date: month,
+  url: z.string().max(EXTRACTION_LIMITS.url).nullable(),
+  summary: longText,
+});
+
 export const extractedLanguageSchema = z.object({
   name: shortText,
   proficiency: shortText,
@@ -86,6 +99,10 @@ export const resumeExtractionSchema = z.object({
     headline: shortText,
     summary: longText,
     location: shortText,
+    tagline: shortText.optional(),
+    coverLetter: longText.optional(),
+    availabilityEnabled: z.boolean().nullable().optional(),
+    availabilityNote: shortText.optional(),
   }),
   contact: z.object({
     email: shortText,
@@ -95,7 +112,9 @@ export const resumeExtractionSchema = z.object({
   experience: z.array(extractedExperienceSchema).max(EXTRACTION_LIMITS.experience),
   projects: z.array(extractedProjectSchema).max(EXTRACTION_LIMITS.projects),
   skills: z.array(z.string().max(EXTRACTION_LIMITS.shortText)).max(EXTRACTION_LIMITS.skills),
+  softSkills: z.array(extractedSoftSkillSchema).max(EXTRACTION_LIMITS.softSkills),
   education: z.array(extractedEducationSchema).max(EXTRACTION_LIMITS.education),
+  courses: z.array(extractedCourseSchema).max(EXTRACTION_LIMITS.courses),
   certifications: z.array(extractedCertificationSchema).max(EXTRACTION_LIMITS.certifications),
   languages: z.array(extractedLanguageSchema).max(EXTRACTION_LIMITS.languages),
   awards: z.array(extractedAwardSchema).max(EXTRACTION_LIMITS.awards),

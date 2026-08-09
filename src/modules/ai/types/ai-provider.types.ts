@@ -1,3 +1,4 @@
+import type { PortfolioDocument } from '@/modules/portfolio-document';
 import type { z } from '@/packages/zod';
 
 import type { resumeExtractionSchema } from '../schemas/resume-extraction.schema';
@@ -9,6 +10,11 @@ export interface ResumeExtractionInput {
   readonly resumeText: string;
   /** Set when a previous attempt failed validation, to select the stronger model. */
   readonly useFallbackModel: boolean;
+}
+
+export interface PortfolioTranslationInput {
+  readonly document: PortfolioDocument;
+  readonly targetLocale: string;
 }
 
 /**
@@ -40,4 +46,5 @@ export type AiErrorCode = 'invalid-output' | 'provider-error' | 'timeout' | 'not
 export interface PortfolioAiProvider {
   readonly name: string;
   extractResume: (input: ResumeExtractionInput) => Promise<AiOutcome<ResumeExtractionResult>>;
+  translatePortfolio: (input: PortfolioTranslationInput) => Promise<AiOutcome<PortfolioDocument>>;
 }

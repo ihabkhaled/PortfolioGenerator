@@ -2,12 +2,27 @@ import { describe, expect, it } from 'vitest';
 
 import { portfolioDocumentSchema } from '@/modules/portfolio-document';
 import {
+  appendCollectionItem,
+  appendEmptyCollectionItem,
+  createPage,
+  editPage,
+  moveCollectionItem,
+  movePage,
+  removeCollectionItem,
+  removePage,
+  setInterests,
+  setCollectionPrimaryField,
+  setCollectionField,
+  updateCollectionItem,
+  appendAttachmentAsset,
+  appendGalleryAsset,
   moveItem,
   moveSection,
   removeItem,
   setContactVisibility,
   setEmailValue,
   setPhoneNumber,
+  setPortraitAsset,
   setIdentityField,
   setIndexable,
   setSectionVisibility,
@@ -42,6 +57,23 @@ describe('setIdentityField', () => {
     setIdentityField(document, 'location', 'Cairo');
 
     expect(document.identity.location).toBe('Lisbon, Portugal');
+  });
+});
+
+describe('setPortraitAsset', () => {
+  it('stores a clean uploaded portrait reference without changing other identity fields', () => {
+    const document = buildFullPortfolioDocument();
+    const next = setPortraitAsset(document, 'asset-portrait');
+
+    expect(next.identity.portraitAssetId).toBe('asset-portrait');
+    expect(next.identity.displayName).toBe(document.identity.displayName);
+    expect(document.identity.portraitAssetId).toBeNull();
+  });
+
+  it('removes the portrait when passed null', () => {
+    const withPortrait = setPortraitAsset(buildFullPortfolioDocument(), 'asset-portrait');
+
+    expect(setPortraitAsset(withPortrait, null).identity.portraitAssetId).toBeNull();
   });
 });
 
@@ -205,5 +237,159 @@ describe('setSectionVisibility', () => {
     const document = buildFullPortfolioDocument();
 
     expect(setSectionVisibility(document, 'page-home', 'section-missing', false)).toEqual(document);
+  });
+});
+
+describe('asset collection edits', () => {
+  it('adds a gallery image only with owner-written alternative text', () => {
+    const next = appendGalleryAsset(buildFullPortfolioDocument(), {
+      assetId: 'asset-gallery-new',
+      alt: 'Speaking at a TypeScript conference',
+      caption: '',
+    });
+
+    expect(next.gallery.at(-1)).toMatchObject({
+      assetId: 'asset-gallery-new',
+      alt: 'Speaking at a TypeScript conference',
+      caption: null,
+    });
+    expect(parseSchema(portfolioDocumentSchema, next).ok).toBe(true);
+  });
+
+  it('refuses to manufacture gallery alt text from a filename', () => {
+    const document = buildFullPortfolioDocument();
+
+    expect(
+      appendGalleryAsset(document, {
+        assetId: 'asset-gallery-new',
+        alt: ' '.repeat(3),
+        caption: '',
+      }),
+    ).toBe(document);
+  });
+
+  it('adds a visible downloadable CV with verified file metadata', () => {
+    const next = appendAttachmentAsset(buildFullPortfolioDocument(), {
+      assetId: 'asset-cv-new',
+      kind: 'cv',
+      label: 'Download my CV',
+      fileName: 'amina-rahman.pdf',
+      contentType: 'application/pdf',
+      sizeBytes: 240_000,
+    });
+
+    expect(next.attachments.at(-1)).toMatchObject({
+      assetId: 'asset-cv-new',
+      kind: 'cv',
+      label: 'Download my CV',
+      visible: true,
+    });
+    expect(parseSchema(portfolioDocumentSchema, next).ok).toBe(true);
+  });
+});
+
+describe('canonical collection edits', () => {
+  it('adds, edits, reorders, and removes an identified entry immutably', () => {
+    const document = buildFullPortfolioDocument();
+    const added = appendCollectionItem(document, 'awards', {
+      id: 'award-new',
+      name: 'Systems prize',
+      issuer: null,
+      date: null,
+      description: null,
+    });
+    const updated = updateCollectionItem(added, 'awards', 'award-new', { issuer: 'ACM' });
+    const moved = moveCollectionItem(updated, 'awards', 0, 1);
+    const removed = removeCollectionItem(moved, 'awards', 'award-new');
+
+    expect(updated.awards.at(-1)?.issuer).toBe('ACM');
+    expect(moved.awards[0]?.id).toBe('award-new');
+    expect(removed.awards).toEqual(document.awards);
+    expect(document.awards).toHaveLength(0);
+  });
+
+  it('normalizes interests and removes empty entries', () => {
+    expect(
+      setInterests(buildFullPortfolioDocument(), [' Running ', ' ', 'Typography']).interests,
+    ).toEqual(['Running', 'Typography']);
+  });
+
+  it('creates an explicitly empty social entry and lets the owner write its URL', () => {
+    const added = appendEmptyCollectionItem(
+      buildFullPortfolioDocument(),
+      'socialLinks',
+      'social-new',
+    );
+    const updated = setCollectionPrimaryField(
+      added,
+      'socialLinks',
+      'social-new',
+      'https://example.com/me',
+    );
+    expect(added.socialLinks.at(-1)).toMatchObject({ kind: 'website', label: null, visible: true });
+    expect(updated.socialLinks.at(-1)?.url).toBe('https://example.com/me');
+  });
+
+  it('edits nullable details, lists, booleans, and project paragraph content', () => {
+    const document = buildFullPortfolioDocument();
+    const withSummary = setCollectionField(document, 'experience', 'exp-1', 'summary', '');
+    const withHighlights = setCollectionField(withSummary, 'experience', 'exp-1', 'highlights', [
+      'One',
+      'Two',
+    ]);
+    const withFeatured = setCollectionField(
+      withHighlights,
+      'projects',
+      'proj-1',
+      'featured',
+      false,
+    );
+    const withContent = setCollectionField(withFeatured, 'projects', 'proj-1', 'content', [
+      'First paragraph',
+      'Second paragraph',
+    ]);
+    const withLinks = setCollectionField(withContent, 'projects', 'proj-1', 'links', [
+      'Case study | https://example.com/case-study',
+    ]);
+    expect(withSummary.experience[0]?.summary).toBeNull();
+    expect(withHighlights.experience[0]?.highlights).toEqual(['One', 'Two']);
+    expect(withFeatured.projects[0]?.featured).toBe(false);
+    expect(withContent.projects[0]?.content.map((block) => block.kind)).toEqual([
+      'paragraph',
+      'paragraph',
+    ]);
+    expect(withLinks.projects[0]?.links[0]).toMatchObject({
+      label: 'Case study',
+      url: 'https://example.com/case-study',
+      visible: true,
+    });
+  });
+});
+
+describe('page edits', () => {
+  it('creates a public page without accepting a client-side password hash', () => {
+    const next = createPage(buildFullPortfolioDocument(), {
+      id: 'page-speaking',
+      slug: 'speaking',
+      title: 'Speaking',
+      navLabel: 'Speaking',
+    });
+    expect(next.pages.at(-1)).toMatchObject({
+      slug: 'speaking',
+      visibility: 'public',
+      passwordHash: null,
+      sections: [],
+    });
+  });
+
+  it('edits, reorders, and deletes a subpage while preserving home', () => {
+    const document = buildFullPortfolioDocument();
+    const edited = editPage(document, 'page-projects', { navLabel: 'Work', visible: false });
+    const moved = movePage(edited, 1, 0);
+    const removed = removePage(moved, 'page-projects');
+    expect(edited.pages[1]?.navLabel).toBe('Work');
+    expect(moved.pages.map((page) => page.order)).toEqual([0, 10, 20]);
+    expect(removed.pages.some((page) => page.slug === '')).toBe(true);
+    expect(removePage(document, 'page-home')).toBe(document);
   });
 });

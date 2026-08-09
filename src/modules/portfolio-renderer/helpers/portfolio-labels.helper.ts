@@ -31,5 +31,16 @@ export function buildPortfolioLabels(translate: (key: string) => string): Portfo
     builtWith: translate('builtWith'),
     navigationLabel: translate('navigationLabel'),
     portraitAlt: translate('portraitAlt'),
+    supplemental: {
+      softSkills: translate('supplemental.softSkills'),
+      courses: translate('supplemental.courses'),
+      publications: translate('supplemental.publications'),
+      volunteering: translate('supplemental.volunteering'),
+      awards: translate('supplemental.awards'),
+      interests: translate('supplemental.interests'),
+      testimonials: translate('supplemental.testimonials'),
+      gallery: translate('supplemental.gallery'),
+      attachments: translate('supplemental.attachments'),
+    },
   };
 }

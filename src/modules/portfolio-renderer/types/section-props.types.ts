@@ -8,6 +8,8 @@ import type {
 
 import type { FactEntry, TimelineEntry } from './renderer.types';
 
+export type PortfolioCustomLinkBlock = Extract<PortfolioCustomBlock, { readonly kind: 'links' }>;
+
 export interface HeroSectionProps {
   readonly displayName: string;
   readonly headline: string | null;
@@ -61,7 +63,7 @@ export interface ContactSectionProps {
 
 export interface CustomSectionProps {
   readonly blocks: readonly PortfolioCustomBlock[];
-  readonly renderLinkBlock: (block: PortfolioCustomBlock) => ReactNode;
+  readonly renderLinkBlock: (block: PortfolioCustomLinkBlock) => ReactNode;
 }
 
 export interface PortfolioShellProps {
@@ -80,4 +82,9 @@ export interface PortfolioShellProps {
 export interface PortfolioNavProps {
   readonly label: string;
   readonly items: readonly PortfolioNavigationItem[];
+}
+
+export interface SupplementalSectionProps {
+  readonly title: string;
+  readonly children: ReactNode;
 }

@@ -1,10 +1,20 @@
 import type { ReactElement } from 'react';
 
-import type { PortfolioCustomBlock, PortfolioDocument } from '@/modules/portfolio-document';
+import type { PortfolioDocument } from '@/modules/portfolio-document';
+import {
+  CameraIcon,
+  CodeIcon,
+  GlobeIcon,
+  MessageIcon,
+  VideoIcon,
+  type AppIcon,
+} from '@/packages/icons';
 import { AppImage } from '@/packages/image';
+import { AppLink, toAppRoute } from '@/packages/link';
 import { ManifestPanel } from '@/shared/components/data-display/manifest-panel.component';
 import { ExternalLink } from '@/shared/components/primitives/external-link';
 import type { ManifestRow } from '@/shared/components/types/shared-component.types';
+import { buildPublicAssetPath } from '@/shared/constants/route-paths.constants';
 import { formatPhoneNumber } from '@/shared/utils/phone-number.util';
 import { toDisplayUrl } from '@/shared/utils/safe-url.util';
 
@@ -14,18 +24,23 @@ import {
   factListClasses,
   heroClasses,
   projectClasses,
+  supplementalClasses,
 } from '../constants/template-style.constants';
 import {
   buildCertificationEntries,
+  buildAwardEntries,
+  buildCourseEntries,
   buildEducationEntries,
   buildExperienceEntries,
   buildLanguageEntries,
+  buildPublicationEntries,
+  buildSoftSkillEntries,
+  buildVolunteeringEntries,
   joinNonEmpty,
   splitParagraphs,
-  visibleLinks,
 } from '../helpers/section-content.helper';
 import type { FactEntry, SectionRendererProps } from '../types/renderer.types';
-import type { ContactRow } from '../types/section-props.types';
+import type { ContactRow, PortfolioCustomLinkBlock } from '../types/section-props.types';
 
 import { AboutSection } from './about-section.component';
 import { ContactSection } from './contact-section.component';
@@ -34,6 +49,7 @@ import { FactListSection } from './fact-list-section.component';
 import { HeroSection } from './hero-section.component';
 import { ProjectsSection } from './projects-section.component';
 import { SkillsSection } from './skills-section.component';
+import { SupplementalSection } from './supplemental-section.component';
 import { TimelineSection } from './timeline-section.component';
 
 /**
@@ -71,14 +87,26 @@ export function SectionRenderer(props: Readonly<SectionRendererProps>): ReactEle
     }
 
     case 'about': {
-      return <AboutSection paragraphs={splitParagraphs(document.identity.summary ?? '')} />;
+      return (
+        <div className={supplementalClasses.stack}>
+          <AboutSection paragraphs={splitParagraphs(document.identity.summary ?? '')} />
+          {renderAboutCollections(document, labels)}
+        </div>
+      );
     }
 
     case 'experience': {
       return (
-        <TimelineSection
-          entries={buildExperienceEntries(document, section.config.limit, labels.present)}
-        />
+        <div className={supplementalClasses.stack}>
+          <TimelineSection
+            entries={buildExperienceEntries(document, section.config.limit, labels.present)}
+          />
+          {document.volunteering.length === 0 ? null : (
+            <SupplementalSection title={labels.supplemental.volunteering}>
+              <TimelineSection entries={buildVolunteeringEntries(document, labels.present)} />
+            </SupplementalSection>
+          )}
+        </div>
       );
     }
 
@@ -87,7 +115,19 @@ export function SectionRenderer(props: Readonly<SectionRendererProps>): ReactEle
     }
 
     case 'skills': {
-      return <SkillsSection groups={document.skills.filter((group) => group.items.length > 0)} />;
+      return (
+        <div className={supplementalClasses.stack}>
+          <SkillsSection groups={document.skills.filter((group) => group.items.length > 0)} />
+          {document.softSkills.length === 0 ? null : (
+            <SupplementalSection title={labels.supplemental.softSkills}>
+              <FactListSection
+                entries={buildSoftSkillEntries(document)}
+                renderLink={renderFactLink}
+              />
+            </SupplementalSection>
+          )}
+        </div>
+      );
     }
 
     case 'education': {
@@ -98,10 +138,20 @@ export function SectionRenderer(props: Readonly<SectionRendererProps>): ReactEle
 
     case 'certifications': {
       return (
-        <FactListSection
-          entries={buildCertificationEntries(document)}
-          renderLink={renderFactLink}
-        />
+        <div className={supplementalClasses.stack}>
+          <FactListSection
+            entries={buildCertificationEntries(document)}
+            renderLink={renderFactLink}
+          />
+          {document.courses.length === 0 ? null : (
+            <SupplementalSection title={labels.supplemental.courses}>
+              <FactListSection
+                entries={buildCourseEntries(document)}
+                renderLink={renderNamedFactLink}
+              />
+            </SupplementalSection>
+          )}
+        </div>
       );
     }
 
@@ -140,7 +190,7 @@ function renderPortrait(
   return (
     <div className={heroClasses.portraitFrame}>
       <AppImage
-        src={`/api/assets/${document.identity.portraitAssetId}`}
+        src={buildPublicAssetPath(document.identity.portraitAssetId)}
         alt={alt}
         width={112}
         height={112}
@@ -184,11 +234,165 @@ function renderHeroAside(
 function renderSocialLinks(document: PortfolioDocument): ReactElement {
   return (
     <>
-      {visibleLinks(document).map((link) => (
-        <ExternalLink key={link.id} href={link.url} className={heroClasses.socialLink}>
-          {link.label}
-        </ExternalLink>
-      ))}
+      {document.socialLinks
+        .filter((link) => link.visible)
+        .map((link) => {
+          const Icon = socialIcon(link.kind);
+          const label = link.label ?? socialLabel(link.kind);
+          return (
+            <ExternalLink key={link.id} href={link.url} className={heroClasses.socialLink}>
+              <Icon aria-hidden size={16} />
+              {label}
+            </ExternalLink>
+          );
+        })}
+    </>
+  );
+}
+
+function socialLabel(kind: PortfolioDocument['socialLinks'][number]['kind']): string {
+  const labels: Record<PortfolioDocument['socialLinks'][number]['kind'], string> = {
+    github: 'GitHub',
+    gitlab: 'GitLab',
+    behance: 'Behance',
+    linkedin: 'LinkedIn',
+    youtube: 'YouTube',
+    tiktok: 'TikTok',
+    instagram: 'Instagram',
+    facebook: 'Facebook',
+    x: 'X',
+    threads: 'Threads',
+    dribbble: 'Dribbble',
+    stackoverflow: 'Stack Overflow',
+    telegram: 'Telegram',
+    whatsapp: 'WhatsApp',
+    medium: 'Medium',
+    website: 'Website',
+  };
+  return labels[kind];
+}
+
+function socialIcon(kind: PortfolioDocument['socialLinks'][number]['kind']): AppIcon {
+  switch (kind) {
+    case 'github':
+    case 'gitlab':
+    case 'stackoverflow': {
+      return CodeIcon;
+    }
+    case 'youtube':
+    case 'tiktok': {
+      return VideoIcon;
+    }
+    case 'instagram':
+    case 'behance':
+    case 'dribbble': {
+      return CameraIcon;
+    }
+    case 'linkedin':
+    case 'facebook':
+    case 'x':
+    case 'threads':
+    case 'medium':
+    case 'telegram':
+    case 'whatsapp': {
+      return MessageIcon;
+    }
+    case 'website': {
+      return GlobeIcon;
+    }
+  }
+}
+
+function renderNamedFactLink(entry: FactEntry): ReactElement | null {
+  if (entry.link === null) return null;
+  return (
+    <ExternalLink href={entry.link} className={factListClasses.link}>
+      {entry.title}
+    </ExternalLink>
+  );
+}
+
+function renderAboutCollections(
+  document: PortfolioDocument,
+  labels: SectionRendererProps['labels'],
+): ReactElement {
+  return (
+    <>
+      {document.publications.length === 0 ? null : (
+        <SupplementalSection title={labels.supplemental.publications}>
+          <FactListSection
+            entries={buildPublicationEntries(document)}
+            renderLink={renderNamedFactLink}
+          />
+        </SupplementalSection>
+      )}
+      {document.awards.length === 0 ? null : (
+        <SupplementalSection title={labels.supplemental.awards}>
+          <FactListSection entries={buildAwardEntries(document)} renderLink={renderFactLink} />
+        </SupplementalSection>
+      )}
+      {document.interests.length === 0 ? null : (
+        <SupplementalSection title={labels.supplemental.interests}>
+          <ul className={supplementalClasses.chips}>
+            {document.interests.map((interest) => (
+              <li key={interest} className={supplementalClasses.chip}>
+                {interest}
+              </li>
+            ))}
+          </ul>
+        </SupplementalSection>
+      )}
+      {document.testimonials.length === 0 ? null : (
+        <SupplementalSection title={labels.supplemental.testimonials}>
+          <div className={supplementalClasses.quotes}>
+            {document.testimonials.map((entry) => (
+              <figure key={entry.id} className={supplementalClasses.quote}>
+                <blockquote className={supplementalClasses.quoteText}>{entry.quote}</blockquote>
+                <figcaption className={supplementalClasses.quoteByline}>
+                  {joinNonEmpty([entry.author, entry.role, entry.organization], ', ')}
+                </figcaption>
+              </figure>
+            ))}
+          </div>
+        </SupplementalSection>
+      )}
+      {document.gallery.length === 0 ? null : (
+        <SupplementalSection title={labels.supplemental.gallery}>
+          <div className={supplementalClasses.gallery}>
+            {document.gallery.map((entry) => (
+              <figure key={entry.id} className={supplementalClasses.figure}>
+                <AppImage
+                  src={buildPublicAssetPath(entry.assetId)}
+                  alt={entry.alt}
+                  width={640}
+                  height={480}
+                  className={supplementalClasses.galleryImage}
+                />
+                {entry.caption === null ? null : (
+                  <figcaption className={supplementalClasses.caption}>{entry.caption}</figcaption>
+                )}
+              </figure>
+            ))}
+          </div>
+        </SupplementalSection>
+      )}
+      {document.attachments.some((entry) => entry.visible) ? (
+        <SupplementalSection title={labels.supplemental.attachments}>
+          <div className={supplementalClasses.attachments}>
+            {document.attachments
+              .filter((entry) => entry.visible)
+              .map((entry) => (
+                <AppLink
+                  key={entry.id}
+                  href={toAppRoute(buildPublicAssetPath(entry.assetId))}
+                  className={supplementalClasses.attachment}
+                >
+                  {entry.label} ({Math.ceil(entry.sizeBytes / 1024)} KB)
+                </AppLink>
+              ))}
+          </div>
+        </SupplementalSection>
+      ) : null}
     </>
   );
 }
@@ -205,11 +409,7 @@ function renderFactLink(entry: FactEntry): ReactElement | null {
   );
 }
 
-function renderCustomLinkBlock(block: PortfolioCustomBlock): ReactElement | null {
-  if (block.kind !== 'links') {
-    return null;
-  }
-
+function renderCustomLinkBlock(block: PortfolioCustomLinkBlock): ReactElement {
   return (
     <>
       {block.items.map((link) => (

@@ -4,7 +4,11 @@ import { portfolioDocumentSchema } from '@/modules/portfolio-document';
 import { parseSchema } from '@/packages/zod';
 
 import { WARNING_CODES } from '../constants/extraction.constants';
-import { mapExtractionToDocument, normalizeMonth } from '../mappers/extraction-to-document.mapper';
+import {
+  buildImportedPages,
+  mapExtractionToDocument,
+  normalizeMonth,
+} from '../mappers/extraction-to-document.mapper';
 import type { ResumeExtractionResult } from '../types/ai-provider.types';
 
 /**
@@ -20,7 +24,9 @@ function extraction(overrides: Partial<ResumeExtractionResult> = {}): ResumeExtr
     experience: [],
     projects: [],
     skills: [],
+    softSkills: [],
     education: [],
+    courses: [],
     certifications: [],
     languages: [],
     awards: [],
@@ -76,6 +82,49 @@ describe('mapExtractionToDocument', () => {
     expect(result.document.source).toEqual({ kind: 'resume-import', resumeUploadId: 'upload-42' });
   });
 
+  it('composes factual reference pages for the populated CV sections', () => {
+    const result = mapExtractionToDocument(
+      extraction({
+        identity: {
+          displayName: 'Amina Rahman',
+          headline: 'Engineer',
+          summary: 'Backend engineer.',
+          location: null,
+        },
+        experience: [role()],
+        projects: [{ name: 'Ledger', summary: null, highlights: [], technologies: [], url: null }],
+        skills: ['TypeScript'],
+        education: [
+          {
+            institution: 'Example University',
+            degree: null,
+            field: null,
+            startDate: null,
+            endDate: null,
+            location: null,
+            details: null,
+          },
+        ],
+      }),
+      'Fallback',
+      'upload-1',
+    );
+
+    expect(result.document.pages.map((page) => page.slug)).toEqual([
+      '',
+      'experience',
+      'projects',
+      'skills',
+      'about',
+    ]);
+  });
+
+  it('creates no imported pages when the document has no home page', () => {
+    const result = mapExtractionToDocument(extraction(), 'Fallback', 'upload-1');
+
+    expect(buildImportedPages({ ...result.document, pages: [] })).toEqual([]);
+  });
+
   it('falls back to the account name when the model found no name', () => {
     const result = mapExtractionToDocument(
       extraction({
@@ -109,7 +158,23 @@ describe('mapExtractionToDocument', () => {
         'upload-1',
       );
 
-      expect(result.document.links[0]).toMatchObject({ label: 'GitHub', visible: true });
+      expect(result.document.socialLinks[0]).toMatchObject({ kind: 'github', visible: true });
+      expect(result.document.links).toHaveLength(0);
+    });
+
+    it('drops an unsafe social URL and reports its source position', () => {
+      const result = mapExtractionToDocument(
+        extraction({ links: [{ kind: 'github', url: 'javascript:alert(1)' }] }),
+        'Fallback',
+        'upload-1',
+      );
+
+      expect(result.document.socialLinks).toHaveLength(0);
+      expect(result.warnings).toContainEqual({
+        code: WARNING_CODES.droppedInvalidUrl,
+        path: 'links.0',
+        message: 'A social link was removed because it was not a safe https address.',
+      });
     });
 
     it('falls back to the raw kind for an unfamiliar link type', () => {
@@ -228,6 +293,84 @@ describe('mapExtractionToDocument', () => {
         [],
       );
     });
+  });
+
+  it('maps evidence-backed soft skills and courses without inventing missing details', () => {
+    const result = mapExtractionToDocument(
+      extraction({
+        softSkills: [{ label: 'Mentoring', detail: 'Mentored three junior engineers.' }],
+        courses: [
+          {
+            name: 'Distributed Systems',
+            provider: 'Example Academy',
+            date: null,
+            url: null,
+            summary: null,
+          },
+        ],
+      }),
+      'Fallback',
+      'upload-1',
+    );
+
+    expect(result.document.softSkills[0]).toMatchObject({
+      label: 'Mentoring',
+      detail: 'Mentored three junior engineers.',
+    });
+    expect(result.document.courses[0]).toMatchObject({
+      name: 'Distributed Systems',
+      provider: 'Example Academy',
+      date: null,
+    });
+  });
+
+  it('drops blank optional collections and normalizes a safe course URL', () => {
+    const result = mapExtractionToDocument(
+      extraction({
+        softSkills: [
+          { label: null, detail: null },
+          { label: ' '.repeat(3), detail: null },
+        ],
+        courses: [
+          { name: null, provider: null, date: null, url: null, summary: null },
+          { name: '  ', provider: null, date: null, url: null, summary: null },
+          {
+            name: 'Security',
+            provider: null,
+            date: null,
+            url: 'https://example.com/course',
+            summary: null,
+          },
+        ],
+      }),
+      'Fallback',
+      'upload-1',
+    );
+
+    expect(result.document.softSkills).toEqual([]);
+    expect(result.document.courses).toEqual([
+      expect.objectContaining({ name: 'Security', url: 'https://example.com/course' }),
+    ]);
+  });
+
+  it('puts supported social URLs in icon links and leaves unknown kinds as general links', () => {
+    const result = mapExtractionToDocument(
+      extraction({
+        links: [
+          { kind: 'github', url: 'https://github.com/amina' },
+          { kind: 'personal-blog', url: 'https://example.com/writing' },
+        ],
+      }),
+      'Fallback',
+      'upload-1',
+    );
+
+    expect(result.document.socialLinks).toEqual([
+      expect.objectContaining({ kind: 'github', url: 'https://github.com/amina', visible: true }),
+    ]);
+    expect(result.document.links).toEqual([
+      expect.objectContaining({ kind: 'personal-blog', url: 'https://example.com/writing' }),
+    ]);
   });
 
   describe('incomplete collection entries', () => {

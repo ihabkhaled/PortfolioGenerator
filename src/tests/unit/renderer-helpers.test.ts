@@ -6,6 +6,7 @@ import {
   buildEducationEntries,
   buildExperienceEntries,
   buildLanguageEntries,
+  buildVolunteeringEntries,
   buildPortfolioLabels,
   formatDateRange,
   formatMonth,
@@ -67,6 +68,30 @@ describe('formatDateRange', () => {
 
   it('renders nothing when there are no dates, rather than a floating dash', () => {
     expect(formatDateRange(null, null, false, 'Present')).toBe('');
+  });
+});
+
+describe('buildVolunteeringEntries', () => {
+  it('leaves an absent role empty and formats an ongoing contribution', () => {
+    const document = buildMinimalPortfolioDocument();
+    const entries = buildVolunteeringEntries(
+      {
+        ...document,
+        volunteering: [
+          {
+            id: 'volunteer-1',
+            organization: 'Community Lab',
+            role: null,
+            startDate: '2024-01',
+            endDate: null,
+            summary: null,
+          },
+        ],
+      },
+      'Present',
+    );
+
+    expect(entries[0]).toMatchObject({ role: '', dateRange: 'January 2024 — Present' });
   });
 });
 
@@ -203,6 +228,15 @@ describe('hasContent', () => {
     ).toBe(true);
   });
 
+  it('reports social profiles as contact content without legacy links', () => {
+    expect(
+      hasContent(
+        section('contact', { title: null, showEmail: false, showPhone: false, showLinks: true }),
+        { ...full, links: [] },
+      ),
+    ).toBe(true);
+  });
+
   it('reports a contact section as present when only a visible phone is shown', () => {
     const withPhone = {
       ...full,
@@ -240,15 +274,45 @@ describe('hasContent', () => {
     const emptyGroups = {
       ...full,
       skills: [{ id: 'g', label: 'Group', tier: 'working' as const, items: [] }],
+      softSkills: [],
     };
 
     expect(hasContent(section('skills', { title: null }), emptyGroups)).toBe(false);
   });
 
   it('reports an about section with a whitespace-only summary as empty', () => {
-    const blankSummary = { ...full, identity: { ...full.identity, summary: ' '.repeat(3) } };
+    const blankSummary = {
+      ...full,
+      identity: { ...full.identity, summary: ' '.repeat(3) },
+      publications: [],
+      awards: [],
+      interests: [],
+      testimonials: [],
+      gallery: [],
+      attachments: [],
+    };
 
     expect(hasContent(section('about', { title: null }), blankSummary)).toBe(false);
+  });
+
+  it('reports an about section with only a visible attachment as present', () => {
+    const attachmentOnly = {
+      ...minimal,
+      attachments: [
+        {
+          id: 'attachment-resume',
+          kind: 'cv' as const,
+          label: 'Resume',
+          assetId: 'asset-resume',
+          fileName: 'resume.pdf',
+          contentType: 'application/pdf',
+          sizeBytes: 1024,
+          visible: true,
+        },
+      ],
+    };
+
+    expect(hasContent(section('about', { title: null }), attachmentOnly)).toBe(true);
   });
 });
 

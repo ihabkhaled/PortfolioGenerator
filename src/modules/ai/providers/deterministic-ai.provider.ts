@@ -1,3 +1,5 @@
+import type { PortfolioDocument } from '@/modules/portfolio-document';
+
 import { DETERMINISTIC_PROVIDER_NAME } from '../constants/deterministic.constants';
 import { parseDeterministicResume } from '../helpers/deterministic-extraction.helper';
 import type {
@@ -5,6 +7,7 @@ import type {
   PortfolioAiProvider,
   ResumeExtractionInput,
   ResumeExtractionResult,
+  PortfolioTranslationInput,
 } from '../types/ai-provider.types';
 
 /**
@@ -43,6 +46,20 @@ export function createDeterministicAiProvider(): PortfolioAiProvider {
           inputUnits: null,
           outputUnits: null,
           latencyMs: Math.round(performance.now() - startedAt),
+        },
+      });
+    },
+
+    translatePortfolio(_input: PortfolioTranslationInput): Promise<AiOutcome<PortfolioDocument>> {
+      return Promise.resolve({
+        ok: false,
+        errorCode: 'not-configured',
+        usage: {
+          provider: DETERMINISTIC_PROVIDER_NAME,
+          model: DETERMINISTIC_PROVIDER_NAME,
+          inputUnits: null,
+          outputUnits: null,
+          latencyMs: 0,
         },
       });
     },

@@ -19,10 +19,15 @@ import { SeoFields } from '../components/seo-fields.component';
 import { WarningList } from '../components/warning-list.component';
 import { editorClasses } from '../constants/editor-style.constants';
 import {
+  appendAttachmentAsset,
+  appendGalleryAsset,
   moveSection,
+  removeItem,
   setContactVisibility,
+  setAvailabilityEnabled,
   setEmailValue,
   setPhoneNumber,
+  setPortraitAsset,
   setIdentityField,
   setIndexable,
   setSectionVisibility,
@@ -31,6 +36,11 @@ import {
 import { useDraftEditor } from '../hooks/use-draft-editor.hook';
 import type { EditorContainerProps } from '../types/editor-view.types';
 import type { SectionListEntry } from '../types/section-list.types';
+
+import { AssetCollectionsUploadContainer } from './asset-collections-upload.container';
+import { CollectionManagerContainer } from './collection-manager.container';
+import { PageManagerContainer } from './page-manager.container';
+import { PortraitUploadContainer } from './portrait-upload.container';
 
 export function PortfolioEditorContainer(props: Readonly<EditorContainerProps>): ReactElement {
   const t = useAppTranslation(I18N_NAMESPACES.editor);
@@ -100,6 +110,10 @@ export function PortfolioEditorContainer(props: Readonly<EditorContainerProps>):
             headline={document.identity.headline ?? ''}
             summary={document.identity.summary ?? ''}
             location={document.identity.location ?? ''}
+            tagline={document.identity.tagline ?? ''}
+            availabilityEnabled={document.identity.availabilityEnabled}
+            availabilityNote={document.identity.availabilityNote ?? ''}
+            coverLetter={document.identity.coverLetter ?? ''}
             onDisplayNameChange={(event) => {
               editor.update(setIdentityField(document, 'displayName', event.target.value));
             }}
@@ -112,7 +126,64 @@ export function PortfolioEditorContainer(props: Readonly<EditorContainerProps>):
             onLocationChange={(event) => {
               editor.update(setIdentityField(document, 'location', event.target.value));
             }}
+            onTaglineChange={(event) => {
+              editor.update(setIdentityField(document, 'tagline', event.target.value));
+            }}
+            onAvailabilityEnabledChange={(event) => {
+              editor.update(setAvailabilityEnabled(document, event.target.checked));
+            }}
+            onAvailabilityNoteChange={(event) => {
+              editor.update(setIdentityField(document, 'availabilityNote', event.target.value));
+            }}
+            onCoverLetterChange={(event) => {
+              editor.update(setIdentityField(document, 'coverLetter', event.target.value));
+            }}
           />
+
+          <PortraitUploadContainer
+            portfolioId={props.portfolioId}
+            hasPortrait={document.identity.portraitAssetId !== null}
+            uploadAction={props.uploadAssetAction}
+            onUploaded={(assetId) => {
+              editor.update(setPortraitAsset(document, assetId));
+            }}
+            onRemove={() => {
+              editor.update(setPortraitAsset(document, null));
+            }}
+          />
+
+          <AssetCollectionsUploadContainer
+            portfolioId={props.portfolioId}
+            gallery={document.gallery}
+            attachments={document.attachments}
+            uploadAction={props.uploadAssetAction}
+            onGalleryUploaded={(asset, alt, caption) => {
+              editor.update(appendGalleryAsset(document, { assetId: asset.id, alt, caption }));
+            }}
+            onAttachmentUploaded={(asset, kind, label) => {
+              editor.update(
+                appendAttachmentAsset(document, {
+                  assetId: asset.id,
+                  kind,
+                  label,
+                  fileName: asset.originalFilename,
+                  contentType: asset.contentType,
+                  sizeBytes: asset.sizeBytes,
+                }),
+              );
+            }}
+            onGalleryRemove={(index) => {
+              editor.update({ ...document, gallery: [...removeItem(document.gallery, index)] });
+            }}
+            onAttachmentRemove={(index) => {
+              editor.update({
+                ...document,
+                attachments: [...removeItem(document.attachments, index)],
+              });
+            }}
+          />
+
+          <CollectionManagerContainer document={document} onChange={editor.update} />
 
           <ContactFields
             labels={props.labels}
@@ -148,6 +219,14 @@ export function PortfolioEditorContainer(props: Readonly<EditorContainerProps>):
           />
 
           <SectionList title={t('sections.title')} hint={t('sections.hint')} sections={sections} />
+
+          <PageManagerContainer
+            portfolioId={props.portfolioId}
+            expectedVersion={editor.version}
+            document={document}
+            onChange={editor.update}
+            onVersionChange={editor.adoptVersion}
+          />
 
           <SeoFields
             labels={props.labels}

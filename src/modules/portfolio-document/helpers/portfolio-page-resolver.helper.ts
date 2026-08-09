@@ -43,6 +43,15 @@ export function findVisiblePage(
   return { page, sections: sortVisibleSections(page.sections) };
 }
 
+export function findPublicPage(
+  document: PortfolioDocument,
+  pageSlug: string,
+): ResolvedPortfolioPage | null {
+  const resolved = findVisiblePage(document, pageSlug);
+
+  return resolved?.page.visibility === 'public' ? resolved : null;
+}
+
 export function sortVisibleSections(
   sections: readonly PortfolioSection[],
 ): readonly PortfolioSection[] {
@@ -74,4 +83,17 @@ export function buildNavigation(
     isCurrent: page.slug === currentPageSlug,
     isHome: page.slug === HOME_PAGE_SLUG,
   }));
+}
+
+export function buildPublicNavigation(
+  document: PortfolioDocument,
+  portfolioSlug: string,
+  currentPageSlug: string,
+): readonly PortfolioNavigationItem[] {
+  const publicDocument = {
+    ...document,
+    pages: document.pages.filter((page) => page.visibility === 'public'),
+  };
+
+  return buildNavigation(publicDocument, portfolioSlug, currentPageSlug);
 }

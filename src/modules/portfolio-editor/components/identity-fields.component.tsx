@@ -25,6 +25,38 @@ export function IdentityFields(props: Readonly<IdentityFieldsProps>): ReactEleme
         </div>
 
         <div className={editorClasses.field}>
+          <Label htmlFor="identity-tagline">{props.labels.tagline}</Label>
+          <Input
+            id="identity-tagline"
+            value={props.tagline}
+            maxLength={180}
+            onChange={props.onTaglineChange}
+          />
+        </div>
+
+        <div className={editorClasses.field}>
+          <Label htmlFor="identity-availability-note">{props.labels.availabilityNote}</Label>
+          <Input
+            id="identity-availability-note"
+            value={props.availabilityNote}
+            maxLength={320}
+            onChange={props.onAvailabilityNoteChange}
+          />
+        </div>
+
+        <div className={editorClasses.field}>
+          <Label htmlFor="identity-availability-enabled">
+            <input
+              id="identity-availability-enabled"
+              type="checkbox"
+              checked={props.availabilityEnabled}
+              onChange={props.onAvailabilityEnabledChange}
+            />
+            {props.labels.availabilityEnabled}
+          </Label>
+        </div>
+
+        <div className={editorClasses.field}>
           <Label htmlFor="identity-headline">{props.labels.headline}</Label>
           <Input
             id="identity-headline"
@@ -52,6 +84,17 @@ export function IdentityFields(props: Readonly<IdentityFieldsProps>): ReactEleme
             maxLength={3000}
             rows={6}
             onChange={props.onSummaryChange}
+          />
+        </div>
+
+        <div className={editorClasses.fieldWide}>
+          <Label htmlFor="identity-cover-letter">{props.labels.coverLetter}</Label>
+          <Textarea
+            id="identity-cover-letter"
+            value={props.coverLetter}
+            maxLength={12_000}
+            rows={10}
+            onChange={props.onCoverLetterChange}
           />
         </div>
       </div>

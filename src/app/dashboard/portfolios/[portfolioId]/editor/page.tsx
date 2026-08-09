@@ -1,7 +1,10 @@
 import type { Metadata } from 'next';
 import type { ReactElement } from 'react';
 
+import { uploadAssetAction } from '@/modules/assets/server';
 import { requireOwner } from '@/modules/auth/server';
+import { APP_LOCALES, TranslationPanelContainer } from '@/modules/localization';
+import { listOwnedTranslations } from '@/modules/localization/server';
 import {
   PortfolioEditorContainer,
   PublishPanelContainer,
@@ -9,6 +12,7 @@ import {
   type EditorLabels,
 } from '@/modules/portfolio-editor/editor-ui';
 import { getOwnedPortfolio } from '@/modules/portfolios/server';
+import { redactPrivatePagePasswords } from '@/modules/private-page-access';
 import { readExtractionWarnings } from '@/modules/resume-ingestion';
 import { getLatestOwnedUpload } from '@/modules/resume-ingestion/server';
 import { appOrigin } from '@/packages/env';
@@ -36,6 +40,8 @@ export default async function EditorPage(props: EditorPageProps): Promise<ReactE
 
   const t = await getServerTranslations(I18N_NAMESPACES.editor);
   const upload = await getLatestOwnedUpload(owner.id, portfolio.id);
+  const translations = await listOwnedTranslations(owner.id, portfolio.id);
+  const tLocalization = await getServerTranslations(I18N_NAMESPACES.localization);
 
   const labels: EditorLabels = {
     identityTitle: t('identityTitle'),
@@ -44,6 +50,10 @@ export default async function EditorPage(props: EditorPageProps): Promise<ReactE
     headline: t('headline'),
     summary: t('summary'),
     location: t('location'),
+    tagline: t('tagline'),
+    availabilityEnabled: t('availabilityEnabled'),
+    availabilityNote: t('availabilityNote'),
+    coverLetter: t('coverLetter'),
     contactTitle: t('contactTitle'),
     contactHint: t('contactHint'),
     email: t('email'),
@@ -67,10 +77,11 @@ export default async function EditorPage(props: EditorPageProps): Promise<ReactE
     <>
       <PortfolioEditorContainer
         portfolioId={portfolio.id}
-        initialDocument={portfolio.draftDocument}
+        initialDocument={redactPrivatePagePasswords(portfolio.draftDocument)}
         initialVersion={portfolio.draftVersion}
         labels={labels}
         warnings={readExtractionWarnings(upload?.warnings)}
+        uploadAssetAction={uploadAssetAction}
       />
       <div className={editorClasses.shell}>
         <PublishPanelContainer
@@ -78,6 +89,14 @@ export default async function EditorPage(props: EditorPageProps): Promise<ReactE
           slug={portfolio.slug}
           isPublished={portfolio.status === 'PUBLISHED'}
           origin={appOrigin}
+        />
+        <TranslationPanelContainer
+          portfolioId={portfolio.id}
+          snapshots={translations}
+          localeOptions={APP_LOCALES.filter((locale) => locale !== 'en').map((locale) => ({
+            value: locale,
+            label: tLocalization(`locales.${locale}`),
+          }))}
         />
       </div>
     </>

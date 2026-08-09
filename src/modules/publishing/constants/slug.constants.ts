@@ -1,4 +1,4 @@
-import { ROUTE_PATHS } from '@/shared/constants/route-paths.constants';
+import { MARKETING_ROUTE_PATHS, ROUTE_PATHS } from '@/shared/constants/route-paths.constants';
 import { compareAlphabetically } from '@/shared/utils/text.util';
 
 export const SLUG_MIN_LENGTH = 3;
@@ -12,7 +12,7 @@ export const SLUG_MAX_LENGTH = 48;
  * keep that guarantee true as routes are added is to compute the denylist from
  * the route table itself.
  */
-const PLATFORM_ROUTE_SEGMENTS = Object.values(ROUTE_PATHS)
+const PLATFORM_ROUTE_SEGMENTS = Object.values({ ...ROUTE_PATHS, ...MARKETING_ROUTE_PATHS })
   .map((path) => path.split('/').find(Boolean))
   .filter((segment): segment is string => Boolean(segment));
 

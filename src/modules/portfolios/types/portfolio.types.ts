@@ -27,6 +27,13 @@ export interface PublishedPortfolio {
   readonly document: PortfolioDocument;
 }
 
+export interface PublishedPortfolioTranslation {
+  readonly slug: string;
+  readonly locale: string;
+  readonly document: PortfolioDocument;
+  readonly publishedAt: Date;
+}
+
 export interface PortfolioSummary {
   readonly id: string;
   readonly slug: string;

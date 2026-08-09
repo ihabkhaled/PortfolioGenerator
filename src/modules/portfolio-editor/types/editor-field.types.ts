@@ -13,10 +13,18 @@ export interface IdentityFieldsProps {
   readonly headline: string;
   readonly summary: string;
   readonly location: string;
+  readonly tagline: string;
+  readonly availabilityEnabled: boolean;
+  readonly availabilityNote: string;
+  readonly coverLetter: string;
   readonly onDisplayNameChange: TextChange;
   readonly onHeadlineChange: TextChange;
   readonly onSummaryChange: AreaChange;
   readonly onLocationChange: TextChange;
+  readonly onTaglineChange: TextChange;
+  readonly onAvailabilityEnabledChange: TextChange;
+  readonly onAvailabilityNoteChange: TextChange;
+  readonly onCoverLetterChange: AreaChange;
 }
 
 export interface ContactFieldsProps {

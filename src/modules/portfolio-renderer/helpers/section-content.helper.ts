@@ -69,6 +69,70 @@ export function buildLanguageEntries(document: PortfolioDocument): readonly Fact
   }));
 }
 
+export function buildSoftSkillEntries(document: PortfolioDocument): readonly FactEntry[] {
+  return document.softSkills.map((entry) => ({
+    id: entry.id,
+    title: entry.label,
+    subtitle: null,
+    meta: null,
+    detail: entry.detail,
+    link: null,
+  }));
+}
+
+export function buildCourseEntries(document: PortfolioDocument): readonly FactEntry[] {
+  return document.courses.map((entry) => ({
+    id: entry.id,
+    title: entry.name,
+    subtitle: entry.provider,
+    meta: formatMonth(entry.date),
+    detail: entry.summary,
+    link: entry.url,
+  }));
+}
+
+export function buildPublicationEntries(document: PortfolioDocument): readonly FactEntry[] {
+  return document.publications.map((entry) => ({
+    id: entry.id,
+    title: entry.title,
+    subtitle: entry.publisher,
+    meta: formatMonth(entry.date),
+    detail: entry.summary,
+    link: entry.url,
+  }));
+}
+
+export function buildAwardEntries(document: PortfolioDocument): readonly FactEntry[] {
+  return document.awards.map((entry) => ({
+    id: entry.id,
+    title: entry.name,
+    subtitle: entry.issuer,
+    meta: formatMonth(entry.date),
+    detail: entry.description,
+    link: null,
+  }));
+}
+
+export function buildVolunteeringEntries(
+  document: PortfolioDocument,
+  presentLabel: string,
+): readonly TimelineEntry[] {
+  return document.volunteering.map((entry) => ({
+    id: entry.id,
+    organization: entry.organization,
+    role: entry.role ?? '',
+    dateRange: formatDateRange(
+      entry.startDate,
+      entry.endDate,
+      entry.endDate === null,
+      presentLabel,
+    ),
+    summary: entry.summary,
+    highlights: [],
+    tags: [],
+  }));
+}
+
 export function joinNonEmpty(values: readonly (string | null)[], separator: string): string | null {
   const present = values.filter((value): value is string => value !== null && value.trim() !== '');
 
@@ -94,11 +158,19 @@ export function hasContent(section: PortfolioSection, document: PortfolioDocumen
     }
 
     case 'about': {
-      return document.identity.summary !== null && document.identity.summary.trim() !== '';
+      return (
+        (document.identity.summary !== null && document.identity.summary.trim() !== '') ||
+        document.publications.length > 0 ||
+        document.awards.length > 0 ||
+        document.interests.length > 0 ||
+        document.testimonials.length > 0 ||
+        document.gallery.length > 0 ||
+        document.attachments.some((entry) => entry.visible)
+      );
     }
 
     case 'experience': {
-      return document.experience.length > 0;
+      return document.experience.length > 0 || document.volunteering.length > 0;
     }
 
     case 'projects': {
@@ -106,7 +178,9 @@ export function hasContent(section: PortfolioSection, document: PortfolioDocumen
     }
 
     case 'skills': {
-      return document.skills.some((group) => group.items.length > 0);
+      return (
+        document.skills.some((group) => group.items.length > 0) || document.softSkills.length > 0
+      );
     }
 
     case 'education': {
@@ -114,7 +188,7 @@ export function hasContent(section: PortfolioSection, document: PortfolioDocumen
     }
 
     case 'certifications': {
-      return document.certifications.length > 0;
+      return document.certifications.length > 0 || document.courses.length > 0;
     }
 
     case 'languages': {
@@ -143,7 +217,8 @@ export function hasContactContent(
     section.config.showPhone &&
     document.contact.phone.visible &&
     document.contact.phone.nationalNumber !== null;
-  const isShowsLinks = section.config.showLinks && document.links.some((link) => link.visible);
+  const isShowsLinks =
+    section.config.showLinks && document.socialLinks.some((link) => link.visible);
 
   return isShowsEmail || isShowsPhone || isShowsLinks;
 }

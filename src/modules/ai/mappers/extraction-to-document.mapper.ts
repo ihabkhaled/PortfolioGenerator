@@ -2,18 +2,25 @@ import {
   createEmptyPortfolioDocument,
   DOCUMENT_COUNTS,
   MONTH_PATTERN,
+  SOCIAL_LINK_KINDS,
   type PortfolioDocument,
   type PortfolioExperience,
   type PortfolioLink,
   type PortfolioProject,
+  type PortfolioPage,
+  type PortfolioSection,
   type PortfolioSkillGroup,
 } from '@/modules/portfolio-document';
 import { normalizeSafeUrl } from '@/shared/utils/safe-url.util';
 
 import { WARNING_CODES } from '../constants/extraction.constants';
-import { DEFAULT_SKILL_GROUP_LABEL, LINK_LABELS } from '../constants/mapping.constants';
+import {
+  DEFAULT_SKILL_GROUP_LABEL,
+  IMPORTED_PAGE_DEFINITIONS,
+  LINK_LABELS,
+} from '../constants/mapping.constants';
 import type { ResumeExtractionResult } from '../types/ai-provider.types';
-import type { ExtractionMappingResult } from '../types/mapping.types';
+import type { ExtractionMappingResult, ImportedPageDefinition } from '../types/mapping.types';
 
 /**
  * Extraction output to a draft document.
@@ -41,6 +48,7 @@ export function mapExtractionToDocument(
   );
 
   const links = mapLinks(extraction, warnings);
+  const socialLinks = mapSocialLinks(extraction, warnings);
   const experience = mapExperience(extraction, warnings);
   const projects = mapProjects(extraction, warnings);
   const skills = mapSkills(extraction);
@@ -52,6 +60,10 @@ export function mapExtractionToDocument(
       headline: extraction.identity.headline,
       summary: extraction.identity.summary,
       location: extraction.identity.location,
+      tagline: extraction.identity.tagline ?? null,
+      coverLetter: extraction.identity.coverLetter ?? null,
+      availabilityEnabled: extraction.identity.availabilityEnabled === true,
+      availabilityNote: extraction.identity.availabilityNote ?? null,
     },
     contact: {
       // Visible by default only when present: an empty contact row on a public
@@ -68,9 +80,16 @@ export function mapExtractionToDocument(
       },
     },
     links,
+    socialLinks,
     experience,
     projects,
     skills,
+    softSkills: extraction.softSkills
+      .slice(0, DOCUMENT_COUNTS.softSkills)
+      .flatMap((entry, index) => {
+        const label = entry.label?.trim() ?? '';
+        return label === '' ? [] : [{ id: `soft-skill-${index + 1}`, label, detail: entry.detail }];
+      }),
     education: extraction.education.slice(0, DOCUMENT_COUNTS.education).map((entry, index) => ({
       id: `edu-${index + 1}`,
       institution: entry.institution ?? '',
@@ -81,6 +100,20 @@ export function mapExtractionToDocument(
       location: entry.location,
       details: entry.details,
     })),
+    courses: extraction.courses.slice(0, DOCUMENT_COUNTS.courses).flatMap((entry, index) => {
+      const name = entry.name?.trim() ?? '';
+      if (name === '') return [];
+      return [
+        {
+          id: `course-${index + 1}`,
+          name,
+          provider: entry.provider,
+          date: normalizeMonth(entry.date),
+          url: entry.url === null ? null : normalizeSafeUrl(entry.url),
+          summary: entry.summary,
+        },
+      ];
+    }),
     certifications: extraction.certifications
       .slice(0, DOCUMENT_COUNTS.certifications)
       .map((entry, index) => ({
@@ -105,9 +138,63 @@ export function mapExtractionToDocument(
     source: { kind: 'resume-import', resumeUploadId },
   };
 
+  const cleaned = dropIncompleteEntries(document, warnings);
+  return { document: { ...cleaned, pages: buildImportedPages(cleaned) }, warnings };
+}
+
+export function buildImportedPages(document: PortfolioDocument): PortfolioPage[] {
+  const home = document.pages[0];
+  if (home === undefined) return [];
+  const pages: PortfolioPage[] = [home];
+
+  if (document.experience.length > 0)
+    pages.push(createImportedPage(home, IMPORTED_PAGE_DEFINITIONS.experience, pages.length));
+  if (document.projects.length > 0)
+    pages.push(createImportedPage(home, IMPORTED_PAGE_DEFINITIONS.projects, pages.length));
+  if (document.skills.length > 0 || document.softSkills.length > 0)
+    pages.push(createImportedPage(home, IMPORTED_PAGE_DEFINITIONS.skills, pages.length));
+  if (
+    document.identity.summary !== null ||
+    document.education.length > 0 ||
+    document.certifications.length > 0 ||
+    document.courses.length > 0
+  )
+    pages.push(createImportedPage(home, IMPORTED_PAGE_DEFINITIONS.about, pages.length));
+  if (
+    document.contact.email.visible ||
+    document.contact.phone.visible ||
+    document.links.length > 0 ||
+    document.socialLinks.length > 0
+  )
+    pages.push(createImportedPage(home, IMPORTED_PAGE_DEFINITIONS.contact, pages.length));
+
+  return pages;
+}
+
+export function createImportedPage(
+  home: PortfolioPage,
+  definition: ImportedPageDefinition,
+  index: number,
+): PortfolioPage {
+  const sections: PortfolioSection[] = home.sections
+    .filter((section) => definition.sectionTypes.includes(section.type))
+    .map((section, sectionIndex) => ({
+      ...structuredClone(section),
+      id: `section-${definition.slug}-${section.type}`,
+      order: sectionIndex * 10,
+    }));
+
   return {
-    document: dropIncompleteEntries(document, warnings),
-    warnings,
+    id: `page-${definition.slug}`,
+    slug: definition.slug,
+    title: definition.title,
+    navLabel: definition.title,
+    description: null,
+    visible: true,
+    visibility: 'public',
+    passwordHash: null,
+    order: index * 10,
+    sections,
   };
 }
 
@@ -129,6 +216,7 @@ export function mapLinks(
   const links: PortfolioLink[] = [];
 
   for (const [index, link] of extraction.links.slice(0, DOCUMENT_COUNTS.links).entries()) {
+    if ((SOCIAL_LINK_KINDS as readonly string[]).includes(link.kind)) continue;
     const url = normalizeSafeUrl(link.url);
 
     if (url === null) {
@@ -148,6 +236,36 @@ export function mapLinks(
       url,
       // Visible by default: a link the user put on their CV is one they want
       // seen, and the editor makes hiding it trivial.
+      visible: true,
+    });
+  }
+
+  return links;
+}
+
+export function mapSocialLinks(
+  extraction: ResumeExtractionResult,
+  warnings: ExtractionMappingResult['warnings'],
+): PortfolioDocument['socialLinks'] {
+  const links: PortfolioDocument['socialLinks'][number][] = [];
+
+  for (const [index, link] of extraction.links.slice(0, DOCUMENT_COUNTS.socialLinks).entries()) {
+    if (!(SOCIAL_LINK_KINDS as readonly string[]).includes(link.kind)) continue;
+    const url = normalizeSafeUrl(link.url);
+    if (url === null) {
+      warnings.push({
+        code: WARNING_CODES.droppedInvalidUrl,
+        path: `links.${index}`,
+        message: 'A social link was removed because it was not a safe https address.',
+      });
+      continue;
+    }
+
+    links.push({
+      id: `social-${links.length + 1}`,
+      kind: link.kind as PortfolioDocument['socialLinks'][number]['kind'],
+      label: null,
+      url,
       visible: true,
     });
   }

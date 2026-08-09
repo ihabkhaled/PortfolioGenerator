@@ -1,5 +1,362 @@
 import type { PortfolioDocument } from '@/modules/portfolio-document';
 
+import type {
+  AnyCollectionItem,
+  CollectionItem,
+  CreatePageInput,
+  IdentifiedCollectionKey,
+} from '../types/collection-edit.types';
+import type {
+  AttachmentAssetEditInput,
+  GalleryAssetEditInput,
+} from '../types/document-asset-edit.types';
+
+import {
+  formatCollectionEntry,
+  isRequiredCollectionField,
+  isStringArray,
+} from './collection-field.helper';
+
+export function appendCollectionItem<TKey extends IdentifiedCollectionKey>(
+  document: PortfolioDocument,
+  key: TKey,
+  item: CollectionItem<TKey>,
+): PortfolioDocument {
+  return { ...document, [key]: [...document[key], item] };
+}
+
+export function updateCollectionItem<TKey extends IdentifiedCollectionKey>(
+  document: PortfolioDocument,
+  key: TKey,
+  itemId: string,
+  patch: Partial<CollectionItem<TKey>>,
+): PortfolioDocument {
+  return {
+    ...document,
+    [key]: document[key].map((item) => (item.id === itemId ? { ...item, ...patch } : item)),
+  };
+}
+
+export function removeCollectionItem(
+  document: PortfolioDocument,
+  key: IdentifiedCollectionKey,
+  itemId: string,
+): PortfolioDocument {
+  return { ...document, [key]: document[key].filter((item) => item.id !== itemId) };
+}
+
+export function moveCollectionItem(
+  document: PortfolioDocument,
+  key: IdentifiedCollectionKey,
+  from: number,
+  to: number,
+): PortfolioDocument {
+  return { ...document, [key]: moveItem<AnyCollectionItem>(document[key], from, to) };
+}
+
+export function setInterests(
+  document: PortfolioDocument,
+  interests: readonly string[],
+): PortfolioDocument {
+  return { ...document, interests: interests.map((item) => item.trim()).filter(Boolean) };
+}
+
+export function appendEmptyCollectionItem(
+  document: PortfolioDocument,
+  key: IdentifiedCollectionKey,
+  id: string,
+): PortfolioDocument {
+  switch (key) {
+    case 'experience': {
+      return appendCollectionItem(document, key, {
+        id,
+        organization: '',
+        title: '',
+        location: null,
+        startDate: null,
+        endDate: null,
+        current: false,
+        summary: null,
+        highlights: [],
+        technologies: [],
+      });
+    }
+    case 'projects': {
+      return appendCollectionItem(document, key, {
+        id,
+        slug: null,
+        name: '',
+        role: null,
+        year: null,
+        coverAssetId: null,
+        featured: false,
+        summary: null,
+        highlights: [],
+        technologies: [],
+        links: [],
+        content: [],
+      });
+    }
+    case 'skills': {
+      return appendCollectionItem(document, key, { id, label: '', tier: 'working', items: [] });
+    }
+    case 'softSkills': {
+      return appendCollectionItem(document, key, { id, label: '', detail: null });
+    }
+    case 'education': {
+      return appendCollectionItem(document, key, {
+        id,
+        institution: '',
+        degree: null,
+        field: null,
+        startDate: null,
+        endDate: null,
+        location: null,
+        details: null,
+      });
+    }
+    case 'courses': {
+      return appendCollectionItem(document, key, {
+        id,
+        name: '',
+        provider: null,
+        date: null,
+        url: null,
+        summary: null,
+      });
+    }
+    case 'certifications': {
+      return appendCollectionItem(document, key, {
+        id,
+        name: '',
+        issuer: null,
+        date: null,
+        credentialUrl: null,
+      });
+    }
+    case 'languages': {
+      return appendCollectionItem(document, key, { id, name: '', proficiency: null });
+    }
+    case 'awards': {
+      return appendCollectionItem(document, key, {
+        id,
+        name: '',
+        issuer: null,
+        date: null,
+        description: null,
+      });
+    }
+    case 'publications': {
+      return appendCollectionItem(document, key, {
+        id,
+        title: '',
+        publisher: null,
+        date: null,
+        url: null,
+        summary: null,
+      });
+    }
+    case 'volunteering': {
+      return appendCollectionItem(document, key, {
+        id,
+        organization: '',
+        role: null,
+        startDate: null,
+        endDate: null,
+        summary: null,
+      });
+    }
+    case 'testimonials': {
+      return appendCollectionItem(document, key, {
+        id,
+        quote: '',
+        author: '',
+        role: null,
+        organization: null,
+      });
+    }
+    case 'socialLinks': {
+      return appendCollectionItem(document, key, {
+        id,
+        kind: 'website',
+        label: null,
+        url: 'https://',
+        visible: true,
+      });
+    }
+  }
+}
+
+export function setCollectionPrimaryField(
+  document: PortfolioDocument,
+  key: IdentifiedCollectionKey,
+  itemId: string,
+  value: string,
+): PortfolioDocument {
+  switch (key) {
+    case 'experience': {
+      return updateCollectionItem(document, key, itemId, { organization: value });
+    }
+    case 'projects': {
+      return updateCollectionItem(document, key, itemId, { name: value });
+    }
+    case 'skills':
+    case 'softSkills': {
+      return updateCollectionItem(document, key, itemId, { label: value });
+    }
+    case 'education': {
+      return updateCollectionItem(document, key, itemId, { institution: value });
+    }
+    case 'courses':
+    case 'certifications':
+    case 'languages':
+    case 'awards': {
+      return updateCollectionItem(document, key, itemId, { name: value });
+    }
+    case 'publications': {
+      return updateCollectionItem(document, key, itemId, { title: value });
+    }
+    case 'volunteering': {
+      return updateCollectionItem(document, key, itemId, { organization: value });
+    }
+    case 'testimonials': {
+      return updateCollectionItem(document, key, itemId, { quote: value });
+    }
+    case 'socialLinks': {
+      return updateCollectionItem(document, key, itemId, { url: value });
+    }
+  }
+}
+
+export function collectionBooleanFieldValue(item: AnyCollectionItem, field: string): boolean {
+  const fields: Record<string, unknown> = { ...item };
+  const value = fields[field];
+
+  return typeof value === 'boolean' && value;
+}
+
+export function collectionTextFieldValue(item: AnyCollectionItem, field: string): string {
+  const fields: Record<string, unknown> = { ...item };
+  const value = fields[field];
+  if (Array.isArray(value)) {
+    return value
+      .map((entry) => formatCollectionEntry(entry))
+      .filter(Boolean)
+      .join('\n');
+  }
+  return typeof value === 'string' ? value : '';
+}
+
+export function setCollectionField(
+  document: PortfolioDocument,
+  key: IdentifiedCollectionKey,
+  itemId: string,
+  field: string,
+  value: string | boolean | readonly string[] | null,
+): PortfolioDocument {
+  if (key === 'projects' && field === 'content' && isStringArray(value)) {
+    return {
+      ...document,
+      projects: document.projects.map((item) =>
+        item.id === itemId
+          ? {
+              ...item,
+              content: value.map((text, index) => ({
+                id: `${item.id}-paragraph-${index}`,
+                kind: 'paragraph' as const,
+                text,
+              })),
+            }
+          : item,
+      ),
+    };
+  }
+  if (key === 'projects' && field === 'links' && isStringArray(value)) {
+    return {
+      ...document,
+      projects: document.projects.map((item) =>
+        item.id === itemId
+          ? {
+              ...item,
+              links: value.flatMap((line, index) => {
+                const separator = line.indexOf('|');
+                if (separator < 1) return [];
+                const label = line.slice(0, separator).trim();
+                const url = line.slice(separator + 1).trim();
+                return label === '' || url === ''
+                  ? []
+                  : [
+                      {
+                        id: `${item.id}-link-${index}`,
+                        kind: 'project',
+                        label,
+                        url,
+                        visible: true,
+                      },
+                    ];
+              }),
+            }
+          : item,
+      ),
+    };
+  }
+  const normalized =
+    typeof value === 'string' && value.trim() === '' && !isRequiredCollectionField(key, field)
+      ? null
+      : value;
+  return {
+    ...document,
+    [key]: document[key].map((item) =>
+      item.id === itemId ? { ...item, [field]: normalized } : item,
+    ),
+  };
+}
+
+export function createPage(document: PortfolioDocument, input: CreatePageInput): PortfolioDocument {
+  return {
+    ...document,
+    pages: [
+      ...document.pages,
+      {
+        ...input,
+        description: null,
+        visible: true,
+        visibility: 'public',
+        passwordHash: null,
+        order: document.pages.length * 10,
+        sections: [],
+      },
+    ],
+  };
+}
+
+export function editPage(
+  document: PortfolioDocument,
+  pageId: string,
+  patch: Partial<
+    Pick<
+      PortfolioDocument['pages'][number],
+      'slug' | 'title' | 'navLabel' | 'description' | 'visible' | 'visibility'
+    >
+  >,
+): PortfolioDocument {
+  return {
+    ...document,
+    pages: document.pages.map((page) => (page.id === pageId ? { ...page, ...patch } : page)),
+  };
+}
+
+export function movePage(document: PortfolioDocument, from: number, to: number): PortfolioDocument {
+  const pages = moveItem(document.pages, from, to);
+  return { ...document, pages: pages.map((page, index) => ({ ...page, order: index * 10 })) };
+}
+
+export function removePage(document: PortfolioDocument, pageId: string): PortfolioDocument {
+  const page = document.pages.find((candidate) => candidate.id === pageId);
+  if (page?.slug === '') return document;
+  return { ...document, pages: document.pages.filter((candidate) => candidate.id !== pageId) };
+}
+
 /**
  * Immutable edits to a document.
  *
@@ -35,6 +392,72 @@ export function setIdentityField(
       ...document.identity,
       [field]: isRequired || !isBlank ? value : null,
     },
+  };
+}
+
+export function setPortraitAsset(
+  document: PortfolioDocument,
+  assetId: string | null,
+): PortfolioDocument {
+  return {
+    ...document,
+    identity: { ...document.identity, portraitAssetId: assetId },
+  };
+}
+
+export function setAvailabilityEnabled(
+  document: PortfolioDocument,
+  availabilityEnabled: boolean,
+): PortfolioDocument {
+  return {
+    ...document,
+    identity: { ...document.identity, availabilityEnabled },
+  };
+}
+
+export function appendGalleryAsset(
+  document: PortfolioDocument,
+  input: GalleryAssetEditInput,
+): PortfolioDocument {
+  const alt = input.alt.trim();
+  if (alt === '' || document.gallery.some((item) => item.assetId === input.assetId)) {
+    return document;
+  }
+
+  return {
+    ...document,
+    gallery: [
+      ...document.gallery,
+      {
+        id: `gallery-${input.assetId}`,
+        assetId: input.assetId,
+        alt,
+        caption: input.caption.trim() === '' ? null : input.caption,
+      },
+    ],
+  };
+}
+
+export function appendAttachmentAsset(
+  document: PortfolioDocument,
+  input: AttachmentAssetEditInput,
+): PortfolioDocument {
+  const label = input.label.trim();
+  if (label === '' || document.attachments.some((item) => item.assetId === input.assetId)) {
+    return document;
+  }
+
+  return {
+    ...document,
+    attachments: [
+      ...document.attachments,
+      {
+        id: `attachment-${input.assetId}`,
+        ...input,
+        label,
+        visible: true,
+      },
+    ],
   };
 }
 

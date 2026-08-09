@@ -1,9 +1,15 @@
 import 'server-only';
 
+import { headers } from 'next/headers';
+
+import { isAppLocale } from '@/modules/localization';
 import { cacheBySlug } from '@/packages/cache';
 
 import { PORTFOLIO_CACHE_KEY_PREFIX } from '../constants/portfolio-cache.constants';
-import { findPublishedBySlugUnscoped } from '../repositories/portfolio.repository';
+import {
+  findPublishedBySlugUnscoped,
+  findPublishedTranslationBySlugAndLocaleUnscoped,
+} from '../repositories/portfolio.repository';
 import type { PublishedPortfolio } from '../types/portfolio.types';
 
 /**
@@ -22,9 +28,18 @@ export function portfolioCacheTag(slug: string): string {
 }
 
 export async function getPublishedPortfolio(slug: string): Promise<PublishedPortfolio | null> {
+  const requestHeaders = await headers();
+  const requestedLocale = requestHeaders.get('x-app-locale') ?? 'en';
+  const locale = isAppLocale(requestedLocale) ? requestedLocale : 'en';
   const load = cacheBySlug(
-    () => findPublishedBySlugUnscoped(slug),
-    [PORTFOLIO_CACHE_KEY_PREFIX, slug],
+    async () => {
+      const portfolio = await findPublishedBySlugUnscoped(slug);
+      if (portfolio === null || locale === 'en') return portfolio;
+
+      const document = await findPublishedTranslationBySlugAndLocaleUnscoped(slug, locale);
+      return document === null ? null : { ...portfolio, document };
+    },
+    [PORTFOLIO_CACHE_KEY_PREFIX, slug, locale],
     portfolioCacheTag(slug),
   );
 

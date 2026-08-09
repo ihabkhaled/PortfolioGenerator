@@ -7,6 +7,7 @@ export {
   WARNING_CODES,
 } from './constants/extraction.constants';
 export { RESUME_EXTRACTION_SYSTEM_PROMPT } from './constants/extraction-prompt.constants';
+export { PORTFOLIO_TRANSLATION_SYSTEM_PROMPT } from './constants/translation-prompt.constants';
 export { DEFAULT_SKILL_GROUP_LABEL, LINK_LABELS } from './constants/mapping.constants';
 export { parseDeterministicResume } from './helpers/deterministic-extraction.helper';
 export { wrapResumeText } from './helpers/resume-envelope.helper';
@@ -27,6 +28,7 @@ export type {
   AiOutcome,
   AiUsage,
   PortfolioAiProvider,
+  PortfolioTranslationInput,
   ResumeExtractionInput,
   ResumeExtractionResult,
 } from './types/ai-provider.types';

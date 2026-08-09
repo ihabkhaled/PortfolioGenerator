@@ -8,7 +8,7 @@ import {
   suggestSlug,
   validateSlug,
 } from '@/modules/publishing';
-import { ROUTE_PATHS } from '@/shared/constants/route-paths.constants';
+import { MARKETING_ROUTE_PATHS, ROUTE_PATHS } from '@/shared/constants/route-paths.constants';
 import { compareAlphabetically } from '@/shared/utils/text.util';
 
 describe('normalizeSlug', () => {
@@ -103,6 +103,10 @@ describe('reserved slug policy', () => {
 
   it.each(routeSegments)('reserves the platform route segment %s', (segment) => {
     expect(isReservedSlug(segment)).toBe(true);
+  });
+
+  it.each(Object.values(MARKETING_ROUTE_PATHS))('reserves the marketing route %s', (path) => {
+    expect(isReservedSlug(path.slice(1))).toBe(true);
   });
 
   it('covers every platform route except the root', () => {

@@ -36,6 +36,10 @@ export function useDraftEditor(input: DraftEditorInput): DraftEditor {
     setError(null);
   }, []);
 
+  const adoptVersion = useCallback((nextVersion: number): void => {
+    setVersion(nextVersion);
+  }, []);
+
   const save = useCallback((): void => {
     startSaving(async () => {
       const result = await saveDraftAction({
@@ -66,5 +70,5 @@ export function useDraftEditor(input: DraftEditorInput): DraftEditor {
     });
   }, [document, input.portfolioId, version]);
 
-  return { document, version, isDirty, isSaving, error, update, save };
+  return { document, version, isDirty, isSaving, error, update, adoptVersion, save };
 }

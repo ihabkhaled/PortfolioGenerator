@@ -322,6 +322,50 @@ describe('the about band', () => {
 
     expect(screen.queryByText(/payment systems/)).not.toBeInTheDocument();
   });
+
+  it('renders the optional evidence collections attached to an about section', () => {
+    const document = buildFullPortfolioDocument();
+
+    renderSection(
+      { id: 'section-about', type: 'about', visible: true, order: 0, config: { title: null } },
+      {
+        ...document,
+        awards: [
+          {
+            id: 'award-1',
+            name: 'Reliability award',
+            issuer: 'Northwind Payments',
+            date: '2024-06',
+            description: 'For making settlement failures recoverable.',
+          },
+        ],
+      },
+    );
+
+    expect(screen.getAllByText('Reconciling a ledger you did not design')).toHaveLength(2);
+    expect(screen.getByText('Reliability award')).toBeInTheDocument();
+    expect(screen.getByText('Long-distance running')).toBeInTheDocument();
+    expect(screen.getByText(/rounding bug/)).toBeInTheDocument();
+    expect(screen.getByRole('img', { name: /settlement state machine/i })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /Curriculum vitae/ })).toBeInTheDocument();
+  });
+
+  it('omits a gallery caption that was not supplied', () => {
+    const document = buildFullPortfolioDocument();
+
+    renderSection(
+      { id: 'section-about', type: 'about', visible: true, order: 0, config: { title: null } },
+      {
+        ...document,
+        gallery: document.gallery.map((entry) => ({ ...entry, caption: null })),
+      },
+    );
+
+    expect(screen.getByRole('img', { name: /settlement state machine/i })).toBeInTheDocument();
+    expect(
+      screen.queryByText('The settlement state machine, before it was code'),
+    ).not.toBeInTheDocument();
+  });
 });
 
 describe('bands rendered from entries with nothing optional filled in', () => {
@@ -374,6 +418,7 @@ describe('bands rendered from entries with nothing optional filled in', () => {
     certifications: [
       { id: 'cert-bare', name: 'CKA', issuer: null, date: null, credentialUrl: null },
     ],
+    courses: [],
     languages: [{ id: 'lang-bare', name: 'Portuguese', proficiency: null }],
   };
 

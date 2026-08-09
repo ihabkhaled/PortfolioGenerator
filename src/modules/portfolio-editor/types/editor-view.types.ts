@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 
+import type { AssetUploadAction } from '@/modules/assets';
 import type { PortfolioDocument } from '@/modules/portfolio-document';
 import type { ExtractionWarning } from '@/modules/resume-ingestion';
 
@@ -10,6 +11,10 @@ export interface EditorLabels {
   readonly headline: string;
   readonly summary: string;
   readonly location: string;
+  readonly tagline: string;
+  readonly availabilityEnabled: string;
+  readonly availabilityNote: string;
+  readonly coverLetter: string;
   readonly contactTitle: string;
   readonly contactHint: string;
   readonly email: string;
@@ -48,4 +53,5 @@ export interface EditorContainerProps {
   readonly initialVersion: number;
   readonly labels: EditorLabels;
   readonly warnings: readonly ExtractionWarning[];
+  readonly uploadAssetAction: AssetUploadAction;
 }

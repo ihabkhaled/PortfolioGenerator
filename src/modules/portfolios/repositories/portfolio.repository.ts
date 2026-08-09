@@ -1,6 +1,10 @@
 import 'server-only';
 
-import { createEmptyPortfolioDocument, type PortfolioDocument } from '@/modules/portfolio-document';
+import {
+  createEmptyPortfolioDocument,
+  tryMigratePortfolioDocument,
+  type PortfolioDocument,
+} from '@/modules/portfolio-document';
 import { DbNull, getDatabase } from '@/packages/database';
 
 import { PORTFOLIO_SELECT } from '../constants/portfolio-query.constants';
@@ -16,6 +20,7 @@ import type {
   PublishedPortfolio,
   SaveDraftInput,
   PortfolioWriteResult,
+  PublishedPortfolioTranslation,
 } from '../types/portfolio.types';
 
 /**
@@ -230,6 +235,21 @@ export async function findPublishedBySlugUnscoped(
   return row === null ? null : toPublishedPortfolio(row);
 }
 
+export async function findPublishedTranslationBySlugAndLocaleUnscoped(
+  slug: string,
+  locale: string,
+): Promise<PortfolioDocument | null> {
+  const row = await getDatabase().portfolioTranslation.findFirst({
+    where: {
+      locale,
+      publishedDocument: { not: DbNull },
+      portfolio: { slug, status: 'PUBLISHED', deletedAt: null },
+    },
+    select: { publishedDocument: true },
+  });
+  return row === null ? null : tryMigratePortfolioDocument(row.publishedDocument);
+}
+
 /** Sitemap source: published, non-deleted portfolios only. */
 export async function listPublishedPortfoliosUnscoped(): Promise<readonly PublishedPortfolio[]> {
   const rows = await getDatabase().portfolio.findMany({
@@ -241,6 +261,55 @@ export async function listPublishedPortfoliosUnscoped(): Promise<readonly Publis
   return rows
     .map((row) => toPublishedPortfolio(row))
     .filter((portfolio): portfolio is PublishedPortfolio => portfolio !== null);
+}
+
+export async function listPublishedTranslationsUnscoped(): Promise<
+  readonly PublishedPortfolioTranslation[]
+> {
+  const rows = await getDatabase().portfolioTranslation.findMany({
+    where: {
+      publishedDocument: { not: DbNull },
+      publishedAt: { not: null },
+      portfolio: { status: 'PUBLISHED', deletedAt: null },
+    },
+    orderBy: { publishedAt: 'desc' },
+    select: {
+      locale: true,
+      publishedDocument: true,
+      publishedAt: true,
+      portfolio: { select: { slug: true } },
+    },
+  });
+  return rows.flatMap((row) => {
+    const document = tryMigratePortfolioDocument(row.publishedDocument);
+    return document === null || row.publishedAt === null
+      ? []
+      : [{ slug: row.portfolio.slug, locale: row.locale, document, publishedAt: row.publishedAt }];
+  });
+}
+
+export async function listPublishedTranslationsBySlugUnscoped(
+  slug: string,
+): Promise<readonly PublishedPortfolioTranslation[]> {
+  const rows = await getDatabase().portfolioTranslation.findMany({
+    where: {
+      publishedDocument: { not: DbNull },
+      publishedAt: { not: null },
+      portfolio: { slug, status: 'PUBLISHED', deletedAt: null },
+    },
+    select: {
+      locale: true,
+      publishedDocument: true,
+      publishedAt: true,
+      portfolio: { select: { slug: true } },
+    },
+  });
+  return rows.flatMap((row) => {
+    const document = tryMigratePortfolioDocument(row.publishedDocument);
+    return document === null || row.publishedAt === null
+      ? []
+      : [{ slug: row.portfolio.slug, locale: row.locale, document, publishedAt: row.publishedAt }];
+  });
 }
 
 /** Availability check for the slug editor. Advisory: publish is authoritative. */

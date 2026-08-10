@@ -295,6 +295,21 @@ describe('mapExtractionToDocument', () => {
       expect(result.document.socialLinks[0]?.kind).toBe(kind);
       expect(result.document.links).toEqual([]);
     });
+
+    it.each(['LinkedIn', 'GitHub', ' GITHUB '])(
+      'recognizes a social kind regardless of the case the model returned it in (%s)',
+      (kind) => {
+        const result = mapExtractionToDocument(
+          extraction({ links: [{ kind, url: 'https://example.com/a' }] }),
+          'Fallback',
+          'upload-1',
+        );
+
+        expect(result.document.socialLinks).toHaveLength(1);
+        expect(result.document.socialLinks[0]?.kind).toBe(kind.trim().toLowerCase());
+        expect(result.document.links).toEqual([]);
+      },
+    );
   });
 
   describe('experience', () => {

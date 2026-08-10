@@ -366,6 +366,18 @@ export function normalizeMonth(value: string | null): string | null {
   return MONTH_PATTERN.test(trimmed) ? trimmed : null;
 }
 
+/**
+ * `SOCIAL_LINK_KINDS` is a closed, lowercase set, but the model's free-text
+ * `kind` field (`z.string()`, unconstrained) comes back in whatever case it
+ * chose — "LinkedIn", "GitHub" — which a case-sensitive `includes()` never
+ * matches. Normalizing before the check is what makes those links route to
+ * the social-links renderer instead of silently landing in the general,
+ * unrendered `links` bucket.
+ */
+export function normalizeLinkKind(kind: string): string {
+  return kind.trim().toLowerCase();
+}
+
 export function mapLinks(
   extraction: ResumeExtractionResult,
   warnings: ExtractionMappingResult['warnings'],
@@ -373,7 +385,7 @@ export function mapLinks(
   const links: PortfolioLink[] = [];
 
   for (const [index, link] of extraction.links.slice(0, DOCUMENT_COUNTS.links).entries()) {
-    if ((SOCIAL_LINK_KINDS as readonly string[]).includes(link.kind)) continue;
+    if ((SOCIAL_LINK_KINDS as readonly string[]).includes(normalizeLinkKind(link.kind))) continue;
     const url = normalizeSafeUrl(link.url);
 
     if (url === null) {
@@ -407,7 +419,8 @@ export function mapSocialLinks(
   const links: PortfolioDocument['socialLinks'][number][] = [];
 
   for (const [index, link] of extraction.links.slice(0, DOCUMENT_COUNTS.socialLinks).entries()) {
-    if (!(SOCIAL_LINK_KINDS as readonly string[]).includes(link.kind)) continue;
+    const kind = normalizeLinkKind(link.kind);
+    if (!(SOCIAL_LINK_KINDS as readonly string[]).includes(kind)) continue;
     const url = normalizeSafeUrl(link.url);
     if (url === null) {
       warnings.push({
@@ -420,7 +433,7 @@ export function mapSocialLinks(
 
     links.push({
       id: `social-${links.length + 1}`,
-      kind: link.kind as PortfolioDocument['socialLinks'][number]['kind'],
+      kind: kind as PortfolioDocument['socialLinks'][number]['kind'],
       label: null,
       url,
       visible: true,

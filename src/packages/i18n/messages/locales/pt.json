@@ -836,5 +836,24 @@
       "confirmationMismatch": "Digite exatamente a palavra de confirmação para continuar.",
       "notFound": "Esse portfólio não está mais disponível."
     }
+  },
+  "payments": {
+    "billing": {
+      "title": "Faturação",
+      "hint": "O ProFolio custa {price} por mês, valor único, sem níveis. Um novo portfólio recebe um período de avaliação gratuito de 10 dias a partir do dia da primeira publicação.",
+      "status": {
+        "notStarted": "Publique um portfólio para iniciar a sua avaliação gratuita de 10 dias.",
+        "trialing": "A sua avaliação termina em {days} dias.",
+        "deactivated": "O seu portfólio está desativado até subscrever.",
+        "active": "Está subscrito — obrigado por apoiar o ProFolio."
+      },
+      "activeNote": "Faça a gestão ou cancele a sua subscrição a qualquer momento na sua conta PayPal.",
+      "checkout": {
+        "unavailable": "A faturação está temporariamente indisponível. Tente novamente em breve.",
+        "processing": "A confirmar a sua subscrição…",
+        "succeeded": "Subscrição enviada. A ativação é confirmada automaticamente e pode demorar um pouco.",
+        "failed": "Não foi possível confirmar a sua subscrição. Tente novamente ou contacte o suporte se isto persistir."
+      }
+    }
   }
 }

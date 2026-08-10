@@ -25,9 +25,37 @@ const booleanFlag = z
 
 const positiveInt = z.coerce.number().int().positive();
 
+/**
+ * A decimal amount with at most two places, e.g. `2.50` or `2.5`.
+ *
+ * A `refine` over two independent, single-quantifier checks rather than one
+ * `\d+(\.\d{1,2})?`-shaped regex: the static ReDoS scanner flags any pattern
+ * combining two quantified groups in sequence, even a bounded, genuinely safe
+ * one like this. Splitting the check removes the false positive without
+ * weakening what is validated.
+ */
+const priceAmount = z
+  .string()
+  .trim()
+  .refine((value) => {
+    const [whole, ...rest] = value.split('.');
+    const fraction = rest.join('.');
+
+    return (
+      rest.length <= 1 &&
+      whole !== undefined &&
+      /^\d+$/.test(whole) &&
+      (fraction.length === 0 || /^\d{1,2}$/.test(fraction))
+    );
+  }, 'must be a decimal amount with at most two places');
+
 export const publicEnvSchema = z.object({
   NEXT_PUBLIC_APP_URL: z.url(),
   NEXT_PUBLIC_APP_ENV: z.enum(['local', 'staging', 'production']).default('local'),
+  // PayPal client ids are not secrets — the same way a Stripe publishable key
+  // is not — so this is the one PayPal value the browser bundle is allowed to
+  // see. It is only ever read alongside PAYPAL_CLIENT_ID below.
+  NEXT_PUBLIC_PAYPAL_CLIENT_ID: optionalString,
 });
 
 export const serverEnvSchema = z.object({
@@ -114,6 +142,46 @@ export const serverEnvSchema = z.object({
   CONTACT_SMTP_USER: optionalString,
   CONTACT_SMTP_PASS: optionalString,
   EMAIL_CAPTURE_PATH: z.literal('test-results/email-capture.jsonl').optional(),
+
+  /*
+   * PayPal billing.
+   *
+   * Blank is disabled, the same as translation's `AI_GOOGLE_API_KEY`: a
+   * deployment with none of these set runs with billing off rather than
+   * refusing to boot, because most preview and local environments have no
+   * PayPal app to point at. Once any one of them is set, all four become
+   * required — see `paypalConfiguredSchema` below — so a half-entered
+   * credential fails loudly at boot instead of failing the first checkout a
+   * real user attempts.
+   *
+   * `NEXT_PUBLIC_PAYPAL_CLIENT_ID` is declared again here (it also lives in
+   * `publicEnvSchema`) purely so this "all four or none" rule can see it —
+   * `NEXT_PUBLIC_APP_ENV` above is duplicated for the same reason.
+   */
+  NEXT_PUBLIC_PAYPAL_CLIENT_ID: optionalString,
+  PAYPAL_CLIENT_ID: optionalString,
+  PAYPAL_CLIENT_SECRET: optionalString,
+  PAYPAL_ENV: z.enum(['sandbox', 'live']).default('sandbox'),
+  /*
+   * NOT a URL. This app's own webhook route (something like
+   * `/api/payments/webhooks/paypal`) is registered as an endpoint in the
+   * PayPal developer dashboard; PayPal responds to that registration with an
+   * opaque webhook id, and *that* id — not the route path — is what this
+   * variable holds. It is the input to PayPal's webhook-signature-verification
+   * API, used to prove an inbound POST actually came from PayPal before any of
+   * its contents are trusted. See docs/deployment.md for the registration
+   * step that produces it.
+   */
+  PAYPAL_WEBHOOK_ID: optionalString,
+  // The amount billed through the PayPal subscription plan.
+  PAYMENT_PRICE: priceAmount.default('2.50'),
+  // The amount shown in on-page copy. Despite the `NEXT_` prefix this is still
+  // server-only — Next.js only inlines `NEXT_PUBLIC_*` variables into the
+  // browser bundle — so it is read from server components, never the client.
+  // Kept as its own variable rather than reusing PAYMENT_PRICE so display copy
+  // could diverge from the billed amount (a promotional price, a rounding
+  // choice) without touching the value sent to PayPal.
+  NEXT_PAYMENT_PRICE: priceAmount.default('2.50'),
 });
 
 export const s3ConfiguredSchema = z.object({
@@ -134,4 +202,11 @@ export const contactEmailConfiguredSchema = z.object({
   CONTACT_SMTP_HOST: nonEmpty,
   CONTACT_SMTP_USER: nonEmpty,
   CONTACT_SMTP_PASS: nonEmpty,
+});
+
+export const paypalConfiguredSchema = z.object({
+  PAYPAL_CLIENT_ID: nonEmpty,
+  PAYPAL_CLIENT_SECRET: nonEmpty,
+  PAYPAL_WEBHOOK_ID: nonEmpty,
+  NEXT_PUBLIC_PAYPAL_CLIENT_ID: nonEmpty,
 });

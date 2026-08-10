@@ -214,6 +214,7 @@ export default [
             'editor-ui',
             'account-ui',
             'contact-ui',
+            'payments-ui',
             'preferences-ui',
             'private-page-access-ui',
             'pwa-ui',

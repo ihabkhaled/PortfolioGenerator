@@ -836,5 +836,24 @@
       "confirmationMismatch": "准确输入确认词以继续。",
       "deleteFailed": "我们无法完成删除。没有删除任何内容 - 请重试。"
     }
+  },
+  "payments": {
+    "billing": {
+      "title": "账单",
+      "hint": "ProFolio 每月收费 {price}，统一定价，不分等级。新作品集自首次发布之日起可享受 10 天免费试用。",
+      "status": {
+        "notStarted": "发布一个作品集即可开始您的 10 天免费试用。",
+        "trialing": "您的试用将在 {days} 天后结束。",
+        "deactivated": "在您订阅之前，您的作品集已停用。",
+        "active": "您已订阅 — 感谢您支持 ProFolio。"
+      },
+      "activeNote": "您可以随时在 PayPal 账户中管理或取消订阅。",
+      "checkout": {
+        "unavailable": "账单功能暂时不可用，请稍后再试。",
+        "processing": "正在确认您的订阅…",
+        "succeeded": "订阅已提交。激活将自动确认，可能需要一点时间。",
+        "failed": "我们无法确认您的订阅。请重试，如果问题持续出现，请联系支持团队。"
+      }
+    }
   }
 }

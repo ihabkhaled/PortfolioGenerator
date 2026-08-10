@@ -836,5 +836,24 @@
       "confirmationMismatch": "Digita esattamente la parola di conferma per continuare.",
       "notFound": "Quel portafoglio non è più disponibile."
     }
+  },
+  "payments": {
+    "billing": {
+      "title": "Fatturazione",
+      "hint": "ProFolio costa {price} al mese, prezzo unico, senza livelli. Un nuovo portfolio ottiene una prova gratuita di 10 giorni a partire dal giorno della prima pubblicazione.",
+      "status": {
+        "notStarted": "Pubblica un portfolio per avviare la tua prova gratuita di 10 giorni.",
+        "trialing": "La tua prova termina tra {days} giorni.",
+        "deactivated": "Il tuo portfolio è disattivato finché non ti abboni.",
+        "active": "Sei abbonato — grazie per aver sostenuto ProFolio."
+      },
+      "activeNote": "Gestisci o annulla il tuo abbonamento in qualsiasi momento dal tuo account PayPal.",
+      "checkout": {
+        "unavailable": "La fatturazione non è temporaneamente disponibile. Riprova tra poco.",
+        "processing": "Conferma dell'abbonamento in corso…",
+        "succeeded": "Abbonamento inviato. L'attivazione viene confermata automaticamente e può richiedere qualche istante.",
+        "failed": "Non siamo riusciti a confermare il tuo abbonamento. Riprova oppure contatta l'assistenza se il problema persiste."
+      }
+    }
   }
 }

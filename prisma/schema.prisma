@@ -35,6 +35,21 @@ model User {
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
 
+  /// Billing is account-wide, not per portfolio: one flat subscription covers
+  /// every portfolio the owner has, which is why this lives on `User` rather
+  /// than `Portfolio`. The trial clock itself is still tied to publishing —
+  /// see `trialStartedAt` — because an account that never goes public has
+  /// nothing to be free about yet.
+  trialStartedAt        DateTime?          @map("trial_started_at")
+  /// `trialStartedAt` + 10 days, set once and never recomputed, so a plan
+  /// duration change later cannot retroactively shorten a trial already in
+  /// progress.
+  trialEndsAt           DateTime?          @map("trial_ends_at")
+  subscriptionStatus    SubscriptionStatus @default(NONE) @map("subscription_status")
+  paypalSubscriptionId  String?            @unique @map("paypal_subscription_id")
+  paypalPayerId         String?            @map("paypal_payer_id")
+  subscriptionUpdatedAt DateTime?          @map("subscription_updated_at")
+
   sessions              Session[]
   accounts              Account[]
   portfolios            Portfolio[]
@@ -44,6 +59,7 @@ model User {
   assets                Asset[]
   portfolioTranslations PortfolioTranslation[]
 
+  @@index([subscriptionStatus, trialEndsAt])
   @@map("users")
 }
 
@@ -166,8 +182,8 @@ model PortfolioTranslation {
   portfolioId String @map("portfolio_id")
   locale      String
 
-  draftDocument Json @map("draft_document")
-  draftVersion  Int  @default(1) @map("draft_version")
+  draftDocument     Json   @map("draft_document")
+  draftVersion      Int    @default(1) @map("draft_version")
   sourceFingerprint String @map("source_fingerprint")
 
   reviewedDocument Json?     @map("reviewed_document")
@@ -291,12 +307,12 @@ model Asset {
   width            Int?
   height           Int?
 
-  createdAt DateTime  @default(now()) @map("created_at")
-  updatedAt DateTime  @updatedAt @map("updated_at")
-  deletedAt DateTime? @map("deleted_at")
-  objectDeletedAt DateTime? @map("object_deleted_at")
-  deletionAttempts Int @default(0) @map("deletion_attempts")
-  deletionRetryAt DateTime? @map("deletion_retry_at")
+  createdAt        DateTime  @default(now()) @map("created_at")
+  updatedAt        DateTime  @updatedAt @map("updated_at")
+  deletedAt        DateTime? @map("deleted_at")
+  objectDeletedAt  DateTime? @map("object_deleted_at")
+  deletionAttempts Int       @default(0) @map("deletion_attempts")
+  deletionRetryAt  DateTime? @map("deletion_retry_at")
 
   owner     User      @relation(fields: [ownerId], references: [id], onDelete: Cascade)
   portfolio Portfolio @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
@@ -395,4 +411,59 @@ model RateLimitCounter {
   @@unique([bucket, windowStart])
   @@index([expiresAt])
   @@map("rate_limit_counters")
+}
+
+// ---------------------------------------------------------------------------
+// Billing (PayPal)
+// ---------------------------------------------------------------------------
+
+enum SubscriptionStatus {
+  /// Never subscribed and no trial in progress (never published, or the
+  /// account predates billing).
+  NONE
+  /// Inside the 10-day free window that started at first publish.
+  TRIALING
+  /// A PayPal subscription is active; portfolios stay public regardless of
+  /// trial state.
+  ACTIVE
+  /// A PayPal subscription exists but its most recent renewal payment failed.
+  /// Treated the same as expired-and-unsubscribed for access purposes.
+  PAST_DUE
+  /// The PayPal subscription was cancelled or expired.
+  CANCELED
+
+  @@map("subscription_status")
+}
+
+/// One flat product/plan, created once and reused for every subscriber —
+/// there are no tiers. Row-backed rather than an environment variable because
+/// nothing in the fixed set of PayPal env vars names a plan id: the app looks
+/// this up (or creates it, idempotently, the first time it is needed) instead
+/// of requiring a manual PayPal-dashboard step for it. See
+/// `src/modules/payments/services/plan.service.ts`.
+model PaypalBillingPlan {
+  id        String   @id @default(uuid())
+  /// Always "default" today — the unique constraint is what makes concurrent
+  /// first-time creation race-safe, not a lookup key with real variation.
+  key       String   @unique
+  productId String   @map("product_id")
+  planId    String   @map("plan_id")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("paypal_billing_plans")
+}
+
+/// Delivery-id ledger for inbound webhooks. PayPal retries a webhook it did
+/// not get a 2xx for, and a retried BILLING.SUBSCRIPTION.ACTIVATED must not be
+/// applied twice — not that it would corrupt state here, but a silent replay
+/// is exactly the kind of thing an incident review needs to be able to rule
+/// out. The unique constraint on `eventId` is the dedupe; a second insert of
+/// the same id fails and the handler treats that as "already processed".
+model PaypalWebhookEvent {
+  id          String   @id @default(uuid())
+  eventId     String   @unique @map("event_id")
+  eventType   String   @map("event_type")
+  processedAt DateTime @default(now()) @map("processed_at")
+
+  @@map("paypal_webhook_events")
 }

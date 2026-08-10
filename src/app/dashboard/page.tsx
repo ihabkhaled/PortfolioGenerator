@@ -3,6 +3,9 @@ import type { ReactElement } from 'react';
 
 import { DeletePortfolioContainer } from '@/modules/account/account-ui';
 import { requireOwner } from '@/modules/auth/server';
+import { describeBillingStatus } from '@/modules/payments';
+import { BillingStatusBanner } from '@/modules/payments/payments-ui';
+import { getOwnerBillingState } from '@/modules/payments/server';
 import {
   buildPortfolioListItems,
   CreatePortfolioFormContainer,
@@ -30,7 +33,15 @@ export default async function DashboardPage(): Promise<ReactElement> {
   const owner = await requireOwner();
   const t = await getServerTranslations(I18N_NAMESPACES.dashboard);
   const account = await getServerTranslations(I18N_NAMESPACES.account);
+  const paymentsT = await getServerTranslations(I18N_NAMESPACES.payments);
   const portfolios = await listOwnedPortfolios(owner.id);
+
+  // Only the urgent case surfaces here — the full trial/subscription picture
+  // lives on the settings page, where a checkout control can actually do
+  // something about it.
+  const billingState = await getOwnerBillingState(owner.id);
+  const isBillingDeactivated =
+    billingState !== null && describeBillingStatus(billingState, new Date()).tag === 'deactivated';
 
   const items: readonly PortfolioListItem[] = buildPortfolioListItems(portfolios, t).map(
     (item) => ({
@@ -76,6 +87,10 @@ export default async function DashboardPage(): Promise<ReactElement> {
         <h1 className={dashboardClasses.title}>{t('title')}</h1>
         <p className={dashboardClasses.lead}>{t('lead')}</p>
       </header>
+
+      {isBillingDeactivated ? (
+        <BillingStatusBanner tag="deactivated" message={paymentsT('billing.status.deactivated')} />
+      ) : null}
 
       <CreatePortfolioFormContainer />
 

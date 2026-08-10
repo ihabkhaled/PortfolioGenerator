@@ -836,5 +836,24 @@
       "confirmationMismatch": "Geben Sie das Best\u00e4tigungswort genau ein, um fortzufahren.",
       "notFound": "Dieses Portfolio ist nicht mehr verf\u00fcgbar."
     }
+  },
+  "payments": {
+    "billing": {
+      "title": "Abrechnung",
+      "hint": "ProFolio kostet {price} pro Monat, pauschal, ohne Stufen. Ein neues Portfolio erh\u00e4lt eine 10-t\u00e4gige kostenlose Testphase ab dem Tag der ersten Ver\u00f6ffentlichung.",
+      "status": {
+        "notStarted": "Ver\u00f6ffentlichen Sie ein Portfolio, um Ihre 10-t\u00e4gige kostenlose Testphase zu starten.",
+        "trialing": "Ihre Testphase endet in {days} Tagen.",
+        "deactivated": "Ihr Portfolio ist deaktiviert, bis Sie ein Abonnement abschlie\u00dfen.",
+        "active": "Sie sind abonniert \u2014 vielen Dank f\u00fcr Ihre Unterst\u00fctzung von ProFolio."
+      },
+      "activeNote": "Verwalten oder k\u00fcndigen Sie Ihr Abonnement jederzeit \u00fcber Ihr PayPal-Konto.",
+      "checkout": {
+        "unavailable": "Die Zahlungsabwicklung ist vor\u00fcbergehend nicht verf\u00fcgbar. Bitte versuchen Sie es in K\u00fcrze erneut.",
+        "processing": "Ihr Abonnement wird best\u00e4tigt \u2026",
+        "succeeded": "Abonnement \u00fcbermittelt. Die Aktivierung wird automatisch best\u00e4tigt und kann einen Moment dauern.",
+        "failed": "Wir konnten Ihr Abonnement nicht best\u00e4tigen. Bitte versuchen Sie es erneut oder wenden Sie sich an den Support, falls dies weiterhin auftritt."
+      }
+    }
   }
 }

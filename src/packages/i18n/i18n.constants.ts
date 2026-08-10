@@ -10,6 +10,7 @@ export const I18N_NAMESPACES = {
   dashboard: 'dashboard',
   editor: 'editor',
   ingestion: 'ingestion',
+  payments: 'payments',
   publishing: 'publishing',
   portfolio: 'portfolio',
   errors: 'errors',

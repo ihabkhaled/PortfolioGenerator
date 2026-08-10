@@ -9,6 +9,7 @@ export type AuditEventType =
   | 'portfolio.created'
   | 'portfolio.published'
   | 'portfolio.unpublished'
+  | 'portfolio.trial_deactivated'
   | 'portfolio.slug_changed'
   | 'portfolio.deleted'
   | 'resume.uploaded'

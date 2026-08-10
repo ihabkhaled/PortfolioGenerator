@@ -16,6 +16,7 @@ import { formatIssues, parseSchema } from '@/packages/zod';
 import {
   aiRemoteConfiguredSchema,
   contactEmailConfiguredSchema,
+  paypalConfiguredSchema,
   s3ConfiguredSchema,
   serverEnvSchema,
 } from './env.schema';
@@ -81,6 +82,25 @@ export function parseServerEnvironment(input: unknown): ServerEnv {
 
     if (!contactEmail.ok) {
       throw new Error(`CONTACT_EMAIL_ENABLED=true requires: ${formatIssues(contactEmail.issues)}`);
+    }
+  }
+
+  // PayPal billing has no explicit enable flag — presence decides it, the same
+  // as AI_GOOGLE_API_KEY for translation. Any one of the four values being set
+  // is enough to require the complete set, so a half-entered credential is a
+  // boot failure rather than a checkout that fails for the first real user.
+  const paypalFieldsPresent = [
+    parsed.value.PAYPAL_CLIENT_ID,
+    parsed.value.PAYPAL_CLIENT_SECRET,
+    parsed.value.PAYPAL_WEBHOOK_ID,
+    parsed.value.NEXT_PUBLIC_PAYPAL_CLIENT_ID,
+  ].some((value) => value !== undefined);
+
+  if (paypalFieldsPresent) {
+    const paypal = parseSchema(paypalConfiguredSchema, parsed.value);
+
+    if (!paypal.ok) {
+      throw new Error(`PayPal billing requires: ${formatIssues(paypal.issues)}`);
     }
   }
 

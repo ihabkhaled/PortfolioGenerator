@@ -398,6 +398,7 @@
     "builtWith": "Ver\u00f6ffentlicht mit ProFolio",
     "navigationLabel": "Portfolioseiten",
     "portraitAlt": "Portr\u00e4t",
+    "galleryClose": "Vollbild schlie\u00dfen",
     "privatePage": {
       "title": "Diese Seite ist privat",
       "description": "Geben Sie das Passwort ein, das Ihnen der Portfolioeigent\u00fcmer mitgeteilt hat.",
@@ -709,6 +710,12 @@
       "attachmentLabel": "\u00d6ffentliches Download-Label",
       "uploadAttachment": "Anhang hochladen",
       "remove": "Aus Entwurf entfernen",
+      "crop": {
+        "title": "Foto zuschneiden",
+        "zoomLabel": "Zoom",
+        "apply": "Diesen Ausschnitt verwenden",
+        "cancel": "Abbrechen"
+      },
       "kinds": {
         "cv": "Lebenslauf oder Lebenslauf",
         "cover-letter": "Anschreiben",

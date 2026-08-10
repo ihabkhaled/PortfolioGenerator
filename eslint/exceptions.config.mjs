@@ -128,6 +128,25 @@ export default [
   },
   {
     /**
+     * EXC-0009 — the image-crop field's live preview.
+     *
+     * `next/image` decides what to fetch and how to size an `<img>` up front,
+     * from `src`/`width`/`height` props known before the image loads. This
+     * component works the other way around: it needs a real `<img>` DOM node
+     * to read `naturalWidth`/`naturalHeight` from once an in-memory
+     * `URL.createObjectURL` blob has loaded, and to hand that same node to
+     * `canvas.drawImage` afterwards — neither is something next/image's
+     * optimizer pipeline can mediate, since a blob URL is only ever valid in
+     * this tab and was never going to be optimized or served by Next either
+     * way.
+     */
+    files: ['src/modules/portfolio-editor/components/image-crop-field.component.tsx'],
+    rules: {
+      '@next/next/no-img-element': 'off',
+    },
+  },
+  {
+    /**
      * EXC-0004 — src/packages/link/index.tsx
      *
      * `toAppRoute` widens a database-derived path to the branded `Route` type

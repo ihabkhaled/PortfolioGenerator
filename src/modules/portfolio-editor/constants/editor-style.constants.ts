@@ -52,4 +52,14 @@ export const editorClasses = {
   slugPreview: 'truncate font-mono text-[0.6875rem] text-muted-foreground',
   blockerList: 'grid gap-2',
   blocker: 'flex items-start gap-2 text-sm text-warning-readable',
+
+  cropDialog: 'm-auto grid max-w-[min(28rem,90vw)] gap-4 rounded-lg border border-border p-5',
+  cropTitle: 'font-display text-base font-semibold tracking-tight text-foreground',
+  cropViewport:
+    'relative mx-auto touch-none overflow-hidden bg-surface-raised outline outline-1 -outline-offset-1 outline-border',
+  cropViewportRect: 'aspect-[4/3] w-full rounded-lg',
+  cropViewportCircle: 'size-64 max-w-full rounded-full',
+  cropSurface: 'absolute top-0 left-0 origin-top-left cursor-grab select-none active:cursor-grabbing',
+  cropZoomRow: 'grid gap-1.5',
+  cropActions: 'flex justify-end gap-2',
 } as const;

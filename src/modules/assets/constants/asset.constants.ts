@@ -10,6 +10,12 @@ export const ASSET_DELETION_MAX_RETRY_DELAY_MS = 86_400_000;
 export const ASSET_DELETION_BATCH_SIZE = 50;
 export const ASSET_DELETION_NO_STORE_HEADERS = { 'Cache-Control': 'no-store' } as const;
 
+/** Session-scoped draft bytes: never cached, never indexed. */
+export const OWNED_ASSET_RESPONSE_HEADERS = {
+  'Cache-Control': 'private, no-store, max-age=0',
+  'X-Robots-Tag': 'noindex, nofollow, noarchive, nosnippet',
+} as const;
+
 export const UPLOAD_PURPOSE_SET: ReadonlySet<UploadPurpose> = new Set([
   'resume',
   'portrait',

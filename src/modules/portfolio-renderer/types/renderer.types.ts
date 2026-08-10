@@ -26,6 +26,7 @@ export interface PortfolioLabels {
   readonly builtWith: string;
   readonly navigationLabel: string;
   readonly portraitAlt: string;
+  readonly galleryClose: string;
   readonly supplemental: Readonly<{
     softSkills: string;
     courses: string;

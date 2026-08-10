@@ -398,6 +398,7 @@
     "builtWith": "Publicado con ProFolio",
     "navigationLabel": "Páginas del portafolio",
     "portraitAlt": "Retrato",
+    "galleryClose": "Cerrar imagen a tamaño completo",
     "privatePage": {
       "title": "Esta pagina es privada",
       "description": "Ingrese la contraseña que el propietario de la cartera compartió con usted.",
@@ -709,6 +710,12 @@
       "attachmentLabel": "Etiqueta de descarga pública",
       "uploadAttachment": "Subir archivo adjunto",
       "remove": "Quitar del borrador",
+      "crop": {
+        "title": "Encuadra tu foto",
+        "zoomLabel": "Zoom",
+        "apply": "Usar este encuadre",
+        "cancel": "Cancelar"
+      },
       "kinds": {
         "cv": "CV o currículum",
         "cover-letter": "Carta de presentación",

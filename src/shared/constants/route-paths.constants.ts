@@ -71,6 +71,20 @@ export function buildDashboardPublishPath(portfolioId: string): string {
 }
 
 /**
+ * Where the editor's own live preview reads a not-yet-published asset from.
+ *
+ * `/media/{assetId}` only ever serves bytes that are part of a *published*
+ * snapshot (see `getPublishedAssetBytesUnscoped`), so a portrait or gallery
+ * photo uploaded to a draft — before the first publish, or after any edit —
+ * has nowhere to be read from until the next Publish. This route is scoped by
+ * session ownership instead of publish state, so the preview shows what was
+ * actually uploaded rather than a broken image icon.
+ */
+export function buildDashboardAssetPath(portfolioId: string, assetId: string): string {
+  return `${buildDashboardPortfolioPath(portfolioId)}/media/${assetId}`;
+}
+
+/**
  * Paths the app serves under `/{portfolioSlug}/` that are not tenant pages.
  *
  * The public route is an optional catch-all, so a page whose slug matched one

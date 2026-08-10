@@ -15,6 +15,7 @@ document here.
 | [EXC-0006](./EXC-0006-script-body-assertion.md)            | The renderer fixture matrix          | `testing-library/no-container`, `no-node-access`          |
 | [EXC-0007](./EXC-0007-support-scripts-are-cli-programs.md) | `support/**/*.{mjs,mts}`             | `no-console`, `unicorn/no-process-exit`                   |
 | [EXC-0008](./EXC-0008-create-database-identifier.md)       | `support/ensure-database.mjs`        | `sonarjs/sql-queries`                                     |
+| [EXC-0009](./EXC-0009-crop-field-img-element.md)           | The image-crop field                 | `@next/next/no-img-element`                                |
 
 ## Adding one
 

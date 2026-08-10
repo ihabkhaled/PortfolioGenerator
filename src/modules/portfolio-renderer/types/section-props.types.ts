@@ -73,7 +73,7 @@ export interface PortfolioShellProps {
   readonly navigationLabel: string;
   /** Controls that belong to the reader rather than to the portfolio. */
   readonly actions: ReactNode;
-  readonly footerNote: string;
+  readonly footerNote: ReactNode;
   readonly footerLinks: ReactNode;
   readonly banner: ReactNode;
   readonly children: ReactNode;

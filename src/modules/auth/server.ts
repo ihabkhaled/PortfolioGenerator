@@ -6,7 +6,11 @@ import 'server-only';
  * services (and through them the database client) into its bundle.
  */
 
-export { getCurrentUser, requireOwner } from './services/require-owner.service';
+export {
+  getCurrentUser,
+  redirectIfAuthenticated,
+  requireOwner,
+} from './services/require-owner.service';
 export { getOptionalUser, signOutCurrentSession } from './services/session.service';
 export {
   consumePasswordRecovery,

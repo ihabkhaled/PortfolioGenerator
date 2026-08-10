@@ -398,6 +398,7 @@
     "builtWith": "Published with ProFolio",
     "navigationLabel": "Portfolio pages",
     "portraitAlt": "Portrait",
+    "galleryClose": "Close full-size image",
     "privatePage": {
       "title": "This page is private",
       "description": "Enter the password the portfolio owner shared with you.",
@@ -709,6 +710,12 @@
       "attachmentLabel": "Public download label",
       "uploadAttachment": "Upload attachment",
       "remove": "Remove from draft",
+      "crop": {
+        "title": "Frame your photo",
+        "zoomLabel": "Zoom",
+        "apply": "Use this framing",
+        "cancel": "Cancel"
+      },
       "kinds": {
         "cv": "CV or resume",
         "cover-letter": "Cover letter",

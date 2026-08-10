@@ -395,6 +395,7 @@
     "contactCta": "連絡する",
     "skipToContent": "コンテンツにスキップ",
     "portraitAlt": "肖像画",
+    "galleryClose": "フルサイズ画像を閉じる",
     "supplemental": {
       "courses": "コース",
       "publications": "出版物",
@@ -732,6 +733,12 @@
         "rate-limited": "この接続からアップロードされたファイルが多すぎます。後でもう一度試してください。"
       },
       "remove": "下書きから削除",
+      "crop": {
+        "title": "写真の位置を調整",
+        "zoomLabel": "ズーム",
+        "apply": "このフレーミングを使用",
+        "cancel": "キャンセル"
+      },
       "uploadAttachment": "添付ファイルをアップロードする"
     },
     "phoneCountryNone": "国なし"

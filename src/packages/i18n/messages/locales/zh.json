@@ -396,6 +396,7 @@
     "availability": "开放工作",
     "skipToContent": "跳至内容",
     "portraitAlt": "肖像",
+    "galleryClose": "关闭全尺寸图片",
     "supplemental": {
       "courses": "课程",
       "publications": "刊物",
@@ -711,6 +712,12 @@
       "uploadGallery": "上传图库图片",
       "uploadAttachment": "上传附件",
       "remove": "从草稿中删除",
+      "crop": {
+        "title": "裁剪你的照片",
+        "zoomLabel": "缩放",
+        "apply": "使用此构图",
+        "cancel": "取消"
+      },
       "galleryCaption": "标题（可选）",
       "attachmentFile": "可下载的文件",
       "attachmentLabel": "公共下载标签",

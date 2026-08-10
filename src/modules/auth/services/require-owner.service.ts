@@ -38,3 +38,21 @@ export async function getCurrentUser(): Promise<AuthenticatedUser | null> {
 
   return getOptionalUser(requestHeaders);
 }
+
+/**
+ * The inverse of `requireOwner`, for the credential pages themselves.
+ *
+ * A signed-in visitor who lands on `/sign-in` — a stale bookmark, a link
+ * shared before they logged in, clicking "Sign In" again from the marketing
+ * page — has no form to fill in: they already have what that page exists to
+ * get them. Sending them straight to the dashboard is what a session actually
+ * means, rather than showing a form whose only working outcome is confusion.
+ */
+export async function redirectIfAuthenticated(): Promise<void> {
+  const requestHeaders = await headers();
+  const user = await getOptionalUser(requestHeaders);
+
+  if (user) {
+    appRedirect(ROUTE_PATHS.dashboard);
+  }
+}

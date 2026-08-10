@@ -36,6 +36,8 @@ export const portfolioShellClasses = {
   footerInner:
     'mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-6 px-5 py-12 sm:px-8 lg:px-10',
   footerNote: 'font-mono text-[0.6875rem] uppercase tracking-[0.12em] text-muted-foreground',
+  footerNoteLink:
+    'underline-offset-4 transition-colors hover:text-foreground hover:underline focus-visible:text-foreground focus-visible:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring',
   footerLink:
     'text-sm text-muted-foreground underline-offset-4 transition-colors hover:text-foreground hover:underline',
 } as const;
@@ -153,9 +155,18 @@ export const supplementalClasses = {
   quoteByline: 'text-sm text-muted-foreground',
   gallery: 'grid gap-4 sm:grid-cols-2',
   figure: 'overflow-hidden rounded-lg border border-border bg-surface-raised',
+  galleryTrigger:
+    'block w-full cursor-zoom-in text-left focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring',
   galleryImage: 'aspect-[4/3] w-full object-cover',
   caption: 'p-3 text-sm text-muted-foreground',
   attachments: 'grid gap-2',
   attachment:
     'inline-flex w-fit items-center gap-2 rounded-md border border-border px-3 py-2 text-sm text-primary-readable hover:bg-muted',
+  lightboxDialog:
+    'm-auto max-h-[90vh] max-w-[90vw] overflow-visible rounded-lg bg-transparent p-0 backdrop:bg-black/80',
+  lightboxFrame: 'relative grid max-h-[90vh] max-w-[90vw] gap-2',
+  lightboxImage: 'max-h-[80vh] w-auto rounded-lg object-contain',
+  lightboxCaption: 'text-center text-sm text-white',
+  lightboxClose:
+    'absolute -top-4 -right-4 flex size-9 items-center justify-center rounded-full border border-border bg-surface text-foreground shadow-sm hover:bg-surface-raised focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring',
 } as const;

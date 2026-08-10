@@ -9,6 +9,7 @@ import type { PortfolioDocument } from '@/modules/portfolio-document';
 import { I18N_NAMESPACES, useAppTranslation } from '@/packages/i18n';
 import { Button, Input, Label, Select } from '@/packages/ui-primitives';
 
+import { ImageCropField } from '../components/image-crop-field.component';
 import { editorClasses } from '../constants/editor-style.constants';
 import { EDITOR_ATTACHMENT_KINDS } from '../constants/editor.constants';
 import type { AssetCollectionsUploadProps } from '../types/asset-collections-upload.types';
@@ -63,12 +64,19 @@ export function AssetCollectionsUploadContainer(
         <input type="hidden" name="purpose" value="gallery" />
         <div className={editorClasses.field}>
           <Label htmlFor="gallery-asset">{t('assets.galleryFile')}</Label>
-          <Input
+          <ImageCropField
             id="gallery-asset"
             name="asset"
-            type="file"
             accept="image/png,image/jpeg,image/webp,image/gif,image/avif"
             required
+            aspectRatio={4 / 3}
+            shape="rect"
+            outputWidth={1200}
+            outputHeight={900}
+            dialogTitle={t('assets.crop.title')}
+            zoomLabel={t('assets.crop.zoomLabel')}
+            applyLabel={t('assets.crop.apply')}
+            cancelLabel={t('assets.crop.cancel')}
           />
         </div>
         <div className={editorClasses.field}>

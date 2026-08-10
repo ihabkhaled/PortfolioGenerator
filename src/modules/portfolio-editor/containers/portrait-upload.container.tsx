@@ -6,8 +6,9 @@ import { useActionState, useEffect, useRef, type ReactElement } from 'react';
 
 import { ASSET_UPLOAD_INITIAL_STATE } from '@/modules/assets';
 import { I18N_NAMESPACES, useAppTranslation } from '@/packages/i18n';
-import { Button, Input, Label } from '@/packages/ui-primitives';
+import { Button, Label } from '@/packages/ui-primitives';
 
+import { ImageCropField } from '../components/image-crop-field.component';
 import { editorClasses } from '../constants/editor-style.constants';
 import type { PortraitUploadProps } from '../types/portrait-upload.types';
 
@@ -41,12 +42,19 @@ export function PortraitUploadContainer(props: Readonly<PortraitUploadProps>): R
         <input type="hidden" name="purpose" value="portrait" />
         <div className={editorClasses.field}>
           <Label htmlFor="portrait-asset">{t('assets.portraitLabel')}</Label>
-          <Input
+          <ImageCropField
             id="portrait-asset"
             name="asset"
-            type="file"
             accept="image/png,image/jpeg,image/webp,image/gif,image/avif"
             required
+            aspectRatio={1}
+            shape="circle"
+            outputWidth={720}
+            outputHeight={720}
+            dialogTitle={t('assets.crop.title')}
+            zoomLabel={t('assets.crop.zoomLabel')}
+            applyLabel={t('assets.crop.apply')}
+            cancelLabel={t('assets.crop.cancel')}
           />
           <p className={editorClasses.fieldHint}>{t('assets.portraitFormats')}</p>
         </div>

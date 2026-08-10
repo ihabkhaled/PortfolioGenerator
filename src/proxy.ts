@@ -33,11 +33,17 @@ export function buildContentSecurityPolicy(
     `default-src 'self'`,
     `script-src ${scriptSrc}`,
     `style-src 'self' 'unsafe-inline'`,
-    `img-src 'self' blob: data: https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net`,
+    `img-src 'self' blob: data: https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net https://*.adtrafficquality.google`,
     `font-src 'self'`,
     `worker-src 'self'`,
-    `connect-src 'self' https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net`,
-    `frame-src https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net https://tpc.googlesyndication.com`,
+    // *.adtrafficquality.google is Google's ad-traffic-quality beacon,
+    // called by the AdSense script we already allowlist above — the specific
+    // `ep1`/`ep2`/... host it uses is Google's implementation detail to
+    // change, not ours to enumerate. Without it Google cannot verify
+    // impressions as non-fraudulent, which risks the AdSense account rather
+    // than a visitor's data.
+    `connect-src 'self' https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net https://*.adtrafficquality.google`,
+    `frame-src https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net https://tpc.googlesyndication.com https://*.adtrafficquality.google`,
     `media-src 'none'`,
     `object-src 'none'`,
     `base-uri 'self'`,

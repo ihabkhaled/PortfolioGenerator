@@ -9,6 +9,7 @@ import { buildPortfolioLabels, PortfolioTemplate } from '@/modules/portfolio-ren
 import { APP_LOCALE, I18N_NAMESPACES, useAppTranslation } from '@/packages/i18n';
 import { ErrorIcon } from '@/packages/icons';
 import { Button } from '@/packages/ui-primitives';
+import { buildDashboardAssetPath } from '@/shared/constants/route-paths.constants';
 import { sortCountriesByName } from '@/shared/utils/phone-number.util';
 
 import { ContactFields } from '../components/contact-fields.component';
@@ -277,6 +278,7 @@ export function PortfolioEditorContainer(props: Readonly<EditorContainerProps>):
             isPreview
             actions={null}
             footerLinks={null}
+            buildAssetPath={(assetId) => buildDashboardAssetPath(props.portfolioId, assetId)}
           />
         )
       }

@@ -1,9 +1,11 @@
 import type { ReactElement } from 'react';
 
+import { AppLink } from '@/packages/link';
 import { Section } from '@/shared/components/data-display/section.component';
 import { sectionClasses } from '@/shared/components/data-display/section.variants';
-import { buildPublicAssetPath } from '@/shared/constants/route-paths.constants';
+import { buildPublicAssetPath, ROUTE_PATHS } from '@/shared/constants/route-paths.constants';
 
+import { portfolioShellClasses } from '../constants/template-style.constants';
 import { hasContent } from '../helpers/section-content.helper';
 import type { PortfolioTemplateProps } from '../types/renderer.types';
 
@@ -33,7 +35,11 @@ export function PortfolioTemplate(props: Readonly<PortfolioTemplateProps>): Reac
       displayName={props.document.identity.displayName}
       headline={props.document.identity.headline}
       navigationLabel={props.labels.navigationLabel}
-      footerNote={props.labels.builtWith}
+      footerNote={
+        <AppLink href={ROUTE_PATHS.home} className={portfolioShellClasses.footerNoteLink}>
+          {props.labels.builtWith}
+        </AppLink>
+      }
       banner={null}
       navigation={<PortfolioNav label={props.labels.navigationLabel} items={props.navigation} />}
       actions={props.actions}

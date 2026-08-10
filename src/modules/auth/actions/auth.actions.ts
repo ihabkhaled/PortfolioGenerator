@@ -91,7 +91,13 @@ export async function signInAction(
 
   try {
     await getAuth().api.signInEmail({
-      body: { email: parsed.value.email, password: parsed.value.password },
+      // Also the callback for a verification email resent as a side effect
+      // of this call (emailVerification.sendOnSignIn) — see signUpEmail above.
+      body: {
+        email: parsed.value.email,
+        password: parsed.value.password,
+        callbackURL: ROUTE_PATHS.dashboard,
+      },
       headers: await headers(),
     });
   } catch (error) {
@@ -140,6 +146,10 @@ export async function signUpAction(
         name: parsed.value.name,
         email: parsed.value.email,
         password: parsed.value.password,
+        // Threaded into the verification email's link: clicking it, once
+        // verified, lands the now-signed-in visitor on the dashboard instead
+        // of the marketing homepage — see emailVerification.autoSignInAfterVerification.
+        callbackURL: ROUTE_PATHS.dashboard,
       },
       headers: await headers(),
     });

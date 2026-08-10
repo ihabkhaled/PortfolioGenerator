@@ -398,6 +398,7 @@
     "builtWith": "Publié avec ProFolio",
     "navigationLabel": "Pages de portefeuille",
     "portraitAlt": "Portrait",
+    "galleryClose": "Fermer l'image en taille réelle",
     "privatePage": {
       "title": "Cette page est privée",
       "description": "Saisissez le mot de passe que le propriétaire du portefeuille a partagé avec vous.",
@@ -709,6 +710,12 @@
       "attachmentLabel": "Étiquette de téléchargement public",
       "uploadAttachment": "Télécharger la pièce jointe",
       "remove": "Supprimer du brouillon",
+      "crop": {
+        "title": "Cadrez votre photo",
+        "zoomLabel": "Zoom",
+        "apply": "Utiliser ce cadrage",
+        "cancel": "Annuler"
+      },
       "kinds": {
         "cv": "CV ou curriculum vitae",
         "cover-letter": "Lettre de motivation",

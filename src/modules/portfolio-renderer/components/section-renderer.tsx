@@ -46,6 +46,7 @@ import { AboutSection } from './about-section.component';
 import { ContactSection } from './contact-section.component';
 import { CustomSection } from './custom-section.component';
 import { FactListSection } from './fact-list-section.component';
+import { GalleryLightbox } from './gallery-lightbox.component';
 import { HeroSection } from './hero-section.component';
 import { ProjectsSection } from './projects-section.component';
 import { SkillsSection } from './skills-section.component';
@@ -224,22 +225,15 @@ export function SectionRenderer(props: Readonly<SectionRendererProps>): ReactEle
 
     case 'gallery': {
       return (
-        <div className={supplementalClasses.gallery}>
-          {document.gallery.map((entry) => (
-            <figure key={entry.id} className={supplementalClasses.figure}>
-              <AppImage
-                src={buildAssetPath(entry.assetId)}
-                alt={entry.alt}
-                width={640}
-                height={480}
-                className={supplementalClasses.galleryImage}
-              />
-              {entry.caption === null ? null : (
-                <figcaption className={supplementalClasses.caption}>{entry.caption}</figcaption>
-              )}
-            </figure>
-          ))}
-        </div>
+        <GalleryLightbox
+          items={document.gallery.map((entry) => ({
+            id: entry.id,
+            src: buildAssetPath(entry.assetId),
+            alt: entry.alt,
+            caption: entry.caption,
+          }))}
+          closeLabel={labels.galleryClose}
+        />
       );
     }
 
@@ -470,22 +464,15 @@ function renderAboutCollections(
       )}
       {document.gallery.length === 0 ? null : (
         <SupplementalSection title={labels.supplemental.gallery}>
-          <div className={supplementalClasses.gallery}>
-            {document.gallery.map((entry) => (
-              <figure key={entry.id} className={supplementalClasses.figure}>
-                <AppImage
-                  src={buildAssetPath(entry.assetId)}
-                  alt={entry.alt}
-                  width={640}
-                  height={480}
-                  className={supplementalClasses.galleryImage}
-                />
-                {entry.caption === null ? null : (
-                  <figcaption className={supplementalClasses.caption}>{entry.caption}</figcaption>
-                )}
-              </figure>
-            ))}
-          </div>
+          <GalleryLightbox
+            items={document.gallery.map((entry) => ({
+              id: entry.id,
+              src: buildAssetPath(entry.assetId),
+              alt: entry.alt,
+              caption: entry.caption,
+            }))}
+            closeLabel={labels.galleryClose}
+          />
         </SupplementalSection>
       )}
       {document.attachments.some((entry) => entry.visible) ? (

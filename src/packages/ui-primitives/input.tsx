@@ -1,8 +1,10 @@
-import type { InputHTMLAttributes, ReactElement } from 'react';
+import type { InputHTMLAttributes, ReactElement, Ref } from 'react';
 
 import { cn } from './cn';
 
-export type InputProps = InputHTMLAttributes<HTMLInputElement>;
+export type InputProps = InputHTMLAttributes<HTMLInputElement> & {
+  readonly ref?: Ref<HTMLInputElement>;
+};
 
 /**
  * A checkbox or radio is a control, not a text field, and must not carry the

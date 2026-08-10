@@ -124,7 +124,7 @@ export function buildSiteFooterLinks(translate: TranslateFunction): readonly Sit
         },
         {
           id: 'sitemap',
-          href: ROUTE_PATHS.sitemap,
+          href: toAppRoute(ROUTE_PATHS.sitemap),
           label: translate('footer.links.sitemap'),
         },
       ],

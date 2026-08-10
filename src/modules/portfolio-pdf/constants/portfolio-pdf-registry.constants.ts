@@ -37,5 +37,4 @@ globalForPortfolioPdf.portfolioPdfRegistry ??= {
 export const PORTFOLIO_PDF_CACHE_REGISTRY = globalForPortfolioPdf.portfolioPdfRegistry.cache;
 export const PORTFOLIO_PDF_TOKEN_STORE_REGISTRY =
   globalForPortfolioPdf.portfolioPdfRegistry.tokenStore;
-export const PORTFOLIO_PDF_RENDERER_REGISTRY =
-  globalForPortfolioPdf.portfolioPdfRegistry.renderer;
+export const PORTFOLIO_PDF_RENDERER_REGISTRY = globalForPortfolioPdf.portfolioPdfRegistry.renderer;

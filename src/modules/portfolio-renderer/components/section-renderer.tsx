@@ -26,6 +26,7 @@ import {
   projectClasses,
   supplementalClasses,
 } from '../constants/template-style.constants';
+import { GalleryLightboxContainer } from '../containers/gallery-lightbox.container';
 import {
   buildCertificationEntries,
   buildAwardEntries,
@@ -46,7 +47,6 @@ import { AboutSection } from './about-section.component';
 import { ContactSection } from './contact-section.component';
 import { CustomSection } from './custom-section.component';
 import { FactListSection } from './fact-list-section.component';
-import { GalleryLightbox } from './gallery-lightbox.component';
 import { HeroSection } from './hero-section.component';
 import { ProjectsSection } from './projects-section.component';
 import { SkillsSection } from './skills-section.component';
@@ -225,7 +225,7 @@ export function SectionRenderer(props: Readonly<SectionRendererProps>): ReactEle
 
     case 'gallery': {
       return (
-        <GalleryLightbox
+        <GalleryLightboxContainer
           items={document.gallery.map((entry) => ({
             id: entry.id,
             src: buildAssetPath(entry.assetId),
@@ -464,7 +464,7 @@ function renderAboutCollections(
       )}
       {document.gallery.length === 0 ? null : (
         <SupplementalSection title={labels.supplemental.gallery}>
-          <GalleryLightbox
+          <GalleryLightboxContainer
             items={document.gallery.map((entry) => ({
               id: entry.id,
               src: buildAssetPath(entry.assetId),

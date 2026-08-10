@@ -140,9 +140,28 @@ export default [
      * this tab and was never going to be optimized or served by Next either
      * way.
      */
-    files: ['src/modules/portfolio-editor/components/image-crop-field.component.tsx'],
+    files: ['src/modules/portfolio-editor/containers/image-crop-field.container.tsx'],
     rules: {
       '@next/next/no-img-element': 'off',
+    },
+  },
+  {
+    /**
+     * EXC-0010 — the gallery lightbox's backdrop-click dismissal.
+     *
+     * A native `<dialog>` closing on a click that lands on its own padding
+     * (`currentTarget === target`, not on a child) is the standard React
+     * pattern for backdrop-dismiss — there is no keyboard equivalent to add
+     * because there is nothing keyboard-only about this interaction: Escape
+     * already closes the dialog natively, through a completely separate path
+     * this handler does not gate. jsx-a11y has no special case for `<dialog>`
+     * and treats the click handler as if it were the only way to close the
+     * dialog, which it is not.
+     */
+    files: ['src/modules/portfolio-renderer/containers/gallery-lightbox.container.tsx'],
+    rules: {
+      'jsx-a11y/click-events-have-key-events': 'off',
+      'jsx-a11y/no-noninteractive-element-interactions': 'off',
     },
   },
   {

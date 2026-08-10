@@ -11,30 +11,16 @@ import {
   type ReactElement,
 } from 'react';
 
-import { Button, Input, type InputProps } from '@/packages/ui-primitives';
+import { Button, cn, Input } from '@/packages/ui-primitives';
 
 import { editorClasses } from '../constants/editor-style.constants';
-
-export interface ImageCropFieldProps
-  extends Readonly<Omit<InputProps, 'type' | 'onChange' | 'value'>> {
-  /** Width divided by height of the crop frame and the output file. */
-  readonly aspectRatio: number;
-  readonly shape: 'rect' | 'circle';
-  readonly outputWidth: number;
-  readonly outputHeight: number;
-  readonly dialogTitle: string;
-  readonly zoomLabel: string;
-  readonly applyLabel: string;
-  readonly cancelLabel: string;
-}
-
-const MIN_ZOOM = 1;
-const MAX_ZOOM = 3;
-
-interface Point {
-  readonly x: number;
-  readonly y: number;
-}
+import {
+  IMAGE_CROP_MAX_ZOOM,
+  IMAGE_CROP_MIN_ZOOM,
+  IMAGE_CROP_OUTPUT_MIME_TYPE,
+  IMAGE_CROP_OUTPUT_QUALITY,
+} from '../constants/image-crop.constants';
+import type { ImageCropFieldProps, ImageCropPoint } from '../types/image-crop.types';
 
 /**
  * A file input that never lets an image through unframed.
@@ -46,7 +32,7 @@ interface Point {
  * same input with `DataTransfer` — from the server's point of view, framing
  * is just part of choosing a file.
  */
-export function ImageCropField(props: Readonly<ImageCropFieldProps>): ReactElement {
+export function ImageCropFieldContainer(props: Readonly<ImageCropFieldProps>): ReactElement {
   const {
     aspectRatio,
     shape,
@@ -63,14 +49,14 @@ export function ImageCropField(props: Readonly<ImageCropFieldProps>): ReactEleme
   const dialogRef = useRef<HTMLDialogElement>(null);
   const viewportRef = useRef<HTMLDivElement>(null);
   const imageRef = useRef<HTMLImageElement | null>(null);
-  const dragRef = useRef<{ pointer: Point; offset: Point } | null>(null);
+  const dragRef = useRef<{ pointer: ImageCropPoint; offset: ImageCropPoint } | null>(null);
 
   const [objectUrl, setObjectUrl] = useState<string | null>(null);
   const [pendingFile, setPendingFile] = useState<File | null>(null);
   const [naturalSize, setNaturalSize] = useState<{ width: number; height: number } | null>(null);
   const [baseScale, setBaseScale] = useState(1);
-  const [zoom, setZoom] = useState(MIN_ZOOM);
-  const [offset, setOffset] = useState<Point>({ x: 0, y: 0 });
+  const [zoom, setZoom] = useState(IMAGE_CROP_MIN_ZOOM);
+  const [offset, setOffset] = useState<ImageCropPoint>({ x: 0, y: 0 });
 
   useEffect(() => {
     return () => {
@@ -80,7 +66,7 @@ export function ImageCropField(props: Readonly<ImageCropFieldProps>): ReactEleme
     };
   }, [objectUrl]);
 
-  function clampOffset(candidate: Point, scale: number): Point {
+  function clampOffset(candidate: ImageCropPoint, scale: number): ImageCropPoint {
     const viewport = viewportRef.current;
 
     if (viewport === null || naturalSize === null) {
@@ -109,7 +95,7 @@ export function ImageCropField(props: Readonly<ImageCropFieldProps>): ReactEleme
       }
       return URL.createObjectURL(file);
     });
-    setZoom(MIN_ZOOM);
+    setZoom(IMAGE_CROP_MIN_ZOOM);
     dialogRef.current?.showModal();
   }
 
@@ -175,14 +161,14 @@ export function ImageCropField(props: Readonly<ImageCropFieldProps>): ReactEleme
   function applyCrop(): void {
     const viewport = viewportRef.current;
     const image = imageRef.current;
+    const canReadyToCrop =
+      pendingFile !== null &&
+      naturalSize !== null &&
+      viewport !== null &&
+      inputRef.current !== null &&
+      image !== null;
 
-    if (
-      pendingFile === null ||
-      naturalSize === null ||
-      viewport === null ||
-      inputRef.current === null ||
-      image === null
-    ) {
+    if (!canReadyToCrop) {
       return;
     }
 
@@ -193,7 +179,7 @@ export function ImageCropField(props: Readonly<ImageCropFieldProps>): ReactEleme
     const sourceWidth = bounds.width / scale;
     const sourceHeight = bounds.height / scale;
 
-    const canvas = document.createElement('canvas');
+    const canvas = globalThis.document.createElement('canvas');
     canvas.width = outputWidth;
     canvas.height = outputHeight;
     const context = canvas.getContext('2d');
@@ -214,18 +200,22 @@ export function ImageCropField(props: Readonly<ImageCropFieldProps>): ReactEleme
       outputHeight,
     );
 
-    canvas.toBlob((blob) => {
-      if (blob === null || inputRef.current === null) {
-        return;
-      }
+    canvas.toBlob(
+      (blob) => {
+        if (blob === null || inputRef.current === null) {
+          return;
+        }
 
-      const fileName = pendingFile.name.replace(/\.\w+$/u, '.jpg');
-      const cropped = new File([blob], fileName, { type: 'image/jpeg' });
-      const transfer = new DataTransfer();
-      transfer.items.add(cropped);
-      inputRef.current.files = transfer.files;
-      dialogRef.current?.close();
-    }, 'image/jpeg', 0.92);
+        const fileName = pendingFile.name.replace(/\.\w+$/u, '.jpg');
+        const cropped = new File([blob], fileName, { type: IMAGE_CROP_OUTPUT_MIME_TYPE });
+        const transfer = new DataTransfer();
+        transfer.items.add(cropped);
+        inputRef.current.files = transfer.files;
+        dialogRef.current?.close();
+      },
+      IMAGE_CROP_OUTPUT_MIME_TYPE,
+      IMAGE_CROP_OUTPUT_QUALITY,
+    );
   }
 
   return (
@@ -243,16 +233,15 @@ export function ImageCropField(props: Readonly<ImageCropFieldProps>): ReactEleme
         }}
       />
 
-      <dialog
-        ref={dialogRef}
-        className={editorClasses.cropDialog}
-        onCancel={closeWithoutApplying}
-      >
+      <dialog ref={dialogRef} className={editorClasses.cropDialog} onCancel={closeWithoutApplying}>
         <p className={editorClasses.cropTitle}>{dialogTitle}</p>
 
         <div
           ref={viewportRef}
-          className={`${editorClasses.cropViewport} ${shape === 'circle' ? editorClasses.cropViewportCircle : editorClasses.cropViewportRect}`}
+          className={cn(
+            editorClasses.cropViewport,
+            shape === 'circle' ? editorClasses.cropViewportCircle : editorClasses.cropViewportRect,
+          )}
           style={shape === 'rect' ? { aspectRatio } : undefined}
           onPointerDown={handlePointerDown}
           onPointerMove={handlePointerMove}
@@ -285,8 +274,8 @@ export function ImageCropField(props: Readonly<ImageCropFieldProps>): ReactEleme
           <input
             id={`${inputProps.id}-zoom`}
             type="range"
-            min={MIN_ZOOM}
-            max={MAX_ZOOM}
+            min={IMAGE_CROP_MIN_ZOOM}
+            max={IMAGE_CROP_MAX_ZOOM}
             step={0.01}
             value={zoom}
             onChange={(event) => {

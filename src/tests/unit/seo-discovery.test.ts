@@ -90,12 +90,16 @@ describe('serializeRssFeed', () => {
 });
 
 describe('AdSenseScript', () => {
-  it('loads the official script asynchronously once with the request nonce', () => {
+  it('loads the official script once, after hydration, with the request nonce', () => {
     render(AdSenseScript({ nonce: 'request-nonce' }));
     const scripts = [...document.scripts].filter((script) => script.src === ADSENSE_SCRIPT_URL);
 
+    // `next/script`'s `afterInteractive` strategy is what makes this load
+    // after hydration rather than racing the theme script for a position in
+    // <head> — see adsense-script.component.tsx. It manages the loading
+    // timing itself instead of relying on the native `async` attribute, so
+    // that attribute is deliberately not asserted here.
     expect(scripts).toHaveLength(1);
-    expect(scripts[0]).toHaveAttribute('async');
     expect(scripts[0]).toHaveAttribute('crossorigin', 'anonymous');
     expect(scripts[0]).toHaveAttribute('nonce', 'request-nonce');
   });

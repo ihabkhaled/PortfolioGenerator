@@ -18,13 +18,12 @@ export const dynamic = 'force-dynamic';
  * sign-in page, which a browser would just render as a second broken image.
  */
 export async function GET(
-  request: NextRequest,
+  _request: NextRequest,
   context: { readonly params: Promise<{ portfolioId: string; assetId: string }> },
 ): Promise<Response> {
   const owner = await getCurrentUser();
   const { portfolioId, assetId } = await context.params;
-  const found =
-    owner === null ? null : await getOwnedAssetBytes(owner.id, portfolioId, assetId);
+  const found = owner === null ? null : await getOwnedAssetBytes(owner.id, portfolioId, assetId);
 
   if (found === null) {
     return new Response(null, { status: 404, headers: OWNED_ASSET_RESPONSE_HEADERS });

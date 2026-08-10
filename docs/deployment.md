@@ -3,7 +3,7 @@
 ## What this needs
 
 | Dependency                    | Notes                                                    |
-| ------------------------------ | -------------------------------------------------------- |
+| ----------------------------- | -------------------------------------------------------- |
 | Node.js 24+                   | `.nvmrc` and `.node-version` pin the version             |
 | PostgreSQL 16+                | The only required datastore                              |
 | S3-compatible object storage  | AWS S3, Cloudflare R2 or MinIO                           |
@@ -36,23 +36,23 @@ failing at the first request that happens to need it.
 
 The values that must be set for production, and what goes wrong if they are not:
 
-| Variable                                               | If wrong                                                                                                                          |
-| ------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
-| `NEXT_PUBLIC_APP_URL`                                  | Canonical URLs, the sitemap and OG images point at localhost. Inlined at build time — a rebuild is required to change it.          |
-| `NEXT_PUBLIC_APP_ENV`                                  | Anything other than `production` makes `robots.txt` disallow everything. That is deliberate for preview deployments.              |
-| `DATABASE_URL`                                         | Boot failure.                                                                                                                      |
-| `BETTER_AUTH_SECRET`                                   | Boot failure below 32 characters. Rotating it invalidates every session.                                                           |
-| `AUTH_REQUIRE_EMAIL_VERIFICATION=false` in production  | Boot failure. Mandatory verification also requires enabled, fully configured SMTP delivery.                                       |
-| `STORAGE_DRIVER=s3` without the S3 block               | Boot failure, naming the missing variables.                                                                                        |
-| `AI_PROVIDER=openai-compatible` without `AI_API_KEY`   | Boot failure.                                                                                                                      |
-| `CRON_SECRET`                                          | Boot failure in production when absent or shorter than 32 characters.                                                             |
-| `CLAMAV_ENABLED=false` in production                   | Uploads are stored unscanned. Not a boot failure — see below.                                                                      |
-| `CLAMAV_ENABLED=true` without reachable clamd          | Uploads fail closed; no unscanned bytes are stored.                                                                                |
-| `AI_GOOGLE_API_KEY` absent                             | Translation returns `not-configured`. Extraction is unaffected.                                                                    |
-| `CONTACT_EMAIL_ENABLED=true` without the SMTP block    | Boot failure, naming the missing relay values.                                                                                     |
-| `REDIS_URL` absent                                     | Not a boot failure. The PDF cache and download-token store fall back to an in-process implementation — see below.                  |
-| `PDF_CHROMIUM_EXECUTABLE_PATH`                         | Escape hatch only; leave unset unless deploying Chromium somewhere neither `@playwright/test` nor `@sparticuz/chromium` reaches.   |
-| Any one of the four PayPal values set without the rest | Boot failure, naming the missing PayPal values. All four blank boots fine with billing off.                                        |
+| Variable                                               | If wrong                                                                                                                         |
+| ------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------- |
+| `NEXT_PUBLIC_APP_URL`                                  | Canonical URLs, the sitemap and OG images point at localhost. Inlined at build time — a rebuild is required to change it.        |
+| `NEXT_PUBLIC_APP_ENV`                                  | Anything other than `production` makes `robots.txt` disallow everything. That is deliberate for preview deployments.             |
+| `DATABASE_URL`                                         | Boot failure.                                                                                                                    |
+| `BETTER_AUTH_SECRET`                                   | Boot failure below 32 characters. Rotating it invalidates every session.                                                         |
+| `AUTH_REQUIRE_EMAIL_VERIFICATION=false` in production  | Boot failure. Mandatory verification also requires enabled, fully configured SMTP delivery.                                      |
+| `STORAGE_DRIVER=s3` without the S3 block               | Boot failure, naming the missing variables.                                                                                      |
+| `AI_PROVIDER=openai-compatible` without `AI_API_KEY`   | Boot failure.                                                                                                                    |
+| `CRON_SECRET`                                          | Boot failure in production when absent or shorter than 32 characters.                                                            |
+| `CLAMAV_ENABLED=false` in production                   | Uploads are stored unscanned. Not a boot failure — see below.                                                                    |
+| `CLAMAV_ENABLED=true` without reachable clamd          | Uploads fail closed; no unscanned bytes are stored.                                                                              |
+| `AI_GOOGLE_API_KEY` absent                             | Translation returns `not-configured`. Extraction is unaffected.                                                                  |
+| `CONTACT_EMAIL_ENABLED=true` without the SMTP block    | Boot failure, naming the missing relay values.                                                                                   |
+| `REDIS_URL` absent                                     | Not a boot failure. The PDF cache and download-token store fall back to an in-process implementation — see below.                |
+| `PDF_CHROMIUM_EXECUTABLE_PATH`                         | Escape hatch only; leave unset unless deploying Chromium somewhere neither `@playwright/test` nor `@sparticuz/chromium` reaches. |
+| Any one of the four PayPal values set without the rest | Boot failure, naming the missing PayPal values. All four blank boots fine with billing off.                                      |
 
 Private portfolio pages cannot be listed as a `robots.txt` prefix because they
 share the same slug namespace as public portfolios. They are excluded by
@@ -89,7 +89,6 @@ The supported contact contract includes `CONTACT_EMAIL_PROVIDER=smtp`,
 `CONTACT_SMTP_*` variables shown in `.env.example`. Port 587 with
 `CONTACT_SMTP_SECURE=false` still upgrades with STARTTLS before credentials are
 sent.
-
 
 ## Portfolio PDF download
 

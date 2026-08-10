@@ -25,7 +25,7 @@ export async function getOwnedAssetBytes(
 ): Promise<PublishedAssetBytes | null> {
   const asset = await getOwnedAsset(ownerId, assetId);
 
-  if (asset === null || asset.portfolioId !== portfolioId) {
+  if (asset?.portfolioId !== portfolioId) {
     return null;
   }
 

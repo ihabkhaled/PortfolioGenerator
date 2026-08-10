@@ -8,26 +8,22 @@ import { CloseIcon } from '@/packages/icons';
 import { AppImage } from '@/packages/image';
 
 import { supplementalClasses } from '../constants/template-style.constants';
-
-export interface GalleryLightboxItem {
-  readonly id: string;
-  readonly src: string;
-  readonly alt: string;
-  readonly caption: string | null;
-}
-
-export interface GalleryLightboxProps {
-  readonly items: readonly GalleryLightboxItem[];
-  readonly closeLabel: string;
-}
+import type { GalleryLightboxItem, GalleryLightboxProps } from '../types/gallery-lightbox.types';
 
 /**
  * A grid of thumbnails that each open the same image full-size in a native
  * `<dialog>` — chosen over a hand-built overlay because it gets focus
  * trapping, Escape-to-close and a `::backdrop` for free, in exchange for
  * nothing this gallery needs that a bespoke implementation would do better.
+ *
+ * The dialog's own `onClick` closing it on a backdrop click is the standard
+ * React pattern for a native `<dialog>`: `currentTarget` is the dialog itself
+ * (where the listener is bound) and `target` is whatever was actually
+ * clicked, so they are equal only when the click landed on the dialog's own
+ * padding rather than a child. Escape already closes it natively — this only
+ * adds the equivalent mouse gesture, not a new way in.
  */
-export function GalleryLightbox(props: Readonly<GalleryLightboxProps>): ReactElement {
+export function GalleryLightboxContainer(props: Readonly<GalleryLightboxProps>): ReactElement {
   const dialogRef = useRef<HTMLDialogElement>(null);
   const [active, setActive] = useState<GalleryLightboxItem | null>(null);
 
@@ -65,8 +61,8 @@ export function GalleryLightbox(props: Readonly<GalleryLightboxProps>): ReactEle
         ref={dialogRef}
         className={supplementalClasses.lightboxDialog}
         onClick={(event) => {
-          if (event.target === dialogRef.current) {
-            dialogRef.current.close();
+          if (event.currentTarget === event.target) {
+            dialogRef.current?.close();
           }
         }}
         onClose={() => {

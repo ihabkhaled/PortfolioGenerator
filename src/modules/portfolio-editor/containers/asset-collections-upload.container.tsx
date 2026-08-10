@@ -9,10 +9,11 @@ import type { PortfolioDocument } from '@/modules/portfolio-document';
 import { I18N_NAMESPACES, useAppTranslation } from '@/packages/i18n';
 import { Button, Input, Label, Select } from '@/packages/ui-primitives';
 
-import { ImageCropField } from '../components/image-crop-field.component';
 import { editorClasses } from '../constants/editor-style.constants';
 import { EDITOR_ATTACHMENT_KINDS } from '../constants/editor.constants';
 import type { AssetCollectionsUploadProps } from '../types/asset-collections-upload.types';
+
+import { ImageCropFieldContainer } from './image-crop-field.container';
 
 export function AssetCollectionsUploadContainer(
   props: Readonly<AssetCollectionsUploadProps>,
@@ -64,7 +65,7 @@ export function AssetCollectionsUploadContainer(
         <input type="hidden" name="purpose" value="gallery" />
         <div className={editorClasses.field}>
           <Label htmlFor="gallery-asset">{t('assets.galleryFile')}</Label>
-          <ImageCropField
+          <ImageCropFieldContainer
             id="gallery-asset"
             name="asset"
             accept="image/png,image/jpeg,image/webp,image/gif,image/avif"

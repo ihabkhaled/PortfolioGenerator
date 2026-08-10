@@ -8,9 +8,10 @@ import { ASSET_UPLOAD_INITIAL_STATE } from '@/modules/assets';
 import { I18N_NAMESPACES, useAppTranslation } from '@/packages/i18n';
 import { Button, Label } from '@/packages/ui-primitives';
 
-import { ImageCropField } from '../components/image-crop-field.component';
 import { editorClasses } from '../constants/editor-style.constants';
 import type { PortraitUploadProps } from '../types/portrait-upload.types';
+
+import { ImageCropFieldContainer } from './image-crop-field.container';
 
 export function PortraitUploadContainer(props: Readonly<PortraitUploadProps>): ReactElement {
   const t = useAppTranslation(I18N_NAMESPACES.editor);
@@ -42,7 +43,7 @@ export function PortraitUploadContainer(props: Readonly<PortraitUploadProps>): R
         <input type="hidden" name="purpose" value="portrait" />
         <div className={editorClasses.field}>
           <Label htmlFor="portrait-asset">{t('assets.portraitLabel')}</Label>
-          <ImageCropField
+          <ImageCropFieldContainer
             id="portrait-asset"
             name="asset"
             accept="image/png,image/jpeg,image/webp,image/gif,image/avif"

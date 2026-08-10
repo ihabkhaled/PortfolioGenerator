@@ -59,7 +59,8 @@ export const editorClasses = {
     'relative mx-auto touch-none overflow-hidden bg-surface-raised outline outline-1 -outline-offset-1 outline-border',
   cropViewportRect: 'aspect-[4/3] w-full rounded-lg',
   cropViewportCircle: 'size-64 max-w-full rounded-full',
-  cropSurface: 'absolute top-0 left-0 origin-top-left cursor-grab select-none active:cursor-grabbing',
+  cropSurface:
+    'absolute top-0 left-0 origin-top-left cursor-grab select-none active:cursor-grabbing',
   cropZoomRow: 'grid gap-1.5',
   cropActions: 'flex justify-end gap-2',
 } as const;

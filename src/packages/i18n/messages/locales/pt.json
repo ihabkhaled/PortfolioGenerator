@@ -24,10 +24,40 @@
     "loading": "Carregando",
     "footerNote": "Seu currículo permanece privado. Somente o que você analisa e publica se torna público.",
     "nav": {
+      "home": "Início",
+      "menu": "Menu",
       "dashboard": "Painel",
       "signIn": "Entrar",
       "signUp": "Criar uma conta",
       "signOut": "sair"
+    },
+    "footer": {
+      "columns": {
+        "product": "Produto",
+        "company": "Empresa",
+        "legal": "Legal",
+        "resources": "Recursos"
+      },
+      "links": {
+        "features": "Funcionalidades",
+        "howItWorks": "Como funciona",
+        "examples": "Exemplos",
+        "templates": "Modelos",
+        "cvImport": "Importação de currículo",
+        "aiAccuracy": "Precisão da IA",
+        "about": "Sobre",
+        "mission": "Missão",
+        "contact": "Contato",
+        "help": "Ajuda",
+        "privacy": "Privacidade",
+        "security": "Segurança",
+        "terms": "Termos",
+        "accessibility": "Acessibilidade",
+        "faq": "Perguntas frequentes",
+        "changelog": "Registro de alterações",
+        "feed": "Feed RSS",
+        "sitemap": "Mapa do site"
+      }
     }
   },
   "marketing": {

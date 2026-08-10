@@ -5,6 +5,8 @@ import { ManifestPanel } from '@/shared/components/data-display/manifest-panel.c
 import { Section } from '@/shared/components/data-display/section.component';
 import { EmptyState } from '@/shared/components/feedback/empty-state.component';
 import { ErrorState } from '@/shared/components/feedback/error-state.component';
+import { SiteAuthNav } from '@/shared/components/layout/site-auth-nav.component';
+import { SiteFooterNav } from '@/shared/components/layout/site-footer-nav.component';
 import { SiteShell } from '@/shared/components/layout/site-shell.component';
 import { ExternalLink } from '@/shared/components/primitives/external-link';
 import { SkipLink } from '@/shared/components/primitives/skip-link.component';
@@ -91,6 +93,9 @@ describe('SiteShell', () => {
     render(
       <SiteShell
         brand={<span>ProFolio</span>}
+        brandName="ProFolio"
+        homeLink={<a href="#home">Home</a>}
+        menuLabel="Menu"
         navigationLabel="Primary"
         navigation={<a href="#dashboard">Dashboard</a>}
         footerNote="Built for people who have a CV."
@@ -101,9 +106,118 @@ describe('SiteShell', () => {
     );
 
     expect(screen.getByRole('banner')).toBeInTheDocument();
-    expect(screen.getByRole('navigation', { name: 'Primary' })).toBeInTheDocument();
+    expect(screen.getAllByRole('navigation', { name: 'Primary' })).toHaveLength(2);
     expect(screen.getByRole('main')).toHaveTextContent('Page body');
     expect(screen.getByRole('contentinfo')).toHaveTextContent('Built for people who have a CV.');
+  });
+
+  it('renders the home link and brand name in the footer as well as the header', () => {
+    render(
+      <SiteShell
+        brand={<span>ProFolio</span>}
+        brandName="ProFolio"
+        homeLink={<a href="#home">Home</a>}
+        menuLabel="Menu"
+        navigationLabel="Primary"
+        navigation={<a href="#dashboard">Dashboard</a>}
+        footerNote="Built for people who have a CV."
+        footerLinks={<a href="#privacy">Privacy</a>}
+      >
+        <p>Page body</p>
+      </SiteShell>,
+    );
+
+    expect(screen.getAllByRole('link', { name: 'Home' })).toHaveLength(2);
+    expect(within(screen.getByRole('contentinfo')).getByText('ProFolio')).toBeInTheDocument();
+  });
+
+  it('exposes a mobile menu toggle labelled for the reader', () => {
+    render(
+      <SiteShell
+        brand={<span>ProFolio</span>}
+        brandName="ProFolio"
+        homeLink={<a href="#home">Home</a>}
+        menuLabel="Menu"
+        navigationLabel="Primary"
+        navigation={<a href="#dashboard">Dashboard</a>}
+        footerNote="Built for people who have a CV."
+        footerLinks={<a href="#privacy">Privacy</a>}
+      >
+        <p>Page body</p>
+      </SiteShell>,
+    );
+
+    expect(screen.getByRole('group')).toBeInTheDocument();
+    expect(screen.getByLabelText('Menu')).toBeInTheDocument();
+  });
+});
+
+describe('SiteAuthNav', () => {
+  it('offers a way back to the dashboard once signed in, and nothing else', () => {
+    render(
+      <SiteAuthNav
+        isSignedIn
+        dashboardHref="/dashboard"
+        signInHref="/sign-in"
+        signUpHref="/sign-up"
+        dashboardLabel="Dashboard"
+        signInLabel="Sign in"
+        signUpLabel="Create account"
+      />,
+    );
+
+    expect(screen.getByRole('link', { name: 'Dashboard' })).toHaveAttribute('href', '/dashboard');
+    expect(screen.queryByRole('link', { name: 'Sign in' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('link', { name: 'Create account' })).not.toBeInTheDocument();
+  });
+
+  it('offers sign-in and sign-up while signed out, and no dashboard link', () => {
+    render(
+      <SiteAuthNav
+        isSignedIn={false}
+        dashboardHref="/dashboard"
+        signInHref="/sign-in"
+        signUpHref="/sign-up"
+        dashboardLabel="Dashboard"
+        signInLabel="Sign in"
+        signUpLabel="Create account"
+      />,
+    );
+
+    expect(screen.getByRole('link', { name: /Sign in/ })).toHaveAttribute('href', '/sign-in');
+    expect(screen.getByRole('link', { name: /Create account/ })).toHaveAttribute(
+      'href',
+      '/sign-up',
+    );
+    expect(screen.queryByRole('link', { name: 'Dashboard' })).not.toBeInTheDocument();
+  });
+});
+
+describe('SiteFooterNav', () => {
+  it('renders each column as a labelled group of links', () => {
+    render(
+      <SiteFooterNav
+        columns={[
+          {
+            id: 'product',
+            heading: 'Product',
+            links: [{ id: 'features', href: '/guides/features', label: 'Features' }],
+          },
+          {
+            id: 'resources',
+            heading: 'Resources',
+            links: [{ id: 'feed', href: '/feed.xml', label: 'RSS feed' }],
+          },
+        ]}
+      />,
+    );
+
+    expect(screen.getByText('Product')).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Features' })).toHaveAttribute(
+      'href',
+      '/guides/features',
+    );
+    expect(screen.getByRole('link', { name: 'RSS feed' })).toHaveAttribute('href', '/feed.xml');
   });
 });
 

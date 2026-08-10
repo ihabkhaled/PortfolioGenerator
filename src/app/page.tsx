@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import type { ReactElement } from 'react';
 
+import { getCurrentUser } from '@/modules/auth/server';
 import { DEFAULT_LOCALE, isAppLocale } from '@/modules/localization';
 import {
   LandingCta,
@@ -21,18 +22,20 @@ import { buildPlatformMetadataAlternates } from '@/modules/seo';
 import { getRequestLocale } from '@/packages/headers';
 import { I18N_NAMESPACES } from '@/packages/i18n';
 import { getServerTranslations } from '@/packages/i18n/server';
+import { HomeIcon } from '@/packages/icons';
 import { AppLink, toAppRoute } from '@/packages/link';
 import { buttonVariants } from '@/packages/ui-primitives';
 import { LANDMARK_IDS } from '@/shared/accessibility/landmark-ids.constants';
 import { ManifestPanel } from '@/shared/components/data-display/manifest-panel.component';
 import { Section } from '@/shared/components/data-display/section.component';
 import { sectionClasses } from '@/shared/components/data-display/section.variants';
+import { SiteAuthNav } from '@/shared/components/layout/site-auth-nav.component';
+import { SiteFooterNav } from '@/shared/components/layout/site-footer-nav.component';
 import { SiteShell } from '@/shared/components/layout/site-shell.component';
 import { siteShellClasses } from '@/shared/components/layout/site-shell.variants';
 import { SkipLink } from '@/shared/components/primitives/skip-link.component';
 import { MARKETING_ROUTE_PATHS, ROUTE_PATHS } from '@/shared/constants/route-paths.constants';
-
-import { landingClasses } from './page.variants';
+import { buildSiteFooterLinks } from '@/shared/utils/site-footer-links.util';
 
 export async function generateMetadata(): Promise<Metadata> {
   const requestedLocale = await getRequestLocale();
@@ -43,8 +46,11 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function LandingPage(): Promise<ReactElement> {
-  const tApp = await getServerTranslations(I18N_NAMESPACES.app);
-  const t = await getServerTranslations(I18N_NAMESPACES.marketing);
+  const [user, tApp, t] = await Promise.all([
+    getCurrentUser(),
+    getServerTranslations(I18N_NAMESPACES.app),
+    getServerTranslations(I18N_NAMESPACES.marketing),
+  ]);
 
   const steps: readonly LandingStep[] = [
     {
@@ -166,39 +172,39 @@ export default async function LandingPage(): Promise<ReactElement> {
       <SkipLink targetHref={`#${LANDMARK_IDS.mainContent}`} label={tApp('skipToContent')} />
       <SiteShell
         navigationLabel={tApp('name')}
+        brandName={tApp('name')}
+        homeLink={
+          <AppLink
+            href={ROUTE_PATHS.home}
+            aria-label={tApp('nav.home')}
+            className={siteShellClasses.homeLink}
+          >
+            <HomeIcon aria-hidden size={18} />
+          </AppLink>
+        }
+        menuLabel={tApp('nav.menu')}
         brand={
-          <AppLink href={ROUTE_PATHS.home} className={landingClasses.brandLink}>
+          <AppLink href={ROUTE_PATHS.home} className={siteShellClasses.brand}>
             <span className={siteShellClasses.brandName}>{tApp('name')}</span>
             <span className={siteShellClasses.brandRole}>{tApp('tagline')}</span>
           </AppLink>
         }
         navigation={
-          <>
-            <AppLink href={ROUTE_PATHS.signIn} className={siteShellClasses.navLink}>
-              {tApp('nav.signIn')}
-            </AppLink>
-            <AppLink
-              href={ROUTE_PATHS.signUp}
-              className={buttonVariants({ variant: 'primary', size: 'sm' })}
-            >
-              {tApp('nav.signUp')}
-            </AppLink>
-          </>
+          <SiteAuthNav
+            isSignedIn={user !== null}
+            dashboardHref={ROUTE_PATHS.dashboard}
+            signInHref={ROUTE_PATHS.signIn}
+            signUpHref={ROUTE_PATHS.signUp}
+            dashboardLabel={tApp('nav.dashboard')}
+            signInLabel={tApp('nav.signIn')}
+            signUpLabel={tApp('nav.signUp')}
+          />
         }
         actions={
           <ThemeToggleContainer label={tApp('theme.label')} options={buildThemeOptions(tApp)} />
         }
         footerNote={tApp('footerNote')}
-        footerLinks={
-          <>
-            <AppLink href={ROUTE_PATHS.signIn} className={siteShellClasses.footerLink}>
-              {tApp('nav.signIn')}
-            </AppLink>
-            <AppLink href={ROUTE_PATHS.signUp} className={siteShellClasses.footerLink}>
-              {tApp('nav.signUp')}
-            </AppLink>
-          </>
-        }
+        footerLinks={<SiteFooterNav columns={buildSiteFooterLinks(tApp)} />}
       >
         <LandingHero
           eyebrow={t('eyebrow')}

@@ -20,10 +20,40 @@
     },
     "loading": "加载中",
     "nav": {
+      "home": "首页",
+      "menu": "菜单",
       "signIn": "登入",
       "dashboard": "仪表板",
       "signUp": "创建账户",
       "signOut": "登出"
+    },
+    "footer": {
+      "columns": {
+        "product": "产品",
+        "company": "公司",
+        "legal": "法律信息",
+        "resources": "资源"
+      },
+      "links": {
+        "features": "功能",
+        "howItWorks": "工作原理",
+        "examples": "案例",
+        "templates": "模板",
+        "cvImport": "简历导入",
+        "aiAccuracy": "AI 准确性",
+        "about": "关于我们",
+        "mission": "使命",
+        "contact": "联系我们",
+        "help": "帮助",
+        "privacy": "隐私",
+        "security": "安全",
+        "terms": "条款",
+        "accessibility": "无障碍功能",
+        "faq": "常见问题",
+        "changelog": "更新日志",
+        "feed": "RSS 订阅",
+        "sitemap": "网站地图"
+      }
     },
     "name": "ProFolio",
     "tagline": "将简历变成您掌控的作品集",

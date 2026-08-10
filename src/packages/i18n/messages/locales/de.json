@@ -24,10 +24,40 @@
     "loading": "Laden",
     "footerNote": "Ihr Lebenslauf bleibt vertraulich. Nur das, was Sie \u00fcberpr\u00fcfen und ver\u00f6ffentlichen, wird \u00f6ffentlich.",
     "nav": {
+      "home": "Startseite",
+      "menu": "Menü",
       "dashboard": "Armaturenbrett",
       "signIn": "Melden Sie sich an",
       "signUp": "Konto erstellen",
       "signOut": "Abmelden"
+    },
+    "footer": {
+      "columns": {
+        "product": "Produkt",
+        "company": "Unternehmen",
+        "legal": "Rechtliches",
+        "resources": "Ressourcen"
+      },
+      "links": {
+        "features": "Funktionen",
+        "howItWorks": "So funktioniert es",
+        "examples": "Beispiele",
+        "templates": "Vorlagen",
+        "cvImport": "Lebenslauf-Import",
+        "aiAccuracy": "KI-Genauigkeit",
+        "about": "Über uns",
+        "mission": "Mission",
+        "contact": "Kontakt",
+        "help": "Hilfe",
+        "privacy": "Datenschutz",
+        "security": "Sicherheit",
+        "terms": "Nutzungsbedingungen",
+        "accessibility": "Barrierefreiheit",
+        "faq": "Häufige Fragen",
+        "changelog": "Änderungsprotokoll",
+        "feed": "RSS-Feed",
+        "sitemap": "Sitemap"
+      }
     }
   },
   "marketing": {

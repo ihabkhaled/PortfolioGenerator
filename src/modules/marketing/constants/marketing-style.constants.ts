@@ -42,7 +42,15 @@ export const principleListClasses = {
 } as const;
 
 export const topicClasses = {
-  hero: 'surface-grid grid gap-5 border-b border-border px-5 py-20 sm:px-8 lg:px-10 lg:py-28',
+  // `surface-grid`'s `mask-image` fades whatever it is applied to, not just
+  // its own background pattern — putting it on the same element as the
+  // heading faded the heading with it. `wrapper`/`grid`/`inner` mirrors
+  // `heroClasses` above: the mask lives on an isolated, absolutely-positioned
+  // decorative layer, and the actual content is a normal, fully opaque
+  // sibling stacked above it.
+  wrapper: 'relative overflow-hidden border-b border-border',
+  grid: 'surface-grid pointer-events-none absolute inset-0',
+  hero: 'relative grid gap-5 px-5 py-20 sm:px-8 lg:px-10 lg:py-28',
   eyebrow: 'font-mono text-xs font-medium uppercase tracking-[0.18em] text-primary-readable',
   // Same fix as `heroClasses.title`: these topic-page headlines are long
   // enough to wrap, and `leading-none` made the wrapped second line collide

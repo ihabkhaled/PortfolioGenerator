@@ -36,6 +36,8 @@ export {
   upgradeSkills,
 } from './helpers/portfolio-document-v2.migration';
 
+export { upgradeDocumentToVersion3 } from './helpers/portfolio-document-v3.migration';
+
 export {
   applyMigrationSteps,
   migratePortfolioDocument,

@@ -13,6 +13,7 @@ import {
   upgradePages,
   upgradeProjects,
   upgradeSkills,
+  upgradeToCurrentVersion,
   type PortfolioDocument,
 } from '@/modules/portfolio-document';
 import { parseSchema } from '@/packages/zod';
@@ -91,8 +92,12 @@ function buildVersion1Document(): Record<string, unknown> {
 }
 
 describe('upgradeDocumentToVersion2', () => {
-  it('produces a document the current schema accepts', () => {
-    const upgraded = upgradeDocumentToVersion2(buildVersion1Document());
+  // This step's own output is an intermediate value, not a document the
+  // schema is meant to accept on its own — later steps still have to run.
+  // What has to hold is that a version 1 row is not stuck: the full chain
+  // starting from this step's output reaches something the schema accepts.
+  it('is a document the full chain carries to something the current schema accepts', () => {
+    const upgraded = upgradeToCurrentVersion(upgradeDocumentToVersion2(buildVersion1Document()));
     const result = parseSchema(portfolioDocumentSchema, upgraded);
 
     expect(result.ok).toBe(true);
@@ -101,8 +106,10 @@ describe('upgradeDocumentToVersion2', () => {
   it('stamps the new version', () => {
     const upgraded = upgradeDocumentToVersion2(buildVersion1Document()) as Record<string, unknown>;
 
+    // This step's own output, not the document's final resting version: later
+    // steps in the chain (see portfolio-document-v3.migration.ts) move it on
+    // from here, which is exactly what the next test in this file confirms.
     expect(upgraded['schemaVersion']).toBe(2);
-    expect(PORTFOLIO_SCHEMA_VERSION).toBe(2);
   });
 
   // A migration that guessed would put words on a public page nobody wrote.
@@ -126,7 +133,9 @@ describe('upgradeDocumentToVersion2', () => {
     const upgraded = migratePortfolioDocument(buildVersion1Document());
 
     expect(upgraded.identity.displayName).toBe('Amina Rahman');
-    expect(upgraded.schemaVersion).toBe(2);
+    // The full chain, not just this one step: a version 1 row arrives at
+    // whatever version is current today, however many steps that takes.
+    expect(upgraded.schemaVersion).toBe(PORTFOLIO_SCHEMA_VERSION);
   });
 
   // A row that is not an object at all is not a document; validation says so.
@@ -259,8 +268,8 @@ describe('isRecord', () => {
   });
 });
 
-describe('a version 2 document', () => {
-  it('is left alone by the chain, because no step starts from 2', () => {
+describe('a current document', () => {
+  it('is left alone by the chain, because no step starts from the current version', () => {
     const current = buildFullPortfolioDocument();
 
     expect(migratePortfolioDocument(current)).toEqual(current);

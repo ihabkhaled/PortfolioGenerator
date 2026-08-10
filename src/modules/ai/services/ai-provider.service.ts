@@ -48,9 +48,7 @@ export function getTranslationProvider(): PortfolioAiProvider {
     return AI_PROVIDER_REGISTRY.value;
   }
 
-  return getServerEnv().AI_GOOGLE_API_KEY === undefined
-    ? getAiProvider()
-    : createModelAiProvider();
+  return getServerEnv().AI_GOOGLE_API_KEY === undefined ? getAiProvider() : createModelAiProvider();
 }
 
 /** Test hook: substitute a provider, or clear the selection. */

@@ -80,7 +80,9 @@ best-practices 100, SEO 100, mobile performance 85 and desktop performance 90 on
 - [ ] `CLAMAV_ENABLED=true`; an EICAR canary is rejected and a scanner outage
       refuses uploads without writing storage or database rows. Run
       `npm run smoke:clamav -- readiness`, then follow the outage procedure in
-      [deployment.md](./deployment.md).
+      [deployment.md](./deployment.md). **The application no longer refuses to
+      boot without this.** Deploying with it off is a decision to accept
+      unscanned uploads; nothing else will remind you.
 - [ ] `CRON_SECRET` is 32+ random bytes, matches Vercel's cron
       bearer secret, and an unauthorized call to the deletion endpoint returns
       401 without processing work.

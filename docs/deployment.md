@@ -33,7 +33,7 @@ The values that must be set for production, and what goes wrong if they are not:
 | `STORAGE_DRIVER=s3` without the S3 block              | Boot failure, naming the missing variables.                                                                               |
 | `AI_PROVIDER=openai-compatible` without `AI_API_KEY`  | Boot failure.                                                                                                             |
 | `CRON_SECRET`                                         | Boot failure in production when absent or shorter than 32 characters.                                                     |
-| `CLAMAV_ENABLED=false` in production                  | Uploads are stored unscanned. Not a boot failure — see below.                                                              |
+| `CLAMAV_ENABLED=false` in production                  | Uploads are stored unscanned. Not a boot failure — see below.                                                             |
 | `CLAMAV_ENABLED=true` without reachable clamd         | Uploads fail closed; no unscanned bytes are stored.                                                                       |
 | `AI_GOOGLE_API_KEY` absent                            | Translation returns `not-configured`. Extraction is unaffected.                                                           |
 | `CONTACT_EMAIL_ENABLED=true` without the SMTP block   | Boot failure, naming the missing relay values.                                                                            |

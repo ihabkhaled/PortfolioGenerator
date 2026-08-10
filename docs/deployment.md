@@ -77,7 +77,10 @@ source checkout.
 
 ## Scheduled asset deletion retry
 
-`vercel.json` invokes `GET /api/operations/asset-deletions` every 15 minutes.
+`vercel.json` invokes `GET /api/operations/asset-deletions` daily at 03:00 UTC.
+A Vercel Hobby project may only schedule one run per day, so the cadence is a
+plan limit, not a design choice — on Pro, shorten it to `*/15 * * * *` so a
+failed deletion is retried within the quarter hour rather than the day.
 Vercel supplies `Authorization: Bearer <CRON_SECRET>`; configure
 `CRON_SECRET` to that value. The endpoint refuses missing or
 incorrect credentials, processes at most 50 due tombstones, disables caching,

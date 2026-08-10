@@ -1,7 +1,7 @@
 import 'server-only';
 
 import { createOpenAI } from '@ai-sdk/openai';
-import { generateText, NoOutputGeneratedError, Output } from 'ai';
+import { generateText, tool } from 'ai';
 
 import type { StructuredRequest, StructuredResponse } from './ai.types';
 
@@ -17,7 +17,20 @@ import type { StructuredRequest, StructuredResponse } from './ai.types';
  * the base URL is configuration: the same code path reaches OpenAI, an AI
  * gateway, or a self-hosted endpoint, so switching is an environment change
  * rather than a deploy.
+ *
+ * Structured output goes through a forced tool call, not `Output.object()` /
+ * `response_format: json_schema`. Both are meant to be equivalent, and for
+ * OpenAI itself they are — but an OpenAI-*compatible* endpoint is a contract
+ * with one vendor's exact behaviour, not the whole surface, and at least one
+ * real provider on this code path (Ollama Cloud, a reasoning model) silently
+ * ignores `response_format` and answers in plain prose instead of erroring,
+ * which `Output.object()` then fails to parse as JSON. Tool calling is older,
+ * more universally implemented, and verified against that exact provider: a
+ * single tool, forced with `toolChoice`, whose input schema is the requested
+ * schema. The model has no way to answer except by "calling" it correctly.
  */
+
+const EXTRACTION_TOOL_NAME = 'report_extracted_data';
 
 export function createStructuredClient(config: {
   readonly apiKey: string;
@@ -34,11 +47,18 @@ export function createStructuredClient(config: {
     try {
       const result = await generateText({
         model: openai(request.model),
-        // `generateText` with a structured `output` rather than the deprecated
-        // `generateObject`: same guarantee, and the one the SDK still supports.
-        output: Output.object({ schema: request.schema }),
         system: request.systemPrompt,
         prompt: request.userPrompt,
+        tools: {
+          [EXTRACTION_TOOL_NAME]: tool({
+            description: 'Report the requested data. Call this exactly once, with every field.',
+            inputSchema: request.schema,
+          }),
+        },
+        // Forced, not left to the model's judgement: a model that decides to
+        // "just answer" instead of calling the tool produces the same
+        // unparseable-prose failure this replaces.
+        toolChoice: { type: 'tool', toolName: EXTRACTION_TOOL_NAME },
         maxOutputTokens: request.maxOutputTokens,
         abortSignal: AbortSignal.timeout(request.timeoutMs),
         // Zero temperature: this is transcription, not writing. Sampling
@@ -47,21 +67,37 @@ export function createStructuredClient(config: {
         temperature: 0,
       });
 
+      const call = result.toolCalls[0];
+
+      if (call === undefined) {
+        // The model finished without calling the forced tool at all — a
+        // provider- or model-level refusal, not a shape problem with what it
+        // said, so this is not the same failure as an invalid payload.
+        return {
+          ok: false,
+          errorCode: 'provider-error',
+          model: request.model,
+          inputUnits: result.usage.inputTokens ?? null,
+          outputUnits: result.usage.outputTokens ?? null,
+          latencyMs: Math.round(performance.now() - startedAt),
+        };
+      }
+
       return {
         ok: true,
-        value: result.output,
+        value: call.input,
         model: request.model,
         inputUnits: result.usage.inputTokens ?? null,
         outputUnits: result.usage.outputTokens ?? null,
         latencyMs: Math.round(performance.now() - startedAt),
       };
-    } catch (error) {
+    } catch {
+      // A malformed tool call (arguments that do not even parse as JSON) is
+      // the one failure the SDK still throws for; everything else above is
+      // returned, not thrown. Either way there is nothing usable to report.
       return {
         ok: false,
-        // A model that produced unparseable or schema-violating output is a
-        // different failure from a network error: the first is worth one
-        // targeted retry, the second is worth backing off.
-        errorCode: NoOutputGeneratedError.isInstance(error) ? 'invalid-output' : 'provider-error',
+        errorCode: 'invalid-output',
         model: request.model,
         inputUnits: null,
         outputUnits: null,

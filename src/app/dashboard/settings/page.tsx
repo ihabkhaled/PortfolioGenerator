@@ -88,6 +88,8 @@ export default async function AccountSettingsPage(): Promise<ReactElement> {
           passwordTitle: t('security.passwordTitle'),
           currentPassword: t('security.currentPassword'),
           newPassword: t('security.newPassword'),
+          showPassword: t('security.showPassword'),
+          hidePassword: t('security.hidePassword'),
           changePassword: t('security.changePassword'),
           changingPassword: t('security.changingPassword'),
           passwordChanged: t('security.passwordChanged'),

@@ -286,6 +286,8 @@ describe('CredentialForm', () => {
     email: 'Email',
     password: 'Password',
     passwordHint: 'At least 12 characters.',
+    showPassword: 'Show password',
+    hidePassword: 'Hide password',
   };
 
   it('renders a sign-in form without a name field', () => {
@@ -363,7 +365,9 @@ describe('CredentialForm', () => {
       />,
     );
 
-    expect(screen.getByRole('status')).toHaveTextContent('Check your email to verify your account.');
+    expect(screen.getByRole('status')).toHaveTextContent(
+      'Check your email to verify your account.',
+    );
     expect(screen.queryByRole('alert')).not.toBeInTheDocument();
   });
 

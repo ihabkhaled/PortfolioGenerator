@@ -55,7 +55,9 @@ try {
   // A server that is not reachable yet, or a user without CREATEDB, is not
   // fatal here: `prisma migrate` runs next and produces its own, better,
   // error for either case. This script only ever helps; it never blocks.
-  console.warn(`Skipped database auto-create: ${error instanceof Error ? error.message : String(error)}`);
+  console.warn(
+    `Skipped database auto-create: ${error instanceof Error ? error.message : String(error)}`,
+  );
 } finally {
   try {
     await client.end();

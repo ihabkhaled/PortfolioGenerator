@@ -34,6 +34,9 @@ export interface ErrorStateProps {
   readonly title: string;
   readonly description: string;
   readonly action?: ReactNode;
+  /** Renders a close control; omit for a panel the reader cannot dismiss. */
+  readonly onDismiss?: () => void;
+  readonly dismissLabel?: string;
 }
 
 export interface ManifestRow {

@@ -301,7 +301,7 @@ export function createSmtpEmailSender(
         config,
         {
           recipient: message.email,
-          subject: 'Reset your PortfolioGenerate password',
+          subject: 'Reset your ProFolio password',
           body: `Use this secure link to choose a new password:\n\n${message.resetUrl}\n\nIf you did not request this, you can ignore this message.`,
         },
         timeoutMs,
@@ -311,7 +311,7 @@ export function createSmtpEmailSender(
         config,
         {
           recipient: message.email,
-          subject: 'Verify your PortfolioGenerate email',
+          subject: 'Verify your ProFolio email',
           body: `Use this secure link to verify your email address:\n\n${message.verificationUrl}\n\nIf you did not create this account, you can ignore this message.`,
         },
         timeoutMs,

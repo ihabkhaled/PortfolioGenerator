@@ -90,7 +90,7 @@ describe('SiteShell', () => {
   it('exposes header, navigation, main and footer landmarks', () => {
     render(
       <SiteShell
-        brand={<span>PortfolioGenerate</span>}
+        brand={<span>ProFolio</span>}
         navigationLabel="Primary"
         navigation={<a href="#dashboard">Dashboard</a>}
         footerNote="Built for people who have a CV."

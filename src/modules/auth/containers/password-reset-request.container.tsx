@@ -30,6 +30,8 @@ export function PasswordResetRequestContainer(): ReactElement {
       emailLabel={t('emailLabel')}
       passwordLabel={t('passwordLabel')}
       passwordHint={t('passwordHint')}
+      showPasswordLabel={t('showPassword')}
+      hidePasswordLabel={t('hidePassword')}
       submitLabel={t('reset.requestSubmit')}
       pendingLabel={t('reset.requestPending')}
       footer={

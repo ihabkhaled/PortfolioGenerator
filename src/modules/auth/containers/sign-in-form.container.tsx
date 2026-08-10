@@ -32,6 +32,8 @@ export function SignInFormContainer(): ReactElement {
         email: t('emailLabel'),
         password: t('passwordLabel'),
         passwordHint: t('passwordHint'),
+        showPassword: t('showPassword'),
+        hidePassword: t('hidePassword'),
       }}
       footer={
         <>

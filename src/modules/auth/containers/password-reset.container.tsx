@@ -31,6 +31,8 @@ export function PasswordResetContainer(props: Readonly<PasswordResetContainerPro
       emailLabel={t('emailLabel')}
       passwordLabel={t('reset.newPassword')}
       passwordHint={t('passwordHint')}
+      showPasswordLabel={t('showPassword')}
+      hidePasswordLabel={t('hidePassword')}
       submitLabel={t('reset.resetSubmit')}
       pendingLabel={t('reset.resetPending')}
       footer={

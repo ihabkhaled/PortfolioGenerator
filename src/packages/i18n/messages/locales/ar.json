@@ -2,15 +2,16 @@
   "app": {
     "pwaUpdate": {
       "title": "تحديث متاح",
-      "description": "إصدار جديد من PortfolioGenerate جاهز.",
+      "description": "إصدار جديد من ProFolio جاهز.",
       "action": "تحديث"
     },
     "pwa": {
-      "installTitle": "\u062a\u062b\u0628\u064a\u062a PortfolioGenerate",
+      "installTitle": "\u062a\u062b\u0628\u064a\u062a ProFolio",
       "installDescription": "\u0627\u062d\u062a\u0641\u0638 \u0628\u0645\u0633\u0627\u062d\u0629 \u0645\u062d\u0641\u0638\u062a\u0643 \u062c\u0627\u0647\u0632\u0629 \u0639\u0644\u0649 \u0647\u0630\u0627 \u0627\u0644\u062c\u0647\u0627\u0632.",
-      "installAction": "\u062a\u062b\u0628\u064a\u062a"
+      "installAction": "\u062a\u062b\u0628\u064a\u062a",
+      "dismiss": "\u0625\u063a\u0644\u0627\u0642"
     },
-    "name": "PortfolioGenerate",
+    "name": "ProFolio",
     "footerNote": "سيرتك الذاتية تبقى خاصة. فقط ما تقوم بمراجعته ونشره يصبح عامًا.",
     "themeSwitchLabel": "تبديل الموضوع",
     "theme": {
@@ -193,7 +194,7 @@
           "third": "الصفحات العامة عبارة عن قراءات دائمة، وليست عروضًا حية للذكاء الاصطناعي.",
           "second": "يبقى التحرير والنشر قرارات بشرية صريحة."
         },
-        "description": "يوجد PortfolioGenerate لتقصير عملية الإعداد دون أخذ حقوق التأليف من الشخص الممثل."
+        "description": "يوجد ProFolio لتقصير عملية الإعداد دون أخذ حقوق التأليف من الشخص الممثل."
       },
       "mission": {
         "title": "جعل النشر الاحترافي صادقًا وقابلاً للتملك",
@@ -205,7 +206,7 @@
         }
       },
       "contact": {
-        "title": "تحدث إلى فريق PortfolioGenerate",
+        "title": "تحدث إلى فريق ProFolio",
         "sections": {
           "first": "تتلقى أسئلة المنتج إجابات عملية حول الاستيراد والتحرير والنشر.",
           "second": "يجب أن تتضمن تقارير إمكانية الوصول الصفحة والمتصفح والتقنية المساعدة المستخدمة.",
@@ -262,7 +263,7 @@
   },
   "contact": {
     "name": "اسم",
-    "lead": "إرسال سؤال حول PortfolioGenerate. نحن نستخدم التفاصيل الخاصة بك فقط للرد على هذه الرسالة.",
+    "lead": "إرسال سؤال حول ProFolio. نحن نستخدم التفاصيل الخاصة بك فقط للرد على هذه الرسالة.",
     "subject": "موضوع",
     "message": "رسالة",
     "website": "موقع إلكتروني",
@@ -284,6 +285,8 @@
     "nameLabel": "اسم",
     "passwordLabel": "كلمة المرور",
     "passwordHint": "ما لا يقل عن 12 حرفا.",
+    "showPassword": "إظهار كلمة المرور",
+    "hidePassword": "إخفاء كلمة المرور",
     "signUpTitle": "أنشئ حسابك",
     "submitSignIn": "تسجيل الدخول",
     "submitSignUp": "إنشاء حساب",
@@ -390,7 +393,7 @@
     "locationLabel": "موقع",
     "present": "حاضر",
     "availability": "مفتوح للعمل",
-    "builtWith": "نشرت مع PortfolioGenerate",
+    "builtWith": "نشرت مع ProFolio",
     "contactCta": "تواصل معنا",
     "skipToContent": "انتقل إلى المحتوى",
     "privatePage": {
@@ -760,6 +763,8 @@
       "sent": "إذا كان التسليم متاحًا، فستكون رسالة التحقق في طريقها إليك عبر البريد الإلكتروني.",
       "passwordTitle": "تغيير كلمة المرور",
       "currentPassword": "كلمة المرور الحالية",
+      "showPassword": "إظهار كلمة المرور",
+      "hidePassword": "إخفاء كلمة المرور",
       "newPassword": "كلمة المرور الجديدة",
       "changingPassword": "تغيير كلمة المرور",
       "passwordChanged": "تم تغيير كلمة المرور الخاصة بك وتم إلغاء الجلسات الأخرى.",

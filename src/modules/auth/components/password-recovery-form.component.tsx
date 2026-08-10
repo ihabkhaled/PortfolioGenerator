@@ -2,7 +2,7 @@ import type { ReactElement } from 'react';
 
 import { AUTH_MIN_PASSWORD_LENGTH } from '@/packages/auth';
 import { ErrorIcon } from '@/packages/icons';
-import { Button, Input, Label } from '@/packages/ui-primitives';
+import { Button, Input, Label, PasswordInput } from '@/packages/ui-primitives';
 
 import { authClasses } from '../constants/auth-style.constants';
 import { AUTH_FIELD_NAMES } from '../constants/auth.constants';
@@ -39,14 +39,15 @@ export function PasswordRecoveryForm(props: Readonly<PasswordRecoveryFormProps>)
           <input type="hidden" name={AUTH_FIELD_NAMES.resetToken} value={props.token ?? ''} />
           <div className={authClasses.field}>
             <Label htmlFor={AUTH_FIELD_NAMES.newPassword}>{props.passwordLabel}</Label>
-            <Input
+            <PasswordInput
               id={AUTH_FIELD_NAMES.newPassword}
               name={AUTH_FIELD_NAMES.newPassword}
-              type="password"
               autoComplete="new-password"
               required
               minLength={AUTH_MIN_PASSWORD_LENGTH}
               aria-describedby={`${AUTH_FIELD_NAMES.newPassword}-hint`}
+              showLabel={props.showPasswordLabel}
+              hideLabel={props.hidePasswordLabel}
             />
             <p id={`${AUTH_FIELD_NAMES.newPassword}-hint`} className={authClasses.hint}>
               {props.passwordHint}

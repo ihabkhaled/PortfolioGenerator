@@ -39,6 +39,12 @@ export function PwaRegistrationContainer(
   const title = serviceWorkerUpdate ? props.updateTitle : props.installTitle;
   const description = serviceWorkerUpdate ? props.updateDescription : props.installDescription;
   const actionLabel = serviceWorkerUpdate ? props.updateAction : props.installAction;
+  const dismiss = (): void => {
+    // The banner is exactly the union of these two pieces of state; clearing
+    // whichever one is driving it right now is what "dismiss" means.
+    setServiceWorkerUpdate(null);
+    setInstallPrompt(null);
+  };
   const runAction = async (): Promise<void> => {
     if (serviceWorkerUpdate) {
       await serviceWorkerUpdate.activate();
@@ -59,6 +65,8 @@ export function PwaRegistrationContainer(
       <ErrorState
         title={title}
         description={description}
+        onDismiss={dismiss}
+        dismissLabel={props.dismissLabel}
         action={
           serviceWorkerUpdate || installPrompt ? (
             <Button

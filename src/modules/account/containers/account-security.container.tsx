@@ -4,7 +4,7 @@
 import { useActionState } from 'react';
 import type { ReactElement } from 'react';
 
-import { Button, Input, Label } from '@/packages/ui-primitives';
+import { Button, Label, PasswordInput } from '@/packages/ui-primitives';
 
 import {
   changeAccountPasswordAction,
@@ -57,20 +57,22 @@ export function AccountSecurityContainer(props: Readonly<AccountSecurityProps>):
         <Label htmlFor={ACCOUNT_SETTINGS_FIELD_NAMES.currentPassword}>
           {props.labels.currentPassword}
         </Label>
-        <Input
+        <PasswordInput
           id={ACCOUNT_SETTINGS_FIELD_NAMES.currentPassword}
           name={ACCOUNT_SETTINGS_FIELD_NAMES.currentPassword}
-          type="password"
           autoComplete="current-password"
           required
+          showLabel={props.labels.showPassword}
+          hideLabel={props.labels.hidePassword}
         />
         <Label htmlFor={ACCOUNT_SETTINGS_FIELD_NAMES.newPassword}>{props.labels.newPassword}</Label>
-        <Input
+        <PasswordInput
           id={ACCOUNT_SETTINGS_FIELD_NAMES.newPassword}
           name={ACCOUNT_SETTINGS_FIELD_NAMES.newPassword}
-          type="password"
           autoComplete="new-password"
           required
+          showLabel={props.labels.showPassword}
+          hideLabel={props.labels.hidePassword}
         />
         {passwordState.status === 'success' ? (
           <p className={accountClasses.sectionHint} role="status">

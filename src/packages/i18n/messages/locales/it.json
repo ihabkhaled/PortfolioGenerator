@@ -2,15 +2,16 @@
   "app": {
     "pwaUpdate": {
       "title": "Aggiornamento disponibile",
-      "description": "È pronta una nuova versione di PortfolioGenerate.",
+      "description": "È pronta una nuova versione di ProFolio.",
       "action": "Aggiorna"
     },
     "pwa": {
-      "installTitle": "Installa PortfolioGenerate",
+      "installTitle": "Installa ProFolio",
       "installDescription": "Mantieni pronto su questo dispositivo il tuo spazio portfolio.",
-      "installAction": "Installa"
+      "installAction": "Installa",
+      "dismiss": "Chiudi"
     },
-    "name": "PortfolioGenerate",
+    "name": "ProFolio",
     "tagline": "Trasforma un CV in un portfolio che controlli",
     "skipToContent": "Vai al contenuto",
     "themeSwitchLabel": "Cambia tema",
@@ -188,7 +189,7 @@
       },
       "about": {
         "title": "Un prodotto portfolio costruito attorno alla paternità fattuale",
-        "description": "PortfolioGenerate esiste per abbreviare la configurazione senza togliere la paternità alla persona rappresentata.",
+        "description": "ProFolio esiste per abbreviare la configurazione senza togliere la paternità alla persona rappresentata.",
         "sections": {
           "first": "Il prodotto inizia con prove già scritte in un CV.",
           "second": "L'editing e la pubblicazione rimangono decisioni umane esplicite.",
@@ -205,7 +206,7 @@
         }
       },
       "contact": {
-        "title": "Parla con il team di PortfolioGenerate",
+        "title": "Parla con il team di ProFolio",
         "description": "Chiedi informazioni sul prodotto, segnala un problema di accessibilità o condividi un problema di sicurezza.",
         "sections": {
           "first": "Le domande sui prodotti ricevono risposte pratiche sull'importazione, la modifica e la pubblicazione.",
@@ -262,7 +263,7 @@
   },
   "contact": {
     "title": "Contattaci",
-    "lead": "Invia una domanda su PortfolioGenerate. Utilizziamo i tuoi dati solo per rispondere a questo messaggio.",
+    "lead": "Invia una domanda su ProFolio. Utilizziamo i tuoi dati solo per rispondere a questo messaggio.",
     "name": "Nome",
     "email": "E-mail",
     "subject": "Soggetto",
@@ -286,6 +287,8 @@
     "emailLabel": "E-mail",
     "passwordLabel": "Password",
     "passwordHint": "Almeno 12 caratteri.",
+    "showPassword": "Mostra password",
+    "hidePassword": "Nascondi password",
     "submitSignIn": "Registrazione",
     "submitSignUp": "Creare un account",
     "pendingSignIn": "Accesso",
@@ -392,7 +395,7 @@
     "availability": "Aperto a lavorare",
     "contactCta": "Mettiti in contatto",
     "skipToContent": "Vai al contenuto",
-    "builtWith": "Pubblicato con PortfolioGenerate",
+    "builtWith": "Pubblicato con ProFolio",
     "navigationLabel": "Pagine del portfolio",
     "portraitAlt": "Ritratto",
     "privatePage": {
@@ -760,6 +763,8 @@
       "sent": "Se la consegna è disponibile, sarà in arrivo un'e-mail di verifica.",
       "passwordTitle": "Cambiare la password",
       "currentPassword": "Password attuale",
+      "showPassword": "Mostra password",
+      "hidePassword": "Nascondi password",
       "newPassword": "Nuova password",
       "changePassword": "Cambiare la password",
       "changingPassword": "Modifica della password",

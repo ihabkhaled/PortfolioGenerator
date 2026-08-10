@@ -36,7 +36,7 @@ import './styles.css';
 export const metadata: Metadata = {
   metadataBase: new URL(appOrigin),
   manifest: '/manifest.webmanifest',
-  appleWebApp: { capable: true, statusBarStyle: 'default', title: 'PortfolioGenerate' },
+  appleWebApp: { capable: true, statusBarStyle: 'default', title: 'ProFolio' },
   icons: {
     icon: [
       { url: '/icon-192.png', type: 'image/png', sizes: '192x192' },
@@ -45,8 +45,8 @@ export const metadata: Metadata = {
     apple: [{ url: '/apple-touch-icon.png', type: 'image/png', sizes: '180x180' }],
   },
   title: {
-    default: 'PortfolioGenerate',
-    template: '%s · PortfolioGenerate',
+    default: 'ProFolio',
+    template: '%s · ProFolio',
   },
   description: 'Turn a CV into a portfolio you control.',
   alternates: {
@@ -54,14 +54,14 @@ export const metadata: Metadata = {
   },
   openGraph: {
     type: 'website',
-    siteName: 'PortfolioGenerate',
-    title: 'PortfolioGenerate',
+    siteName: 'ProFolio',
+    title: 'ProFolio',
     description: 'Turn a CV into a portfolio you control.',
     images: [{ url: '/platform-share-card.svg', width: 1200, height: 630 }],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'PortfolioGenerate',
+    title: 'ProFolio',
     description: 'Turn a CV into a portfolio you control.',
     images: ['/platform-share-card.svg'],
   },
@@ -119,6 +119,7 @@ export default async function RootLayout(props: {
             updateTitle={tApp('pwaUpdate.title')}
             updateDescription={tApp('pwaUpdate.description')}
             updateAction={tApp('pwaUpdate.action')}
+            dismissLabel={tApp('pwa.dismiss')}
           />
         </I18nLocaleProvider>
       </body>

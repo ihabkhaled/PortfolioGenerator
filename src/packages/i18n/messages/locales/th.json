@@ -2,13 +2,14 @@
   "app": {
     "pwaUpdate": {
       "title": "มีการอัปเดต",
-      "description": "PortfolioGenerate เวอร์ชันใหม่พร้อมใช้งานแล้ว",
+      "description": "ProFolio เวอร์ชันใหม่พร้อมใช้งานแล้ว",
       "action": "อัปเดต"
     },
     "pwa": {
-      "installTitle": "\u0e15\u0e34\u0e14\u0e15\u0e31\u0e49\u0e07 PortfolioGenerate",
+      "installTitle": "\u0e15\u0e34\u0e14\u0e15\u0e31\u0e49\u0e07 ProFolio",
       "installDescription": "\u0e40\u0e01\u0e47\u0e1a\u0e1e\u0e37\u0e49\u0e19\u0e17\u0e35\u0e48\u0e17\u0e33\u0e07\u0e32\u0e19\u0e1e\u0e2d\u0e23\u0e4c\u0e15\u0e42\u0e1f\u0e25\u0e34\u0e42\u0e2d\u0e43\u0e2b\u0e49\u0e1e\u0e23\u0e49\u0e2d\u0e21\u0e43\u0e0a\u0e49\u0e07\u0e32\u0e19\u0e1a\u0e19\u0e2d\u0e38\u0e1b\u0e01\u0e23\u0e13\u0e4c\u0e19\u0e35\u0e49",
-      "installAction": "\u0e15\u0e34\u0e14\u0e15\u0e31\u0e49\u0e07"
+      "installAction": "\u0e15\u0e34\u0e14\u0e15\u0e31\u0e49\u0e07",
+      "dismiss": "\u0e1b\u0e34\u0e14"
     },
     "theme": {
       "light": "แสงสว่าง",
@@ -25,7 +26,7 @@
       "signOut": "ออกจากระบบ"
     },
     "themeSwitchLabel": "สลับธีม",
-    "name": "PortfolioGenerate",
+    "name": "ProFolio",
     "tagline": "เปลี่ยน CV ให้เป็นพอร์ตโฟลิโอที่คุณควบคุม",
     "footerNote": "CV ของคุณยังคงเป็นส่วนตัว เฉพาะสิ่งที่คุณตรวจสอบและเผยแพร่เท่านั้นที่จะกลายเป็นสาธารณะ"
   },
@@ -193,7 +194,7 @@
           "third": "หน้าสาธารณะเป็นแบบอ่านถาวร ไม่ใช่การสาธิต AI แบบสด",
           "first": "ผลิตภัณฑ์เริ่มต้นด้วยหลักฐานที่เขียนไว้ใน CV แล้ว"
         },
-        "description": "PortfolioGenerate มีอยู่เพื่อลดระยะเวลาการตั้งค่าโดยไม่ต้องละทิ้งการประพันธ์จากบุคคลที่เป็นตัวแทน"
+        "description": "ProFolio มีอยู่เพื่อลดระยะเวลาการตั้งค่าโดยไม่ต้องละทิ้งการประพันธ์จากบุคคลที่เป็นตัวแทน"
       },
       "mission": {
         "sections": {
@@ -220,7 +221,7 @@
           "second": "รายงานการเข้าถึงควรมีเพจ เบราว์เซอร์ และเทคโนโลยีช่วยเหลือที่ใช้"
         },
         "description": "ถามเกี่ยวกับผลิตภัณฑ์ รายงานปัญหาการเข้าถึง หรือแชร์ข้อกังวลด้านความปลอดภัย",
-        "title": "พูดคุยกับทีมงาน PortfolioGenerate"
+        "title": "พูดคุยกับทีมงาน ProFolio"
       },
       "faq": {
         "sections": {
@@ -275,7 +276,7 @@
       "rate-limited": "มีการส่งข้อความมากเกินไปจากการเชื่อมต่อนี้ ลองอีกครั้งในภายหลัง"
     },
     "accepted": "ข้อความของคุณได้รับการยอมรับแล้ว เราจะตอบกลับทางอีเมล",
-    "lead": "ส่งคำถามเกี่ยวกับ PortfolioGenerate เราใช้รายละเอียดของคุณเพื่อตอบกลับข้อความนี้เท่านั้น"
+    "lead": "ส่งคำถามเกี่ยวกับ ProFolio เราใช้รายละเอียดของคุณเพื่อตอบกลับข้อความนี้เท่านั้น"
   },
   "auth": {
     "signInTitle": "เข้าสู่ระบบ",
@@ -303,6 +304,8 @@
     },
     "pendingSignUp": "การสร้างบัญชีของคุณ",
     "passwordHint": "อย่างน้อย 12 ตัวอักษร",
+    "showPassword": "แสดงรหัสผ่าน",
+    "hidePassword": "ซ่อนรหัสผ่าน",
     "pendingSignIn": "กำลังลงชื่อเข้าใช้",
     "forgotPasswordLink": "ลืมรหัสผ่าน?",
     "notices": {
@@ -392,7 +395,7 @@
     "locationLabel": "ที่ตั้ง",
     "skipToContent": "ข้ามไปที่เนื้อหา",
     "portraitAlt": "ภาพเหมือน",
-    "builtWith": "เผยแพร่ด้วย PortfolioGenerate",
+    "builtWith": "เผยแพร่ด้วย ProFolio",
     "privatePage": {
       "denied": "รหัสผ่านนั้นไม่ตรงกัน ตรวจสอบแล้วลองอีกครั้ง",
       "title": "เพจนี้เป็นเพจส่วนตัว",
@@ -754,6 +757,8 @@
       "verified": "ตรวจสอบแล้ว",
       "passwordTitle": "เปลี่ยนรหัสผ่าน",
       "currentPassword": "รหัสผ่านปัจจุบัน",
+      "showPassword": "แสดงรหัสผ่าน",
+      "hidePassword": "ซ่อนรหัสผ่าน",
       "newPassword": "รหัสผ่านใหม่",
       "changePassword": "เปลี่ยนรหัสผ่าน",
       "hint": "ยืนยันอีเมลของคุณ เปลี่ยนรหัสผ่าน และตรวจสอบอุปกรณ์ที่ลงชื่อเข้าใช้",

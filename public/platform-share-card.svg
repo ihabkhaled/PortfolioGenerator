@@ -1,8 +1,8 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title description">
-  <title id="title">PortfolioGenerate</title>
+  <title id="title">ProFolio</title>
   <desc id="description">Turn a CV into a reviewed portfolio you control.</desc>
   <rect width="1200" height="630" fill="#0d1117"/>
   <circle cx="1020" cy="110" r="260" fill="#2457d6" opacity=".35"/>
-  <text x="96" y="278" fill="#ffffff" font-family="system-ui, sans-serif" font-size="76" font-weight="700">PortfolioGenerate</text>
+  <text x="96" y="278" fill="#ffffff" font-family="system-ui, sans-serif" font-size="76" font-weight="700">ProFolio</text>
   <text x="96" y="370" fill="#cbd5e1" font-family="system-ui, sans-serif" font-size="38">From reviewed CV facts to a portfolio you control.</text>
 </svg>

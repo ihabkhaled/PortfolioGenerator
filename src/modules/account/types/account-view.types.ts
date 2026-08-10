@@ -81,6 +81,8 @@ export interface AccountSecurityProps {
     | 'passwordTitle'
     | 'currentPassword'
     | 'newPassword'
+    | 'showPassword'
+    | 'hidePassword'
     | 'changePassword'
     | 'changingPassword'
     | 'passwordChanged'

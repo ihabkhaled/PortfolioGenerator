@@ -37,7 +37,7 @@ export function serializeRssFeed(items: readonly FeedItem[]): string {
     )
     .join('');
 
-  return `<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"><channel><title>PortfolioGenerate</title><link>${escapeXml(absoluteUrl('/'))}</link><description>Recently published portfolios</description><atom:link xmlns:atom="http://www.w3.org/2005/Atom" href="${escapeXml(feedUrl)}" rel="self" type="application/rss+xml"/>${entries}</channel></rss>`;
+  return `<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"><channel><title>ProFolio</title><link>${escapeXml(absoluteUrl('/'))}</link><description>Recently published portfolios</description><atom:link xmlns:atom="http://www.w3.org/2005/Atom" href="${escapeXml(feedUrl)}" rel="self" type="application/rss+xml"/>${entries}</channel></rss>`;
 }
 
 export function escapeXml(value: string): string {

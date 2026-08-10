@@ -5,6 +5,8 @@ export interface AuthFieldLabels {
   readonly email: string;
   readonly password: string;
   readonly passwordHint: string;
+  readonly showPassword: string;
+  readonly hidePassword: string;
 }
 
 export interface CredentialFormProps {

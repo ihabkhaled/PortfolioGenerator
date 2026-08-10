@@ -2,13 +2,14 @@
   "app": {
     "pwaUpdate": {
       "title": "更新があります",
-      "description": "新しい PortfolioGenerate を利用できます。",
+      "description": "新しい ProFolio を利用できます。",
       "action": "更新"
     },
     "pwa": {
-      "installTitle": "PortfolioGenerate \u3092\u30a4\u30f3\u30b9\u30c8\u30fc\u30eb",
+      "installTitle": "ProFolio \u3092\u30a4\u30f3\u30b9\u30c8\u30fc\u30eb",
       "installDescription": "\u3053\u306e\u30c7\u30d0\u30a4\u30b9\u3067\u30dd\u30fc\u30c8\u30d5\u30a9\u30ea\u30aa\u4f5c\u696d\u30b9\u30da\u30fc\u30b9\u3092\u3059\u3050\u306b\u4f7f\u3048\u308b\u3088\u3046\u306b\u3057\u307e\u3059\u3002",
-      "installAction": "\u30a4\u30f3\u30b9\u30c8\u30fc\u30eb"
+      "installAction": "\u30a4\u30f3\u30b9\u30c8\u30fc\u30eb",
+      "dismiss": "\u9589\u3058\u308b"
     },
     "theme": {
       "dark": "暗い",
@@ -24,7 +25,7 @@
       "signIn": "サインイン",
       "signOut": "サインアウト"
     },
-    "name": "ポートフォリオ生成",
+    "name": "ProFolio",
     "themeSwitchLabel": "テーマを切り替える",
     "footerNote": "あなたの履歴書は非公開のままです。あなたがレビューして公開したもののみが公開されます。",
     "tagline": "履歴書を自分がコントロールできるポートフォリオに変える"
@@ -179,7 +180,7 @@
       },
       "about": {
         "title": "事実の著者に基づいて構築されたポートフォリオ製品",
-        "description": "PortfolioGenerate は、代表者から著者権を奪うことなくセットアップを短縮するために存在します。",
+        "description": "ProFolio は、代表者から著者権を奪うことなくセットアップを短縮するために存在します。",
         "sections": {
           "second": "編集と出版は依然として人間による明示的な決定です。",
           "first": "製品は履歴書にすでに書かれた証拠から始まります。",
@@ -205,7 +206,7 @@
         "description": "有用なポートフォリオは、作成にアクセスでき、検証が簡単で、訪問するのに信頼できるものである必要があります。"
       },
       "contact": {
-        "title": "PortfolioGenerate チームに相談する",
+        "title": "ProFolio チームに相談する",
         "sections": {
           "first": "製品に関する質問には、インポート、編集、公開に関する実践的な回答が得られます。",
           "third": "セキュリティ レポートは慎重に処理され、履歴書の送信は必要ありません。",
@@ -267,7 +268,7 @@
     "subject": "主題",
     "message": "メッセージ",
     "website": "Webサイト",
-    "lead": "PortfolioGenerate について質問を送信します。お客様の詳細情報は、このメッセージに返信する目的でのみ使用されます。",
+    "lead": "ProFolio について質問を送信します。お客様の詳細情報は、このメッセージに返信する目的でのみ使用されます。",
     "send": "メッセージを送信する",
     "errors": {
       "unavailable": "ただいまメッセージを送信できませんでした。しばらくしてからもう一度お試しください。",
@@ -284,6 +285,8 @@
     "passwordLabel": "パスワード",
     "emailLabel": "電子メール",
     "passwordHint": "少なくとも 12 文字。",
+    "showPassword": "パスワードを表示",
+    "hidePassword": "パスワードを非表示",
     "submitSignIn": "サインイン",
     "submitSignUp": "アカウントを作成する",
     "signInLead": "ダッシュボードに進みます。",
@@ -412,7 +415,7 @@
     },
     "availability": "オープンに働ける",
     "navigationLabel": "ポートフォリオページ",
-    "builtWith": "PortfolioGenerate で公開"
+    "builtWith": "ProFolio で公開"
   },
   "dashboard": {
     "create": {
@@ -754,6 +757,8 @@
       "verified": "確認済み",
       "passwordTitle": "パスワードを変更する",
       "currentPassword": "現在のパスワード",
+      "showPassword": "パスワードを表示",
+      "hidePassword": "パスワードを非表示",
       "newPassword": "新しいパスワード",
       "changePassword": "パスワードを変更する",
       "sending": "確認メールの送信",

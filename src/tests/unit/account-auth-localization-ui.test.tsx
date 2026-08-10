@@ -60,6 +60,8 @@ const securityLabels = {
   passwordTitle: 'Password',
   currentPassword: 'Current password',
   newPassword: 'New password',
+  showPassword: 'Show password',
+  hidePassword: 'Hide password',
   changePassword: 'Change password',
   changingPassword: 'Changing password',
   passwordChanged: 'Password changed',
@@ -262,6 +264,8 @@ describe('password recovery UI', () => {
         emailLabel="Email"
         passwordLabel="Password"
         passwordHint="Use at least twelve characters."
+        showPasswordLabel="Show password"
+        hidePasswordLabel="Hide password"
         submitLabel="Send reset link"
         pendingLabel="Sending reset link"
         footer={null}
@@ -285,6 +289,8 @@ describe('password recovery UI', () => {
         emailLabel="Email"
         passwordLabel="New password"
         passwordHint="Use at least twelve characters."
+        showPasswordLabel="Show password"
+        hidePasswordLabel="Hide password"
         submitLabel="Reset password"
         pendingLabel="Resetting password"
         footer={null}
@@ -311,7 +317,7 @@ describe('password recovery UI', () => {
     render(<PasswordResetContainer token="reset-token" />);
 
     expect(screen.getByRole('alert')).toBeVisible();
-    expect(screen.getByRole('button')).toBeDisabled();
+    expect(screen.getByRole('button', { name: 'Saving new password' })).toBeDisabled();
   });
 
   it('shows reset completion', () => {

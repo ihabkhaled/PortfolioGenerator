@@ -2,15 +2,16 @@
   "app": {
     "pwaUpdate": {
       "title": "Aktualisierung verfügbar",
-      "description": "Eine neue Version von PortfolioGenerate ist bereit.",
+      "description": "Eine neue Version von ProFolio ist bereit.",
       "action": "Aktualisieren"
     },
     "pwa": {
-      "installTitle": "PortfolioGenerate installieren",
+      "installTitle": "ProFolio installieren",
       "installDescription": "Halten Sie Ihren Portfolio-Arbeitsbereich auf diesem Ger\u00e4t bereit.",
-      "installAction": "Installieren"
+      "installAction": "Installieren",
+      "dismiss": "Schließen"
     },
-    "name": "PortfolioGenerate",
+    "name": "ProFolio",
     "tagline": "Verwandeln Sie einen Lebenslauf in ein Portfolio, das Sie kontrollieren",
     "skipToContent": "Zum Inhalt springen",
     "themeSwitchLabel": "Thema wechseln",
@@ -188,7 +189,7 @@
       },
       "about": {
         "title": "Ein Portfolioprodukt, das auf sachlicher Autorenschaft basiert",
-        "description": "PortfolioGenerate dient dazu, die Einrichtung zu verk\u00fcrzen, ohne der dargestellten Person die Urheberschaft zu entziehen.",
+        "description": "ProFolio dient dazu, die Einrichtung zu verk\u00fcrzen, ohne der dargestellten Person die Urheberschaft zu entziehen.",
         "sections": {
           "first": "Das Produkt beginnt mit den bereits in einem Lebenslauf niedergeschriebenen Nachweisen.",
           "second": "Bearbeitung und Ver\u00f6ffentlichung bleiben explizite menschliche Entscheidungen.",
@@ -205,7 +206,7 @@
         }
       },
       "contact": {
-        "title": "Sprechen Sie mit dem PortfolioGenerate-Team",
+        "title": "Sprechen Sie mit dem ProFolio-Team",
         "description": "Fragen Sie nach dem Produkt, melden Sie ein Problem mit der Barrierefreiheit oder \u00e4u\u00dfern Sie ein Sicherheitsbedenken.",
         "sections": {
           "first": "Produktfragen erhalten praktische Antworten zum Import, Bearbeiten und Ver\u00f6ffentlichen.",
@@ -262,7 +263,7 @@
   },
   "contact": {
     "title": "Kontaktieren Sie uns",
-    "lead": "Senden Sie eine Frage zu PortfolioGenerate. Wir verwenden Ihre Daten ausschlie\u00dflich zur Beantwortung dieser Nachricht.",
+    "lead": "Senden Sie eine Frage zu ProFolio. Wir verwenden Ihre Daten ausschlie\u00dflich zur Beantwortung dieser Nachricht.",
     "name": "Name",
     "email": "E-Mail",
     "subject": "Betreff",
@@ -286,6 +287,8 @@
     "emailLabel": "E-Mail",
     "passwordLabel": "Passwort",
     "passwordHint": "Mindestens 12 Zeichen.",
+    "showPassword": "Passwort anzeigen",
+    "hidePassword": "Passwort ausblenden",
     "submitSignIn": "Melden Sie sich an",
     "submitSignUp": "Konto erstellen",
     "pendingSignIn": "Anmelden",
@@ -392,7 +395,7 @@
     "availability": "Offen f\u00fcr die Arbeit",
     "contactCta": "Nehmen Sie Kontakt auf",
     "skipToContent": "Zum Inhalt springen",
-    "builtWith": "Ver\u00f6ffentlicht mit PortfolioGenerate",
+    "builtWith": "Ver\u00f6ffentlicht mit ProFolio",
     "navigationLabel": "Portfolioseiten",
     "portraitAlt": "Portr\u00e4t",
     "privatePage": {
@@ -760,6 +763,8 @@
       "sent": "Wenn die Lieferung verf\u00fcgbar ist, ist eine Best\u00e4tigungs-E-Mail unterwegs.",
       "passwordTitle": "Passwort \u00e4ndern",
       "currentPassword": "Aktuelles Passwort",
+      "showPassword": "Passwort anzeigen",
+      "hidePassword": "Passwort ausblenden",
       "newPassword": "Neues Passwort",
       "changePassword": "Passwort \u00e4ndern",
       "changingPassword": "Passwort \u00e4ndern",

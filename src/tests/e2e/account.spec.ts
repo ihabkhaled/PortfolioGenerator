@@ -138,20 +138,20 @@ test.describe('account profile and security workflows', () => {
     await signUp(page, account);
 
     const otherContext = await browser.newContext({
-      userAgent: 'PortfolioGenerate E2E Other Session',
+      userAgent: 'ProFolio E2E Other Session',
     });
     const otherPage = await otherContext.newPage();
     await signIn(otherPage, account);
 
     await page.goto('/dashboard/settings');
-    await expect(page.getByText('PortfolioGenerate E2E Other Session')).toBeVisible();
+    await expect(page.getByText('ProFolio E2E Other Session')).toBeVisible();
     await expect(page.getByText(/Created:/u)).toHaveCount(2);
     await expect(page.getByText(/Expires:/u)).toHaveCount(2);
     await expect(page.getByText(/Current session/u)).toHaveCount(1);
     await expect(page.getByRole('button', { name: 'Revoke', exact: true })).toHaveCount(1);
     await page.getByRole('button', { name: 'Revoke', exact: true }).click();
     await expect(page.getByRole('button', { name: 'Revoke', exact: true })).toHaveCount(0);
-    await expect(page.getByText('PortfolioGenerate E2E Other Session')).toHaveCount(0);
+    await expect(page.getByText('ProFolio E2E Other Session')).toHaveCount(0);
 
     await otherPage.goto('/dashboard');
     await otherPage.waitForURL('**/sign-in**');

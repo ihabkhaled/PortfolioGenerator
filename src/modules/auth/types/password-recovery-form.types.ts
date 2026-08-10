@@ -10,6 +10,8 @@ export interface PasswordRecoveryFormProps {
   readonly emailLabel: string;
   readonly passwordLabel: string;
   readonly passwordHint: string;
+  readonly showPasswordLabel: string;
+  readonly hidePasswordLabel: string;
   readonly submitLabel: string;
   readonly pendingLabel: string;
   readonly footer: ReactNode;

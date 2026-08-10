@@ -66,12 +66,13 @@ describe('PWA boundaries', () => {
   it('registers silently until an update is available and cleans up on unmount', () => {
     const view = render(
       <PwaRegistrationContainer
-        installTitle="Install PortfolioGenerate"
+        installTitle="Install ProFolio"
         installDescription="Keep it ready on this device."
         installAction="Install"
         updateTitle="Update available"
         updateDescription="Refresh to use it."
         updateAction="Refresh"
+        dismissLabel="Dismiss"
       />,
     );
 
@@ -86,12 +87,13 @@ describe('PWA boundaries', () => {
     const activate = vi.fn().mockResolvedValue(undefined);
     render(
       <PwaRegistrationContainer
-        installTitle="Install PortfolioGenerate"
+        installTitle="Install ProFolio"
         installDescription="Keep it ready on this device."
         installAction="Install"
         updateTitle="Update available"
         updateDescription="Refresh to use it."
         updateAction="Refresh"
+        dismissLabel="Dismiss"
       />,
     );
 
@@ -107,12 +109,13 @@ describe('PWA boundaries', () => {
     const prompt = vi.fn().mockResolvedValue(undefined);
     render(
       <PwaRegistrationContainer
-        installTitle="Install PortfolioGenerate"
+        installTitle="Install ProFolio"
         installDescription="Keep it ready on this device."
         installAction="Install"
         updateTitle="Update available"
         updateDescription="Refresh to use it."
         updateAction="Refresh"
+        dismissLabel="Dismiss"
       />,
     );
 
@@ -127,12 +130,13 @@ describe('PWA boundaries', () => {
     const prompt = vi.fn().mockRejectedValue(new Error('prompt withdrawn'));
     render(
       <PwaRegistrationContainer
-        installTitle="Install PortfolioGenerate"
+        installTitle="Install ProFolio"
         installDescription="Keep it ready on this device."
         installAction="Install"
         updateTitle="Update available"
         updateDescription="Refresh to use it."
         updateAction="Refresh"
+        dismissLabel="Dismiss"
       />,
     );
 

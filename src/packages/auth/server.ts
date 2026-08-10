@@ -23,7 +23,7 @@ function createAuth() {
   const env = getServerEnv();
 
   return betterAuth({
-    appName: 'PortfolioGenerate',
+    appName: 'ProFolio',
     secret: env.BETTER_AUTH_SECRET,
     baseURL: env.BETTER_AUTH_URL,
     database: prismaAdapter(getDatabase(), { provider: 'postgresql' }),

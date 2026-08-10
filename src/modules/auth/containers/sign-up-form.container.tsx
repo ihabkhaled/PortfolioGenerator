@@ -32,6 +32,8 @@ export function SignUpFormContainer(): ReactElement {
         email: t('emailLabel'),
         password: t('passwordLabel'),
         passwordHint: t('passwordHint'),
+        showPassword: t('showPassword'),
+        hidePassword: t('hidePassword'),
       }}
       footer={
         <AppLink href={ROUTE_PATHS.signIn} className={authClasses.switchLink}>

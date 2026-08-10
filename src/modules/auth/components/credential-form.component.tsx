@@ -2,7 +2,7 @@ import type { ReactElement } from 'react';
 
 import { AUTH_MIN_PASSWORD_LENGTH } from '@/packages/auth';
 import { ErrorIcon } from '@/packages/icons';
-import { Button, Input, Label } from '@/packages/ui-primitives';
+import { Button, Input, Label, PasswordInput } from '@/packages/ui-primitives';
 
 import { authClasses } from '../constants/auth-style.constants';
 import { AUTH_FIELD_NAMES } from '../constants/auth.constants';
@@ -58,14 +58,15 @@ export function CredentialForm(props: Readonly<CredentialFormProps>): ReactEleme
 
       <div className={authClasses.field}>
         <Label htmlFor={AUTH_FIELD_NAMES.password}>{props.labels.password}</Label>
-        <Input
+        <PasswordInput
           id={AUTH_FIELD_NAMES.password}
           name={AUTH_FIELD_NAMES.password}
-          type="password"
           autoComplete={props.includeName ? 'new-password' : 'current-password'}
           required
           minLength={AUTH_MIN_PASSWORD_LENGTH}
           aria-describedby={`${AUTH_FIELD_NAMES.password}-hint`}
+          showLabel={props.labels.showPassword}
+          hideLabel={props.labels.hidePassword}
         />
         <p id={`${AUTH_FIELD_NAMES.password}-hint`} className={authClasses.hint}>
           {props.labels.passwordHint}

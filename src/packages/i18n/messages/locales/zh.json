@@ -2,13 +2,14 @@
   "app": {
     "pwaUpdate": {
       "title": "有可用更新",
-      "description": "新版 PortfolioGenerate 已准备就绪。",
+      "description": "新版 ProFolio 已准备就绪。",
       "action": "更新"
     },
     "pwa": {
-      "installTitle": "\u5b89\u88c5 PortfolioGenerate",
+      "installTitle": "\u5b89\u88c5 ProFolio",
       "installDescription": "\u8ba9\u60a8\u7684\u4f5c\u54c1\u96c6\u5de5\u4f5c\u533a\u5728\u6b64\u8bbe\u5907\u4e0a\u968f\u65f6\u53ef\u7528\u3002",
-      "installAction": "\u5b89\u88c5"
+      "installAction": "\u5b89\u88c5",
+      "dismiss": "\u5173\u95ed"
     },
     "skipToContent": "跳至内容",
     "theme": {
@@ -24,7 +25,7 @@
       "signUp": "创建账户",
       "signOut": "登出"
     },
-    "name": "投资组合生成",
+    "name": "ProFolio",
     "tagline": "将简历变成您掌控的作品集",
     "footerNote": "您的简历保密。只有您评论和发布的内容才会公开。",
     "themeSwitchLabel": "切换主题"
@@ -192,7 +193,7 @@
           "first": "该产品从已经写在简历中的证据开始。",
           "third": "公共页面是持久阅读，而不是现场人工智能演示。"
         },
-        "description": "PortfolioGenerate 的存在是为了缩短设置时间，同时又不会剥夺所代表人员的作者权。",
+        "description": "ProFolio 的存在是为了缩短设置时间，同时又不会剥夺所代表人员的作者权。",
         "title": "围绕事实作者身份构建的组合产品"
       },
       "mission": {
@@ -211,7 +212,7 @@
           "second": "无障碍报告应包括页面、浏览器和所使用的辅助技术。",
           "third": "安全报告会得到谨慎处理，并且无需发送您的简历。"
         },
-        "title": "与 PortfolioGenerate 团队交谈"
+        "title": "与 ProFolio 团队交谈"
       },
       "help": {
         "description": "查找常见决策和可恢复问题的直接指导。",
@@ -269,7 +270,7 @@
     "message": "信息",
     "send": "发送消息",
     "sending": "发送消息",
-    "lead": "发送有关 PortfolioGenerate 的问题。我们仅使用您的详细信息来回复此消息。",
+    "lead": "发送有关 ProFolio 的问题。我们仅使用您的详细信息来回复此消息。",
     "errors": {
       "rate-limited": "从该连接发送的消息太多。稍后再试。",
       "unavailable": "我们刚才无法发送消息。稍后再试。",
@@ -284,6 +285,8 @@
     "passwordLabel": "密码",
     "signUpTitle": "创建您的帐户",
     "passwordHint": "至少 12 个字符。",
+    "showPassword": "显示密码",
+    "hidePassword": "隐藏密码",
     "submitSignUp": "创建账户",
     "submitSignIn": "登入",
     "pendingSignUp": "创建您的帐户",
@@ -412,7 +415,7 @@
       "denied": "该密码不匹配。检查并重试。",
       "description": "输入投资组合所有者与您共享的密码。"
     },
-    "builtWith": "与 PortfolioGenerate 一起发布"
+    "builtWith": "与 ProFolio 一起发布"
   },
   "dashboard": {
     "listTitle": "作品集",
@@ -756,6 +759,8 @@
       "hint": "验证您的电子邮件、更改密码并查看登录的设备。",
       "passwordTitle": "更改密码",
       "currentPassword": "当前密码",
+      "showPassword": "显示密码",
+      "hidePassword": "隐藏密码",
       "newPassword": "新密码",
       "changePassword": "更改密码",
       "currentSession": "当前会话",

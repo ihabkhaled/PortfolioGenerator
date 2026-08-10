@@ -2,15 +2,16 @@
   "app": {
     "pwaUpdate": {
       "title": "Update available",
-      "description": "A new version of PortfolioGenerate is ready.",
+      "description": "A new version of ProFolio is ready.",
       "action": "Refresh"
     },
     "pwa": {
-      "installTitle": "Install PortfolioGenerate",
+      "installTitle": "Install ProFolio",
       "installDescription": "Keep your portfolio workspace ready on this device.",
-      "installAction": "Install"
+      "installAction": "Install",
+      "dismiss": "Dismiss"
     },
-    "name": "PortfolioGenerate",
+    "name": "ProFolio",
     "tagline": "Turn a CV into a portfolio you control",
     "skipToContent": "Skip to content",
     "themeSwitchLabel": "Switch theme",
@@ -188,7 +189,7 @@
       },
       "about": {
         "title": "A portfolio product built around factual authorship",
-        "description": "PortfolioGenerate exists to shorten setup without taking authorship away from the person represented.",
+        "description": "ProFolio exists to shorten setup without taking authorship away from the person represented.",
         "sections": {
           "first": "The product begins with evidence already written in a CV.",
           "second": "Editing and publishing remain explicit human decisions.",
@@ -205,7 +206,7 @@
         }
       },
       "contact": {
-        "title": "Talk to the PortfolioGenerate team",
+        "title": "Talk to the ProFolio team",
         "description": "Ask about the product, report an accessibility problem, or share a security concern.",
         "sections": {
           "first": "Product questions receive practical answers about import, editing, and publishing.",
@@ -262,7 +263,7 @@
   },
   "contact": {
     "title": "Contact us",
-    "lead": "Send a question about PortfolioGenerate. We use your details only to reply to this message.",
+    "lead": "Send a question about ProFolio. We use your details only to reply to this message.",
     "name": "Name",
     "email": "Email",
     "subject": "Subject",
@@ -286,6 +287,8 @@
     "emailLabel": "Email",
     "passwordLabel": "Password",
     "passwordHint": "At least 12 characters.",
+    "showPassword": "Show password",
+    "hidePassword": "Hide password",
     "submitSignIn": "Sign in",
     "submitSignUp": "Create account",
     "pendingSignIn": "Signing in",
@@ -392,7 +395,7 @@
     "availability": "Open to work",
     "contactCta": "Get in touch",
     "skipToContent": "Skip to content",
-    "builtWith": "Published with PortfolioGenerate",
+    "builtWith": "Published with ProFolio",
     "navigationLabel": "Portfolio pages",
     "portraitAlt": "Portrait",
     "privatePage": {
@@ -761,6 +764,8 @@
       "passwordTitle": "Change password",
       "currentPassword": "Current password",
       "newPassword": "New password",
+      "showPassword": "Show password",
+      "hidePassword": "Hide password",
       "changePassword": "Change password",
       "changingPassword": "Changing password",
       "passwordChanged": "Your password was changed and other sessions were revoked.",

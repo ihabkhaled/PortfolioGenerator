@@ -28,7 +28,7 @@ export function buildDefaultTitle(document: PortfolioDocument, page: PortfolioPa
 /**
  * The description falls back through reviewed fields rather than to a generic
  * platform sentence: a search result reading "A portfolio built with
- * PortfolioGenerate" helps nobody, least of all the person it describes.
+ * ProFolio" helps nobody, least of all the person it describes.
  */
 export function buildDefaultDescription(document: PortfolioDocument): string {
   const summary = document.identity.summary?.trim() ?? '';

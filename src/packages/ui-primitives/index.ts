@@ -25,6 +25,7 @@ export { Divider, type DividerProps } from './divider';
 export { Input, type InputProps } from './input';
 export { Label, type LabelProps } from './label';
 export { PageContainer, type PageContainerProps } from './page-container';
+export { PasswordInput, type PasswordInputProps } from './password-input';
 export { Select, type SelectProps } from './select';
 export { Skeleton, type SkeletonProps } from './skeleton';
 export { Spinner, type SpinnerProps } from './spinner';

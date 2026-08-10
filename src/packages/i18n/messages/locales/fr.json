@@ -24,10 +24,40 @@
     "loading": "Chargement",
     "footerNote": "Votre CV reste privé. Seul ce que vous examinez et publiez devient public.",
     "nav": {
+      "home": "Accueil",
+      "menu": "Menu",
       "dashboard": "Tableau de bord",
       "signIn": "Se connecter",
       "signUp": "Créer un compte",
       "signOut": "se déconnecter"
+    },
+    "footer": {
+      "columns": {
+        "product": "Produit",
+        "company": "Entreprise",
+        "legal": "Mentions légales",
+        "resources": "Ressources"
+      },
+      "links": {
+        "features": "Fonctionnalités",
+        "howItWorks": "Comment ça marche",
+        "examples": "Exemples",
+        "templates": "Modèles",
+        "cvImport": "Import de CV",
+        "aiAccuracy": "Précision de l'IA",
+        "about": "À propos",
+        "mission": "Mission",
+        "contact": "Contact",
+        "help": "Aide",
+        "privacy": "Confidentialité",
+        "security": "Sécurité",
+        "terms": "Conditions d'utilisation",
+        "accessibility": "Accessibilité",
+        "faq": "Foire aux questions",
+        "changelog": "Journal des modifications",
+        "feed": "Flux RSS",
+        "sitemap": "Plan du site"
+      }
     }
   },
   "marketing": {

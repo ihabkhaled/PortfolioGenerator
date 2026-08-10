@@ -24,10 +24,40 @@
     "loading": "Loading",
     "footerNote": "Your CV stays private. Only what you review and publish becomes public.",
     "nav": {
+      "home": "Home",
+      "menu": "Menu",
       "dashboard": "Dashboard",
       "signIn": "Sign in",
       "signUp": "Create account",
       "signOut": "Sign out"
+    },
+    "footer": {
+      "columns": {
+        "product": "Product",
+        "company": "Company",
+        "legal": "Legal",
+        "resources": "Resources"
+      },
+      "links": {
+        "features": "Features",
+        "howItWorks": "How it works",
+        "examples": "Examples",
+        "templates": "Templates",
+        "cvImport": "CV import",
+        "aiAccuracy": "AI accuracy",
+        "about": "About",
+        "mission": "Mission",
+        "contact": "Contact",
+        "help": "Help",
+        "privacy": "Privacy",
+        "security": "Security",
+        "terms": "Terms",
+        "accessibility": "Accessibility",
+        "faq": "FAQ",
+        "changelog": "Changelog",
+        "feed": "RSS feed",
+        "sitemap": "Sitemap"
+      }
     }
   },
   "marketing": {

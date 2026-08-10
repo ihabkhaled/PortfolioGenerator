@@ -24,10 +24,40 @@
     "tagline": "تحويل السيرة الذاتية إلى محفظة تتحكم فيها",
     "skipToContent": "انتقل إلى المحتوى",
     "nav": {
+      "home": "الرئيسية",
+      "menu": "القائمة",
       "dashboard": "لوحة القيادة",
       "signOut": "تسجيل الخروج",
       "signIn": "تسجيل الدخول",
       "signUp": "إنشاء حساب"
+    },
+    "footer": {
+      "columns": {
+        "product": "المنتج",
+        "company": "الشركة",
+        "legal": "الشؤون القانونية",
+        "resources": "الموارد"
+      },
+      "links": {
+        "features": "الميزات",
+        "howItWorks": "كيف يعمل",
+        "examples": "أمثلة",
+        "templates": "القوالب",
+        "cvImport": "استيراد السيرة الذاتية",
+        "aiAccuracy": "دقة الذكاء الاصطناعي",
+        "about": "من نحن",
+        "mission": "مهمتنا",
+        "contact": "تواصل معنا",
+        "help": "المساعدة",
+        "privacy": "الخصوصية",
+        "security": "الأمان",
+        "terms": "الشروط",
+        "accessibility": "إمكانية الوصول",
+        "faq": "الأسئلة الشائعة",
+        "changelog": "سجل التغييرات",
+        "feed": "تغذية RSS",
+        "sitemap": "خريطة الموقع"
+      }
     }
   },
   "marketing": {

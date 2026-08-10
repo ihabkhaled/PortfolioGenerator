@@ -7,13 +7,16 @@ import { buildThemeOptions } from '@/modules/preferences';
 import { ThemeToggleContainer } from '@/modules/preferences/preferences-ui';
 import { I18N_NAMESPACES } from '@/packages/i18n';
 import { getServerTranslations } from '@/packages/i18n/server';
+import { HomeIcon } from '@/packages/icons';
 import { AppLink } from '@/packages/link';
 import { appRedirect } from '@/packages/navigation';
 import { LANDMARK_IDS } from '@/shared/accessibility/landmark-ids.constants';
+import { SiteFooterNav } from '@/shared/components/layout/site-footer-nav.component';
 import { SiteShell } from '@/shared/components/layout/site-shell.component';
 import { siteShellClasses } from '@/shared/components/layout/site-shell.variants';
 import { SkipLink } from '@/shared/components/primitives/skip-link.component';
 import { ROUTE_PATHS } from '@/shared/constants/route-paths.constants';
+import { buildSiteFooterLinks } from '@/shared/utils/site-footer-links.util';
 
 export const metadata: Metadata = {
   robots: { index: false, follow: false },
@@ -43,6 +46,17 @@ export default async function DashboardLayout(props: {
       <SkipLink targetHref={`#${LANDMARK_IDS.mainContent}`} label={tApp('skipToContent')} />
       <SiteShell
         navigationLabel={tApp('nav.dashboard')}
+        brandName={tApp('name')}
+        homeLink={
+          <AppLink
+            href={ROUTE_PATHS.home}
+            aria-label={tApp('nav.home')}
+            className={siteShellClasses.homeLink}
+          >
+            <HomeIcon aria-hidden size={18} />
+          </AppLink>
+        }
+        menuLabel={tApp('nav.menu')}
         brand={
           <AppLink href={ROUTE_PATHS.dashboard} className={siteShellClasses.brand}>
             <span className={siteShellClasses.brandName}>{tApp('name')}</span>
@@ -54,7 +68,7 @@ export default async function DashboardLayout(props: {
           <ThemeToggleContainer label={tApp('theme.label')} options={buildThemeOptions(tApp)} />
         }
         footerNote={tApp('footerNote')}
-        footerLinks={null}
+        footerLinks={<SiteFooterNav columns={buildSiteFooterLinks(tApp)} />}
       >
         {props.children}
       </SiteShell>

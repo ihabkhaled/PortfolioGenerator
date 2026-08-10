@@ -24,10 +24,40 @@
     "loading": "Caricamento",
     "footerNote": "Il tuo CV rimane privato. Solo ciò che rivedi e pubblichi diventa pubblico.",
     "nav": {
+      "home": "Home",
+      "menu": "Menu",
       "dashboard": "Pannello di controllo",
       "signIn": "Registrazione",
       "signUp": "Creare un account",
       "signOut": "disconnessione"
+    },
+    "footer": {
+      "columns": {
+        "product": "Prodotto",
+        "company": "Azienda",
+        "legal": "Legale",
+        "resources": "Risorse"
+      },
+      "links": {
+        "features": "Funzionalità",
+        "howItWorks": "Come funziona",
+        "examples": "Esempi",
+        "templates": "Modelli",
+        "cvImport": "Importazione CV",
+        "aiAccuracy": "Accuratezza dell'IA",
+        "about": "Chi siamo",
+        "mission": "Missione",
+        "contact": "Contatto",
+        "help": "Aiuto",
+        "privacy": "Privacy",
+        "security": "Sicurezza",
+        "terms": "Termini",
+        "accessibility": "Accessibilità",
+        "faq": "Domande frequenti",
+        "changelog": "Registro delle modifiche",
+        "feed": "Feed RSS",
+        "sitemap": "Mappa del sito"
+      }
     }
   },
   "marketing": {

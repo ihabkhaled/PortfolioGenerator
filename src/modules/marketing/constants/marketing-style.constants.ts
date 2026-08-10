@@ -14,7 +14,12 @@ export const heroClasses = {
   content: 'grid gap-6',
   eyebrow:
     'font-mono text-[0.6875rem] font-medium uppercase tracking-[0.18em] text-primary-readable',
-  title: 'font-display text-[clamp(2.5rem,6vw,4rem)] font-bold leading-[1.02] tracking-[-0.035em]',
+  // `leading-tight` (not `leading-none`) is deliberate: this headline
+  // regularly wraps to two lines at the widths it actually renders at, and a
+  // line-height at or near 1 packs the second line close enough to the first
+  // that ascenders and descenders collide — reading as clipped text rather
+  // than as a tight display headline.
+  title: 'font-display text-[clamp(2.5rem,6vw,4rem)] font-bold leading-tight tracking-[-0.035em]',
   lead: 'max-w-xl text-lg leading-relaxed text-foreground text-pretty',
   supporting: 'max-w-xl leading-relaxed text-muted-foreground text-pretty',
   actions: 'flex flex-wrap items-center gap-3 pt-2',
@@ -39,8 +44,11 @@ export const principleListClasses = {
 export const topicClasses = {
   hero: 'surface-grid grid gap-5 border-b border-border px-5 py-20 sm:px-8 lg:px-10 lg:py-28',
   eyebrow: 'font-mono text-xs font-medium uppercase tracking-[0.18em] text-primary-readable',
+  // Same fix as `heroClasses.title`: these topic-page headlines are long
+  // enough to wrap, and `leading-none` made the wrapped second line collide
+  // with the first instead of reading as a second, legible line.
   title:
-    'max-w-4xl font-display text-[clamp(2.5rem,7vw,4.5rem)] font-bold leading-none tracking-tight',
+    'max-w-4xl font-display text-[clamp(2.5rem,7vw,4.5rem)] font-bold leading-tight tracking-tight',
   lead: 'max-w-2xl text-lg leading-relaxed text-muted-foreground',
   related: 'flex flex-wrap gap-3',
   relatedLink:

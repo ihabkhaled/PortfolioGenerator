@@ -876,5 +876,24 @@
       "confirmationMismatch": "Escriba la palabra de confirmación exactamente para continuar.",
       "notFound": "Esa cartera ya no está disponible."
     }
+  },
+  "payments": {
+    "billing": {
+      "title": "Facturación",
+      "hint": "ProFolio cuesta {price} al mes, tarifa única, sin niveles. Un portfolio nuevo obtiene una prueba gratuita de 10 días a partir del día en que se publica por primera vez.",
+      "status": {
+        "notStarted": "Publica un portfolio para iniciar tu prueba gratuita de 10 días.",
+        "trialing": "Tu prueba termina en {days} días.",
+        "deactivated": "Tu portfolio está desactivado hasta que te suscribas.",
+        "active": "Estás suscrito — gracias por apoyar a ProFolio."
+      },
+      "activeNote": "Gestiona o cancela tu suscripción en cualquier momento desde tu cuenta de PayPal.",
+      "checkout": {
+        "unavailable": "La facturación no está disponible temporalmente. Inténtalo de nuevo en breve.",
+        "processing": "Confirmando tu suscripción…",
+        "succeeded": "Suscripción enviada. La activación se confirma automáticamente y puede tardar un momento.",
+        "failed": "No pudimos confirmar tu suscripción. Inténtalo de nuevo o contacta con soporte si esto continúa."
+      }
+    }
   }
 }

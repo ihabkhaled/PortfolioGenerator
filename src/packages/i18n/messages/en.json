@@ -872,5 +872,24 @@
       "confirmationMismatch": "Type the confirmation word exactly to continue.",
       "notFound": "That portfolio is no longer available."
     }
+  },
+  "payments": {
+    "billing": {
+      "title": "Billing",
+      "hint": "ProFolio costs {price} per month, flat, with no tiers. A new portfolio gets a 10-day free trial starting the day you first publish it.",
+      "status": {
+        "notStarted": "Publish a portfolio to start your 10-day free trial.",
+        "trialing": "Your trial ends in {days} days.",
+        "deactivated": "Your portfolio is deactivated until you subscribe.",
+        "active": "You're subscribed — thank you for supporting ProFolio."
+      },
+      "activeNote": "Manage or cancel your subscription anytime from your PayPal account.",
+      "checkout": {
+        "unavailable": "Billing is temporarily unavailable. Please try again shortly.",
+        "processing": "Confirming your subscription…",
+        "succeeded": "Subscription submitted. Activation is confirmed automatically and can take a moment.",
+        "failed": "We could not confirm your subscription. Please try again, or contact support if this keeps happening."
+      }
+    }
   }
 }

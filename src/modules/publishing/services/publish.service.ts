@@ -1,6 +1,7 @@
 import 'server-only';
 
 import { recordAuditEvent } from '@/modules/audit/server';
+import { ensureBillingTrialStarted } from '@/modules/payments/server';
 import { migratePortfolioDocument } from '@/modules/portfolio-document';
 import {
   invalidatePortfolioPdfCache,
@@ -89,6 +90,12 @@ export async function publishPortfolio(request: PublishRequest): Promise<Publish
       publishedVersion: result.value.publishedVersion,
     },
   });
+
+  // A no-op after the owner's first-ever publish — see
+  // `startOwnerTrialIfUnset`. The 10-day free trial is a property of the
+  // account, not of this one portfolio, so it starts the first time *any*
+  // portfolio the owner controls goes public.
+  await ensureBillingTrialStarted(request.ownerId, request.now);
 
   return {
     ok: true,

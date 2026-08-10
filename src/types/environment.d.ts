@@ -19,5 +19,9 @@ declare namespace NodeJS {
      * about `process.env` that is not true of any Node process.
      */
     NEXT_PUBLIC_APP_ENV?: 'local' | 'staging' | 'production';
+    /** PayPal client ids are not secrets, the same way a Stripe publishable
+     * key is not — see the comment on `NEXT_PUBLIC_PAYPAL_CLIENT_ID` in
+     * `env.schema.ts`. */
+    NEXT_PUBLIC_PAYPAL_CLIENT_ID?: string;
   }
 }

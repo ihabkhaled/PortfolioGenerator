@@ -3,7 +3,7 @@
 ## What this needs
 
 | Dependency                    | Notes                                                    |
-| ----------------------------- | -------------------------------------------------------- |
+| ------------------------------ | -------------------------------------------------------- |
 | Node.js 24+                   | `.nvmrc` and `.node-version` pin the version             |
 | PostgreSQL 16+                | The only required datastore                              |
 | S3-compatible object storage  | AWS S3, Cloudflare R2 or MinIO                           |
@@ -36,22 +36,23 @@ failing at the first request that happens to need it.
 
 The values that must be set for production, and what goes wrong if they are not:
 
-| Variable                                              | If wrong                                                                                                                         |
-| ----------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
-| `NEXT_PUBLIC_APP_URL`                                 | Canonical URLs, the sitemap and OG images point at localhost. Inlined at build time — a rebuild is required to change it.        |
-| `NEXT_PUBLIC_APP_ENV`                                 | Anything other than `production` makes `robots.txt` disallow everything. That is deliberate for preview deployments.             |
-| `DATABASE_URL`                                        | Boot failure.                                                                                                                    |
-| `BETTER_AUTH_SECRET`                                  | Boot failure below 32 characters. Rotating it invalidates every session.                                                         |
-| `AUTH_REQUIRE_EMAIL_VERIFICATION=false` in production | Boot failure. Mandatory verification also requires enabled, fully configured SMTP delivery.                                      |
-| `STORAGE_DRIVER=s3` without the S3 block              | Boot failure, naming the missing variables.                                                                                      |
-| `AI_PROVIDER=openai-compatible` without `AI_API_KEY`  | Boot failure.                                                                                                                    |
-| `CRON_SECRET`                                         | Boot failure in production when absent or shorter than 32 characters.                                                            |
-| `CLAMAV_ENABLED=false` in production                  | Uploads are stored unscanned. Not a boot failure — see below.                                                                    |
-| `CLAMAV_ENABLED=true` without reachable clamd         | Uploads fail closed; no unscanned bytes are stored.                                                                              |
-| `AI_GOOGLE_API_KEY` absent                            | Translation returns `not-configured`. Extraction is unaffected.                                                                  |
-| `CONTACT_EMAIL_ENABLED=true` without the SMTP block   | Boot failure, naming the missing relay values.                                                                                   |
-| `REDIS_URL` absent                                    | Not a boot failure. The PDF cache and download-token store fall back to an in-process implementation — see below.                |
-| `PDF_CHROMIUM_EXECUTABLE_PATH`                        | Escape hatch only; leave unset unless deploying Chromium somewhere neither `@playwright/test` nor `@sparticuz/chromium` reaches. |
+| Variable                                               | If wrong                                                                                                                          |
+| ------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| `NEXT_PUBLIC_APP_URL`                                  | Canonical URLs, the sitemap and OG images point at localhost. Inlined at build time — a rebuild is required to change it.          |
+| `NEXT_PUBLIC_APP_ENV`                                  | Anything other than `production` makes `robots.txt` disallow everything. That is deliberate for preview deployments.              |
+| `DATABASE_URL`                                         | Boot failure.                                                                                                                      |
+| `BETTER_AUTH_SECRET`                                   | Boot failure below 32 characters. Rotating it invalidates every session.                                                           |
+| `AUTH_REQUIRE_EMAIL_VERIFICATION=false` in production  | Boot failure. Mandatory verification also requires enabled, fully configured SMTP delivery.                                       |
+| `STORAGE_DRIVER=s3` without the S3 block               | Boot failure, naming the missing variables.                                                                                        |
+| `AI_PROVIDER=openai-compatible` without `AI_API_KEY`   | Boot failure.                                                                                                                      |
+| `CRON_SECRET`                                          | Boot failure in production when absent or shorter than 32 characters.                                                             |
+| `CLAMAV_ENABLED=false` in production                   | Uploads are stored unscanned. Not a boot failure — see below.                                                                      |
+| `CLAMAV_ENABLED=true` without reachable clamd          | Uploads fail closed; no unscanned bytes are stored.                                                                                |
+| `AI_GOOGLE_API_KEY` absent                             | Translation returns `not-configured`. Extraction is unaffected.                                                                    |
+| `CONTACT_EMAIL_ENABLED=true` without the SMTP block    | Boot failure, naming the missing relay values.                                                                                     |
+| `REDIS_URL` absent                                     | Not a boot failure. The PDF cache and download-token store fall back to an in-process implementation — see below.                  |
+| `PDF_CHROMIUM_EXECUTABLE_PATH`                         | Escape hatch only; leave unset unless deploying Chromium somewhere neither `@playwright/test` nor `@sparticuz/chromium` reaches.   |
+| Any one of the four PayPal values set without the rest | Boot failure, naming the missing PayPal values. All four blank boots fine with billing off.                                        |
 
 Private portfolio pages cannot be listed as a `robots.txt` prefix because they
 share the same slug namespace as public portfolios. They are excluded by
@@ -80,7 +81,6 @@ original language.
 
 `AI_GOOGLE_TRANSLATE_URL` defaults to Gemini's OpenAI-compatible endpoint and
 `AI_TRANSLATION_MODEL` to `gemini-2.5-flash`. Gemini goes through the existing
-OpenAI-compatible AI boundary; do not install or import a Gemini SDK. All three
 are runtime environment variables on Vercel and are not required while
 `next build` imports route modules.
 
@@ -90,24 +90,6 @@ The supported contact contract includes `CONTACT_EMAIL_PROVIDER=smtp`,
 `CONTACT_SMTP_SECURE=false` still upgrades with STARTTLS before credentials are
 sent.
 
-## Vercel and ClamAV
-
-Deploy the Next.js application to Vercel and run ClamAV as a separate private
-service using [`deploy/clamav/compose.yaml`](../deploy/clamav/compose.yaml).
-Vercel Functions cannot host a long-running clamd daemon. The application must
-reach it through a private-network connector or an authenticated TLS gateway;
-never expose raw TCP port 3310 to the public internet because clamd provides no
-authentication or transport encryption.
-
-The deployment needs enough memory for signatures and scans (the supplied
-container reserves 3 GB and limits at 4 GB), a persistent signatures volume,
-and a health monitor. Copy `deploy/clamav/.env.example`, bind the gateway to its
-private interface, then point `CLAMAV_HOST` and `CLAMAV_PORT` at that gateway.
-
-Production secrets and endpoints remain human-owned steps: Vercel project
-access, Postgres, object storage, SMTP credentials, Gemini/OpenAI-compatible AI
-credentials, DNS, and the private scanner network cannot be provisioned from a
-source checkout.
 
 ## Portfolio PDF download
 
@@ -132,6 +114,86 @@ Two things to verify after deploying, beyond setting `REDIS_URL`:
   plan and function configuration allow both. A cache hit (the common case
   after a portfolio's first download) returns in well under a second and
   never touches Chromium.
+
+## PayPal billing
+
+A published portfolio gets a 10-day free trial, starting the day the owner
+first publishes anything. After that, keeping a portfolio public costs
+`PAYMENT_PRICE`/month (flat, no tiers) through a PayPal subscription; if the
+trial ends with no active subscription, the portfolio is unpublished — never
+deleted — until the owner subscribes. See
+[ADR-0009](../architecture/adrs/0009-paypal-subscription-billing.md) for why
+billing is account-wide rather than per portfolio, and why deactivation reuses
+the same code path as the owner's own unpublish button.
+
+Billing is fully optional and off by default, the same "blank is disabled"
+shape as translation's `AI_GOOGLE_API_KEY`: leave `PAYPAL_CLIENT_ID`,
+`PAYPAL_CLIENT_SECRET`, `PAYPAL_WEBHOOK_ID` and `NEXT_PUBLIC_PAYPAL_CLIENT_ID`
+all blank and the app boots with the billing UI and the trial/deactivation
+sweep both switched off. Set any one of the four and all four become
+required at boot — see the table above.
+
+### One manual step: registering the webhook
+
+Everything else — the PayPal Product, the Plan, the subscription linking — is
+handled by the application itself; see below. The one thing that cannot be
+automated is registering this app's webhook URL with PayPal, because doing so
+is what produces the id this app needs to verify inbound events:
+
+1. In the [PayPal developer dashboard](https://developer.paypal.com/dashboard/applications),
+   open the REST API app for this environment (sandbox or live) and note its
+   **Client ID** and **Secret** — these become `PAYPAL_CLIENT_ID` /
+   `PAYPAL_CLIENT_SECRET` (and `PAYPAL_CLIENT_ID` again as
+   `NEXT_PUBLIC_PAYPAL_CLIENT_ID`).
+2. Add a webhook pointed at
+   `https://<your-deployed-domain>/api/payments/webhooks/paypal`, subscribed
+   to at least: `BILLING.SUBSCRIPTION.ACTIVATED`,
+   `BILLING.SUBSCRIPTION.CANCELLED`, `BILLING.SUBSCRIPTION.SUSPENDED`,
+   `BILLING.SUBSCRIPTION.EXPIRED`, `PAYMENT.SALE.COMPLETED`,
+   `PAYMENT.SALE.DENIED`, `PAYMENT.SALE.REFUNDED`.
+3. PayPal responds with a webhook id (`WH-...`) for that registration. **This
+   id, not the URL from step 2, is `PAYPAL_WEBHOOK_ID`.** It is what
+   `verifyPaypalWebhookSignature` sends to PayPal's
+   `/v1/notifications/verify-webhook-signature` endpoint to confirm an inbound
+   POST actually came from PayPal; see the comment on `PAYPAL_WEBHOOK_ID` in
+   `env.schema.ts` for the full distinction.
+
+Nothing else is a manual step. The PayPal Product and the monthly Plan
+(`PAYMENT_PRICE`, one currency, no tiers) are created automatically the first
+time any request needs them — `getOrCreateSubscriptionPlan` checks a
+one-row database table first and only calls the PayPal API on a cold start
+with no row yet, so this costs a PayPal round trip once, ever, not on every
+page render.
+
+### Scheduled trial-expiry deactivation
+
+`vercel.json` invokes `GET /api/operations/billing-deactivations` daily at
+04:00 UTC, alongside the existing asset-deletion cron at 03:00 UTC — Vercel
+Hobby allows up to two scheduled functions, each at most once a day, so this
+is a second job rather than folded into the first. It authenticates the same
+way (`Authorization: Bearer <CRON_SECRET>`), disables caching, processes at
+most `BILLING_DEACTIVATION_BATCH_SIZE` (50) owners whose trial has ended
+without an active subscription, and returns only how many portfolios it
+unpublished — never which ones or whose.
+
+## Vercel and ClamAV
+
+Deploy the Next.js application to Vercel and run ClamAV as a separate private
+service using [`deploy/clamav/compose.yaml`](../deploy/clamav/compose.yaml).
+Vercel Functions cannot host a long-running clamd daemon. The application must
+reach it through a private-network connector or an authenticated TLS gateway;
+never expose raw TCP port 3310 to the public internet because clamd provides no
+authentication or transport encryption.
+
+The deployment needs enough memory for signatures and scans (the supplied
+container reserves 3 GB and limits at 4 GB), a persistent signatures volume,
+and a health monitor. Copy `deploy/clamav/.env.example`, bind the gateway to its
+private interface, then point `CLAMAV_HOST` and `CLAMAV_PORT` at that gateway.
+
+Production secrets and endpoints remain human-owned steps: Vercel project
+access, Postgres, object storage, SMTP credentials, Gemini/OpenAI-compatible AI
+credentials, DNS, and the private scanner network cannot be provisioned from a
+source checkout.
 
 ## Scheduled asset deletion retry
 

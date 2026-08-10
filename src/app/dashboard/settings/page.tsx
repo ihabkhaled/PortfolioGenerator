@@ -13,7 +13,16 @@ import {
 import { getOwnedAccountPreferences, listAccountSessions } from '@/modules/account/server';
 import { requireOwner } from '@/modules/auth/server';
 import { APP_LOCALES } from '@/modules/localization';
+import { describeBillingStatus } from '@/modules/payments';
+import {
+  BillingStatusBanner,
+  paymentsClasses,
+  PaypalCheckoutContainer,
+} from '@/modules/payments/payments-ui';
+import { getOwnerBillingState } from '@/modules/payments/server';
 import { listOwnedPortfolios } from '@/modules/portfolios/server';
+import { publicEnv } from '@/packages/env';
+import { getServerEnv } from '@/packages/env/server';
 import { getRequestHeaders } from '@/packages/headers';
 import { I18N_NAMESPACES } from '@/packages/i18n';
 import { getServerTranslations } from '@/packages/i18n/server';
@@ -35,6 +44,7 @@ export const metadata: Metadata = {
 export default async function AccountSettingsPage(): Promise<ReactElement> {
   const owner = await requireOwner();
   const t = await getServerTranslations(I18N_NAMESPACES.account);
+  const paymentsT = await getServerTranslations(I18N_NAMESPACES.payments);
   const portfolios = await listOwnedPortfolios(owner.id);
   const sessions = await listAccountSessions(owner.id, await getRequestHeaders());
   const preferences: AccountPreferences = (await getOwnedAccountPreferences(owner.id)) ?? {
@@ -42,6 +52,15 @@ export default async function AccountSettingsPage(): Promise<ReactElement> {
     themePreference: 'system',
     defaultCountryIso: null,
   };
+
+  const billingState = await getOwnerBillingState(owner.id);
+  const billingView =
+    billingState === null ? null : describeBillingStatus(billingState, new Date());
+  const billingPriceLabel = `$${getServerEnv().NEXT_PAYMENT_PRICE}`;
+  const billingMessage =
+    billingView === null
+      ? null
+      : paymentsT(`billing.status.${billingView.tag}`, { days: billingView.daysRemaining ?? 0 });
 
   return (
     <div className={accountClasses.page}>
@@ -59,6 +78,36 @@ export default async function AccountSettingsPage(): Promise<ReactElement> {
         portfolioCountLabel={t('summary.portfolioCountLabel')}
         portfolioCount={portfolios.length}
       />
+
+      <section className={paymentsClasses.section}>
+        <h2 className={paymentsClasses.sectionTitle}>{paymentsT('billing.title')}</h2>
+        <p className={paymentsClasses.sectionHint}>
+          {paymentsT('billing.hint', { price: billingPriceLabel })}
+        </p>
+
+        {billingView === null || billingMessage === null ? null : (
+          <BillingStatusBanner tag={billingView.tag} message={billingMessage} />
+        )}
+
+        {billingView !== null &&
+        billingView.tag !== 'active' &&
+        publicEnv.NEXT_PUBLIC_PAYPAL_CLIENT_ID !== undefined ? (
+          <PaypalCheckoutContainer
+            ownerId={owner.id}
+            clientId={publicEnv.NEXT_PUBLIC_PAYPAL_CLIENT_ID}
+            labels={{
+              unavailable: paymentsT('billing.checkout.unavailable'),
+              processing: paymentsT('billing.checkout.processing'),
+              succeeded: paymentsT('billing.checkout.succeeded'),
+              failed: paymentsT('billing.checkout.failed'),
+            }}
+          />
+        ) : null}
+
+        {billingView?.tag === 'active' ? (
+          <p className={paymentsClasses.sectionHint}>{paymentsT('billing.activeNote')}</p>
+        ) : null}
+      </section>
 
       <AccountProfileContainer
         name={owner.name}

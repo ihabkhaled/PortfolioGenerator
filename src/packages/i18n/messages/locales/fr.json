@@ -876,5 +876,24 @@
       "confirmationMismatch": "Tapez exactement le mot de confirmation pour continuer.",
       "notFound": "Ce portefeuille n'est plus disponible."
     }
+  },
+  "payments": {
+    "billing": {
+      "title": "Facturation",
+      "hint": "ProFolio coûte {price} par mois, prix unique, sans paliers. Un nouveau portfolio bénéficie d'un essai gratuit de 10 jours à partir du jour de sa première publication.",
+      "status": {
+        "notStarted": "Publiez un portfolio pour démarrer votre essai gratuit de 10 jours.",
+        "trialing": "Votre essai se termine dans {days} jours.",
+        "deactivated": "Votre portfolio est désactivé jusqu'à ce que vous vous abonniez.",
+        "active": "Vous êtes abonné — merci de soutenir ProFolio."
+      },
+      "activeNote": "Gérez ou annulez votre abonnement à tout moment depuis votre compte PayPal.",
+      "checkout": {
+        "unavailable": "La facturation est temporairement indisponible. Veuillez réessayer sous peu.",
+        "processing": "Confirmation de votre abonnement…",
+        "succeeded": "Abonnement envoyé. L'activation est confirmée automatiquement et peut prendre un instant.",
+        "failed": "Nous n'avons pas pu confirmer votre abonnement. Veuillez réessayer, ou contacter le support si cela persiste."
+      }
+    }
   }
 }

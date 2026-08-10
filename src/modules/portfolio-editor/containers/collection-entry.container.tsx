@@ -51,6 +51,23 @@ export function CollectionEntryContainer(props: Readonly<CollectionEntryProps>):
             );
           }
           const value = collectionTextFieldValue(item, field.name);
+          if (field.kind === 'month') {
+            return (
+              <div key={field.name} className={editorClasses.field}>
+                <Label htmlFor={id}>{label}</Label>
+                <Input
+                  id={id}
+                  type="month"
+                  value={value}
+                  onChange={(event) => {
+                    props.onChange(
+                      setCollectionField(document, key, item.id, field.name, event.target.value),
+                    );
+                  }}
+                />
+              </div>
+            );
+          }
           if (field.kind === 'social-kind' || field.kind === 'skill-tier') {
             const options = field.kind === 'social-kind' ? EDITOR_SOCIAL_KINDS : EDITOR_SKILL_TIERS;
             const labelPrefix = field.kind === 'social-kind' ? 'socialKinds' : 'skillTiers';

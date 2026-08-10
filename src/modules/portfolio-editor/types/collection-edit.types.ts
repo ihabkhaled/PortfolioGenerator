@@ -20,6 +20,7 @@ export type AnyCollectionItem = PortfolioDocument[IdentifiedCollectionKey][numbe
 
 export type CollectionFieldKind =
   | 'text'
+  | 'month'
   | 'textarea'
   | 'list'
   | 'boolean'

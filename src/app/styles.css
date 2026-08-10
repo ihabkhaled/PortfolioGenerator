@@ -38,8 +38,33 @@
     inline-size: 1.5rem;
   }
 
+  /*
+   * The native "Choose File" button and its "No file chosen" text otherwise
+   * render in the browser's own chrome — often black-on-transparent — inside
+   * a dark, bordered field built for it. Unreadable against a dark theme, and
+   * visibly foreign next to every other control on the page.
+   */
   input[type='file'] {
+    color: var(--color-muted-foreground);
     cursor: pointer;
+  }
+
+  input[type='file']::file-selector-button {
+    margin-inline-end: 0.75rem;
+    border-radius: 0.5rem;
+    border: 1px solid var(--color-border);
+    background: var(--color-surface);
+    color: var(--color-foreground);
+    padding-block: 0.375rem;
+    padding-inline: 0.75rem;
+    font: inherit;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 150ms;
+  }
+
+  input[type='file']::file-selector-button:hover {
+    background: var(--color-surface-raised);
   }
 
   :where(button, input, select, textarea):disabled {

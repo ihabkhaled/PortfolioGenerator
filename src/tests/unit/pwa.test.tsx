@@ -126,6 +126,30 @@ describe('PWA boundaries', () => {
     expect(prompt).toHaveBeenCalledOnce();
   });
 
+  it('dismisses the install banner with no update pending', async () => {
+    const prompt = vi.fn().mockResolvedValue(undefined);
+    render(
+      <PwaRegistrationContainer
+        installTitle="Install ProFolio"
+        installDescription="Keep it ready on this device."
+        installAction="Install"
+        updateTitle="Update available"
+        updateDescription="Refresh to use it."
+        updateAction="Refresh"
+        dismissLabel="Dismiss"
+      />,
+    );
+
+    act(() => {
+      browser.installListener?.({ prompt });
+    });
+    expect(screen.getByText('Install ProFolio')).toBeInTheDocument();
+
+    await userEvent.click(screen.getByRole('button', { name: 'Dismiss' }));
+
+    expect(screen.queryByText('Install ProFolio')).not.toBeInTheDocument();
+  });
+
   it('dismissing the update banner leaves a pending install prompt for later', async () => {
     const activate = vi.fn().mockResolvedValue(undefined);
     const prompt = vi.fn().mockResolvedValue(undefined);

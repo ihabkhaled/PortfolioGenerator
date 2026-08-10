@@ -81,6 +81,19 @@ describe('upgradeDocumentToVersion3', () => {
     ).toEqual({ schemaVersion: 3, pages: [{ id: 'p', sections: 'nonsense' }] });
   });
 
+  it('leaves a page or section that is not itself a record alone', () => {
+    expect(upgradeDocumentToVersion3({ schemaVersion: 2, pages: ['not a page'] })).toEqual({
+      schemaVersion: 3,
+      pages: ['not a page'],
+    });
+    expect(
+      upgradeDocumentToVersion3({
+        schemaVersion: 2,
+        pages: [{ id: 'p', sections: ['not a section'] }],
+      }),
+    ).toEqual({ schemaVersion: 3, pages: [{ id: 'p', sections: ['not a section'] }] });
+  });
+
   // The exact scenario the bug produced: a portfolio that already existed
   // before the fix, still carrying `showPhone: false` on every contact
   // section, reaches the current version with the switch turned on.

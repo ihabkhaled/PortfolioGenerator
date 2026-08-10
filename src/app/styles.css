@@ -67,6 +67,16 @@
     background: var(--color-surface-raised);
   }
 
+  /*
+   * Edge draws its own reveal/clear icons in the same top-right corner where
+   * `PasswordInput` (packages/ui-primitives/password-input.tsx) places its
+   * own toggle button, so the two would otherwise overlap.
+   */
+  input[type='password']::-ms-reveal,
+  input[type='password']::-ms-clear {
+    display: none;
+  }
+
   :where(button, input, select, textarea):disabled {
     cursor: not-allowed;
   }

@@ -59,10 +59,11 @@ export function DraftStatusProvider(props: Readonly<{ children: ReactNode }>): R
 export function useDraftStatusPublisher(status: DraftStatus): void {
   const context = useContext(DraftStatusContext);
   const setStatus = context?.setStatus;
-  // Destructured to plain values so the effect's dependency list is exact:
-  // `save` is already stable from useCallback in useDraftEditor, and listing
-  // the object itself would re-publish on every render of the caller for no
-  // reason, fighting React's own update batching.
+  // Destructured to plain values so the effect's dependency list is exact.
+  // `save` is *not* stable — useDraftEditor rebuilds it on every document
+  // change — which is exactly why it belongs in the list: the publish panel
+  // has to call the `save` that closes over the current draft, not a stale
+  // one from the render this effect first ran in.
   const { isDirty, isSaving, save } = status;
 
   useEffect(() => {

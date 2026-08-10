@@ -40,10 +40,15 @@ export function PwaRegistrationContainer(
   const description = serviceWorkerUpdate ? props.updateDescription : props.installDescription;
   const actionLabel = serviceWorkerUpdate ? props.updateAction : props.installAction;
   const dismiss = (): void => {
-    // The banner is exactly the union of these two pieces of state; clearing
-    // whichever one is driving it right now is what "dismiss" means.
-    setServiceWorkerUpdate(null);
-    setInstallPrompt(null);
+    // Only the one actually on screen: a service-worker update takes
+    // precedence over a pending install prompt (see `title` above), and
+    // `beforeinstallprompt` typically fires once per session, so clearing
+    // both would silently throw away an install offer the visitor never saw.
+    if (serviceWorkerUpdate) {
+      setServiceWorkerUpdate(null);
+    } else {
+      setInstallPrompt(null);
+    }
   };
   const runAction = async (): Promise<void> => {
     if (serviceWorkerUpdate) {

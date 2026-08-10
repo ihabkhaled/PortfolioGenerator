@@ -126,6 +126,36 @@ describe('PWA boundaries', () => {
     expect(prompt).toHaveBeenCalledOnce();
   });
 
+  it('dismissing the update banner leaves a pending install prompt for later', async () => {
+    const activate = vi.fn().mockResolvedValue(undefined);
+    const prompt = vi.fn().mockResolvedValue(undefined);
+    render(
+      <PwaRegistrationContainer
+        installTitle="Install ProFolio"
+        installDescription="Keep it ready on this device."
+        installAction="Install"
+        updateTitle="Update available"
+        updateDescription="Refresh to use it."
+        updateAction="Refresh"
+        dismissLabel="Dismiss"
+      />,
+    );
+
+    act(() => {
+      browser.installListener?.({ prompt });
+      browser.updateListener?.({ activate });
+    });
+    expect(screen.getByText('Update available')).toBeInTheDocument();
+
+    await userEvent.click(screen.getByRole('button', { name: 'Dismiss' }));
+
+    // The update banner is gone, but the install prompt underneath it — a
+    // `beforeinstallprompt` event that typically fires once per session —
+    // must still be there to show next, not silently discarded with it.
+    expect(screen.queryByText('Update available')).not.toBeInTheDocument();
+    expect(screen.getByText('Install ProFolio')).toBeInTheDocument();
+  });
+
   it('dismisses a browser prompt that is withdrawn before the user chooses it', async () => {
     const prompt = vi.fn().mockRejectedValue(new Error('prompt withdrawn'));
     render(

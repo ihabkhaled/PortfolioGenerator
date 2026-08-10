@@ -18,6 +18,7 @@ import { SectionList } from '../components/section-list.component';
 import { SeoFields } from '../components/seo-fields.component';
 import { WarningList } from '../components/warning-list.component';
 import { editorClasses } from '../constants/editor-style.constants';
+import { useDraftStatusPublisher } from '../contexts/draft-status.context';
 import {
   appendAttachmentAsset,
   appendGalleryAsset,
@@ -50,6 +51,12 @@ export function PortfolioEditorContainer(props: Readonly<EditorContainerProps>):
     portfolioId: props.portfolioId,
     initialDocument: props.initialDocument,
     initialVersion: props.initialVersion,
+  });
+
+  useDraftStatusPublisher({
+    isDirty: editor.isDirty,
+    isSaving: editor.isSaving,
+    save: editor.save,
   });
 
   const { document } = editor;

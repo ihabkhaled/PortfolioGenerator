@@ -1,6 +1,7 @@
 import type { ReactElement } from 'react';
 
 import { Input, Label, Select } from '@/packages/ui-primitives';
+import { countryFlagEmoji } from '@/shared/utils/phone-number.util';
 
 import { editorClasses } from '../constants/editor-style.constants';
 import type { ContactFieldsProps } from '../types/editor-field.types';
@@ -53,13 +54,14 @@ export function ContactFields(props: Readonly<ContactFieldsProps>): ReactElement
             <Select
               id="contact-phone-country"
               aria-label={props.labels.phoneCountry}
+              className={editorClasses.phoneCountrySelect}
               value={props.phoneCountryIso ?? ''}
               onChange={props.onPhoneCountryChange}
             >
               <option value="">{props.labels.phoneCountryNone}</option>
               {props.countries.map((country) => (
                 <option key={country.iso} value={country.iso}>
-                  {country.dial} {country.name}
+                  {countryFlagEmoji(country.iso)} {country.dial} {country.name}
                 </option>
               ))}
             </Select>

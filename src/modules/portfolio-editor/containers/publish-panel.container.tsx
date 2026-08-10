@@ -12,6 +12,7 @@ import { Button, Input, Label } from '@/packages/ui-primitives';
 import { claimSlugAction, publishAction, unpublishAction } from '../actions/editor.actions';
 import { editorClasses } from '../constants/editor-style.constants';
 import { EDITOR_INITIAL_STATE } from '../constants/editor.constants';
+import { useDraftStatus } from '../contexts/draft-status.context';
 import type { PublishPanelProps } from '../types/publish-panel.types';
 
 /**
@@ -50,6 +51,7 @@ export function PublishPanelContainer(props: Readonly<PublishPanelProps>): React
     EDITOR_INITIAL_STATE,
   );
 
+  const draft = useDraftStatus();
   const error = slugState.error ?? publishState.error ?? unpublishState.error;
   const blockers = publishState.blockers ?? [];
   const publishLabelKey = resolvePublishLabelKey(isPublishing, props.isPublished);
@@ -60,6 +62,22 @@ export function PublishPanelContainer(props: Readonly<PublishPanelProps>): React
         <h2 className={editorClasses.sectionTitle}>{t('publish.title')}</h2>
       </div>
       <p className={editorClasses.sectionHint}>{t('publish.hint')}</p>
+
+      {draft.isDirty ? (
+        <p className={editorClasses.blocker}>
+          <WarningIcon aria-hidden size={16} />
+          {t('publish.unsavedChanges')}
+          <Button
+            type="button"
+            variant="secondary"
+            size="sm"
+            onClick={draft.save}
+            disabled={draft.isSaving}
+          >
+            {t(draft.isSaving ? 'saving' : 'save')}
+          </Button>
+        </p>
+      ) : null}
 
       {error === null ? null : (
         <p className={editorClasses.error} role="alert">
@@ -105,7 +123,7 @@ export function PublishPanelContainer(props: Readonly<PublishPanelProps>): React
       <div className={editorClasses.headerActions}>
         <form action={runPublish}>
           <input type="hidden" name="portfolioId" value={props.portfolioId} />
-          <Button type="submit" disabled={isPublishing}>
+          <Button type="submit" disabled={isPublishing || draft.isDirty}>
             {t(publishLabelKey)}
           </Button>
         </form>

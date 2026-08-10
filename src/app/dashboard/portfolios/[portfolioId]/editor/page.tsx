@@ -6,6 +6,7 @@ import { requireOwner } from '@/modules/auth/server';
 import { APP_LOCALES, TranslationPanelContainer } from '@/modules/localization';
 import { listOwnedTranslations } from '@/modules/localization/server';
 import {
+  DraftStatusProvider,
   PortfolioEditorContainer,
   PublishPanelContainer,
   editorClasses,
@@ -74,7 +75,7 @@ export default async function EditorPage(props: EditorPageProps): Promise<ReactE
   };
 
   return (
-    <>
+    <DraftStatusProvider>
       <PortfolioEditorContainer
         portfolioId={portfolio.id}
         initialDocument={redactPrivatePagePasswords(portfolio.draftDocument)}
@@ -99,6 +100,6 @@ export default async function EditorPage(props: EditorPageProps): Promise<ReactE
           }))}
         />
       </div>
-    </>
+    </DraftStatusProvider>
   );
 }

@@ -661,6 +661,7 @@
     "publish": {
       "title": "Pubblicare",
       "hint": "Scegli il tuo indirizzo pubblico, quindi pubblica. Niente è pubblico finché non lo fai tu.",
+      "unsavedChanges": "Hai modifiche non salvate. Salva la bozza prima di pubblicare: Pubblica controlla l'ultimo salvataggio, non ciò che vedi a schermo.",
       "slugLabel": "Indirizzo pubblico",
       "urlPreview": "Il tuo portafoglio sarà a {url}",
       "claim": "Salva indirizzo",

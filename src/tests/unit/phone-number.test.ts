@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 
 import { COUNTRY_DIAL_CODES } from '@/shared/constants/country-codes.constants';
 import {
+  countryFlagEmoji,
   findCountryByIso,
   formatPhoneNumber,
   sortCountriesByName,
@@ -91,12 +92,42 @@ describe('findCountryByIso', () => {
   });
 });
 
+describe('countryFlagEmoji', () => {
+  it('maps an ISO code to its regional-indicator flag', () => {
+    expect(countryFlagEmoji('EG')).toBe('🇪🇬');
+    expect(countryFlagEmoji('US')).toBe('🇺🇸');
+  });
+
+  it('produces a flag for every entry in the country list', () => {
+    // Regional indicators are outside the Basic Multilingual Plane, so each
+    // one is a surrogate pair — two UTF-16 units for one code point. Reading
+    // by code point index, not by slicing the string, is what makes this
+    // check correct rather than merely long enough.
+    const REGIONAL_INDICATOR_FIRST = 0x1_f1_e6;
+    const REGIONAL_INDICATOR_LAST = 0x1_f1_ff;
+
+    for (const country of COUNTRY_DIAL_CODES) {
+      const flag = countryFlagEmoji(country.iso);
+
+      expect(flag).toHaveLength(4);
+      expect(flag.codePointAt(0)).toBeGreaterThanOrEqual(REGIONAL_INDICATOR_FIRST);
+      expect(flag.codePointAt(0)).toBeLessThanOrEqual(REGIONAL_INDICATOR_LAST);
+      expect(flag.codePointAt(2)).toBeGreaterThanOrEqual(REGIONAL_INDICATOR_FIRST);
+      expect(flag.codePointAt(2)).toBeLessThanOrEqual(REGIONAL_INDICATOR_LAST);
+    }
+  });
+
+  it('is case-insensitive', () => {
+    expect(countryFlagEmoji('eg')).toBe(countryFlagEmoji('EG'));
+  });
+});
+
 describe('formatPhoneNumber', () => {
   // Bracketed rather than run together: a bare `+20100...` is trivially misread
   // by one digit, and a reader dialling internationally needs to see where the
   // country code ends.
   it('brackets the prefix and keeps the number as typed', () => {
-    expect(formatPhoneNumber('EG', '100-156-8256')).toBe('(+20) 100-156-8256');
+    expect(formatPhoneNumber('EG', '100-156-8256')).toBe('🇪🇬 (+20) 100-156-8256');
   });
 
   it('renders the number alone when no country was chosen', () => {

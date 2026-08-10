@@ -20,6 +20,7 @@ export { PageManagerContainer } from './containers/page-manager.container';
 export { PortfolioEditorContainer } from './containers/portfolio-editor.container';
 export { PortraitUploadContainer } from './containers/portrait-upload.container';
 export { PublishPanelContainer } from './containers/publish-panel.container';
+export { DraftStatusProvider } from './contexts/draft-status.context';
 export { useDraftEditor } from './hooks/use-draft-editor.hook';
 export type {
   ContactFieldsProps,

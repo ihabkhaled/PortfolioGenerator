@@ -340,7 +340,7 @@ export function createImportedSection(
       return {
         ...base,
         type,
-        config: { title: null, showEmail: true, showPhone: false, showLinks: true },
+        config: { title: null, showEmail: true, showPhone: true, showLinks: true },
       };
     }
     case 'hero': {

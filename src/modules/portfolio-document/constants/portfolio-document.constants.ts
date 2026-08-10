@@ -266,6 +266,6 @@ export const DEFAULT_HOME_SECTIONS = [
     type: 'contact',
     visible: true,
     order: 80,
-    config: { title: null, showEmail: true, showPhone: false, showLinks: true },
+    config: { title: null, showEmail: true, showPhone: true, showLinks: true },
   },
 ] as const;

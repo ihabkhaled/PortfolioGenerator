@@ -661,6 +661,7 @@
     "publish": {
       "title": "Publish",
       "hint": "Choose your public address, then publish. Nothing is public until you do.",
+      "unsavedChanges": "You have unsaved changes. Save your draft before publishing — Publish checks what was last saved, not what is on screen.",
       "slugLabel": "Public address",
       "urlPreview": "Your portfolio will be at {url}",
       "claim": "Save address",

@@ -21,7 +21,21 @@ export function findCountryByIso(iso: string | null): CountryDialCode | null {
 }
 
 /**
- * `(+20) 100-156-8256`.
+ * A flag for the reader's eye, derived rather than stored.
+ *
+ * Each ISO letter maps to its Unicode regional indicator symbol — `EG`
+ * becomes 🇪🇬 — so there is no image asset and no second list of flags that
+ * could drift from `COUNTRY_DIAL_CODES`. Every entry in that list is a real
+ * two-letter ISO 3166-1 code, so the mapping always produces a flag.
+ */
+export function countryFlagEmoji(iso: string): string {
+  return String.fromCodePoint(
+    ...Array.from(iso.toUpperCase(), (letter) => 127_397 + (letter.codePointAt(0) ?? 0)),
+  );
+}
+
+/**
+ * `🇪🇬 (+20) 100-156-8256`.
  *
  * The prefix is bracketed rather than run together with the number, because a
  * reader dialling internationally needs to see where the country code ends —
@@ -39,7 +53,9 @@ export function formatPhoneNumber(
 
   const country = findCountryByIso(iso);
 
-  return country === null ? trimmed : `(${country.dial}) ${trimmed}`;
+  return country === null
+    ? trimmed
+    : `${countryFlagEmoji(country.iso)} (${country.dial}) ${trimmed}`;
 }
 
 /** The `tel:` target. Punctuation a human reads is noise to a dialler. */

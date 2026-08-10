@@ -661,6 +661,7 @@
     "publish": {
       "title": "Publicar",
       "hint": "Escolha seu endereço público e publique. Nada é público até que você o faça.",
+      "unsavedChanges": "Você tem alterações não salvas. Salve seu rascunho antes de publicar — Publicar verifica o que foi salvo por último, não o que está na tela.",
       "slugLabel": "Endereço público",
       "urlPreview": "Seu portfólio estará em {url}",
       "claim": "Salvar endereço",

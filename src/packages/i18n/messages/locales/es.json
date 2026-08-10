@@ -661,6 +661,7 @@
     "publish": {
       "title": "Publicar",
       "hint": "Elija su dirección pública y luego publíquela. Nada es público hasta que lo hagas.",
+      "unsavedChanges": "Tienes cambios sin guardar. Guarda tu borrador antes de publicar: Publicar comprueba lo último guardado, no lo que ves en pantalla.",
       "slugLabel": "megafonía",
       "urlPreview": "Su cartera estará en {url}",
       "claim": "Guardar dirección",

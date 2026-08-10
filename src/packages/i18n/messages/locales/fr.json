@@ -661,6 +661,7 @@
     "publish": {
       "title": "Publier",
       "hint": "Choisissez votre adresse publique, puis publiez. Rien n'est public jusqu'à ce que vous le fassiez.",
+      "unsavedChanges": "Vous avez des modifications non enregistrées. Enregistrez votre brouillon avant de publier — la publication vérifie ce qui a été enregistré en dernier, pas ce qui est affiché à l'écran.",
       "slugLabel": "Sonorisation",
       "urlPreview": "Votre portfolio sera chez {url}",
       "claim": "Enregistrer l'adresse",

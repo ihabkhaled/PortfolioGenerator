@@ -173,7 +173,7 @@ describe('the contact band', () => {
       },
     });
 
-    expect(screen.getByText('(+351) 000 000 000')).toBeInTheDocument();
+    expect(screen.getByText('🇵🇹 (+351) 000 000 000')).toBeInTheDocument();
   });
 
   it('omits the link row when the section turns links off', () => {

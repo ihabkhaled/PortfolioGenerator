@@ -661,6 +661,7 @@
     "publish": {
       "title": "Ver\u00f6ffentlichen",
       "hint": "W\u00e4hlen Sie Ihre \u00f6ffentliche Adresse und ver\u00f6ffentlichen Sie sie. Nichts ist \u00f6ffentlich, bis Sie es tun.",
+      "unsavedChanges": "Sie haben ungespeicherte \u00c4nderungen. Speichern Sie Ihren Entwurf vor der Ver\u00f6ffentlichung \u2014 Ver\u00f6ffentlichen pr\u00fcft den zuletzt gespeicherten Stand, nicht das, was gerade angezeigt wird.",
       "slugLabel": "\u00d6ffentliche Ansprache",
       "urlPreview": "Ihr Portfolio wird bei {url} sein",
       "claim": "Adresse speichern",

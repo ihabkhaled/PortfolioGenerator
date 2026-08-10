@@ -1,6 +1,6 @@
 import 'server-only';
 
-import { getAiProvider } from '@/modules/ai/server';
+import { getTranslationProvider } from '@/modules/ai/server';
 import type { PortfolioDocument } from '@/modules/portfolio-document';
 import { getOwnedPortfolio, portfolioCacheTag } from '@/modules/portfolios/server';
 import { redactPrivatePagePasswords, restoreServerPageAccess } from '@/modules/private-page-access';
@@ -41,7 +41,7 @@ export async function generateTranslationDraft(
 ): Promise<TranslationWriteResult> {
   const portfolio = await getOwnedPortfolio(ownerId, portfolioId);
   if (portfolio === null) return { ok: false, reason: 'not-found' };
-  const translated = await getAiProvider().translatePortfolio({
+  const translated = await getTranslationProvider().translatePortfolio({
     document: redactPrivatePagePasswords(portfolio.draftDocument),
     targetLocale: locale,
   });

@@ -137,14 +137,31 @@ describe('virus scanner environment', () => {
     ).toBe(false);
   });
 
-  it('refuses an explicit scanner opt-out for a production public deployment', () => {
-    expect(() =>
+  /*
+   * Scanning off in production is a risk, not a boot failure.
+   *
+   * It used to throw. That made the application undeployable on any platform
+   * without a private network to reach clamd on, and a site that will not start
+   * is not safer than one that starts with scanning off. The guarantee that
+   * still holds is the one below it: when scanning is on and the daemon cannot
+   * answer, the upload is refused.
+   */
+  it('boots a production public deployment that has opted out of scanning', () => {
+    expect(
       parseServerEnvironment({
         ...base,
         NEXT_PUBLIC_APP_ENV: 'production',
         CLAMAV_ENABLED: 'false',
-      }),
-    ).toThrow('CLAMAV_ENABLED=true is required in production');
+        CRON_SECRET: 'c'.repeat(32),
+        AUTH_REQUIRE_EMAIL_VERIFICATION: 'true',
+        CONTACT_EMAIL_ENABLED: 'true',
+        CONTACT_EMAIL_FROM: 'sender@example.com',
+        CONTACT_EMAIL_TO: 'support@example.com',
+        CONTACT_SMTP_HOST: 'smtp-relay.brevo.com',
+        CONTACT_SMTP_USER: 'relay-user',
+        CONTACT_SMTP_PASS: 'relay-password',
+      }).CLAMAV_ENABLED,
+    ).toBe(false);
   });
 
   it('retains an explicit scanner opt-out outside production', () => {

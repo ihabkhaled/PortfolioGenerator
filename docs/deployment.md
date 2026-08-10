@@ -33,8 +33,9 @@ The values that must be set for production, and what goes wrong if they are not:
 | `STORAGE_DRIVER=s3` without the S3 block              | Boot failure, naming the missing variables.                                                                               |
 | `AI_PROVIDER=openai-compatible` without `AI_API_KEY`  | Boot failure.                                                                                                             |
 | `CRON_SECRET`                                         | Boot failure in production when absent or shorter than 32 characters.                                                     |
-| `CLAMAV_ENABLED=false` in production                  | Boot failure. Both `NODE_ENV` and `NEXT_PUBLIC_APP_ENV` enforce this.                                                     |
+| `CLAMAV_ENABLED=false` in production                  | Uploads are stored unscanned. Not a boot failure — see below.                                                              |
 | `CLAMAV_ENABLED=true` without reachable clamd         | Uploads fail closed; no unscanned bytes are stored.                                                                       |
+| `AI_GOOGLE_API_KEY` absent                            | Translation returns `not-configured`. Extraction is unaffected.                                                           |
 | `CONTACT_EMAIL_ENABLED=true` without the SMTP block   | Boot failure, naming the missing relay values.                                                                            |
 
 Private portfolio pages cannot be listed as a `robots.txt` prefix because they
@@ -42,13 +43,31 @@ share the same slug namespace as public portfolios. They are excluded by
 response-level `X-Robots-Tag: noindex, nofollow` and private no-store caching;
 publishing their tenant-specific paths in `robots.txt` would itself leak them.
 
-Gemini uses the existing OpenAI-compatible AI boundary; do not install or import a
-Gemini SDK. Set `AI_PROVIDER=openai-compatible`, `AI_BASE_URL` to
-`https://generativelanguage.googleapis.com/v1beta/openai`, `AI_API_KEY` to the
-Gemini API key, and optionally `AI_TRANSLATION_MODEL` to a translation-specific
-Gemini model id. When omitted, translations use `AI_PRIMARY_MODEL`. These values
-are runtime environment variables on Vercel and are not required while `next build`
-imports route modules.
+## Virus scanning is no longer a boot requirement
+
+`CLAMAV_ENABLED=true` in production used to be enforced at startup. It is not
+any more: a platform with no private network to reach `clamd` on could not
+deploy at all, and a site that will not boot is not safer than one that boots
+with scanning off. The guarantee that remains is the one that matters — when
+scanning **is** on and the daemon cannot answer, the upload is refused and
+nothing is stored. Running with it off is a recorded risk, not a silent one; it
+is a launch-readiness checklist item.
+
+## Translation
+
+Translation of stored portfolio content is configured independently of
+extraction. `AI_GOOGLE_API_KEY` alone decides it: set it and translation runs on
+Google AI whatever `AI_PROVIDER` is, so a deployment can leave extraction
+deterministic and still translate. Leave it empty and translation reports
+`not-configured` rather than falling back to the extraction model — a portfolio
+rewritten by a model nobody chose for the job is worse than one left in its
+original language.
+
+`AI_GOOGLE_TRANSLATE_URL` defaults to Gemini's OpenAI-compatible endpoint and
+`AI_TRANSLATION_MODEL` to `gemini-2.5-flash`. Gemini goes through the existing
+OpenAI-compatible AI boundary; do not install or import a Gemini SDK. All three
+are runtime environment variables on Vercel and are not required while
+`next build` imports route modules.
 
 The supported contact contract includes `CONTACT_EMAIL_PROVIDER=smtp`,
 `CONTACT_RATE_LIMIT_MAX`, `CONTACT_RATE_LIMIT_WINDOW_MS`, and the

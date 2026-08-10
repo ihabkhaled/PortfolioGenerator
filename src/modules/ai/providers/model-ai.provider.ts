@@ -91,7 +91,10 @@ export function createModelAiProvider(): PortfolioAiProvider {
       input: PortfolioTranslationInput,
     ): Promise<AiOutcome<PortfolioDocument>> {
       const env = getServerEnv();
-      const model = env.AI_TRANSLATION_MODEL ?? env.AI_PRIMARY_MODEL;
+      // Translation is its own provider with its own key and endpoint. It does
+      // not fall back to the extraction model: a portfolio translated by a model
+      // nobody chose for the job is worse than one that was left untranslated.
+      const model = env.AI_TRANSLATION_MODEL;
       const emptyUsage = {
         provider: MODEL_PROVIDER_NAME,
         model,
@@ -99,13 +102,13 @@ export function createModelAiProvider(): PortfolioAiProvider {
         outputUnits: null,
         latencyMs: 0,
       };
-      if (env.AI_API_KEY === undefined) {
+      if (env.AI_GOOGLE_API_KEY === undefined) {
         return { ok: false, errorCode: 'not-configured', usage: emptyUsage };
       }
 
       const response = await createStructuredClient({
-        apiKey: env.AI_API_KEY,
-        baseUrl: env.AI_BASE_URL,
+        apiKey: env.AI_GOOGLE_API_KEY,
+        baseUrl: env.AI_GOOGLE_TRANSLATE_URL,
       })({
         model,
         schema: portfolioDocumentSchema,

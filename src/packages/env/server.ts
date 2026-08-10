@@ -34,9 +34,11 @@ function validateProductionRequirements(environment: ServerEnv): void {
   // production build. Deployment requirements belong to the explicit public
   // environment so local and preview builds do not require runtime services.
   const isProduction = environment.NEXT_PUBLIC_APP_ENV === 'production';
-  if (isProduction && !environment.CLAMAV_ENABLED) {
-    throw new Error('CLAMAV_ENABLED=true is required in production');
-  }
+  // CLAMAV_ENABLED is deliberately *not* required here. It was, and it made the
+  // application undeployable on any platform without a private network to reach
+  // clamd on. Scanning is still fail-closed when it is on; leaving it off is now
+  // a recorded operational risk (docs/launch-readiness.md) rather than a boot
+  // failure that takes the whole site down.
   if (isProduction && environment.CRON_SECRET === undefined) {
     throw new Error('CRON_SECRET is required in production');
   }

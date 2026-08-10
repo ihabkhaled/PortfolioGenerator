@@ -55,7 +55,21 @@ export const serverEnvSchema = z.object({
   AI_API_KEY: optionalString,
   AI_PRIMARY_MODEL: z.string().trim().default('gpt-5-mini'),
   AI_FALLBACK_MODEL: z.string().trim().default('gpt-5'),
-  AI_TRANSLATION_MODEL: optionalString,
+  /*
+   * Translation runs on Google AI, independently of the extraction provider.
+   *
+   * They are separate settings rather than one shared key because they are
+   * separate decisions: extraction may be pointed at any OpenAI-shaped endpoint
+   * (or left deterministic and offline), while translation is Gemini by default.
+   * Sharing `AI_API_KEY` would have meant that turning extraction off, or
+   * repointing it at a self-hosted server, silently took translation with it.
+   */
+  AI_GOOGLE_TRANSLATE_URL: z
+    .string()
+    .trim()
+    .default('https://generativelanguage.googleapis.com/v1beta/openai'),
+  AI_GOOGLE_API_KEY: optionalString,
+  AI_TRANSLATION_MODEL: z.string().trim().default('gemini-2.5-flash'),
   AI_MAX_OUTPUT_TOKENS: positiveInt.default(8000),
   AI_REQUEST_TIMEOUT_MS: positiveInt.default(60_000),
 
@@ -74,10 +88,11 @@ export const serverEnvSchema = z.object({
   /*
    * Virus scanning.
    *
-   * Off by default so a fresh checkout runs without a daemon, and pinned on in
-   * production by configuration rather than by code. When it is on and clamd is
-   * unreachable, uploads are refused — see `inspectAndScan` for why that is the
-   * safe direction.
+   * Off by default so a fresh checkout runs without a daemon. Production is
+   * expected to turn it on, but that is now an operational decision rather than
+   * a boot requirement: a platform with no private network to reach clamd on
+   * could not deploy at all. When it is on and clamd is unreachable, uploads are
+   * refused — see `inspectAndScan` for why that is the safe direction.
    */
   CLAMAV_ENABLED: booleanFlag.default(false),
   CLAMAV_HOST: z.string().trim().default('127.0.0.1'),

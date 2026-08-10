@@ -28,6 +28,12 @@ const nextConfig: NextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
   typedRoutes: true,
+  // `next dev` otherwise appends a generated block to AGENTS.md on every
+  // start. AGENTS.md is this repository's own hand-maintained canonical
+  // instruction set (see its header); a framework-injected block inside it
+  // would fight that curation on every dev boot rather than living in the
+  // framework's own docs.
+  agentRules: false,
   typescript: {
     tsconfigPath: 'tsconfig.app.json',
   },

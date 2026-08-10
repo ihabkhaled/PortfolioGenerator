@@ -72,6 +72,20 @@ export default [
   },
   {
     /**
+     * EXC-0008 — support/ensure-database.mjs's CREATE DATABASE statement.
+     *
+     * Postgres has no bind-parameter syntax for a DDL identifier. The name is
+     * escaped with `pg`'s own `Client#escapeIdentifier` — the library's
+     * supported mechanism for exactly this — before it reaches the query
+     * string, the same shape as EXC-0001's computed filesystem paths.
+     */
+    files: ['support/ensure-database.mjs'],
+    rules: {
+      'sonarjs/sql-queries': 'off',
+    },
+  },
+  {
+    /**
      * EXC-0003 — the logger wrapper is the single owner of console output.
      */
     files: ['src/packages/logger/**'],

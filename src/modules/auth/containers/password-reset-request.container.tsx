@@ -5,9 +5,12 @@ import { useActionState } from 'react';
 import type { ReactElement } from 'react';
 
 import { I18N_NAMESPACES, useAppTranslation } from '@/packages/i18n';
+import { AppLink } from '@/packages/link';
+import { ROUTE_PATHS } from '@/shared/constants/route-paths.constants';
 
 import { requestPasswordResetAction } from '../actions/auth.actions';
 import { PasswordRecoveryForm } from '../components/password-recovery-form.component';
+import { authClasses } from '../constants/auth-style.constants';
 import { PASSWORD_RECOVERY_INITIAL_STATE } from '../constants/auth.constants';
 
 export function PasswordResetRequestContainer(): ReactElement {
@@ -29,6 +32,11 @@ export function PasswordResetRequestContainer(): ReactElement {
       passwordHint={t('passwordHint')}
       submitLabel={t('reset.requestSubmit')}
       pendingLabel={t('reset.requestPending')}
+      footer={
+        <AppLink href={ROUTE_PATHS.signIn} className={authClasses.switchLink}>
+          {t('toSignIn')}
+        </AppLink>
+      }
     />
   );
 }

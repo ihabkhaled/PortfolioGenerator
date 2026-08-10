@@ -294,6 +294,10 @@
     "toSignIn": "¿Ya tienes una cuenta? Iniciar sesión.",
     "signOut": "desconectar",
     "forgotPasswordLink": "¿Olvidaste tu contraseña?",
+    "notices": {
+      "verificationEmailSent": "Revisa tu correo: te hemos enviado un enlace para verificar tu cuenta. Una vez que lo confirmes, podrás iniciar sesión.",
+      "emailNotVerified": "Tu correo aún no está verificado. Acabamos de enviarte un nuevo enlace de verificación; revisa tu bandeja de entrada."
+    },
     "reset": {
       "requestTitle": "Restablece tu contraseña",
       "requestLead": "Introduce tu correo electrónico. Si existe una cuenta, le enviaremos un enlace de restablecimiento seguro.",

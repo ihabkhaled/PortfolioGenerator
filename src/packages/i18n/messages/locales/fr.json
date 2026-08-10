@@ -294,6 +294,10 @@
     "toSignIn": "Vous avez déjà un compte ? Se connecter.",
     "signOut": "se déconnecter",
     "forgotPasswordLink": "Vous avez oublié votre mot de passe ?",
+    "notices": {
+      "verificationEmailSent": "Consultez vos e-mails : nous vous avons envoyé un lien pour vérifier votre compte. Une fois validé, vous pourrez vous connecter.",
+      "emailNotVerified": "Votre adresse e-mail n'est pas encore vérifiée. Nous venons de vous envoyer un nouveau lien de vérification — consultez votre boîte de réception."
+    },
     "reset": {
       "requestTitle": "Réinitialisez votre mot de passe",
       "requestLead": "Entrez votre email. Si un compte existe, nous vous enverrons un lien de réinitialisation sécurisé.",

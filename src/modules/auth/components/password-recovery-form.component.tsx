@@ -57,6 +57,8 @@ export function PasswordRecoveryForm(props: Readonly<PasswordRecoveryFormProps>)
       <Button type="submit" className={authClasses.submit} disabled={props.isPending}>
         {props.isPending ? props.pendingLabel : props.submitLabel}
       </Button>
+
+      {props.footer}
     </form>
   );
 }

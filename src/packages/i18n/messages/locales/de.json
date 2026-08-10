@@ -294,6 +294,10 @@
     "toSignIn": "Sie haben bereits ein Konto? Melden Sie sich an.",
     "signOut": "Abmelden",
     "forgotPasswordLink": "Passwort vergessen?",
+    "notices": {
+      "verificationEmailSent": "Prüfen Sie Ihr Postfach – wir haben einen Link zur Bestätigung Ihres Kontos gesendet. Danach können Sie sich anmelden.",
+      "emailNotVerified": "Ihre E-Mail-Adresse ist noch nicht bestätigt. Wir haben soeben einen neuen Bestätigungslink gesendet – bitte prüfen Sie Ihr Postfach."
+    },
     "reset": {
       "requestTitle": "Setzen Sie Ihr Passwort zur\u00fcck",
       "requestLead": "Geben Sie Ihre E-Mail-Adresse ein. Wenn ein Konto vorhanden ist, senden wir einen sicheren Reset-Link.",

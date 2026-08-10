@@ -298,6 +298,7 @@ describe('CredentialForm', () => {
         isPending={false}
         includeName={false}
         errorMessage={null}
+        noticeMessage={null}
         footer={null}
       />,
     );
@@ -317,6 +318,7 @@ describe('CredentialForm', () => {
         isPending={false}
         includeName
         errorMessage={null}
+        noticeMessage={null}
         footer={null}
       />,
     );
@@ -336,11 +338,33 @@ describe('CredentialForm', () => {
         isPending={false}
         includeName={false}
         errorMessage="Those details did not match."
+        noticeMessage={null}
         footer={null}
       />,
     );
 
     expect(screen.getByRole('alert')).toHaveTextContent('Those details did not match.');
+  });
+
+  // Not an error — an unverified account is not a failed sign-in attempt, so
+  // it is announced as status text, not an alert.
+  it('announces a notice', () => {
+    render(
+      <CredentialForm
+        action={noop}
+        labels={labels}
+        submitLabel="Sign in"
+        pendingLabel="Signing in"
+        isPending={false}
+        includeName={false}
+        errorMessage={null}
+        noticeMessage="Check your email to verify your account."
+        footer={null}
+      />,
+    );
+
+    expect(screen.getByRole('status')).toHaveTextContent('Check your email to verify your account.');
+    expect(screen.queryByRole('alert')).not.toBeInTheDocument();
   });
 
   it('shows the pending label while the action is in flight', () => {
@@ -353,6 +377,7 @@ describe('CredentialForm', () => {
         isPending
         includeName={false}
         errorMessage={null}
+        noticeMessage={null}
         footer={null}
       />,
     );

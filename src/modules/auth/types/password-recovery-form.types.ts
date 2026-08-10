@@ -1,3 +1,5 @@
+import type { ReactNode } from 'react';
+
 export interface PasswordRecoveryFormProps {
   readonly mode: 'request' | 'reset';
   readonly token: string | null;
@@ -10,6 +12,7 @@ export interface PasswordRecoveryFormProps {
   readonly passwordHint: string;
   readonly submitLabel: string;
   readonly pendingLabel: string;
+  readonly footer: ReactNode;
 }
 
 export interface PasswordResetContainerProps {

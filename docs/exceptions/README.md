@@ -13,6 +13,8 @@ document here.
 | [EXC-0004](./EXC-0004-branded-route-assertion.md)        | `packages/link`                      | `@typescript-eslint/no-unnecessary-type-assertion`        |
 | [EXC-0005](./EXC-0005-cleartext-url-autofix.md)          | The URL policy and its test          | `sonarjs/no-clear-text-protocols`, `unicorn/prefer-https` |
 | [EXC-0006](./EXC-0006-script-body-assertion.md)          | The renderer fixture matrix          | `testing-library/no-container`, `no-node-access`          |
+| [EXC-0007](./EXC-0007-support-scripts-are-cli-programs.md) | `support/**/*.{mjs,mts}`           | `no-console`, `unicorn/no-process-exit`                    |
+| [EXC-0008](./EXC-0008-create-database-identifier.md)     | `support/ensure-database.mjs`        | `sonarjs/sql-queries`                                      |
 
 ## Adding one
 

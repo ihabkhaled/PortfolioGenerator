@@ -294,6 +294,10 @@
     "toSignIn": "Já tem uma conta? Entrar.",
     "signOut": "sair",
     "forgotPasswordLink": "Esqueceu sua senha?",
+    "notices": {
+      "verificationEmailSent": "Verifique seu e-mail — enviamos um link para confirmar sua conta. Depois de clicar nele, você poderá entrar.",
+      "emailNotVerified": "Seu e-mail ainda não foi confirmado. Acabamos de enviar um novo link de confirmação — verifique sua caixa de entrada."
+    },
     "reset": {
       "requestTitle": "Redefinir sua senha",
       "requestLead": "Digite seu e-mail. Se existir uma conta, enviaremos um link de redefinição seguro.",

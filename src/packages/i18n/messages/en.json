@@ -294,6 +294,10 @@
     "toSignIn": "Already have an account? Sign in.",
     "signOut": "Sign out",
     "forgotPasswordLink": "Forgot your password?",
+    "notices": {
+      "verificationEmailSent": "Check your email — we've sent a link to verify your account. Once you click it, you can sign in.",
+      "emailNotVerified": "Your email isn't verified yet. We've just sent a new verification link — check your inbox."
+    },
     "reset": {
       "requestTitle": "Reset your password",
       "requestLead": "Enter your email. If an account exists, we will send a secure reset link.",

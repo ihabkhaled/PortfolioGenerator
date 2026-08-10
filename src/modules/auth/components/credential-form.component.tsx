@@ -24,6 +24,11 @@ export function CredentialForm(props: Readonly<CredentialFormProps>): ReactEleme
           <span className={authClasses.errorText}>{props.errorMessage}</span>
         </p>
       )}
+      {props.noticeMessage === null ? null : (
+        <p className={authClasses.hint} role="status">
+          {props.noticeMessage}
+        </p>
+      )}
 
       {props.includeName ? (
         <div className={authClasses.field}>

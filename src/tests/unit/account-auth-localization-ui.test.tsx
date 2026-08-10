@@ -264,6 +264,7 @@ describe('password recovery UI', () => {
         passwordHint="Use at least twelve characters."
         submitLabel="Send reset link"
         pendingLabel="Sending reset link"
+        footer={null}
       />,
     );
 
@@ -286,6 +287,7 @@ describe('password recovery UI', () => {
         passwordHint="Use at least twelve characters."
         submitLabel="Reset password"
         pendingLabel="Resetting password"
+        footer={null}
       />,
     );
 

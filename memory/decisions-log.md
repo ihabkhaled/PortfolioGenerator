@@ -52,3 +52,15 @@ achieve is not a measurement.
 
 **2026-08-09 — Deleting a portfolio keeps its slug claimed.**
 See ADR-0008. A published address is usually on someone's business cards.
+
+---
+
+**2026-08-10 — Local `DATABASE_URL` is back on port 5432, superseding the
+2026-08-08 entry above.**
+The developer runs one shared Postgres server across several projects, all on
+the default port, one database per project — not a container per project. That
+server does not always have `portfolio_generate` created on it yet, which used
+to fail every request with "database does not exist" until someone ran
+`createdb` by hand. `support/ensure-database.mjs`, wired into `predev`, now
+creates it automatically. `npm run validate`'s Docker Postgres stays on 5433,
+unrelated to this value — see `docs/testing.md`.

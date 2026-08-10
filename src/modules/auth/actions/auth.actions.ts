@@ -2,13 +2,14 @@
 
 import { headers } from 'next/headers';
 
-import { getAuth } from '@/packages/auth/server';
+import { getAuth, isEmailNotVerifiedError } from '@/packages/auth/server';
+import type { AuthInstance } from '@/packages/auth/server';
 import { logger } from '@/packages/logger';
 import { appRedirect } from '@/packages/navigation';
 import { parseSchema } from '@/packages/zod';
 import { ROUTE_PATHS } from '@/shared/constants/route-paths.constants';
 
-import { AUTH_ERROR_KEYS, AUTH_FIELD_NAMES } from '../constants/auth.constants';
+import { AUTH_ERROR_KEYS, AUTH_FIELD_NAMES, AUTH_NOTICE_KEYS } from '../constants/auth.constants';
 import {
   passwordResetRequestSchema,
   passwordResetSchema,
@@ -85,7 +86,7 @@ export async function signInAction(
   });
 
   if (!parsed.ok) {
-    return { status: 'error', error: AUTH_ERROR_KEYS.invalidCredentials };
+    return { status: 'error', error: AUTH_ERROR_KEYS.invalidCredentials, notice: null };
   }
 
   try {
@@ -93,10 +94,19 @@ export async function signInAction(
       body: { email: parsed.value.email, password: parsed.value.password },
       headers: await headers(),
     });
-  } catch {
+  } catch (error) {
+    // Unverified is the one failure worth naming — see isEmailNotVerifiedError.
+    // better-auth has just sent a fresh verification link as a side effect of
+    // this same rejected attempt (emailVerification.sendOnSignIn).
+    if (isEmailNotVerifiedError(error)) {
+      logger.info('auth.sign_in.blocked_unverified');
+
+      return { status: 'notice', error: null, notice: AUTH_NOTICE_KEYS.emailNotVerified };
+    }
+
     logger.info('auth.sign_in.rejected');
 
-    return { status: 'error', error: AUTH_ERROR_KEYS.invalidCredentials };
+    return { status: 'error', error: AUTH_ERROR_KEYS.invalidCredentials, notice: null };
   }
 
   appRedirect(ROUTE_PATHS.dashboard);
@@ -115,11 +125,17 @@ export async function signUpAction(
   if (!parsed.ok) {
     const [firstIssue] = parsed.issues;
 
-    return { status: 'error', error: firstIssue?.message ?? AUTH_ERROR_KEYS.unknown };
+    return {
+      status: 'error',
+      error: firstIssue?.message ?? AUTH_ERROR_KEYS.unknown,
+      notice: null,
+    };
   }
 
+  let result: Awaited<ReturnType<AuthInstance['api']['signUpEmail']>>;
+
   try {
-    await getAuth().api.signUpEmail({
+    result = await getAuth().api.signUpEmail({
       body: {
         name: parsed.value.name,
         email: parsed.value.email,
@@ -133,7 +149,16 @@ export async function signUpAction(
     // need to know to sign in instead — but it is the only place we do it.
     logger.info('auth.sign_up.rejected');
 
-    return { status: 'error', error: AUTH_ERROR_KEYS.emailTaken };
+    return { status: 'error', error: AUTH_ERROR_KEYS.emailTaken, notice: null };
+  }
+
+  // A null token means verification is required and no session was created —
+  // the account exists but signing straight in would just bounce off the
+  // dashboard's auth guard with no explanation. Telling the user to check
+  // their email here, instead of redirecting and hoping, is the difference
+  // between a working flow and an account that looks like it silently failed.
+  if (result.token === null) {
+    return { status: 'notice', error: null, notice: AUTH_NOTICE_KEYS.verificationEmailSent };
   }
 
   appRedirect(ROUTE_PATHS.dashboard);

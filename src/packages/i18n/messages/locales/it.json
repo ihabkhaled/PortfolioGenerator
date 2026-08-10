@@ -294,6 +294,10 @@
     "toSignIn": "Hai già un account? Registrazione.",
     "signOut": "disconnessione",
     "forgotPasswordLink": "Hai dimenticato la password?",
+    "notices": {
+      "verificationEmailSent": "Controlla la tua email: ti abbiamo inviato un link per verificare il tuo account. Dopo averlo confermato potrai accedere.",
+      "emailNotVerified": "La tua email non è ancora verificata. Ti abbiamo appena inviato un nuovo link di verifica: controlla la posta in arrivo."
+    },
     "reset": {
       "requestTitle": "Reimposta la tua password",
       "requestLead": "Inserisci la tua email. Se esiste un account, invieremo un collegamento di ripristino sicuro.",

@@ -1,6 +1,6 @@
 import 'server-only';
 
-import { betterAuth } from 'better-auth';
+import { APIError, BASE_ERROR_CODES, betterAuth } from 'better-auth';
 import { prismaAdapter } from 'better-auth/adapters/prisma';
 import { nextCookies } from 'better-auth/next-js';
 
@@ -37,6 +37,11 @@ function createAuth() {
     },
     emailVerification: {
       sendOnSignUp: env.AUTH_REQUIRE_EMAIL_VERIFICATION,
+      // A blocked sign-in (correct password, unverified email) resends a fresh
+      // link in the same request. Without this, a user who lost or never
+      // received the first email has no way back in: they cannot sign in to
+      // reach the account page that would let them ask for another one.
+      sendOnSignIn: env.AUTH_REQUIRE_EMAIL_VERIFICATION,
       autoSignInAfterVerification: true,
       sendVerificationEmail: async ({ user, url }) => {
         await createConfiguredEmailSender().sendEmailVerification({
@@ -56,6 +61,22 @@ function createAuth() {
     // Must stay last: it forwards Set-Cookie from server actions.
     plugins: [nextCookies()],
   });
+}
+
+/**
+ * True when a `signInEmail` rejection was specifically "this account exists
+ * but its email is unverified," as opposed to a wrong password or no account.
+ *
+ * Sign-in otherwise collapses every failure to one message, deliberately, so
+ * the form cannot be used to enumerate accounts. This one case is the
+ * exception: without it, a user who signed up correctly has no way to learn
+ * why they can never sign in, and no session to reach a resend action from.
+ * The library itself distinguishes it (`FORBIDDEN` / `EMAIL_NOT_VERIFIED`), so
+ * surfacing it costs nothing beyond what `sendOnSignUp` already reveals at
+ * sign-up time for a duplicate address.
+ */
+export function isEmailNotVerifiedError(error: unknown): boolean {
+  return error instanceof APIError && error.body?.code === BASE_ERROR_CODES.EMAIL_NOT_VERIFIED.code;
 }
 
 export type AuthInstance = ReturnType<typeof createAuth>;

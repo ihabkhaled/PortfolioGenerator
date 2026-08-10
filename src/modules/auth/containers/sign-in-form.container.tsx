@@ -24,6 +24,7 @@ export function SignInFormContainer(): ReactElement {
       action={formAction}
       isPending={isPending}
       errorMessage={state.error === null ? null : t(state.error)}
+      noticeMessage={state.notice === null ? null : t(state.notice)}
       submitLabel={t('submitSignIn')}
       pendingLabel={t('pendingSignIn')}
       labels={{

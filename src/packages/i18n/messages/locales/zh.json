@@ -290,6 +290,10 @@
     "toSignIn": "已经有帐户？登入。",
     "signOut": "登出",
     "forgotPasswordLink": "忘记密码了吗？",
+    "notices": {
+      "verificationEmailSent": "请查收邮件——我们已发送一个链接用于验证您的账户。点击后即可登录。",
+      "emailNotVerified": "您的邮箱尚未验证。我们刚刚发送了一个新的验证链接——请查收邮箱。"
+    },
     "reset": {
       "requestTitle": "重置您的密码",
       "resetTitle": "选择新密码",

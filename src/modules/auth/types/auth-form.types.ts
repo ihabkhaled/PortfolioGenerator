@@ -12,6 +12,7 @@ export interface CredentialFormProps {
   readonly submitLabel: string;
   readonly pendingLabel: string;
   readonly errorMessage: string | null;
+  readonly noticeMessage: string | null;
   readonly isPending: boolean;
   readonly includeName: boolean;
   readonly action: (formData: FormData) => void;

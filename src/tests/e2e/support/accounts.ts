@@ -32,7 +32,7 @@ export async function signUp(page: Page, account: TestAccount): Promise<void> {
   await page.goto('/sign-up');
   await page.getByLabel('Name', { exact: true }).fill(account.name);
   await page.getByLabel('Email').fill(account.email);
-  await page.getByLabel('Password').fill(account.password);
+  await page.getByLabel('Password', { exact: true }).fill(account.password);
   await page.getByRole('button', { name: /create account/i }).click();
   await page.waitForURL('**/dashboard');
 }
@@ -40,7 +40,7 @@ export async function signUp(page: Page, account: TestAccount): Promise<void> {
 export async function signIn(page: Page, account: TestAccount): Promise<void> {
   await page.goto('/sign-in');
   await page.getByLabel('Email').fill(account.email);
-  await page.getByLabel('Password').fill(account.password);
+  await page.getByLabel('Password', { exact: true }).fill(account.password);
   await page.getByRole('button', { name: /sign in/i }).click();
   await page.waitForURL('**/dashboard');
 }
@@ -98,6 +98,20 @@ export function requireBrowser(context: BrowserContext): Browser {
 }
 
 /**
+ * The editor's one authoritative Save action.
+ *
+ * A second, contextual "Save" button lives inside the Publish panel's own
+ * unsaved-changes banner and does the same thing — it only renders while the
+ * draft is dirty, which is exactly when a test is about to click Save, so an
+ * unscoped `getByRole('button', { name: 'Save' })` resolves to two elements.
+ * Scoping to the header picks the editor's persistent Save action rather than
+ * relying on which one happens to come first in the DOM.
+ */
+export async function saveEditor(page: Page): Promise<void> {
+  await page.locator('header').getByRole('button', { name: 'Save', exact: true }).click();
+}
+
+/**
  * Create, fill and publish a portfolio in one call.
  *
  * Several specs need a live public page to assert against. Building one is
@@ -110,7 +124,7 @@ export async function publishPortfolio(page: Page, displayName: string): Promise
 
   await page.getByLabel('Headline').fill('Platform engineer');
   await page.getByLabel('Summary').fill('A short summary so the portfolio is publishable.');
-  await page.getByRole('button', { name: 'Save', exact: true }).click();
+  await saveEditor(page);
   await page.getByText('Saved').first().waitFor();
 
   await page.getByRole('button', { name: 'Publish', exact: true }).click();

@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 
-import { buildAccount, createPortfolio, signIn, signUp } from './support/accounts';
+import { buildAccount, createPortfolio, saveEditor, signIn, signUp } from './support/accounts';
 
 function firstField(
   fields: Readonly<Record<string, readonly [string, string]>>,
@@ -74,7 +74,7 @@ test.describe('collection and page authoring', () => {
     await interests.fill('Architecture, Typography');
     await interests.fill('Typography, Architecture');
 
-    await page.getByRole('button', { name: 'Save', exact: true }).click();
+    await saveEditor(page);
     await expect(page.getByText('Saved').first()).toBeVisible();
     await page.reload();
 
@@ -93,7 +93,7 @@ test.describe('collection and page authoring', () => {
     await expect(interests).toHaveValue('Typography, Architecture');
     await interests.fill('Typography edited, Architecture');
 
-    await page.getByRole('button', { name: 'Save', exact: true }).click();
+    await saveEditor(page);
     await expect(page.getByText('Saved').first()).toBeVisible();
     await page.reload();
 
@@ -113,7 +113,7 @@ test.describe('collection and page authoring', () => {
     await expect(interests).toHaveValue('Typography edited, Architecture');
     await interests.fill('Architecture');
 
-    await page.getByRole('button', { name: 'Save', exact: true }).click();
+    await saveEditor(page);
     await expect(page.getByText('Saved').first()).toBeVisible();
     await page.reload();
 
@@ -147,7 +147,7 @@ test.describe('collection and page authoring', () => {
     await page.locator('#new-page-slug').fill('notes');
     await page.getByRole('button', { name: 'Add page' }).click();
 
-    await page.getByRole('button', { name: 'Save', exact: true }).click();
+    await saveEditor(page);
     await expect(page.getByText('Saved').first()).toBeVisible();
     await page.reload();
 
@@ -179,7 +179,7 @@ test.describe('collection and page authoring', () => {
     });
     await pages.getByRole('button', { name: 'Move page up' }).last().click();
     await pages.getByLabel('Page title').nth(1).fill('Second notes edited');
-    await page.getByRole('button', { name: 'Save', exact: true }).click();
+    await saveEditor(page);
     await expect(page.getByText('Saved').first()).toBeVisible();
     await page.reload();
 
@@ -188,7 +188,7 @@ test.describe('collection and page authoring', () => {
     await expect(pages.getByLabel('Address').nth(1)).toHaveValue('second-notes');
     await expect(pages.getByLabel('Address').nth(2)).toHaveValue('first-notes');
     await pages.getByRole('button', { name: 'Remove page' }).nth(1).click();
-    await page.getByRole('button', { name: 'Save', exact: true }).click();
+    await saveEditor(page);
     await expect(page.getByText('Saved').first()).toBeVisible();
     await page.reload();
     await expect(pages.getByLabel('Page title')).toHaveCount(2);
@@ -226,11 +226,11 @@ test.describe('collection and page authoring', () => {
     await secondPage.goto(editorUrl);
 
     await page.getByLabel('Headline').fill('First writer');
-    await page.getByRole('button', { name: 'Save', exact: true }).click();
+    await saveEditor(page);
     await expect(page.getByText('Saved').first()).toBeVisible();
 
     await secondPage.getByLabel('Headline').fill('Stale writer');
-    await secondPage.getByRole('button', { name: 'Save', exact: true }).click();
+    await saveEditor(secondPage);
     await expect(secondPage.getByRole('alert')).toContainText('changed in another tab');
     await secondContext.close();
   });

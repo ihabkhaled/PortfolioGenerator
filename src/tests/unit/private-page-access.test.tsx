@@ -162,7 +162,7 @@ describe('private page response policy', () => {
     expect(cookie).toContain('Secure');
     expect(cookie).toContain('SameSite=Lax');
     expect(cookie).toContain('Max-Age=900');
-    expect(cookie).toContain('Path=/amina-rahman/projects');
+    expect(cookie).toContain('Path=/portfolios/amina-rahman/projects');
   });
 
   it('prevents caches and crawlers from retaining a private response', () => {
@@ -193,7 +193,7 @@ describe('private page response policy', () => {
       }),
     ).toBe(false);
     expect(buildPrivatePageCookie({ grant, scope: localizedScope, secure: true })).toContain(
-      'Path=/ar/amina-rahman/projects',
+      'Path=/ar/portfolios/amina-rahman/projects',
     );
   });
 });

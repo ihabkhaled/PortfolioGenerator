@@ -8,6 +8,7 @@ import type { ReactElement } from 'react';
 import { I18N_NAMESPACES, useAppTranslation } from '@/packages/i18n';
 import { ErrorIcon, WarningIcon } from '@/packages/icons';
 import { Button, Input, Label } from '@/packages/ui-primitives';
+import { buildPortfolioPath } from '@/shared/constants/route-paths.constants';
 
 import { claimSlugAction, publishAction, unpublishAction } from '../actions/editor.actions';
 import { editorClasses } from '../constants/editor-style.constants';
@@ -112,7 +113,7 @@ export function PublishPanelContainer(props: Readonly<PublishPanelProps>): React
             }}
           />
           <p className={editorClasses.slugPreview}>
-            {t('publish.urlPreview', { url: `${props.origin}/${slug}` })}
+            {t('publish.urlPreview', { url: `${props.origin}${buildPortfolioPath(slug)}` })}
           </p>
         </div>
         <Button type="submit" variant="secondary" disabled={isClaiming}>

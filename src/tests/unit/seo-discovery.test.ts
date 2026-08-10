@@ -28,14 +28,14 @@ describe('buildPortfolioFeedItems', () => {
     expect(buildPortfolioFeedItems([published()])).toEqual([
       {
         title: 'Home — Amina Rahman',
-        url: 'https://portfoliogenerate.test/amina-rahman',
+        url: 'https://portfoliogenerate.test/portfolios/amina-rahman',
         description:
           'Backend engineer working on payment systems.\nI care about the boring parts: idempotency, reconciliation, and error budgets that someone actually reads.',
         publishedAt: PUBLISHED_AT,
       },
       {
         title: 'Projects — Amina Rahman',
-        url: 'https://portfoliogenerate.test/amina-rahman/projects',
+        url: 'https://portfoliogenerate.test/portfolios/amina-rahman/projects',
         description:
           'Backend engineer working on payment systems.\nI care about the boring parts: idempotency, reconciliation, and error budgets that someone actually reads.',
         publishedAt: PUBLISHED_AT,
@@ -49,7 +49,9 @@ describe('buildPortfolioFeedItems', () => {
 
     const publicUrls = buildPortfolioFeedItems([published()]).map((item) => item.url);
 
-    expect(publicUrls).not.toContain('https://portfoliogenerate.test/amina-rahman/notes');
+    expect(publicUrls).not.toContain(
+      'https://portfoliogenerate.test/portfolios/amina-rahman/notes',
+    );
     expect(buildPortfolioFeedItems([published({ document: privateDocument })])).toEqual([]);
   });
 });

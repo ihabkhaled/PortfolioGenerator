@@ -1,5 +1,6 @@
 import type { PortfolioDocument } from '@/modules/portfolio-document';
 import { appOrigin } from '@/packages/env';
+import { ROUTE_PATHS } from '@/shared/constants/route-paths.constants';
 
 import { OG_HEADLINE_MAX_LENGTH, OG_NAME_MAX_LENGTH } from '../constants/og-image.constants';
 import type { OgCardValues } from '../types/og-card.types';
@@ -18,7 +19,7 @@ export function buildOgCardValues(document: PortfolioDocument, slug: string): Og
   return {
     name: truncate(document.identity.displayName, OG_NAME_MAX_LENGTH),
     headline: buildCardHeadline(document),
-    url: `${stripScheme(appOrigin)}/${slug}`,
+    url: `${stripScheme(appOrigin)}${ROUTE_PATHS.portfolios}/${slug}`,
   };
 }
 

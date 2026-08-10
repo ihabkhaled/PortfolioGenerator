@@ -1,5 +1,6 @@
 import type { PortfolioDocument, PortfolioPage } from '@/modules/portfolio-document';
 import { absoluteUrl } from '@/packages/env';
+import { ROUTE_PATHS } from '@/shared/constants/route-paths.constants';
 
 import { SEO_DESCRIPTION_MAX_LENGTH } from '../constants/seo.constants';
 import type { PortfolioMetadataInput, PortfolioMetadataValues } from '../types/seo.types';
@@ -13,7 +14,8 @@ import type { PortfolioMetadataInput, PortfolioMetadataValues } from '../types/s
  */
 
 export function buildPageUrl(portfolioSlug: string, pageSlug: string, locale = 'en'): string {
-  const portfolioPath = pageSlug === '' ? `/${portfolioSlug}` : `/${portfolioSlug}/${pageSlug}`;
+  const slugPath = `${ROUTE_PATHS.portfolios}/${portfolioSlug}`;
+  const portfolioPath = pageSlug === '' ? slugPath : `${slugPath}/${pageSlug}`;
   const path = locale === 'en' ? portfolioPath : `/${locale}${portfolioPath}`;
 
   return absoluteUrl(path);
@@ -85,8 +87,8 @@ export function buildPortfolioMetadataValues(
     indexable: document.seo.indexable && page.visible,
     imageUrl: absoluteUrl(
       locale === 'en'
-        ? `/${portfolioSlug}/opengraph-image`
-        : `/${locale}/${portfolioSlug}/opengraph-image`,
+        ? `${ROUTE_PATHS.portfolios}/${portfolioSlug}/opengraph-image`
+        : `/${locale}${ROUTE_PATHS.portfolios}/${portfolioSlug}/opengraph-image`,
     ),
     displayName: document.identity.displayName,
     languageAlternates,

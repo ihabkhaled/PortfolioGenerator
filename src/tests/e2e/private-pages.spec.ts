@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 
-import { buildAccount, createPortfolio, signUp } from './support/accounts';
+import { buildAccount, createPortfolio, saveEditor, signUp } from './support/accounts';
 import { readOwnedAssetStorageKey } from './support/database';
 import { buildResumePdf } from './support/pdf.fixture';
 
@@ -49,7 +49,7 @@ test.describe('password-protected portfolio pages', () => {
       assetId,
     });
 
-    await page.getByRole('button', { name: 'Save', exact: true }).click();
+    await saveEditor(page);
     await expect(page.getByText('Saved').first()).toBeVisible();
     for (const [index, password] of [notesPassword, otherPassword].entries()) {
       await page.getByLabel('Page access').nth(index).selectOption('private');
@@ -59,11 +59,11 @@ test.describe('password-protected portfolio pages', () => {
     }
     await page.getByLabel('Headline').fill('Security engineer');
     await page.getByLabel('Summary').fill('A reviewed private-media portfolio.');
-    await page.getByRole('button', { name: 'Save', exact: true }).click();
+    await saveEditor(page);
     await page.getByRole('button', { name: 'Publish', exact: true }).click();
     await page.getByRole('button', { name: 'Unpublish' }).waitFor();
 
-    const mediaPath = `/${slug}/notes/media/${assetId}`;
+    const mediaPath = `/portfolios/${slug}/notes/media/${assetId}`;
     const anonymous = await browser.newContext();
     const anonymousResponse = await anonymous.request.get(mediaPath);
     expect(anonymousResponse.status()).toBe(404);
@@ -108,7 +108,7 @@ test.describe('password-protected portfolio pages', () => {
     await page.locator('#new-page-nav').fill('Notes');
     await page.locator('#new-page-slug').fill('notes');
     await page.getByRole('button', { name: 'Add page' }).click();
-    await page.getByRole('button', { name: 'Save', exact: true }).click();
+    await saveEditor(page);
     await expect(page.getByText('Saved').first()).toBeVisible();
 
     await page.getByLabel('Page access').last().selectOption('private');
@@ -120,10 +120,10 @@ test.describe('password-protected portfolio pages', () => {
 
     const visitor = await browser.newContext();
     const publicPage = await visitor.newPage();
-    await publicPage.goto(`/${slug}`);
+    await publicPage.goto(`/portfolios/${slug}`);
     await expect(publicPage.getByRole('link', { name: 'Notes' })).toHaveCount(0);
 
-    const challengeResponse = await publicPage.goto(`/${slug}/notes`);
+    const challengeResponse = await publicPage.goto(`/portfolios/${slug}/notes`);
     expect(challengeResponse?.headers()['cache-control']).toContain('private, no-store');
     expect(challengeResponse?.headers()['x-robots-tag']).toContain('noindex, nofollow');
     await expect(publicPage.getByRole('heading', { name: /private page/i })).toBeVisible();
@@ -133,7 +133,7 @@ test.describe('password-protected portfolio pages', () => {
 
     await publicPage.getByLabel('Password').fill(password);
     await publicPage.getByRole('button', { name: /unlock/i }).click();
-    await publicPage.waitForURL(`**/${slug}/notes`);
+    await publicPage.waitForURL(`**/portfolios/${slug}/notes`);
     await expect(publicPage.getByRole('heading', { name: 'Field notes' })).toBeVisible();
     const contentResponse = await publicPage.reload();
     expect(contentResponse?.headers()['cache-control']).toContain('private, no-store');
@@ -150,7 +150,7 @@ test.describe('password-protected portfolio pages', () => {
     await page.locator('#new-page-nav').fill('Notes');
     await page.locator('#new-page-slug').fill('notes');
     await page.getByRole('button', { name: 'Add page' }).click();
-    await page.getByRole('button', { name: 'Save', exact: true }).click();
+    await saveEditor(page);
     await page.getByLabel('Page access').last().selectOption('private');
     await page.getByLabel('Share password').last().fill(password);
     await page.getByRole('button', { name: 'Update page access' }).last().click();
@@ -161,8 +161,8 @@ test.describe('password-protected portfolio pages', () => {
       maxRedirects: 0,
     });
     expect(response.status()).toBe(303);
-    expect(response.headers()['location']).toContain(`/fr/${slug}/notes`);
-    expect(response.headers()['set-cookie']).toContain(`Path=/fr/${slug}/notes`);
+    expect(response.headers()['location']).toContain(`/fr/portfolios/${slug}/notes`);
+    expect(response.headers()['set-cookie']).toContain(`Path=/fr/portfolios/${slug}/notes`);
   });
 
   test('rate-limits repeated password guesses before issuing a grant', async ({ page }) => {
@@ -174,7 +174,7 @@ test.describe('password-protected portfolio pages', () => {
     await page.locator('#new-page-nav').fill('Notes');
     await page.locator('#new-page-slug').fill('notes');
     await page.getByRole('button', { name: 'Add page' }).click();
-    await page.getByRole('button', { name: 'Save', exact: true }).click();
+    await saveEditor(page);
     await page.getByLabel('Page access').last().selectOption('private');
     await page.getByLabel('Share password').last().fill(password);
     await page.getByRole('button', { name: 'Update page access' }).last().click();
@@ -204,7 +204,7 @@ test.describe('password-protected portfolio pages', () => {
     await page.locator('#new-page-nav').fill('Confidential');
     await page.locator('#new-page-slug').fill('confidential');
     await page.getByRole('button', { name: 'Add page' }).click();
-    await page.getByRole('button', { name: 'Save', exact: true }).click();
+    await saveEditor(page);
     await expect(page.getByText('Saved').first()).toBeVisible();
     await page.getByLabel('Page access').last().selectOption('private');
     await page.getByLabel('Share password').last().fill('a private sitemap password');

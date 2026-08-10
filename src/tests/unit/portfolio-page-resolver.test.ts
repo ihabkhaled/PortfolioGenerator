@@ -115,11 +115,11 @@ describe('sortVisiblePages', () => {
 
 describe('buildPageHref', () => {
   it('addresses the home page by the portfolio slug alone', () => {
-    expect(buildPageHref('amina-rahman', '')).toBe('/amina-rahman');
+    expect(buildPageHref('amina-rahman', '')).toBe('/portfolios/amina-rahman');
   });
 
   it('appends a subpage slug', () => {
-    expect(buildPageHref('amina-rahman', 'projects')).toBe('/amina-rahman/projects');
+    expect(buildPageHref('amina-rahman', 'projects')).toBe('/portfolios/amina-rahman/projects');
   });
 });
 
@@ -132,7 +132,7 @@ describe('buildNavigation', () => {
         pageId: 'page-home',
         slug: '',
         label: 'Home',
-        href: '/amina-rahman',
+        href: '/portfolios/amina-rahman',
         isCurrent: false,
         isHome: true,
       },
@@ -140,7 +140,7 @@ describe('buildNavigation', () => {
         pageId: 'page-projects',
         slug: 'projects',
         label: 'Projects',
-        href: '/amina-rahman/projects',
+        href: '/portfolios/amina-rahman/projects',
         isCurrent: true,
         isHome: false,
       },

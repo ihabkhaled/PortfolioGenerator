@@ -4,13 +4,19 @@ import {
   buildLocaleRewrite,
   getLocaleDirection,
   isPublicPortfolioCandidatePath,
+  localizePath,
   resolveLocalePath,
+  type ResolvedLocalePath,
 } from '@/modules/localization';
 import { findVisiblePage } from '@/modules/portfolio-document';
 import { getPublishedPortfolioForLocale } from '@/modules/portfolios/server';
 import { resolveRuntimeLocale, SAVED_LOCALE_COOKIE } from '@/modules/preferences';
 import { PRIVATE_PAGE_RESPONSE_HEADERS } from '@/modules/private-page-access';
 import { isDevelopmentEnvironment } from '@/packages/env';
+import { ROUTE_PATHS } from '@/shared/constants/route-paths.constants';
+
+/** `ROUTE_PATHS.portfolios` without its leading slash — the one place that strips it. */
+const PORTFOLIOS_SEGMENT = ROUTE_PATHS.portfolios.slice(1);
 
 /**
  * Per-request nonce-based Content-Security-Policy. Next.js reads the CSP from
@@ -64,16 +70,64 @@ async function applyPrivatePageResponseHeaders(
   pathname: string,
   locale: string,
 ): Promise<void> {
-  if (!isPublicPortfolioCandidatePath(pathname)) return;
+  // Not `isPublicPortfolioCandidatePath` here: 'portfolios' is now a platform
+  // segment (see locale.constants.ts), so that check correctly says a
+  // `/portfolios/...` request is *not* a bare-slug candidate — which is
+  // exactly backwards for this function, whose job only starts once a
+  // request has already resolved to the real portfolio route.
   const segments = resolveLocalePath(pathname).pathname.split('/').filter(Boolean);
-  const [portfolioSlug, pageSlug] = segments;
-  if (!portfolioSlug || !pageSlug || segments.length !== 2) return;
+  const [first, portfolioSlug, pageSlug] = segments;
+  if (first !== PORTFOLIOS_SEGMENT || !portfolioSlug || !pageSlug || segments.length !== 3) return;
   const portfolio = await getPublishedPortfolioForLocale(portfolioSlug, locale);
   const page = portfolio === null ? null : findVisiblePage(portfolio.document, pageSlug);
   if (page?.page.visibility !== 'private') return;
   for (const [name, value] of Object.entries(PRIVATE_PAGE_RESPONSE_HEADERS)) {
     response.headers.set(name, value);
   }
+}
+
+/**
+ * A published portfolio's old `/{slug}` address — already indexed, already
+ * bookmarked — has to keep working after the move to `/portfolios/{slug}`.
+ * 308, not a softer code: this is "permanently lives elsewhere," and search
+ * engines and browsers should update their own records rather than keep
+ * asking.
+ *
+ * Only ever redirects a slug that resolves to a real, published portfolio.
+ * Everything else — a scanner probe, a stale slug from a deleted or
+ * unpublished portfolio, a path that was never a portfolio at all — returns
+ * `null` and falls through to whatever would have happened today: a direct
+ * 404 with no redirect hop, so a guess is never told it landed closer to a
+ * real slug than another guess would have.
+ */
+async function buildLegacyPortfolioRedirect(
+  request: NextRequest,
+  resolvedPath: ResolvedLocalePath,
+  locale: string,
+): Promise<NextResponse | null> {
+  const segments = resolvedPath.pathname.split('/').filter(Boolean);
+  const [slug, ...rest] = segments;
+
+  // No first segment (root `/`) or already the new shape: nothing to redirect.
+  // The `PORTFOLIOS_SEGMENT` check is redundant with `isPublicPortfolioCandidatePath`
+  // below now that 'portfolios' is a platform segment — kept anyway as the
+  // cheap short-circuit for the hot path, since real portfolio traffic hits
+  // this function on every request.
+  if (slug === undefined || slug === PORTFOLIOS_SEGMENT) return null;
+  if (!isPublicPortfolioCandidatePath(request.nextUrl.pathname)) return null;
+
+  const portfolio = await getPublishedPortfolioForLocale(slug, locale);
+  if (portfolio === null) return null;
+
+  const canonicalTarget = [ROUTE_PATHS.portfolios, slug, ...rest].join('/');
+  const localizedTarget = resolvedPath.explicit
+    ? localizePath(canonicalTarget, resolvedPath.locale)
+    : canonicalTarget;
+
+  const target = new URL(localizedTarget, request.url);
+  target.search = request.nextUrl.search;
+
+  return NextResponse.redirect(target, 308);
 }
 
 export default async function proxy(request: NextRequest): Promise<NextResponse> {
@@ -90,6 +144,14 @@ export default async function proxy(request: NextRequest): Promise<NextResponse>
   );
   requestHeaders.set('x-app-locale', locale);
   requestHeaders.set('x-app-direction', getLocaleDirection(locale));
+
+  const legacyRedirect = await buildLegacyPortfolioRedirect(request, resolvedPath, locale);
+
+  if (legacyRedirect) {
+    legacyRedirect.headers.set('content-security-policy', contentSecurityPolicy);
+    legacyRedirect.headers.set('content-language', locale);
+    return legacyRedirect;
+  }
 
   const localeRewrite = buildLocaleRewrite(request.nextUrl.pathname);
   const response = localeRewrite

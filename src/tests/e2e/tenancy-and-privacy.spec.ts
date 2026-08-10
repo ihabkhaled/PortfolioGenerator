@@ -2,7 +2,13 @@ import { expect, test } from '@playwright/test';
 
 import { buildFullPortfolioDocument } from '../fixtures/portfolio-document.fixtures';
 
-import { buildAccount, createPortfolio, signUp } from './support/accounts';
+import {
+  buildAccount,
+  createPortfolio,
+  publishPortfolio,
+  saveEditor,
+  signUp,
+} from './support/accounts';
 import { buildResumePdf } from './support/pdf.fixture';
 
 function portfolioIdFromEditorUrl(url: string): string {
@@ -51,6 +57,31 @@ test.describe('what an anonymous visitor can reach', () => {
     expect(draft.status()).toBe(404);
   });
 
+  // A bookmarked or indexed pre-move address has to keep resolving, but only
+  // for as long as the portfolio behind it is actually public — otherwise the
+  // redirect itself becomes a way to learn a slug used to be live.
+  test('a published portfolio’s legacy address redirects permanently; an unpublished one just 404s', async ({
+    page,
+  }) => {
+    const account = buildAccount('legacy-redirect');
+
+    await signUp(page, account);
+    const slug = await publishPortfolio(page, 'Legacy Address Owner');
+
+    const redirected = await page.request.get(`/${slug}`, { maxRedirects: 0 });
+
+    expect(redirected.status()).toBe(308);
+    expect(redirected.headers()['location']).toContain(`/portfolios/${slug}`);
+
+    await page.getByRole('button', { name: 'Unpublish' }).click();
+    await page.getByRole('button', { name: 'Publish', exact: true }).waitFor();
+
+    const afterUnpublish = await page.request.get(`/${slug}`, { maxRedirects: 0 });
+
+    expect(afterUnpublish.status()).toBe(404);
+    expect(afterUnpublish.headers()['location']).toBeUndefined();
+  });
+
   test('the dashboard is never cached and never indexed', async ({ page }) => {
     const account = buildAccount('headers');
 
@@ -94,7 +125,7 @@ test.describe('one tenant cannot reach another', () => {
     await page.locator('#new-page-nav').fill('Notes');
     await page.locator('#new-page-slug').fill('notes');
     await page.getByRole('button', { name: 'Add page' }).click();
-    await page.getByRole('button', { name: 'Save', exact: true }).click();
+    await saveEditor(page);
     await expect(page.getByText('Saved').first()).toBeVisible();
     const ownerAccessForm = page.locator('form').filter({
       has: page.getByRole('button', { name: 'Update page access' }),
@@ -118,7 +149,7 @@ test.describe('one tenant cannot reach another', () => {
     await strangerPage.locator('#new-page-nav').fill('Notes');
     await strangerPage.locator('#new-page-slug').fill('notes');
     await strangerPage.getByRole('button', { name: 'Add page' }).click();
-    await strangerPage.getByRole('button', { name: 'Save', exact: true }).click();
+    await saveEditor(strangerPage);
 
     const strangerAccessForm = strangerPage.locator('form').filter({
       has: strangerPage.getByRole('button', { name: 'Update page access' }),

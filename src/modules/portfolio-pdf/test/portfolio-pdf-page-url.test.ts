@@ -27,8 +27,8 @@ describe('buildPortfolioPdfPageUrls', () => {
     const document = buildFullPortfolioDocument();
 
     expect(buildPortfolioPdfPageUrls('https://example.com', 'amina', document)).toEqual([
-      'https://example.com/amina',
-      'https://example.com/amina/projects',
+      'https://example.com/portfolios/amina',
+      'https://example.com/portfolios/amina/projects',
     ]);
   });
 

@@ -50,7 +50,6 @@ const DEFENSIVE_RESERVED_SEGMENTS = [
   'null',
   'oauth',
   'portfolio',
-  'portfolios',
   'preview',
   'pricing',
   'privacy',

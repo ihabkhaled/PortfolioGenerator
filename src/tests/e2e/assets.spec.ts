@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 
-import { buildAccount, createPortfolio, signUp } from './support/accounts';
+import { buildAccount, createPortfolio, saveEditor, signUp } from './support/accounts';
 
 function buildPngHeader(width: number, height: number): Buffer {
   const buffer = Buffer.alloc(64);
@@ -34,12 +34,12 @@ test.describe('owned portrait assets', () => {
 
     await page.getByLabel('Headline').fill('Platform engineer');
     await page.getByLabel('Summary').fill('A portfolio with an owner-approved portrait.');
-    await page.getByRole('button', { name: 'Save', exact: true }).click();
+    await saveEditor(page);
     await page.getByText('Saved').first().waitFor();
     await page.getByRole('button', { name: 'Publish', exact: true }).click();
     await page.getByRole('button', { name: 'Unpublish' }).waitFor();
 
-    await page.goto(`/${slug}`);
+    await page.goto(`/portfolios/${slug}`);
     const image = page.getByRole('img', { name: 'Portrait' });
 
     await expect(image).toBeVisible();

@@ -1,11 +1,15 @@
 /**
  * Every platform route, in one place.
  *
- * Public portfolios live at the root (`/{slug}`), so this table is not just
- * navigation convenience — it is the input to the reserved-slug policy. A new
- * platform route that is added here and nowhere else is still protected,
- * because `RESERVED_SLUG_SEGMENTS` is derived from these values and a unit
- * test asserts the two never drift apart.
+ * Public portfolios live under `/portfolios/{slug}`, kept out of the root
+ * namespace on purpose so a portfolio slug can never shadow one of the app's
+ * own routes. `RESERVED_SLUG_SEGMENTS` is still derived from these values —
+ * not because a collision at the root is possible any more, but because
+ * `/portfolios/{platform-word}` stays a phishing-adjacent confusion risk even
+ * without a literal 404-shadowing collision — and a unit test asserts the two
+ * never drift apart. `PLATFORM_ROUTE_SEGMENTS` (a separate, hand-maintained
+ * list in `@/modules/localization`) is what the legacy `/{slug}` → redirect
+ * actually keys off; see `src/proxy.ts`.
  */
 export const ROUTE_PATHS = {
   home: '/',
@@ -22,6 +26,7 @@ export const ROUTE_PATHS = {
   apiAssetDeletionRetry: '/api/operations/asset-deletions',
   apiPortfolioPdfDownload: '/api/portfolio-pdf/download',
   media: '/media',
+  portfolios: '/portfolios',
   robots: '/robots.txt',
   sitemap: '/sitemap.xml',
   feed: '/feed.xml',
@@ -102,11 +107,11 @@ export const PORTFOLIO_SUBPATH_SEGMENTS: readonly string[] = [
 ];
 
 export function buildPortfolioPath(slug: string): string {
-  return `/${slug}`;
+  return `${ROUTE_PATHS.portfolios}/${slug}`;
 }
 
 export function buildPortfolioOgImagePath(slug: string): string {
-  return `/${slug}/opengraph-image`;
+  return `${buildPortfolioPath(slug)}/opengraph-image`;
 }
 
 export function buildPublicAssetPath(assetId: string): string {
@@ -123,5 +128,5 @@ export function buildPrivatePageAssetPath(
   pageSlug: string,
   assetId: string,
 ): string {
-  return `/${portfolioSlug}/${pageSlug}/media/${assetId}`;
+  return `${buildPortfolioPath(portfolioSlug)}/${pageSlug}/media/${assetId}`;
 }

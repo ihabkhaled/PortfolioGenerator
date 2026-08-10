@@ -27,6 +27,7 @@ export const PLATFORM_ROUTE_SEGMENTS: readonly string[] = [
   'forgot-password',
   'manifest.webmanifest',
   'media',
+  'portfolios',
   'reset-password',
   'robots.txt',
   'sign-in',

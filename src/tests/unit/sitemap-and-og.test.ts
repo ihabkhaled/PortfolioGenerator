@@ -80,20 +80,20 @@ describe('buildPortfolioSitemapEntries', () => {
   it('addresses the home page by the portfolio slug alone', () => {
     const [home] = buildPortfolioSitemapEntries([published()]);
 
-    expect(home?.url).toBe('https://portfoliogenerate.test/amina-rahman');
+    expect(home?.url).toBe('https://portfoliogenerate.test/portfolios/amina-rahman');
     expect(home?.lastModified).toEqual(PUBLISHED_AT);
   });
 
   it('lists visible subpages', () => {
     expect(urls(buildPortfolioSitemapEntries([published()]))).toContain(
-      'https://portfoliogenerate.test/amina-rahman/projects',
+      'https://portfoliogenerate.test/portfolios/amina-rahman/projects',
     );
   });
 
   // A hidden page 404s; submitting known-404s teaches a crawler the domain is broken.
   it('omits a hidden page', () => {
     expect(urls(buildPortfolioSitemapEntries([published()]))).not.toContain(
-      'https://portfoliogenerate.test/amina-rahman/notes',
+      'https://portfoliogenerate.test/portfolios/amina-rahman/notes',
     );
   });
 
@@ -117,8 +117,8 @@ describe('buildPortfolioSitemapEntries', () => {
     });
 
     expect(urls(buildPortfolioSitemapEntries([reordered]))).toEqual([
-      'https://portfoliogenerate.test/amina-rahman/projects',
-      'https://portfoliogenerate.test/amina-rahman',
+      'https://portfoliogenerate.test/portfolios/amina-rahman/projects',
+      'https://portfoliogenerate.test/portfolios/amina-rahman',
     ]);
   });
 
@@ -134,7 +134,7 @@ describe('buildPortfolioSitemapEntries', () => {
 
   it('prefixes translated portfolio entries with their locale', () => {
     expect(buildPortfolioSitemapEntries([{ ...published(), locale: 'fr' }])[0]?.url).toBe(
-      'https://portfoliogenerate.test/fr/amina-rahman',
+      'https://portfoliogenerate.test/fr/portfolios/amina-rahman',
     );
   });
 });
@@ -144,7 +144,7 @@ describe('buildOgCardValues', () => {
     expect(buildOgCardValues(buildFullPortfolioDocument(), 'amina-rahman')).toEqual({
       name: 'Amina Rahman',
       headline: 'Backend engineer, payments and reliability',
-      url: 'portfoliogenerate.test/amina-rahman',
+      url: 'portfoliogenerate.test/portfolios/amina-rahman',
     });
   });
 

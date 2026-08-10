@@ -300,7 +300,7 @@ describe('PublishPanelContainer', () => {
     await userEvent.clear(slug);
     await userEvent.type(slug, 'amina');
 
-    expect(screen.getByText(/portfoliogenerate\.test\/amina/)).toBeInTheDocument();
+    expect(screen.getByText(/portfoliogenerate\.test\/portfolios\/amina/)).toBeInTheDocument();
   });
 
   // Changing a URL and making a portfolio public are different decisions.

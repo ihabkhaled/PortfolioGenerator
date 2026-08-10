@@ -92,7 +92,7 @@ test.describe('deleting an account', () => {
     // And the account cannot be signed back into.
     await page.goto('/sign-in');
     await page.getByLabel('Email').fill(account.email);
-    await page.getByLabel('Password').fill(account.password);
+    await page.getByLabel('Password', { exact: true }).fill(account.password);
     await page.getByRole('button', { name: /sign in/i }).click();
 
     await expect(page.getByRole('alert')).toBeVisible();

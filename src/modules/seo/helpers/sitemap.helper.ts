@@ -90,7 +90,8 @@ export function entriesForPortfolio(portfolio: SitemapPortfolio): readonly Sitem
 }
 
 export function pagePath(portfolioSlug: string, pageSlug: string, locale = 'en'): string {
-  const portfolioPath = pageSlug === '' ? `/${portfolioSlug}` : `/${portfolioSlug}/${pageSlug}`;
+  const slugPath = `${ROUTE_PATHS.portfolios}/${portfolioSlug}`;
+  const portfolioPath = pageSlug === '' ? slugPath : `${slugPath}/${pageSlug}`;
   return locale === 'en' ? portfolioPath : `/${locale}${portfolioPath}`;
 }
 

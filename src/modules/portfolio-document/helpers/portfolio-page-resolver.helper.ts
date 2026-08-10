@@ -1,3 +1,5 @@
+import { ROUTE_PATHS } from '@/shared/constants/route-paths.constants';
+
 import { HOME_PAGE_SLUG } from '../constants/portfolio-document.constants';
 import type {
   PortfolioDocument,
@@ -67,7 +69,9 @@ export function sortVisiblePages(document: PortfolioDocument): readonly Portfoli
 }
 
 export function buildPageHref(portfolioSlug: string, pageSlug: string): string {
-  return pageSlug === HOME_PAGE_SLUG ? `/${portfolioSlug}` : `/${portfolioSlug}/${pageSlug}`;
+  const portfolioPath = `${ROUTE_PATHS.portfolios}/${portfolioSlug}`;
+
+  return pageSlug === HOME_PAGE_SLUG ? portfolioPath : `${portfolioPath}/${pageSlug}`;
 }
 
 export function buildNavigation(

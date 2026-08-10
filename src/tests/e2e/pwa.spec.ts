@@ -3,7 +3,7 @@ import type { Page } from '@playwright/test';
 
 import { expectResponsivePage } from '../accessibility/support/responsive-proof';
 
-import { buildAccount, createPortfolio, signUp } from './support/accounts';
+import { buildAccount, createPortfolio, saveEditor, signUp } from './support/accounts';
 import { buildResumePdf } from './support/pdf.fixture';
 
 interface PrivateMediaFixture {
@@ -70,7 +70,7 @@ async function createPrivateMediaFixture(page: Page): Promise<PrivateMediaFixtur
   if (visibilityId === null) throw new Error('Expected an uploaded attachment visibility control');
   const password = 'exact private media grant';
   const assetId = visibilityId.replace('attachment-visible-attachment-', '');
-  await page.getByRole('button', { name: 'Save', exact: true }).click();
+  await saveEditor(page);
   await expect(page.getByText('Saved').first()).toBeVisible();
   await page.getByLabel('Page access').last().selectOption('private');
   await page.getByLabel('Share password').last().fill(password);
@@ -79,8 +79,8 @@ async function createPrivateMediaFixture(page: Page): Promise<PrivateMediaFixtur
   await page.getByRole('button', { name: 'Unpublish' }).waitFor();
 
   return {
-    challengePath: `/${slug}/notes`,
-    mediaPath: `/${slug}/notes/media/${assetId}`,
+    challengePath: `/portfolios/${slug}/notes`,
+    mediaPath: `/portfolios/${slug}/notes/media/${assetId}`,
     password,
   };
 }

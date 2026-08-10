@@ -6,6 +6,7 @@ import {
   createPortfolio,
   openImport,
   requireBrowser,
+  saveEditor,
   signUp,
 } from './support/accounts';
 import { buildResumePdf, RESUME_LINES } from './support/pdf.fixture';
@@ -48,7 +49,7 @@ test.describe('the golden path', () => {
 
     // --- Review -------------------------------------------------------------
     await page.getByLabel('Headline').fill('Platform engineer, scheduling and reliability');
-    await page.getByRole('button', { name: 'Save', exact: true }).click();
+    await saveEditor(page);
 
     await expect(page.getByText('Saved').first()).toBeVisible();
 
@@ -63,7 +64,7 @@ test.describe('the golden path', () => {
     // --- Read it as a stranger ---------------------------------------------
     const visitor = await requireBrowser(context).newContext();
     const publicPage = await visitor.newPage();
-    const response = await publicPage.goto(`/${slug}`);
+    const response = await publicPage.goto(`/portfolios/${slug}`);
 
     expect(response?.status()).toBe(200);
     await expect(publicPage.getByRole('heading', { level: 1 })).toHaveText('Noor Haddad');

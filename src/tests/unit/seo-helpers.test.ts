@@ -19,18 +19,20 @@ import {
 
 describe('buildPageUrl', () => {
   it('addresses the home page by the portfolio slug alone', () => {
-    expect(buildPageUrl('amina-rahman', '')).toBe('https://portfoliogenerate.test/amina-rahman');
+    expect(buildPageUrl('amina-rahman', '')).toBe(
+      'https://portfoliogenerate.test/portfolios/amina-rahman',
+    );
   });
 
   it('appends a subpage slug', () => {
     expect(buildPageUrl('amina-rahman', 'projects')).toBe(
-      'https://portfoliogenerate.test/amina-rahman/projects',
+      'https://portfoliogenerate.test/portfolios/amina-rahman/projects',
     );
   });
 
   it('prefixes translated portfolio pages with their locale', () => {
     expect(buildPageUrl('amina-rahman', 'projects', 'fr')).toBe(
-      'https://portfoliogenerate.test/fr/amina-rahman/projects',
+      'https://portfoliogenerate.test/fr/portfolios/amina-rahman/projects',
     );
   });
 });
@@ -92,7 +94,7 @@ describe('buildPortfolioMetadataValues', () => {
       portfolioSlug: 'amina-rahman',
     });
 
-    expect(values.canonical).toBe('https://portfoliogenerate.test/amina-rahman');
+    expect(values.canonical).toBe('https://portfoliogenerate.test/portfolios/amina-rahman');
     expect(values.title).toContain('Amina Rahman');
     expect(values.indexable).toBe(true);
   });
@@ -143,12 +145,14 @@ describe('buildPortfolioMetadataValues', () => {
       includeEnglishAlternate: false,
     });
 
-    expect(values.canonical).toBe('https://portfoliogenerate.test/fr/amina-rahman');
-    expect(values.imageUrl).toBe('https://portfoliogenerate.test/fr/amina-rahman/opengraph-image');
+    expect(values.canonical).toBe('https://portfoliogenerate.test/fr/portfolios/amina-rahman');
+    expect(values.imageUrl).toBe(
+      'https://portfoliogenerate.test/fr/portfolios/amina-rahman/opengraph-image',
+    );
     expect(values.languageAlternates).toEqual({
-      'x-default': 'https://portfoliogenerate.test/fr/amina-rahman',
-      fr: 'https://portfoliogenerate.test/fr/amina-rahman',
-      ar: 'https://portfoliogenerate.test/ar/amina-rahman',
+      'x-default': 'https://portfoliogenerate.test/fr/portfolios/amina-rahman',
+      fr: 'https://portfoliogenerate.test/fr/portfolios/amina-rahman',
+      ar: 'https://portfoliogenerate.test/ar/portfolios/amina-rahman',
     });
   });
 });

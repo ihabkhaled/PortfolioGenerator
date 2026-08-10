@@ -1,5 +1,6 @@
 import { DEFAULT_LOCALE, localizePath } from '@/modules/localization';
 import { sha256Hex } from '@/packages/cryptography';
+import { ROUTE_PATHS } from '@/shared/constants/route-paths.constants';
 
 import {
   PRIVATE_PAGE_GRANT_MAX_AGE_SECONDS,
@@ -9,7 +10,7 @@ import type { PrivatePageCookieInput } from '../types/private-page-access.types'
 
 export function buildPrivatePageCookie(input: PrivatePageCookieInput): string {
   const cookieName = buildPrivatePageCookieName(input.scope.portfolioSlug, input.scope.pageId);
-  const canonicalPath = `/${encodeURIComponent(input.scope.portfolioSlug)}/${encodeURIComponent(input.scope.pageSlug)}`;
+  const canonicalPath = `${ROUTE_PATHS.portfolios}/${encodeURIComponent(input.scope.portfolioSlug)}/${encodeURIComponent(input.scope.pageSlug)}`;
   const path =
     input.scope.locale === DEFAULT_LOCALE
       ? canonicalPath

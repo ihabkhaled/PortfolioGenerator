@@ -1,7 +1,7 @@
 import 'server-only';
 
 import { createOpenAI } from '@ai-sdk/openai';
-import { generateText, tool } from 'ai';
+import { generateText, InvalidToolInputError, tool } from 'ai';
 
 import type { StructuredRequest, StructuredResponse } from './ai.types';
 
@@ -91,13 +91,17 @@ export function createStructuredClient(config: {
         outputUnits: result.usage.outputTokens ?? null,
         latencyMs: Math.round(performance.now() - startedAt),
       };
-    } catch {
-      // A malformed tool call (arguments that do not even parse as JSON) is
-      // the one failure the SDK still throws for; everything else above is
-      // returned, not thrown. Either way there is nothing usable to report.
+    } catch (error) {
+      // `InvalidToolInputError` is the one shape failure the SDK still throws
+      // for: arguments that do not parse, or do not validate against the
+      // requested schema. Everything else that can land here — a network
+      // failure, a timeout from the abort signal above, a provider outage —
+      // is an infrastructure failure with nothing wrong in what the model
+      // said, and has to stay `provider-error` so the retry policy doesn't
+      // mistake an outage for a model that needs the costlier fallback.
       return {
         ok: false,
-        errorCode: 'invalid-output',
+        errorCode: InvalidToolInputError.isInstance(error) ? 'invalid-output' : 'provider-error',
         model: request.model,
         inputUnits: null,
         outputUnits: null,

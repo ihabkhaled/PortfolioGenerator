@@ -427,6 +427,9 @@
     "skipToContent": "跳至内容",
     "portraitAlt": "肖像",
     "galleryClose": "关闭全尺寸图片",
+    "pdf": {
+      "downloadCta": "下载 PDF"
+    },
     "supplemental": {
       "courses": "课程",
       "publications": "刊物",

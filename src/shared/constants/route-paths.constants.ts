@@ -20,6 +20,7 @@ export const ROUTE_PATHS = {
   api: '/api',
   apiContact: '/api/contact',
   apiAssetDeletionRetry: '/api/operations/asset-deletions',
+  apiPortfolioPdfDownload: '/api/portfolio-pdf/download',
   media: '/media',
   robots: '/robots.txt',
   sitemap: '/sitemap.xml',
@@ -110,6 +111,11 @@ export function buildPortfolioOgImagePath(slug: string): string {
 
 export function buildPublicAssetPath(assetId: string): string {
   return `${ROUTE_PATHS.media}/${assetId}`;
+}
+
+/** The token, never the portfolio id or slug — see `portfolio-pdf`'s download route. */
+export function buildPortfolioPdfDownloadPath(token: string): string {
+  return `${ROUTE_PATHS.apiPortfolioPdfDownload}/${token}`;
 }
 
 export function buildPrivatePageAssetPath(

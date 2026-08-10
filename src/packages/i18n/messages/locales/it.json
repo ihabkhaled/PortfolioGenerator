@@ -429,6 +429,9 @@
     "navigationLabel": "Pagine del portfolio",
     "portraitAlt": "Ritratto",
     "galleryClose": "Chiudi immagine a grandezza naturale",
+    "pdf": {
+      "downloadCta": "Scarica il PDF"
+    },
     "privatePage": {
       "title": "Questa pagina è privata",
       "description": "Inserisci la password che il proprietario del portafoglio ha condiviso con te.",

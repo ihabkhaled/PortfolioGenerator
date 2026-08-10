@@ -8,6 +8,12 @@ import {
   findVisiblePage,
   resolvePageSlug,
 } from '@/modules/portfolio-document';
+import {
+  buildPortfolioPdfDownloadFilename,
+  hasDownloadablePortfolioContent,
+} from '@/modules/portfolio-pdf';
+import { PortfolioPdfDownloadLink } from '@/modules/portfolio-pdf/portfolio-pdf-ui';
+import { getPortfolioPdfDownloadToken } from '@/modules/portfolio-pdf/server';
 import { buildPortfolioLabels, PortfolioTemplate } from '@/modules/portfolio-renderer';
 import {
   getPublishedPortfolio,
@@ -31,7 +37,10 @@ import { getRequestCookie } from '@/packages/headers';
 import { I18N_NAMESPACES } from '@/packages/i18n';
 import { getServerTranslations } from '@/packages/i18n/server';
 import { appNotFound } from '@/packages/navigation';
-import { buildPrivatePageAssetPath } from '@/shared/constants/route-paths.constants';
+import {
+  buildPortfolioPdfDownloadPath,
+  buildPrivatePageAssetPath,
+} from '@/shared/constants/route-paths.constants';
 
 /**
  * Every published portfolio, at the root of the domain.
@@ -166,6 +175,18 @@ export default async function PublicPortfolioPage(
   const tApp = await getServerTranslations(I18N_NAMESPACES.app);
   const pageUrl = buildPageUrl(portfolioSlug, resolved.page.slug, locale);
 
+  /*
+   * The download link's token, not the download itself: minting or reusing it
+   * is one or two cheap lookups (see `getPortfolioPdfDownloadToken`), while
+   * actually printing the portfolio only happens lazily, on the first
+   * download. Null when there is nothing public to download, or when the
+   * token store itself is unavailable — either way, no link is better than a
+   * link that always 404s.
+   */
+  const downloadToken = hasDownloadablePortfolioContent(portfolio.document)
+    ? await getPortfolioPdfDownloadToken(portfolio.id, new Date())
+    : null;
+
   return (
     <>
       {/*
@@ -199,7 +220,15 @@ export default async function PublicPortfolioPage(
         actions={
           <ThemeToggleContainer label={tApp('theme.label')} options={buildThemeOptions(tApp)} />
         }
-        footerLinks={null}
+        footerLinks={
+          downloadToken === null ? null : (
+            <PortfolioPdfDownloadLink
+              href={buildPortfolioPdfDownloadPath(downloadToken)}
+              label={translate('pdf.downloadCta')}
+              downloadFilename={buildPortfolioPdfDownloadFilename(portfolioSlug)}
+            />
+          )
+        }
         {...(resolved.page.visibility === 'private'
           ? {
               buildAssetPath: (assetId: string): string => {

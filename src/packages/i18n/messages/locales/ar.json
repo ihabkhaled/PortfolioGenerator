@@ -435,6 +435,9 @@
     },
     "portraitAlt": "لَوحَة",
     "galleryClose": "إغلاق الصورة بالحجم الكامل",
+    "pdf": {
+      "downloadCta": "تنزيل PDF"
+    },
     "navigationLabel": "صفحات المحفظة",
     "supplemental": {
       "courses": "الدورات",

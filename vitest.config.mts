@@ -78,6 +78,13 @@ export default defineConfig({
         'src/packages/email/**',
         'src/packages/og/**',
         'src/packages/pdf/**',
+        // A thin construct-and-delegate facade over ioredis, like
+        // packages/database and packages/auth above.
+        'src/packages/redis/**',
+        // Headless Chromium automation: exercised by the E2E suite against a
+        // real browser, not mocked here. `pdf-merge.ts` next to it is pure
+        // byte manipulation and stays covered.
+        'src/packages/pdf-renderer/browser-print.ts',
         'src/packages/i18n/request.ts',
         'src/shared/fonts/**',
       ],

@@ -7,6 +7,7 @@ import { cacheBySlug } from '@/packages/cache';
 
 import { PORTFOLIO_CACHE_KEY_PREFIX } from '../constants/portfolio-cache.constants';
 import {
+  findPublishedByIdUnscoped,
   findPublishedBySlugUnscoped,
   findPublishedTranslationBySlugAndLocaleUnscoped,
 } from '../repositories/portfolio.repository';
@@ -52,4 +53,19 @@ export async function getPublishedPortfolioForLocale(
   );
 
   return load();
+}
+
+/**
+ * The PDF download route's entry point: a token resolves to a portfolio id,
+ * never a slug, so this is the by-id twin of `getPublishedPortfolio`.
+ *
+ * Not cache-wrapped like the slug lookup above — this only runs on a cache
+ * miss in the PDF path, which already carries its own five-day cache, so a
+ * second cache here would buy nothing and add a tag scheme keyed by id that
+ * nothing else needs.
+ */
+export async function getPublishedPortfolioById(
+  portfolioId: string,
+): Promise<PublishedPortfolio | null> {
+  return findPublishedByIdUnscoped(portfolioId);
 }

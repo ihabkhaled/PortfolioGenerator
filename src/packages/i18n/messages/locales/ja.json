@@ -426,6 +426,9 @@
     "skipToContent": "コンテンツにスキップ",
     "portraitAlt": "肖像画",
     "galleryClose": "フルサイズ画像を閉じる",
+    "pdf": {
+      "downloadCta": "PDFをダウンロード"
+    },
     "supplemental": {
       "courses": "コース",
       "publications": "出版物",

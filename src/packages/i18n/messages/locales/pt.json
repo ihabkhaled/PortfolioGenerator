@@ -429,6 +429,9 @@
     "navigationLabel": "Páginas do portfólio",
     "portraitAlt": "Retrato",
     "galleryClose": "Fechar imagem em tamanho real",
+    "pdf": {
+      "downloadCta": "Transferir PDF"
+    },
     "privatePage": {
       "title": "Esta página é privada",
       "description": "Digite a senha que o proprietário do portfólio compartilhou com você.",

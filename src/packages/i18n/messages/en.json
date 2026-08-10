@@ -429,6 +429,9 @@
     "navigationLabel": "Portfolio pages",
     "portraitAlt": "Portrait",
     "galleryClose": "Close full-size image",
+    "pdf": {
+      "downloadCta": "Download PDF"
+    },
     "privatePage": {
       "title": "This page is private",
       "description": "Enter the password the portfolio owner shared with you.",

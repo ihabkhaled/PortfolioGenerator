@@ -429,6 +429,9 @@
     "navigationLabel": "Portfolioseiten",
     "portraitAlt": "Portr\u00e4t",
     "galleryClose": "Vollbild schlie\u00dfen",
+    "pdf": {
+      "downloadCta": "PDF herunterladen"
+    },
     "privatePage": {
       "title": "Diese Seite ist privat",
       "description": "Geben Sie das Passwort ein, das Ihnen der Portfolioeigent\u00fcmer mitgeteilt hat.",

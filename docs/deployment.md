@@ -10,10 +10,23 @@
 | An OpenAI-compatible endpoint | Optional; `deterministic` works without one              |
 | ClamAV 1.4 service            | Required when production uploads are enabled             |
 | SMTP relay                    | Required for verification, contact and password recovery |
+| Redis                         | Optional — see below                                     |
 
-No Redis or queue. Vercel Cron invokes the bounded asset-object deletion retry;
-see [ADR-0003](../architecture/adrs/0003-postgres-rate-limiting.md) for why rate
-limiting remains in PostgreSQL.
+No queue. Vercel Cron invokes the bounded asset-object deletion retry; see
+[ADR-0003](../architecture/adrs/0003-postgres-rate-limiting.md) for why rate
+limiting remains in PostgreSQL — the same "simplest infra that works"
+reasoning is why the portfolio PDF download (below) generates in the request
+path rather than through a message broker.
+
+Redis is used for exactly one feature: caching a portfolio's downloadable PDF
+and rotating its unguessable download link (`src/modules/portfolio-pdf`).
+Nothing else in the product reads or writes it, and nothing else needs it —
+rate limiting stays in Postgres. Unset `REDIS_URL` and that feature falls back
+to an in-process cache: correct on a single instance, not durable across the
+several a real deployment runs. Production should set it; the Vercel
+Marketplace offers Upstash Redis as a one-click add-on that fills in
+`REDIS_URL` automatically. Any `ioredis`-compatible `REDIS_URL` works — the
+wrapper (`src/packages/redis`) is not tied to a vendor SDK.
 
 ## Environment
 
@@ -23,20 +36,22 @@ failing at the first request that happens to need it.
 
 The values that must be set for production, and what goes wrong if they are not:
 
-| Variable                                              | If wrong                                                                                                                  |
-| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
-| `NEXT_PUBLIC_APP_URL`                                 | Canonical URLs, the sitemap and OG images point at localhost. Inlined at build time — a rebuild is required to change it. |
-| `NEXT_PUBLIC_APP_ENV`                                 | Anything other than `production` makes `robots.txt` disallow everything. That is deliberate for preview deployments.      |
-| `DATABASE_URL`                                        | Boot failure.                                                                                                             |
-| `BETTER_AUTH_SECRET`                                  | Boot failure below 32 characters. Rotating it invalidates every session.                                                  |
-| `AUTH_REQUIRE_EMAIL_VERIFICATION=false` in production | Boot failure. Mandatory verification also requires enabled, fully configured SMTP delivery.                               |
-| `STORAGE_DRIVER=s3` without the S3 block              | Boot failure, naming the missing variables.                                                                               |
-| `AI_PROVIDER=openai-compatible` without `AI_API_KEY`  | Boot failure.                                                                                                             |
-| `CRON_SECRET`                                         | Boot failure in production when absent or shorter than 32 characters.                                                     |
-| `CLAMAV_ENABLED=false` in production                  | Uploads are stored unscanned. Not a boot failure — see below.                                                             |
-| `CLAMAV_ENABLED=true` without reachable clamd         | Uploads fail closed; no unscanned bytes are stored.                                                                       |
-| `AI_GOOGLE_API_KEY` absent                            | Translation returns `not-configured`. Extraction is unaffected.                                                           |
-| `CONTACT_EMAIL_ENABLED=true` without the SMTP block   | Boot failure, naming the missing relay values.                                                                            |
+| Variable                                              | If wrong                                                                                                                         |
+| ----------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| `NEXT_PUBLIC_APP_URL`                                 | Canonical URLs, the sitemap and OG images point at localhost. Inlined at build time — a rebuild is required to change it.        |
+| `NEXT_PUBLIC_APP_ENV`                                 | Anything other than `production` makes `robots.txt` disallow everything. That is deliberate for preview deployments.             |
+| `DATABASE_URL`                                        | Boot failure.                                                                                                                    |
+| `BETTER_AUTH_SECRET`                                  | Boot failure below 32 characters. Rotating it invalidates every session.                                                         |
+| `AUTH_REQUIRE_EMAIL_VERIFICATION=false` in production | Boot failure. Mandatory verification also requires enabled, fully configured SMTP delivery.                                      |
+| `STORAGE_DRIVER=s3` without the S3 block              | Boot failure, naming the missing variables.                                                                                      |
+| `AI_PROVIDER=openai-compatible` without `AI_API_KEY`  | Boot failure.                                                                                                                    |
+| `CRON_SECRET`                                         | Boot failure in production when absent or shorter than 32 characters.                                                            |
+| `CLAMAV_ENABLED=false` in production                  | Uploads are stored unscanned. Not a boot failure — see below.                                                                    |
+| `CLAMAV_ENABLED=true` without reachable clamd         | Uploads fail closed; no unscanned bytes are stored.                                                                              |
+| `AI_GOOGLE_API_KEY` absent                            | Translation returns `not-configured`. Extraction is unaffected.                                                                  |
+| `CONTACT_EMAIL_ENABLED=true` without the SMTP block   | Boot failure, naming the missing relay values.                                                                                   |
+| `REDIS_URL` absent                                    | Not a boot failure. The PDF cache and download-token store fall back to an in-process implementation — see below.                |
+| `PDF_CHROMIUM_EXECUTABLE_PATH`                        | Escape hatch only; leave unset unless deploying Chromium somewhere neither `@playwright/test` nor `@sparticuz/chromium` reaches. |
 
 Private portfolio pages cannot be listed as a `robots.txt` prefix because they
 share the same slug namespace as public portfolios. They are excluded by
@@ -93,6 +108,30 @@ Production secrets and endpoints remain human-owned steps: Vercel project
 access, Postgres, object storage, SMTP credentials, Gemini/OpenAI-compatible AI
 credentials, DNS, and the private scanner network cannot be provisioned from a
 source checkout.
+
+## Portfolio PDF download
+
+`GET /api/portfolio-pdf/download/{token}` renders a published portfolio's
+public pages to a single PDF with headless Chromium (`playwright-core`),
+caches the bytes for five days, and serves them only through a token that
+rotates every eight hours — see `src/modules/portfolio-pdf` for the full
+design and the ADR-style decision notes in
+`services/portfolio-pdf.service.ts`.
+
+Two things to verify after deploying, beyond setting `REDIS_URL`:
+
+- **A Chromium binary must be reachable in production.** Locally and in CI
+  this reuses the Chromium `@playwright/test` installs for the E2E suite; in
+  production (`NODE_ENV=production`) it loads `@sparticuz/chromium`'s bundled
+  build automatically. This has not been exercised against a real Vercel
+  deployment as part of this change — download a PDF from a production build
+  before relying on it, and set `PDF_CHROMIUM_EXECUTABLE_PATH` if the
+  deployment target needs a different binary.
+- **Function duration and memory.** The route sets `maxDuration = 60` and
+  needs enough memory for one headless Chromium instance; confirm the Vercel
+  plan and function configuration allow both. A cache hit (the common case
+  after a portfolio's first download) returns in well under a second and
+  never touches Chromium.
 
 ## Scheduled asset deletion retry
 

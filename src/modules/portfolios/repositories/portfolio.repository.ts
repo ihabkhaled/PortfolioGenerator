@@ -235,6 +235,23 @@ export async function findPublishedBySlugUnscoped(
   return row === null ? null : toPublishedPortfolio(row);
 }
 
+/**
+ * Public read by id. The PDF download flow resolves a token to a portfolio
+ * id — never a slug, by design — so it needs this lookup rather than
+ * `findPublishedBySlugUnscoped`; everything else about the tenant-free
+ * contract above applies identically.
+ */
+export async function findPublishedByIdUnscoped(
+  portfolioId: string,
+): Promise<PublishedPortfolio | null> {
+  const row = await getDatabase().portfolio.findFirst({
+    where: { id: portfolioId, status: 'PUBLISHED', deletedAt: null },
+    select: PORTFOLIO_SELECT,
+  });
+
+  return row === null ? null : toPublishedPortfolio(row);
+}
+
 export async function findPublishedTranslationBySlugAndLocaleUnscoped(
   slug: string,
   locale: string,

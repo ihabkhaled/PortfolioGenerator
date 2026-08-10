@@ -426,6 +426,9 @@
     "skipToContent": "ข้ามไปที่เนื้อหา",
     "portraitAlt": "ภาพเหมือน",
     "galleryClose": "ปิดภาพขนาดเต็ม",
+    "pdf": {
+      "downloadCta": "ดาวน์โหลด PDF"
+    },
     "builtWith": "เผยแพร่ด้วย ProFolio",
     "privatePage": {
       "denied": "รหัสผ่านนั้นไม่ตรงกัน ตรวจสอบแล้วลองอีกครั้ง",

@@ -67,6 +67,10 @@ const packageBoundaries = [
     matchSubpaths: false,
     owners: ['src/shared/fonts/'],
   },
+  { package: 'ioredis', owners: ['src/packages/redis/'] },
+  { package: 'playwright-core', owners: ['src/packages/pdf-renderer/'] },
+  { package: '@sparticuz/chromium', owners: ['src/packages/pdf-renderer/'] },
+  { package: 'pdf-lib', owners: ['src/packages/pdf-renderer/'] },
 ];
 
 export default [

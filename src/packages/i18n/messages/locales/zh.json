@@ -396,6 +396,9 @@
     "availability": "开放工作",
     "skipToContent": "跳至内容",
     "portraitAlt": "肖像",
+    "pdf": {
+      "downloadCta": "下载 PDF"
+    },
     "supplemental": {
       "courses": "课程",
       "publications": "刊物",

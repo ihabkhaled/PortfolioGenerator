@@ -3,6 +3,10 @@ import 'server-only';
 import { recordAuditEvent } from '@/modules/audit/server';
 import { migratePortfolioDocument } from '@/modules/portfolio-document';
 import {
+  invalidatePortfolioPdfCache,
+  invalidatePortfolioPdfCacheIfChanged,
+} from '@/modules/portfolio-pdf/server';
+import {
   getOwnedPortfolio,
   portfolioCacheTag,
   publishOwnedPortfolio,
@@ -72,6 +76,10 @@ export async function publishPortfolio(request: PublishRequest): Promise<Publish
 
   invalidateTagImmediately(portfolioCacheTag(portfolio.slug));
 
+  // Only if the newly published content actually differs from whatever
+  // produced the currently cached PDF — see the function's own comment.
+  await invalidatePortfolioPdfCacheIfChanged(portfolio.id, document, request.now);
+
   await recordAuditEvent({
     eventType: 'portfolio.published',
     ownerId: request.ownerId,
@@ -110,6 +118,10 @@ export async function unpublishPortfolio(request: PublishRequest): Promise<Publi
   }
 
   invalidateTagImmediately(portfolioCacheTag(portfolio.slug));
+
+  // Unconditional: nothing public remains, so nothing stays cached either —
+  // "don't keep old file."
+  await invalidatePortfolioPdfCache(portfolio.id);
 
   await recordAuditEvent({
     eventType: 'portfolio.unpublished',

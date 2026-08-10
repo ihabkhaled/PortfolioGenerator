@@ -10,6 +10,7 @@ import 'server-only';
 export { PORTFOLIO_CACHE_KEY_PREFIX } from './constants/portfolio-cache.constants';
 export {
   createPortfolio,
+  findPublishedByIdUnscoped,
   findPublishedBySlugUnscoped,
   findPublishedTranslationBySlugAndLocaleUnscoped,
   getOwnedPortfolio,
@@ -27,6 +28,7 @@ export {
 } from './repositories/portfolio.repository';
 export {
   getPublishedPortfolio,
+  getPublishedPortfolioById,
   getPublishedPortfolioForLocale,
   portfolioCacheTag,
 } from './services/public-portfolio.service';

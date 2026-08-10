@@ -398,6 +398,9 @@
     "builtWith": "Publié avec ProFolio",
     "navigationLabel": "Pages de portefeuille",
     "portraitAlt": "Portrait",
+    "pdf": {
+      "downloadCta": "Télécharger le PDF"
+    },
     "privatePage": {
       "title": "Cette page est privée",
       "description": "Saisissez le mot de passe que le propriétaire du portefeuille a partagé avec vous.",

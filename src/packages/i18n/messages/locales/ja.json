@@ -395,6 +395,9 @@
     "contactCta": "連絡する",
     "skipToContent": "コンテンツにスキップ",
     "portraitAlt": "肖像画",
+    "pdf": {
+      "downloadCta": "PDFをダウンロード"
+    },
     "supplemental": {
       "courses": "コース",
       "publications": "出版物",

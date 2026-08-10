@@ -23,6 +23,8 @@ lint rule is what makes the map true.
 | `next/cache`                                         | `packages/cache`         | Tag invalidation is a correctness requirement here, not a performance detail.                                                                              |
 | `next/og`                                            | `packages/og`            | The heaviest per-request dependency in the repository.                                                                                                     |
 | `next/font/*`                                        | `shared/fonts`           |                                                                                                                                                            |
+| `ioredis`                                            | `packages/redis`         | The only Redis client in the product; the PDF cache and download-token store are the only callers.                                                         |
+| `playwright-core`, `@sparticuz/chromium`, `pdf-lib`  | `packages/pdf-renderer`  | Headless Chromium print-to-PDF and PDF merging for the portfolio download feature, isolated from the untrusted-input PDF parser in `packages/pdf`.         |
 
 ## Packages with no vendor
 

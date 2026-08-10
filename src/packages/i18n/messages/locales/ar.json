@@ -404,6 +404,9 @@
       "denied": "كلمة المرور هذه غير متطابقة. التحقق من ذلك وحاول مرة أخرى."
     },
     "portraitAlt": "لَوحَة",
+    "pdf": {
+      "downloadCta": "تنزيل PDF"
+    },
     "navigationLabel": "صفحات المحفظة",
     "supplemental": {
       "courses": "الدورات",

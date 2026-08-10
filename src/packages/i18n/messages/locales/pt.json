@@ -398,6 +398,9 @@
     "builtWith": "Publicado com ProFolio",
     "navigationLabel": "Páginas do portfólio",
     "portraitAlt": "Retrato",
+    "pdf": {
+      "downloadCta": "Transferir PDF"
+    },
     "privatePage": {
       "title": "Esta página é privada",
       "description": "Digite a senha que o proprietário do portfólio compartilhou com você.",

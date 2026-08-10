@@ -398,6 +398,9 @@
     "builtWith": "Pubblicato con ProFolio",
     "navigationLabel": "Pagine del portfolio",
     "portraitAlt": "Ritratto",
+    "pdf": {
+      "downloadCta": "Scarica il PDF"
+    },
     "privatePage": {
       "title": "Questa pagina è privata",
       "description": "Inserisci la password che il proprietario del portafoglio ha condiviso con te.",

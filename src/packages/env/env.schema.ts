@@ -114,6 +114,27 @@ export const serverEnvSchema = z.object({
   CONTACT_SMTP_USER: optionalString,
   CONTACT_SMTP_PASS: optionalString,
   EMAIL_CAPTURE_PATH: z.literal('test-results/email-capture.jsonl').optional(),
+
+  /*
+   * Portfolio PDF download.
+   *
+   * Optional, like every other external integration here: unset, the cache
+   * and the download-token store both fall back to an in-process
+   * implementation (see `portfolio-pdf`'s registries) and the feature keeps
+   * working for a single instance, just without the cross-instance durability
+   * a real deployment needs. Production is expected to set it — see
+   * docs/deployment.md.
+   */
+  REDIS_URL: optionalString,
+  /*
+   * Escape hatch for the headless Chromium used to print a published
+   * portfolio to PDF. Unset in production, the renderer loads
+   * `@sparticuz/chromium`'s bundled build; unset outside production, it uses
+   * whatever Chromium `@playwright/test` already installed for the E2E suite.
+   * Set this to point at a Chromium binary directly on a deployment target
+   * that is neither of those.
+   */
+  PDF_CHROMIUM_EXECUTABLE_PATH: optionalString,
 });
 
 export const s3ConfiguredSchema = z.object({

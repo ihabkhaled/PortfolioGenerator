@@ -398,6 +398,9 @@
     "builtWith": "Publicado con ProFolio",
     "navigationLabel": "Páginas del portafolio",
     "portraitAlt": "Retrato",
+    "pdf": {
+      "downloadCta": "Descargar PDF"
+    },
     "privatePage": {
       "title": "Esta pagina es privada",
       "description": "Ingrese la contraseña que el propietario de la cartera compartió con usted.",

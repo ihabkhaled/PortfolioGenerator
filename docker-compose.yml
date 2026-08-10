@@ -1,6 +1,6 @@
 # Local dependencies, so a fresh checkout is one command from a working stack.
 #
-# Both services are pinned to a major tag rather than `latest`: a scanner that
+# Every service is pinned to a major tag rather than `latest`: a scanner that
 # silently changes version between two developers' machines is a difference
 # nobody will think to check when an upload starts behaving differently.
 
@@ -41,6 +41,23 @@ services:
       retries: 5
       start_period: 300s
 
+  # Optional. Backs the portfolio PDF cache and the rotating download token —
+  # see src/modules/portfolio-pdf. Unset REDIS_URL and the app falls back to
+  # an in-process implementation instead of failing to boot.
+  redis:
+    image: redis:7-alpine
+    container_name: redis-portfolio-generate
+    ports:
+      - '6379:6379'
+    volumes:
+      - portfolio-redis:/data
+    healthcheck:
+      test: ['CMD', 'redis-cli', 'ping']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
 volumes:
   portfolio-postgres:
   portfolio-clamav:
+  portfolio-redis:

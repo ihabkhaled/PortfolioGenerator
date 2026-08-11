@@ -88,6 +88,7 @@ export function PaypalCheckoutContainer(
 
     void paypal
       .Buttons({
+        cspNonce: nonce,
         createSubscription: (_data, actions) =>
           actions.subscription.create({ plan_id: planId, custom_id: ownerId }),
         onApprove: (data) => {
@@ -107,7 +108,7 @@ export function PaypalCheckoutContainer(
         },
       })
       .render(container);
-  }, [ownerId, planId, sdkReady]);
+  }, [nonce, ownerId, planId, sdkReady]);
 
   const sdkUrl = `https://www.paypal.com/sdk/js?client-id=${encodeURIComponent(clientId)}&vault=true&intent=subscription`;
 

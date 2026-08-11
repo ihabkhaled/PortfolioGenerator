@@ -94,11 +94,19 @@ describe('PayPal checkout', () => {
       },
     });
 
-    render(<PaypalCheckoutContainer ownerId="owner-1" clientId="client" labels={labels} />);
+    render(
+      <PaypalCheckoutContainer
+        ownerId="owner-1"
+        clientId="client"
+        nonce="request-nonce"
+        labels={labels}
+      />,
+    );
     await user.click(screen.getByRole('button', { name: 'SDK' }));
     await waitFor(() => {
       expect(renderButtons).toHaveBeenCalledOnce();
     });
+    expect(options).toMatchObject({ cspNonce: 'request-nonce' });
 
     const create = vi.fn().mockResolvedValue('I-created');
     await expect(options?.createSubscription({}, { subscription: { create } })).resolves.toBe(

@@ -76,11 +76,7 @@ export default async function DashboardLayout(props: {
             <span className={siteShellClasses.brandEmail}>{user.email}</span>
           </AppLink>
         }
-        navigation={
-          <AppLink href={ROUTE_PATHS.dashboardSettings} className={siteShellClasses.navLink}>
-            {tApp('nav.preferences')}
-          </AppLink>
-        }
+        navigation={null}
         actions={
           <ThemeToggleContainer label={tApp('theme.label')} options={buildThemeOptions(tApp)} />
         }

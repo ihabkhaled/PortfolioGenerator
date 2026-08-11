@@ -113,6 +113,8 @@ export interface PaypalApproveData {
 }
 
 export interface PaypalButtonsOptions {
+  /** Lets PayPal nonce the inline styles it injects for Smart Buttons. */
+  readonly cspNonce?: string | undefined;
   readonly createSubscription: (
     data: unknown,
     actions: PaypalSubscriptionActions,

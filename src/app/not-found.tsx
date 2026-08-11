@@ -8,6 +8,8 @@ import { buttonVariants } from '@/packages/ui-primitives';
 import { sectionClasses } from '@/shared/components/data-display/section.variants';
 import { ROUTE_PATHS } from '@/shared/constants/route-paths.constants';
 
+import MarketingLayout from './(marketing)/layout';
+
 export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
@@ -22,16 +24,18 @@ export default async function NotFoundPage(): Promise<ReactElement> {
   const t = await getServerTranslations(I18N_NAMESPACES.errors);
 
   return (
-    <main className={sectionClasses.page}>
-      <div className={sectionClasses.pageHeader}>
-        <h1 className={sectionClasses.pageTitle}>{t('notFoundTitle')}</h1>
-        <p className={sectionClasses.pageLead}>{t('notFoundLead')}</p>
-        <div className={sectionClasses.pageActions}>
-          <AppLink href={ROUTE_PATHS.home} className={buttonVariants({ variant: 'secondary' })}>
-            {t('backHome')}
-          </AppLink>
+    <MarketingLayout>
+      <div className={sectionClasses.page}>
+        <div className={sectionClasses.pageHeader}>
+          <h1 className={sectionClasses.pageTitle}>{t('notFoundTitle')}</h1>
+          <p className={sectionClasses.pageLead}>{t('notFoundLead')}</p>
+          <div className={sectionClasses.pageActions}>
+            <AppLink href={ROUTE_PATHS.home} className={buttonVariants({ variant: 'secondary' })}>
+              {t('backHome')}
+            </AppLink>
+          </div>
         </div>
       </div>
-    </main>
+    </MarketingLayout>
   );
 }

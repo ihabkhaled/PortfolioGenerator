@@ -30,6 +30,7 @@ export type {
 export type {
   EditorContainerProps,
   EditorLabels,
+  EditorMobilePane,
   EditorShellProps,
   WarningListProps,
 } from './types/editor-view.types';

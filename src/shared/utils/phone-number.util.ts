@@ -1,6 +1,7 @@
 import { COUNTRY_DIAL_CODES } from '@/shared/constants/country-codes.constants';
 import type {
   CountryDialCode,
+  FormattedPhoneNumberParts,
   SplitInternationalPhoneResult,
 } from '@/shared/types/country-code.types';
 
@@ -35,6 +36,32 @@ export function countryFlagEmoji(iso: string): string {
 }
 
 /**
+ * The flag and the `(dial) number` text as separate values.
+ *
+ * Split out from {@link formatPhoneNumber} so a caller that renders to the
+ * DOM can wrap the flag in its own element — the flag emoji has no fallback
+ * glyph on every platform (see `countryFlagEmoji`), and a caller may want to
+ * badge it rather than concatenate it into a plain string a reader cannot
+ * style separately.
+ */
+export function formatPhoneNumberParts(
+  iso: string | null,
+  nationalNumber: string | null,
+): FormattedPhoneNumberParts | null {
+  const trimmed = nationalNumber?.trim() ?? '';
+
+  if (trimmed === '') {
+    return null;
+  }
+
+  const country = findCountryByIso(iso);
+
+  return country === null
+    ? { flag: null, text: trimmed }
+    : { flag: countryFlagEmoji(country.iso), text: `(${country.dial}) ${trimmed}` };
+}
+
+/**
  * `🇪🇬 (+20) 100-156-8256`.
  *
  * The prefix is bracketed rather than run together with the number, because a
@@ -45,17 +72,13 @@ export function formatPhoneNumber(
   iso: string | null,
   nationalNumber: string | null,
 ): string | null {
-  const trimmed = nationalNumber?.trim() ?? '';
+  const parts = formatPhoneNumberParts(iso, nationalNumber);
 
-  if (trimmed === '') {
+  if (parts === null) {
     return null;
   }
 
-  const country = findCountryByIso(iso);
-
-  return country === null
-    ? trimmed
-    : `${countryFlagEmoji(country.iso)} (${country.dial}) ${trimmed}`;
+  return parts.flag === null ? parts.text : `${parts.flag} ${parts.text}`;
 }
 
 /** The `tel:` target. Punctuation a human reads is noise to a dialler. */

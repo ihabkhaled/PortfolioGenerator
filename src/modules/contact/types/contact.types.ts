@@ -20,6 +20,15 @@ export interface ContactResult {
 export type ContactSubmissionStatus =
   'idle' | 'pending' | 'accepted' | 'invalid' | 'rate-limited' | 'unavailable';
 
+export interface ContactFormContainerProps {
+  /**
+   * Rail eyebrow label shared with every other section on the page that
+   * embeds this form (e.g. a guide topic page) — matches the shared
+   * `Section` rhythm. Omit on a standalone rendering of the form.
+   */
+  readonly eyebrow?: string;
+}
+
 export interface ContactDependencies {
   readonly deliver: EmailSender['sendContact'];
   readonly consumeRateLimit: (input: {

@@ -29,7 +29,7 @@ export function PasswordInput(props: Readonly<PasswordInputProps>): ReactElement
 
   return (
     <div className="relative">
-      <Input {...rest} type={visible ? 'text' : 'password'} className={cn('pr-10', className)} />
+      <Input {...rest} type={visible ? 'text' : 'password'} className={cn('pr-11', className)} />
       <button
         type="button"
         onClick={() => {
@@ -37,7 +37,7 @@ export function PasswordInput(props: Readonly<PasswordInputProps>): ReactElement
         }}
         aria-label={visible ? hideLabel : showLabel}
         aria-pressed={visible}
-        className="absolute inset-y-0 right-0 flex w-10 items-center justify-center text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+        className="absolute inset-y-0 right-0 flex w-11 items-center justify-center text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
       >
         {visible ? (
           <HidePreviewIcon aria-hidden size={18} />

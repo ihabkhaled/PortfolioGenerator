@@ -17,21 +17,58 @@ export const portfolioShellClasses = {
   headerInner:
     'mx-auto flex min-h-16 max-w-6xl flex-wrap items-center justify-between gap-3 px-5 py-2 sm:px-8 lg:px-10',
   brand: 'grid min-w-0',
+  // The brand name doubles as a link back to the platform's own marketing
+  // home — distinct from the portfolio's own overview page (`navLinkCurrent`
+  // et al.), which is why it carries a different icon (`OverviewIcon` there,
+  // `HomeIcon` here) rather than reusing the same one for two different
+  // destinations.
+  brandLink:
+    'group flex min-w-0 items-center gap-2 rounded-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring',
+  brandHomeIcon:
+    'size-4 shrink-0 text-muted-foreground transition-colors group-hover:text-foreground',
   headerActions: 'flex min-w-0 flex-wrap items-center justify-end gap-2 sm:gap-3',
   footerLinks: 'flex flex-wrap items-center gap-3',
   brandName: 'font-display truncate text-[0.95rem] font-bold tracking-tight text-foreground',
   brandHeadline:
     'truncate font-mono text-[0.6875rem] font-medium uppercase tracking-[0.14em] text-muted-foreground',
-  // `overflow-x-auto` alone lets a browser decide it also needs a *vertical*
-  // scrollbar, and Windows renders that as a pair of stepper arrows next to the
-  // navigation. Pinning the vertical axis and hiding the horizontal bar keeps
-  // the overflow behaviour without the furniture.
-  nav: 'flex items-center gap-1 overflow-x-auto overflow-y-hidden [scrollbar-width:none] [&::-webkit-scrollbar]:hidden',
+  // The horizontal bar is a `sm:`-and-up affordance now that narrower
+  // viewports get their own collapsible menu (`navToggle`/`mobileNav`
+  // below) — a scrolling bar and a hamburger both trying to solve the same
+  // "too many items" problem at once is worse than either alone.
+  // `overflow-x-auto` alone still lets a browser decide it also needs a
+  // *vertical* scrollbar on a wide-but-short bar, and Windows renders that
+  // as a pair of stepper arrows next to the navigation; pinning the
+  // vertical axis keeps the overflow behaviour without the furniture, for
+  // the rarer case of a portfolio with enough custom pages to overflow even
+  // the desktop width.
+  nav: 'scroll-fade-x hidden items-center gap-1 overflow-x-auto overflow-y-hidden [scrollbar-width:none] sm:flex [&::-webkit-scrollbar]:hidden',
   navLink:
     'relative inline-flex min-h-11 cursor-pointer items-center gap-1.5 rounded-md px-2.5 py-2 text-sm font-medium whitespace-nowrap text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring',
   navLinkCurrent:
     'text-foreground after:absolute after:inset-x-3 after:-bottom-px after:h-px after:bg-primary after:content-[""]',
-  main: 'mx-auto w-full max-w-6xl px-5 sm:px-8 lg:px-10',
+  // The hamburger toggle only exists below `sm` — the same breakpoint where
+  // `nav` above disappears — so exactly one of the two navigation
+  // affordances is ever on screen at once.
+  navToggle:
+    'inline-flex size-9 shrink-0 cursor-pointer items-center justify-center rounded-md text-foreground transition-colors hover:bg-muted focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring sm:hidden',
+  // `absolute` against `header`'s own `sticky` positioning (sticky counts as
+  // a positioned ancestor) rather than pushing page content down in normal
+  // flow — the toggle button and this panel share one client component
+  // instance, but live at different depths inside `headerActions`, so
+  // anchoring to the header itself is what keeps the panel full-width
+  // regardless of the button's own position within that row.
+  mobileNav:
+    'absolute inset-x-0 top-full z-40 grid gap-1 border-b border-border bg-canvas px-5 py-3 shadow-lg sm:hidden',
+  mobileNavLink:
+    'relative flex min-h-11 cursor-pointer items-center gap-2.5 rounded-md px-3 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring',
+  mobileNavLinkCurrent: 'bg-muted text-foreground',
+  // The locale switcher (`localizationClasses.controls`) is `fixed` at the
+  // viewport bottom, not appended after the document's last element, so on a
+  // short page `body`'s own bottom reserve (src/app/styles.css) never comes
+  // into play — the page never scrolls far enough for it to matter. This
+  // reserve clears the switcher's own height (control padding + the select)
+  // plus its bottom inset regardless of page length.
+  main: 'mx-auto w-full max-w-6xl px-5 pb-[5.5rem] sm:px-8 lg:px-10',
   footer: 'mt-24 border-t border-border bg-surface/40',
   footerInner:
     'mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-6 px-5 py-12 sm:px-8 lg:px-10',
@@ -83,7 +120,10 @@ export const timelineClasses = {
 } as const;
 
 export const projectClasses = {
-  list: 'grid gap-4 sm:grid-cols-2',
+  // `items-start` overrides grid's default `stretch`: without it every card
+  // in a row grows to match its tallest sibling, leaving uneven dead space
+  // below a short description next to a long one.
+  list: 'grid items-start gap-4 sm:grid-cols-2',
   item: 'grid content-start gap-3 rounded-lg border border-border bg-surface-raised p-5',
   name: 'font-display text-lg font-semibold tracking-tight text-foreground',
   summary: 'leading-relaxed text-sm text-muted-foreground text-pretty',
@@ -126,6 +166,14 @@ export const contactClasses = {
   value: 'text-sm text-foreground',
   link: 'text-sm text-primary-readable underline-offset-4 hover:underline',
   links: 'flex flex-wrap gap-x-5 gap-y-2',
+  // The regional-indicator flag emoji has no fallback glyph: several Windows
+  // builds render the two codepoints as bare capital letters (e.g. `EG`)
+  // instead of composing a flag. Wrapping the emoji in a badge means that
+  // failure mode still reads as an intentional country-code chip rather than
+  // a rendering bug, whichever way the reader's font renders it.
+  phoneValue: 'inline-flex flex-wrap items-center gap-1.5',
+  phoneFlag:
+    'inline-flex min-w-[1.75rem] items-center justify-center rounded-full border border-border bg-surface px-1 py-0.5 font-mono text-[0.6875rem] leading-none text-muted-foreground',
 } as const;
 
 export const customBlockClasses = {

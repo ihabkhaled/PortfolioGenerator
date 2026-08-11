@@ -24,6 +24,12 @@ export const siteShellClasses = {
   brandName: 'font-display whitespace-nowrap text-[0.95rem] font-bold tracking-tight',
   brandRole:
     'hidden truncate font-mono text-[0.6875rem] font-medium uppercase tracking-[0.14em] text-muted-foreground sm:inline',
+  // For real user-supplied data next to the brand mark — a signed-in email,
+  // not a marketing tagline. `brandRole`'s uppercase tracked mono treatment is
+  // built for a handful of short display words; forcing an email address
+  // through it (`USER@EXAMPLE.COM`) fights the one thing a user actually
+  // wants here, which is to read it back correctly.
+  brandEmail: 'hidden truncate text-[0.8125rem] font-medium text-muted-foreground sm:inline',
 
   headerActions: 'hidden min-w-0 items-center justify-end gap-2 sm:flex sm:gap-3',
   nav: 'flex items-center gap-1 sm:gap-2',

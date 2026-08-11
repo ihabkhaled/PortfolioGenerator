@@ -10,9 +10,9 @@ import { ROUTE_PATHS } from '@/shared/constants/route-paths.constants';
 
 import { contactFormClasses } from '../constants/contact-style.constants';
 import { CONTACT_ERROR_STATUSES } from '../constants/contact.constants';
-import type { ContactSubmissionStatus } from '../types/contact.types';
+import type { ContactFormContainerProps, ContactSubmissionStatus } from '../types/contact.types';
 
-export function ContactFormContainer(): ReactElement {
+export function ContactFormContainer(props: Readonly<ContactFormContainerProps>): ReactElement {
   const t = useAppTranslation(I18N_NAMESPACES.contact);
   const [status, setStatus] = useState<ContactSubmissionStatus>('idle');
 
@@ -57,6 +57,7 @@ export function ContactFormContainer(): ReactElement {
 
   return (
     <section className={contactFormClasses.section} aria-labelledby="contact-form-title">
+      {props.eyebrow ? <p className={contactFormClasses.eyebrow}>{props.eyebrow}</p> : null}
       <h2 id="contact-form-title" className={contactFormClasses.heading}>
         {t('title')}
       </h2>

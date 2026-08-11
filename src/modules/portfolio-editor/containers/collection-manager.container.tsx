@@ -40,6 +40,9 @@ export function CollectionManagerContainer(props: Readonly<CollectionManagerProp
               {t('collections.add')}
             </Button>
           </div>
+          {props.document[key].length === 0 ? (
+            <p className={editorClasses.fieldHint}>{t(`collections.emptyHints.${key}`)}</p>
+          ) : null}
           {props.document[key].map((item, index) => (
             <CollectionEntryContainer
               key={item.id}

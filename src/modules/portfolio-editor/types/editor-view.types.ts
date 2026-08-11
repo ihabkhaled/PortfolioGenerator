@@ -34,12 +34,20 @@ export interface EditorLabels {
   readonly warningsTitle: string;
 }
 
+/** Which pane is visible below the `lg` breakpoint, where there is room for one. */
+export type EditorMobilePane = 'forms' | 'preview';
+
 export interface EditorShellProps {
   readonly title: string;
   readonly subtitle: string;
   readonly actions: ReactNode;
   readonly forms: ReactNode;
   readonly preview: ReactNode;
+  readonly showingPreview: boolean;
+  readonly onEditClick: () => void;
+  readonly onPreviewClick: () => void;
+  readonly mobileEditLabel: string;
+  readonly mobilePreviewLabel: string;
 }
 
 export interface WarningListProps {

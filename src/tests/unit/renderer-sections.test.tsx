@@ -173,7 +173,14 @@ describe('the contact band', () => {
       },
     });
 
-    expect(screen.getByText('🇵🇹 (+351) 000 000 000')).toBeInTheDocument();
+    // The flag sits in its own `aria-hidden` badge (see `contactClasses.phoneFlag`)
+    // so a screen reader announces the dialable number alone, while the link's
+    // full text content — what a sighted reader sees — still reads as one
+    // continuous string with the flag in front of it.
+    const phoneLink = screen.getByRole('link', { name: '(+351) 000 000 000' });
+
+    expect(phoneLink).toHaveAttribute('href', 'tel:+351000000000');
+    expect(phoneLink).toHaveTextContent('🇵🇹 (+351) 000 000 000');
   });
 
   it('omits the link row when the section turns links off', () => {

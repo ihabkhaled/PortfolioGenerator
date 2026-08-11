@@ -6,6 +6,10 @@ export const accountClasses = {
   section: 'grid gap-4 rounded-xl border border-border bg-surface-raised p-5',
   dangerSection: 'grid gap-4 rounded-xl border border-danger/40 bg-surface-raised p-5',
   sectionTitle: 'font-display text-base font-semibold text-foreground',
+  // One step down from `sectionTitle`, matching the editor module's
+  // `entryTitle` convention: a subsection nested inside a card reads as a
+  // heading, not as another card of the same weight.
+  subsectionTitle: 'text-sm font-medium text-foreground',
   sectionHint: 'text-sm text-muted-foreground',
   field: 'grid gap-1.5',
   row: 'flex flex-wrap items-end gap-3',

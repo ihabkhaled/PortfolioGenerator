@@ -25,6 +25,8 @@ export interface PortfolioLabels {
   readonly skipToContent: string;
   readonly builtWith: string;
   readonly navigationLabel: string;
+  readonly homeLabel: string;
+  readonly menuToggleLabel: string;
   readonly portraitAlt: string;
   readonly galleryClose: string;
   readonly supplemental: Readonly<{

@@ -26,25 +26,33 @@ export const MARKETING_PAGES: readonly MarketingPageDefinition[] = slugs.map((sl
   sections: [
     {
       kind: 'use-case',
-      titleKey: 'landing.useCases.title',
+      titleKey: `pages.${slug}.sections.firstTitle`,
       bodyKey: `pages.${slug}.sections.first`,
     },
     {
       kind: 'trust-boundary',
-      titleKey: 'landing.trust.title',
+      titleKey: `pages.${slug}.sections.secondTitle`,
       bodyKey: `pages.${slug}.sections.second`,
     },
-    { kind: 'comparison', titleKey: 'principlesTitle', bodyKey: `pages.${slug}.sections.third` },
-    { kind: 'faq', titleKey: 'landing.faq.title', bodyKey: `pages.${slug}.sections.first` },
+    {
+      kind: 'comparison',
+      titleKey: `pages.${slug}.sections.thirdTitle`,
+      bodyKey: `pages.${slug}.sections.third`,
+    },
+    {
+      kind: 'faq',
+      titleKey: `pages.${slug}.sections.fourthTitle`,
+      bodyKey: `pages.${slug}.sections.fourth`,
+    },
     {
       kind: 'resource',
-      titleKey: 'landing.directory.title',
-      bodyKey: `pages.${slug}.sections.second`,
+      titleKey: `pages.${slug}.sections.fifthTitle`,
+      bodyKey: `pages.${slug}.sections.fifth`,
     },
     {
       kind: 'internal-links',
-      titleKey: 'landing.cta.title',
-      bodyKey: `pages.${slug}.sections.third`,
+      titleKey: `pages.${slug}.sections.sixthTitle`,
+      bodyKey: `pages.${slug}.sections.sixth`,
     },
   ],
   relatedSlugs: [

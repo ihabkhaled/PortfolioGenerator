@@ -2,7 +2,7 @@
 // client-boundary-reason: the editor holds an in-progress draft, a dirty flag
 // and a save lifecycle, and re-renders the live preview on every keystroke.
 
-import type { ReactElement } from 'react';
+import { useState, type ReactElement } from 'react';
 
 import { buildNavigation, findVisiblePage, HOME_PAGE_SLUG } from '@/modules/portfolio-document';
 import { buildPortfolioLabels, PortfolioTemplate } from '@/modules/portfolio-renderer';
@@ -37,7 +37,7 @@ import {
   setSeoField,
 } from '../helpers/document-edit.helper';
 import { useDraftEditor } from '../hooks/use-draft-editor.hook';
-import type { EditorContainerProps } from '../types/editor-view.types';
+import type { EditorContainerProps, EditorMobilePane } from '../types/editor-view.types';
 import type { SectionListEntry } from '../types/section-list.types';
 
 import { AssetCollectionsUploadContainer } from './asset-collections-upload.container';
@@ -48,11 +48,18 @@ import { PortraitUploadContainer } from './portrait-upload.container';
 export function PortfolioEditorContainer(props: Readonly<EditorContainerProps>): ReactElement {
   const t = useAppTranslation(I18N_NAMESPACES.editor);
   const tPortfolio = useAppTranslation(I18N_NAMESPACES.portfolio);
+  // "Edit" / "Preview" are the same two words the dashboard's own portfolio
+  // actions already use, and are already fully localized there — reusing them
+  // keeps this segmented control legible in every locale that already
+  // exists, instead of adding two more keys the rest of the catalog would
+  // need to catch up to.
+  const tDashboard = useAppTranslation(I18N_NAMESPACES.dashboard);
   const editor = useDraftEditor({
     portfolioId: props.portfolioId,
     initialDocument: props.initialDocument,
     initialVersion: props.initialVersion,
   });
+  const [mobilePane, setMobilePane] = useState<EditorMobilePane>('forms');
 
   useDraftStatusPublisher({
     isDirty: editor.isDirty,
@@ -92,6 +99,15 @@ export function PortfolioEditorContainer(props: Readonly<EditorContainerProps>):
     <EditorShell
       title={document.identity.displayName || t('untitled')}
       subtitle={t(editor.isDirty ? 'unsaved' : 'saved')}
+      showingPreview={mobilePane === 'preview'}
+      onEditClick={() => {
+        setMobilePane('forms');
+      }}
+      onPreviewClick={() => {
+        setMobilePane('preview');
+      }}
+      mobileEditLabel={tDashboard('actions.edit')}
+      mobilePreviewLabel={tDashboard('actions.preview')}
       actions={
         <>
           <span className={editor.isDirty ? editorClasses.status : editorClasses.statusSaved}>

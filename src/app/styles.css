@@ -260,11 +260,16 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* Install/update UI is taller and sits above the locale control. Reserve its
-   full stack only while it exists; :has() removes the extra space as soon as
-   the prompt is dismissed or the update activates. */
+/* Install/update UI sits above the locale control below `lg:` (see
+   `pwa-style.constants`), so the document needs room for both stacked.
+   Reserve that full stack only while the prompt exists; :has() removes the
+   extra space as soon as it's dismissed or the update activates. This only
+   helps a page long enough to scroll — see `responsive-proof.ts` for the
+   scroll-to-bottom check this backs, and the banner's own compact sizing for
+   how a short, non-scrolling page (an auth form) stays clear of it without
+   ever needing to scroll at all. */
 body:has([data-fixed-surface='pwa']) {
-  padding-bottom: calc(env(safe-area-inset-bottom) + 18rem);
+  padding-bottom: calc(env(safe-area-inset-bottom) + 11rem);
 }
 
 @media (display-mode: standalone) {
@@ -291,6 +296,26 @@ body:has([data-fixed-surface='pwa']) {
     );
   background-size: 4rem 4rem;
   mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 30%, transparent 78%);
+}
+
+/*
+ * The edge cue for a horizontally scrolling strip whose scrollbar is
+ * deliberately hidden (see `portfolioShellClasses.nav`) — otherwise there is
+ * no signal that more content sits past the visible edge. Unlike
+ * `.surface-grid`, which fades a whole decorative layer, this mask stays
+ * opaque until the last fraction of each edge, so it reads as "more this
+ * way" rather than as a fade of the content itself. It has no scroll-position
+ * awareness, so it fades both edges unconditionally: honest for a plain CSS
+ * fix, since it cannot know which side currently has hidden content.
+ */
+.scroll-fade-x {
+  mask-image: linear-gradient(
+    to right,
+    transparent 0,
+    #000 1.25rem,
+    #000 calc(100% - 1.25rem),
+    transparent 100%
+  );
 }
 
 ::selection {

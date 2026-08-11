@@ -54,7 +54,7 @@ export function createEmptyPortfolioDocument(displayName: string): PortfolioDocu
         id: 'page-home',
         slug: HOME_PAGE_SLUG,
         title: 'Home',
-        navLabel: 'Home',
+        navLabel: 'Overview',
         description: null,
         visible: true,
         visibility: 'public',

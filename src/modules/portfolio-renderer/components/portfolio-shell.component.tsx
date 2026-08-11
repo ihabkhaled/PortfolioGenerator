@@ -1,6 +1,9 @@
 import type { ReactElement } from 'react';
 
+import { HomeIcon } from '@/packages/icons';
+import { AppLink } from '@/packages/link';
 import { LANDMARK_IDS } from '@/shared/accessibility/landmark-ids.constants';
+import { ROUTE_PATHS } from '@/shared/constants/route-paths.constants';
 
 import { portfolioShellClasses } from '../constants/template-style.constants';
 import type { PortfolioShellProps } from '../types/section-props.types';
@@ -12,16 +15,24 @@ export function PortfolioShell(props: Readonly<PortfolioShellProps>): ReactEleme
       {props.banner}
       <header className={portfolioShellClasses.header}>
         <div className={portfolioShellClasses.headerInner}>
-          <div className={portfolioShellClasses.brand}>
-            <span className={portfolioShellClasses.brandName}>{props.displayName}</span>
-            {props.headline === null ? null : (
-              <span className={portfolioShellClasses.brandHeadline}>{props.headline}</span>
-            )}
-          </div>
+          <AppLink
+            href={ROUTE_PATHS.home}
+            className={portfolioShellClasses.brandLink}
+            aria-label={props.homeLabel}
+          >
+            <HomeIcon aria-hidden size={16} className={portfolioShellClasses.brandHomeIcon} />
+            <div className={portfolioShellClasses.brand}>
+              <span className={portfolioShellClasses.brandName}>{props.displayName}</span>
+              {props.headline === null ? null : (
+                <span className={portfolioShellClasses.brandHeadline}>{props.headline}</span>
+              )}
+            </div>
+          </AppLink>
           <div className={portfolioShellClasses.headerActions}>
             <nav aria-label={props.navigationLabel} className={portfolioShellClasses.nav}>
               {props.navigation}
             </nav>
+            {props.mobileMenu}
             {props.actions}
           </div>
         </div>

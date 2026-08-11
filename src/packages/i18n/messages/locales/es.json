@@ -7,7 +7,7 @@
     },
     "pwa": {
       "installTitle": "Instalar ProFolio",
-      "installDescription": "Mant\u00e9n listo tu espacio de portafolio en este dispositivo.",
+      "installDescription": "Mantén listo tu espacio de portafolio en este dispositivo.",
       "installAction": "Instalar",
       "dismiss": "Cerrar"
     },
@@ -151,7 +151,16 @@
         "sections": {
           "first": "La extracción de CV revisable mantiene todos los reclamos bajo su control.",
           "second": "Las páginas flexibles combinan experiencia, proyectos, habilidades, educación y sus propias secciones.",
-          "third": "Las instantáneas publicadas se mantienen rápidas incluso cuando los servicios de creación no están disponibles."
+          "third": "Las instantáneas publicadas se mantienen rápidas incluso cuando los servicios de creación no están disponibles.",
+          "firstTitle": "Extracción verificada",
+          "secondTitle": "Páginas creadas a partir de contenido real",
+          "thirdTitle": "Instantáneas que no dependen de nosotros",
+          "fourthTitle": "Cada sección es opcional",
+          "fourth": "Reordene, oculte o elimine cualquier sección: nada es fijo, de modo que la página se ajusta a la carrera, no a una plantilla.",
+          "fifthTitle": "Una cuenta, varios portafolios",
+          "fifth": "Publique un portafolio por rol o audiencia desde una sola cuenta, cada uno con su propia dirección y su propia revisión.",
+          "sixthTitle": "Extras incluidos",
+          "sixth": "Un PDF descargable, una aplicación instalable y un feed público provienen de los mismos datos publicados, sin configuración adicional."
         }
       },
       "how-it-works": {
@@ -160,7 +169,16 @@
         "sections": {
           "first": "Su PDF se valida y se lee como un documento fuente privado.",
           "second": "Los datos extraídos se convierten en un borrador editable con advertencias, nunca en una página pública.",
-          "third": "Usted elige la dirección y la publica solo después de que la vista previa sea precisa."
+          "third": "Usted elige la dirección y la publica solo después de que la vista previa sea precisa.",
+          "firstTitle": "Cargar",
+          "secondTitle": "Revisar el borrador",
+          "thirdTitle": "Publicar a su manera",
+          "fourthTitle": "Nada se hace público por accidente",
+          "fourth": "La importación produce un borrador, no una página: la dirección que elige permanece sin reclamar hasta que usted mismo la publica.",
+          "fifthTitle": "Vuelva cuando quiera",
+          "fifth": "Vuelva a abrir el editor después de publicar para actualizar un puesto, agregar un proyecto u ocultar una página: los cambios permanecen privados hasta que guarde y vuelva a publicar.",
+          "sixthTitle": "Véalo de principio a fin",
+          "sixth": "La ruta directa del CV a una dirección pública toma minutos, no una plantilla con la que luchar."
         }
       },
       "examples": {
@@ -169,7 +187,16 @@
         "sections": {
           "first": "Los portafolios de ingeniería destacan los sistemas, los resultados y la profundidad técnica.",
           "second": "Los portafolios de diseño pueden combinar narrativas de proyectos con medios de galería propios.",
-          "third": "Los portafolios de inicio de carrera pueden liderar con educación, cursos y proyectos demostrables."
+          "third": "Los portafolios de inicio de carrera pueden liderar con educación, cursos y proyectos demostrables.",
+          "firstTitle": "Ingeniería",
+          "secondTitle": "Diseño",
+          "thirdTitle": "Inicio de carrera",
+          "fourthTitle": "Varios roles, una sola identidad",
+          "fourth": "Un consultor o especialista independiente puede publicar un portafolio enfocado por especialidad, cada uno basado en los mismos datos revisados.",
+          "fifthTitle": "Coherentes, no idénticos",
+          "fifth": "Todos los portafolios comparten la misma estructura accesible, así que no hay dos iguales y ninguno parece incompleto.",
+          "sixthTitle": "Comience con su CV",
+          "sixth": "La importación muestra lo que produce su propio CV antes de que decida si lo publica."
         }
       },
       "templates": {
@@ -178,7 +205,16 @@
         "sections": {
           "first": "Las secciones semánticas crean una jerarquía legible en todos los tamaños de pantalla.",
           "second": "Las opciones de acento y tema con nombre preservan el contraste probado.",
-          "third": "Ningún script, estilo o incrustación arbitrario puede comprometer a un visitante."
+          "third": "Ningún script, estilo o incrustación arbitrario puede comprometer a un visitante.",
+          "firstTitle": "Estructura sobre decoración",
+          "secondTitle": "Temas con límites",
+          "thirdTitle": "Sin superficie abierta para scripts",
+          "fourthTitle": "Claro y oscuro, en equilibrio",
+          "fourth": "Cada tema incluye una variante clara y una oscura que cumplen el mismo estándar de contraste, por lo que la preferencia de un visitante nunca implica una versión inferior.",
+          "fifthTitle": "Las secciones que usted elige",
+          "fifth": "La plantilla se adapta a las secciones que estén visibles: un portafolio que solo muestra proyectos y habilidades se ve intencional, no incompleto.",
+          "sixthTitle": "Véalo en acción",
+          "sixth": "Los portafolios de ejemplo muestran cómo la misma plantilla se adapta a carreras muy distintas."
         }
       },
       "cv-import": {
@@ -187,7 +223,16 @@
         "sections": {
           "first": "Las firmas y los límites del PDF se verifican antes de que comience el análisis.",
           "second": "Los valores extraídos conservan advertencias cuando es importante una revisión humana.",
-          "third": "El CV original permanece privado y el importador nunca se publica."
+          "third": "El CV original permanece privado y el importador nunca se publica.",
+          "firstTitle": "Verificado antes de leerse",
+          "secondTitle": "Advertencias, no vacíos silenciosos",
+          "thirdTitle": "Privado hasta que usted publica",
+          "fourthTitle": "También documentos de Word",
+          "fourth": "Las importaciones en DOCX pasan por el mismo proceso validado por el escáner que un PDF antes de que comience la extracción.",
+          "fifthTitle": "Nada se inventa",
+          "fifth": "Un campo que el CV no contiene permanece vacío, en lugar de completarse con una suposición plausible.",
+          "sixthTitle": "Qué rechaza el importador",
+          "sixth": "Los archivos que no pasan la validación (tipo incorrecto, demasiado grandes o ilegibles) se rechazan con un motivo, nunca se aceptan en silencio."
         }
       },
       "ai-accuracy": {
@@ -196,7 +241,16 @@
         "sections": {
           "first": "El modelo recibe el texto extraído a través de un contrato estructurado acotado.",
           "second": "La validación del esquema rechaza la salida con formato incorrecto antes de que llegue al editor.",
-          "third": "Las mejoras en la escritura son acciones separadas y no pueden reemplazar silenciosamente los hechos."
+          "third": "Las mejoras en la escritura son acciones separadas y no pueden reemplazar silenciosamente los hechos.",
+          "firstTitle": "Un contrato acotado",
+          "secondTitle": "Salida validada por esquema",
+          "thirdTitle": "La ayuda de escritura permanece aparte",
+          "fourthTitle": "Funciona incluso sin un modelo",
+          "fourth": "Un mecanismo de respaldo determinista lee directamente el texto estructurado del CV cuando un proveedor de modelo no está disponible, de modo que la importación nunca depende de que un único servicio se mantenga activo.",
+          "fifthTitle": "Una instrucción en un CV sigue siendo solo texto",
+          "fifth": "El contenido extraído de un documento se trata como datos para mostrar, nunca como una instrucción que el asistente deba seguir.",
+          "sixthTitle": "Usted revisa antes de que sea público",
+          "sixth": "Cada campo extraído aparece en el editor para su corrección antes de que algo llegue a una página publicada."
         }
       },
       "security": {
@@ -205,7 +259,16 @@
         "sections": {
           "first": "Las lecturas y escrituras del panel están dirigidas al propietario autenticado.",
           "second": "Las cargas se identifican por contenido, se escanean y se almacenan bajo claves generadas por el servidor.",
-          "third": "La representación pública no importa la creación, el analizador, la IA ni la ruta de almacenamiento privado."
+          "third": "La representación pública no importa la creación, el analizador, la IA ni la ruta de almacenamiento privado.",
+          "firstTitle": "Limitado al propietario",
+          "secondTitle": "Las cargas se verifican, no se asumen seguras",
+          "thirdTitle": "Una superficie pública reducida",
+          "fourthTitle": "Contraseñas que controla el propietario de la página",
+          "fourth": "Cualquier página puede tener su propia contraseña compartida, verificada en el servidor, sin revelar qué páginas existen a quien no la tenga.",
+          "fifthTitle": "Adivinar la dirección de un borrador falla de la misma manera",
+          "fifth": "Un portafolio sin publicar y un error de escritura devuelven exactamente la misma respuesta, de modo que probar direcciones no permite distinguir entre ambos casos.",
+          "sixthTitle": "Informado, no supuesto",
+          "sixth": "Un problema de seguridad llega directamente al equipo a través de la página de contacto, sin necesidad de describirlo primero en público."
         }
       },
       "privacy": {
@@ -214,7 +277,16 @@
         "sections": {
           "first": "Un CV sin formato nunca se entrega desde una URL de objeto público.",
           "second": "Los canales y páginas de contacto ocultos se omiten en lugar de disfrazarse.",
-          "third": "La eliminación de la cuenta elimina las filas de identificación y los archivos de propiedad."
+          "third": "La eliminación de la cuenta elimina las filas de identificación y los archivos de propiedad.",
+          "firstTitle": "Sin enlace público a un archivo sin formato",
+          "secondTitle": "Oculto significa ausente, no disfrazado",
+          "thirdTitle": "La eliminación borra el registro",
+          "fourthTitle": "Indexar es opcional",
+          "fourth": "Un portafolio puede desactivar por completo la indexación en buscadores, o mantener una página específica fuera del mapa del sitio mientras el resto permanece público.",
+          "fifthTitle": "Una contraseña protege una sola página",
+          "fifth": "El acceso concedido a una página privada se limita exactamente a esa página y a ese idioma; no desbloquea nada más.",
+          "sixthTitle": "Lea los términos con claridad",
+          "sixth": "Lo que el servicio hace con lo que usted carga está explicado en los términos, no escondido en una política que nadie lee."
         }
       },
       "about": {
@@ -223,7 +295,16 @@
         "sections": {
           "first": "El producto comienza con evidencias ya escritas en un CV.",
           "second": "La edición y la publicación siguen siendo decisiones humanas explícitas.",
-          "third": "Las páginas públicas son lecturas duraderas, no demostraciones de IA en vivo."
+          "third": "Las páginas públicas son lecturas duraderas, no demostraciones de IA en vivo.",
+          "firstTitle": "Comienza con evidencia",
+          "secondTitle": "Usted decide",
+          "thirdTitle": "Páginas estables",
+          "fourthTitle": "Por qué existe",
+          "fourth": "Convertir un CV en un sitio presentable solía significar pelear con una plantilla o pagar la factura de un especialista independiente; esto lo reduce a una importación y una revisión.",
+          "fifthTitle": "Una superficie pequeña y deliberada",
+          "fifth": "El producto hace una sola cosa (convertir un CV en un portafolio revisado) en lugar de expandirse hacia un creador de sitios genérico.",
+          "sixthTitle": "Lea la misión",
+          "sixth": "La página de misión expone los compromisos concretos que este producto busca cumplir."
         }
       },
       "mission": {
@@ -232,7 +313,16 @@
         "sections": {
           "first": "Reducir el coste mecánico de convertir un CV en un sitio coherente.",
           "second": "Nunca cambie la velocidad por afirmaciones profesionales plausibles pero sin fundamento.",
-          "third": "Dale a cada persona una dirección estable y control sobre lo que dice."
+          "third": "Dale a cada persona una dirección estable y control sobre lo que dice.",
+          "firstTitle": "Reducir el coste mecánico",
+          "secondTitle": "La velocidad nunca inventa una afirmación",
+          "thirdTitle": "Una dirección propia",
+          "fourthTitle": "Accesible de forma predeterminada, no bajo solicitud",
+          "fourth": "Cada portafolio cumple automáticamente con el mismo estándar de accesibilidad: no es una opción que alguien deba saber activar.",
+          "fifthTitle": "Diseñado para poder verificarse",
+          "fifth": "Un visitante puede confiar en que lo que está leyendo fue revisado por la persona a la que describe, y no generado momentos antes solo para él.",
+          "sixthTitle": "Vea los compromisos en la práctica",
+          "sixth": "Las páginas de funciones y seguridad muestran cómo se traducen estos compromisos en decisiones reales del producto."
         }
       },
       "contact": {
@@ -241,7 +331,16 @@
         "sections": {
           "first": "Las preguntas sobre productos reciben respuestas prácticas sobre importación, edición y publicación.",
           "second": "Los informes de accesibilidad deben incluir la página, el navegador y la tecnología de asistencia utilizada.",
-          "third": "Los informes de seguridad se manejan de forma discreta y nunca requieren el envío de su CV."
+          "third": "Los informes de seguridad se manejan de forma discreta y nunca requieren el envío de su CV.",
+          "firstTitle": "Preguntas sobre el producto",
+          "secondTitle": "Informes de accesibilidad",
+          "thirdTitle": "Informes de seguridad",
+          "fourthTitle": "Antes de escribirnos",
+          "fourth": "Las páginas de preguntas frecuentes y ayuda responden las dudas más comunes sobre importación, privacidad y publicación antes de que tenga que esperar una respuesta.",
+          "fifthTitle": "Lo que no necesitamos de usted",
+          "fifth": "Un informe nunca requiere adjuntar su CV ni compartir la contraseña de su cuenta: describa el problema, no el documento privado.",
+          "sixthTitle": "Tiempo de respuesta",
+          "sixth": "Los mensajes llegan directamente a un equipo pequeño, no a una cola de espera: espere una respuesta real, no un contestador automático."
         }
       },
       "help": {
@@ -250,7 +349,16 @@
         "sections": {
           "first": "La ayuda para la importación cubre archivos PDF legibles, límites, escaneos y archivos rechazados.",
           "second": "La ayuda del editor explica la visibilidad, el orden, las vistas previas y las advertencias.",
-          "third": "La ayuda para la publicación cubre direcciones, actualizaciones, páginas privadas y despublicación."
+          "third": "La ayuda para la publicación cubre direcciones, actualizaciones, páginas privadas y despublicación.",
+          "firstTitle": "Importación",
+          "secondTitle": "Editor",
+          "thirdTitle": "Publicación",
+          "fourthTitle": "¿Todavía tiene dudas?",
+          "fourth": "La página de preguntas frecuentes reúne las dudas que la gente más consulta antes de abrir un mensaje de soporte.",
+          "fifthTitle": "¿Algo no se ve como debería?",
+          "fifth": "La página de registro de cambios explica las modificaciones recientes que podrían afectar lo que ve en el editor o en una página publicada.",
+          "sixthTitle": "Hable con alguien del equipo",
+          "sixth": "La página de contacto lo comunica directamente con el equipo para todo lo que esta página no responda."
         }
       },
       "faq": {
@@ -259,7 +367,16 @@
         "sections": {
           "first": "Nada se publica automáticamente: cada importación produce un borrador.",
           "second": "Los datos faltantes del CV permanecen vacíos en lugar de completarse por inferencia.",
-          "third": "Un portafolio publicado sigue funcionando sin el proveedor de inteligencia artificial o el analizador de PDF."
+          "third": "Un portafolio publicado sigue funcionando sin el proveedor de inteligencia artificial o el analizador de PDF.",
+          "firstTitle": "¿Se publica automáticamente?",
+          "secondTitle": "¿Qué pasa si falta un dato?",
+          "thirdTitle": "¿Qué pasa después de publicar?",
+          "fourthTitle": "¿Puedo tener más de un portafolio?",
+          "fourth": "Sí: una cuenta puede tener varios portafolios, cada uno con su propia dirección y su propia revisión antes de publicarse.",
+          "fifthTitle": "¿Puedo retirar una página publicada?",
+          "fifth": "Puede despublicar o eliminar un portafolio desde el panel en cualquier momento; no es necesario contactar con soporte.",
+          "sixthTitle": "¿Algo de esto es gratis?",
+          "sixth": "La página de configuración de la cuenta muestra el plan actual y lo que incluye; las nuevas suscripciones cuentan con un período de prueba gratuita."
         }
       },
       "accessibility": {
@@ -268,7 +385,16 @@
         "sections": {
           "first": "Los puntos de referencia, encabezados, etiquetas y estados de la página actual admiten la navegación.",
           "second": "El enfoque visible y los controles táctiles sirven para lectores móviles y de teclado.",
-          "third": "Las imágenes de la galería requieren alternativas útiles y el movimiento respeta la configuración de movimiento reducido."
+          "third": "Las imágenes de la galería requieren alternativas útiles y el movimiento respeta la configuración de movimiento reducido.",
+          "firstTitle": "Una estructura que se anuncia",
+          "secondTitle": "Operable sin mouse",
+          "thirdTitle": "Contenido multimedia que respeta las preferencias",
+          "fourthTitle": "Comprobado, no asumido",
+          "fourth": "Cada página pública, y el propio editor, se prueban frente a las WCAG 2.2 AA en lugar de confiar en los valores predeterminados del framework.",
+          "fifthTitle": "El editor también es accesible",
+          "fifth": "Reordenar secciones, subir archivos y revisar los campos extraídos funciona todo desde el teclado, no solo el resultado publicado.",
+          "sixthTitle": "¿Encontró un problema?",
+          "sixth": "La página de contacto tiene una vía específica para informes de accesibilidad, incluyendo qué tecnología de asistencia reveló el problema."
         }
       },
       "terms": {
@@ -277,7 +403,16 @@
         "sections": {
           "first": "Usted conserva la responsabilidad de la información profesional que publica.",
           "second": "No cargues malware, te hagas pasar por otra persona ni eludas los controles de acceso.",
-          "third": "Puede cancelar la publicación o eliminar sus datos utilizando los controles proporcionados."
+          "third": "Puede cancelar la publicación o eliminar sus datos utilizando los controles proporcionados.",
+          "firstTitle": "Usted es responsable de lo que publica",
+          "secondTitle": "Qué no está permitido",
+          "thirdTitle": "Puede irse cuando quiera",
+          "fourthTitle": "Qué almacena el servicio",
+          "fourth": "Para un portafolio publicado, solo se almacenan la instantánea revisada y los activos que usted adjunta explícitamente; consulte la página de privacidad para conocer el alcance completo.",
+          "fifthTitle": "Cambios en estos términos",
+          "fifth": "Los cambios importantes se reflejan aquí y, cuando corresponde, se señalan en la página de registro de cambios.",
+          "sixthTitle": "Preguntas sobre algún término",
+          "sixth": "La página de contacto lo comunica con el equipo para todo lo que estos términos no dejen claro."
         }
       },
       "changelog": {
@@ -286,7 +421,16 @@
         "sections": {
           "first": "Los cambios en los documentos explican nuevos campos y el comportamiento de migración.",
           "second": "Los cambios de seguridad identifican límites reforzados sin exponer los detalles del exploit.",
-          "third": "Los cambios en el renderizador indican mejoras visibles en el comportamiento y la accesibilidad."
+          "third": "Los cambios en el renderizador indican mejoras visibles en el comportamiento y la accesibilidad.",
+          "firstTitle": "Cambios en los documentos",
+          "secondTitle": "Cambios de seguridad",
+          "thirdTitle": "Cambios en el renderizador",
+          "fourthTitle": "Por qué llevar un registro de cambios",
+          "fourth": "Un portafolio es una dirección duradera: saber qué cambió detrás de ella importa tanto como saber qué hay de nuevo.",
+          "fifthTitle": "Aquí no hay cambios silenciosos",
+          "fifth": "Todo cambio que afecte lo que ve un visitante o lo que un propietario puede controlar recibe una entrada propia, no solo un incremento de versión.",
+          "sixthTitle": "¿Falta algo?",
+          "sixth": "La página de contacto es la vía para señalar un cambio que debería haberse documentado aquí y no se hizo."
         }
       }
     }
@@ -449,7 +593,9 @@
       "testimonials": "Testimonios",
       "gallery": "Galería",
       "attachments": "Descargas"
-    }
+    },
+    "homeLabel": "Inicio de ProFolio",
+    "menuToggleLabel": "Menú"
   },
   "dashboard": {
     "title": "Tus carteras",
@@ -592,6 +738,21 @@
       "testimonials": "Testimonios",
       "socialLinks": "Enlaces sociales",
       "interests": "Intereses, separados por comas",
+      "emptyHints": {
+        "experience": "Suele ser lo primero que lee un visitante — la mayoría de los portafolios empiezan por aquí.",
+        "projects": "Lo que construiste dice más que dónde trabajaste. Enlaza algo real si puedes.",
+        "skills": "Agrupa herramientas relacionadas bajo una etiqueta — «Frontend», «Cloud» — en lugar de una lista larga.",
+        "softSkills": "Vale la pena añadirlo si tu forma de trabajar importa tanto como lo que sabes.",
+        "education": "Se sigue esperando incluso avanzada la carrera — una línea basta si hay poco que contar.",
+        "courses": "Formación breve y puntual que no encaja en Educación ni en Certificaciones.",
+        "certifications": "Incluye la entidad emisora y un enlace de verificación si lo tienes.",
+        "languages": "Tus idiomas de trabajo, no solo los que aprendiste de niño.",
+        "awards": "El reconocimiento fuera de tu propio equipo es el más convincente.",
+        "publications": "Cualquier cosa de la que figures como autor o coautor.",
+        "volunteering": "El trabajo voluntario también cuenta, sobre todo si muestra una iniciativa que un cargo no mostraría.",
+        "testimonials": "Una frase concreta de alguien con quien trabajaste vale más que un título genérico.",
+        "socialLinks": "Opcional — añade los perfiles que un reclutador realmente abriría."
+      },
       "add": "Agregar entrada",
       "remove": "Eliminar entrada",
       "moveUp": "Mover entrada hacia arriba",

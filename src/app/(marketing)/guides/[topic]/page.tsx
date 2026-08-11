@@ -73,7 +73,7 @@ export default async function TopicPage(props: TopicPageProps): Promise<ReactEle
           );
         })}
       />
-      {page.slug === 'contact' ? <ContactFormContainer /> : null}
+      {page.slug === 'contact' ? <ContactFormContainer eyebrow={t('eyebrow')} /> : null}
     </>
   );
 }

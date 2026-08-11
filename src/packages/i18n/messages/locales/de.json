@@ -7,7 +7,7 @@
     },
     "pwa": {
       "installTitle": "ProFolio installieren",
-      "installDescription": "Halten Sie Ihren Portfolio-Arbeitsbereich auf diesem Ger\u00e4t bereit.",
+      "installDescription": "Halten Sie Ihren Portfolio-Arbeitsbereich auf diesem Gerät bereit.",
       "installAction": "Installieren",
       "dismiss": "Schließen"
     },
@@ -22,7 +22,7 @@
       "system": "Passt zu meinem System"
     },
     "loading": "Laden",
-    "footerNote": "Ihr Lebenslauf bleibt vertraulich. Nur das, was Sie \u00fcberpr\u00fcfen und ver\u00f6ffentlichen, wird \u00f6ffentlich.",
+    "footerNote": "Ihr Lebenslauf bleibt vertraulich. Nur das, was Sie überprüfen und veröffentlichen, wird öffentlich.",
     "nav": {
       "home": "Startseite",
       "menu": "Menü",
@@ -62,9 +62,9 @@
   },
   "marketing": {
     "eyebrow": "Lebenslauf zum Portfolio",
-    "title": "Ihr Lebenslauf, ver\u00f6ffentlicht als Portfolio, das Sie tats\u00e4chlich kontrollieren.",
-    "lead": "Laden Sie einen PDF hoch. \u00dcberpr\u00fcfen Sie jeden extrahierten Sachverhalt. Verfassen Sie Ihre Seiten. Fordern Sie einen URL an und ver\u00f6ffentlichen Sie ihn.",
-    "supporting": "Nichts wird ver\u00f6ffentlicht, bis Sie es sagen, und keine KI wird ausgef\u00fchrt, wenn ein Besucher Ihre Seite l\u00e4dt.",
+    "title": "Ihr Lebenslauf, veröffentlicht als Portfolio, das Sie tatsächlich kontrollieren.",
+    "lead": "Laden Sie einen PDF hoch. Überprüfen Sie jeden extrahierten Sachverhalt. Verfassen Sie Ihre Seiten. Fordern Sie einen URL an und veröffentlichen Sie ihn.",
+    "supporting": "Nichts wird veröffentlicht, bis Sie es sagen, und keine KI wird ausgeführt, wenn ein Besucher Ihre Seite lädt.",
     "primaryCta": "Erstellen Sie Ihr Portfolio",
     "secondaryCta": "Melden Sie sich an",
     "howTitle": "Wie es funktioniert",
@@ -72,228 +72,372 @@
     "steps": {
       "uploadTitle": "Laden Sie Ihren Lebenslauf hoch",
       "uploadBody": "Ein PDF, privat gespeichert. Text wird lokal extrahiert, bevor ihn ein Modell sieht.",
-      "reviewTitle": "\u00dcberpr\u00fcfen Sie den Entwurf",
+      "reviewTitle": "Überprüfen Sie den Entwurf",
       "reviewBody": "Jedes Feld ist editierbar. Warnungen weisen auf Werte hin, die einen zweiten Blick wert sind.",
       "composeTitle": "Verfassen Sie Ihre Seiten",
-      "composeBody": "Abschnitte und zus\u00e4tzliche Seiten neu anordnen, ausblenden, hinzuf\u00fcgen. Kein Code, keine Vorlagen zum K\u00e4mpfen.",
-      "publishTitle": "Fordern Sie einen URL an und ver\u00f6ffentlichen Sie ihn",
-      "publishBody": "W\u00e4hlen Sie Ihren Slug aus, sehen Sie sich das Ergebnis in der Vorschau an und ver\u00f6ffentlichen Sie es, wenn es richtig gelesen wird."
+      "composeBody": "Abschnitte und zusätzliche Seiten neu anordnen, ausblenden, hinzufügen. Kein Code, keine Vorlagen zum Kämpfen.",
+      "publishTitle": "Fordern Sie einen URL an und veröffentlichen Sie ihn",
+      "publishBody": "Wählen Sie Ihren Slug aus, sehen Sie sich das Ergebnis in der Vorschau an und veröffentlichen Sie es, wenn es richtig gelesen wird."
     },
     "principlesTitle": "Was das Produkt verspricht",
     "principles": {
-      "controlTitle": "Sie billigen jede \u00f6ffentliche Tatsache",
-      "controlBody": "Durch die Extraktion entsteht ein Entwurf. Das Ver\u00f6ffentlichen ist immer eine explizite Aktion, die Sie durchf\u00fchren.",
+      "controlTitle": "Sie billigen jede öffentliche Tatsache",
+      "controlBody": "Durch die Extraktion entsteht ein Entwurf. Das Veröffentlichen ist immer eine explizite Aktion, die Sie durchführen.",
       "privacyTitle": "Ihr Lebenslauf bleibt vertraulich",
-      "privacyBody": "Die hochgeladene Datei ist niemals \u00f6ffentlich zug\u00e4nglich und Sie k\u00f6nnen sie jederzeit l\u00f6schen.",
+      "privacyBody": "Die hochgeladene Datei ist niemals öffentlich zugänglich und Sie können sie jederzeit löschen.",
       "honestTitle": "Nichts ist erfunden",
       "honestBody": "Der Extraktor wird angewiesen, ein Feld leer zu lassen, anstatt es zu erraten.",
-      "fastTitle": "\u00d6ffentliche Seiten sind g\u00fcnstig und schnell",
-      "fastBody": "Ein ver\u00f6ffentlichtes Portfolio wird aus einem Snapshot bereitgestellt und ben\u00f6tigt zum Rendern keine KI."
+      "fastTitle": "Öffentliche Seiten sind günstig und schnell",
+      "fastBody": "Ein veröffentlichtes Portfolio wird aus einem Snapshot bereitgestellt und benötigt zum Rendern keine KI."
     },
     "landing": {
       "directory": {
         "eyebrow": "Entdecken Sie das Produkt",
-        "title": "Die Details sollten Sie \u00fcberpr\u00fcfen, bevor Sie einen Lebenslauf hochladen",
-        "lead": "Informieren Sie sich vor der Erstellung eines Kontos \u00fcber den Arbeitsablauf, die Grenzen der sachlichen Genauigkeit, das Sicherheitsmodell, die barrierefreie Vorlage, die Datenschutzoptionen und die praktische Unterst\u00fctzung.",
+        "title": "Die Details sollten Sie überprüfen, bevor Sie einen Lebenslauf hochladen",
+        "lead": "Informieren Sie sich vor der Erstellung eines Kontos über den Arbeitsablauf, die Grenzen der sachlichen Genauigkeit, das Sicherheitsmodell, die barrierefreie Vorlage, die Datenschutzoptionen und die praktische Unterstützung.",
         "linkLabel": "Lesen Sie diesen Leitfaden"
       },
       "useCases": {
         "eyebrow": "Verschiedene Arbeiten, eine klare Struktur",
-        "title": "Ein Portfolio kann mit den Beweisen f\u00fchren, die zur Karriere passen",
-        "lead": "Die Vorlage bleibt konsistent, w\u00e4hrend das \u00fcberpr\u00fcfte Dokument entscheidet, welche Abschnitte angezeigt werden und was zuerst kommt.",
+        "title": "Ein Portfolio kann mit den Beweisen führen, die zur Karriere passen",
+        "lead": "Die Vorlage bleibt konsistent, während das überprüfte Dokument entscheidet, welche Abschnitte angezeigt werden und was zuerst kommt.",
         "engineerTitle": "Ingenieurwesen und technische Arbeiten",
-        "engineerBody": "F\u00fchren Sie mit Systemen, Rollen, Projektbeschr\u00e4nkungen, Technologien, Ver\u00f6ffentlichungen und den Ergebnissen, die bereits in Ihrem Lebenslauf unterst\u00fctzt werden.",
+        "engineerBody": "Führen Sie mit Systemen, Rollen, Projektbeschränkungen, Technologien, Veröffentlichungen und den Ergebnissen, die bereits in Ihrem Lebenslauf unterstützt werden.",
         "designerTitle": "Design und visuelle Praxis",
-        "designerBody": "Kombinieren Sie Projektberichte mit Bildern aus Ihrer eigenen Galerie, n\u00fctzlichen Alternativtexten, Kursen, Auszeichnungen und ausgew\u00e4hlten sozialen Profilen.",
+        "designerBody": "Kombinieren Sie Projektberichte mit Bildern aus Ihrer eigenen Galerie, nützlichen Alternativtexten, Kursen, Auszeichnungen und ausgewählten sozialen Profilen.",
         "graduateTitle": "Studierende und Absolventen",
-        "graduateBody": "Bringen Sie Bildung, Projekte, Kurse, Sprachen, Freiwilligenarbeit und nachgewiesene F\u00e4higkeiten voran, wenn die Berufserfahrung noch kurz ist.",
-        "consultantTitle": "Berater und unabh\u00e4ngige Spezialisten",
-        "consultantBody": "Verwalten Sie separate Portfolios f\u00fcr unterschiedliche Zielgruppen von einem Konto aus, ohne deren Entw\u00fcrfe oder ver\u00f6ffentlichte Adressen zu vermischen."
+        "graduateBody": "Bringen Sie Bildung, Projekte, Kurse, Sprachen, Freiwilligenarbeit und nachgewiesene Fähigkeiten voran, wenn die Berufserfahrung noch kurz ist.",
+        "consultantTitle": "Berater und unabhängige Spezialisten",
+        "consultantBody": "Verwalten Sie separate Portfolios für unterschiedliche Zielgruppen von einem Konto aus, ohne deren Entwürfe oder veröffentlichte Adressen zu vermischen."
       },
       "trust": {
-        "eyebrow": "Grenzen, \u00fcber die Sie nachdenken k\u00f6nnen",
-        "title": "Die \u00f6ffentliche Seite ist von der Maschine, die sie erstellt hat, getrennt",
-        "lead": "Dabei handelt es sich um Produktverhalten, nicht um Leistungsanspr\u00fcche: Sie beschreiben, was gespeichert wird, wann es \u00f6ffentlich wird und wovon eine Besucheranfrage abh\u00e4ngt.",
+        "eyebrow": "Grenzen, über die Sie nachdenken können",
+        "title": "Die öffentliche Seite ist von der Maschine, die sie erstellt hat, getrennt",
+        "lead": "Dabei handelt es sich um Produktverhalten, nicht um Leistungsansprüche: Sie beschreiben, was gespeichert wird, wann es öffentlich wird und wovon eine Besucheranfrage abhängt.",
         "draftTitle": "Der Import stoppt bei einem Entwurf",
-        "draftBody": "Die Extraktion kann Quellenfakten organisieren, aber nur der Eigent\u00fcmer kann sie korrigieren, verfassen und ver\u00f6ffentlichen.",
-        "snapshotTitle": "Durch die Ver\u00f6ffentlichung wird ein validierter Snapshot erstellt",
-        "snapshotBody": "Ein Besucher liest gespeicherte \u00fcberpr\u00fcfte Inhalte; Ihre Anfrage ruft weder den KI-Anbieter auf noch analysiert sie den urspr\u00fcnglichen PDF.",
-        "ownershipTitle": "Die Erstellung bleibt Eigent\u00fcmerbereich",
-        "ownershipBody": "Dashboard-Vorg\u00e4nge ermitteln den angemeldeten Eigent\u00fcmer, bevor ein Portfolio gelesen oder ge\u00e4ndert wird.",
+        "draftBody": "Die Extraktion kann Quellenfakten organisieren, aber nur der Eigentümer kann sie korrigieren, verfassen und veröffentlichen.",
+        "snapshotTitle": "Durch die Veröffentlichung wird ein validierter Snapshot erstellt",
+        "snapshotBody": "Ein Besucher liest gespeicherte überprüfte Inhalte; Ihre Anfrage ruft weder den KI-Anbieter auf noch analysiert sie den ursprünglichen PDF.",
+        "ownershipTitle": "Die Erstellung bleibt Eigentümerbereich",
+        "ownershipBody": "Dashboard-Vorgänge ermitteln den angemeldeten Eigentümer, bevor ein Portfolio gelesen oder geändert wird.",
         "accessTitle": "Abwesende und private Inhalte bleiben abwesend",
-        "accessBody": "Ausgeblendete Kan\u00e4le, leere Abschnitte, Entw\u00fcrfe und nicht autorisierte private Seiten werden von der \u00f6ffentlichen Ausgabe und Navigation ausgeschlossen."
+        "accessBody": "Ausgeblendete Kanäle, leere Abschnitte, Entwürfe und nicht autorisierte private Seiten werden von der öffentlichen Ausgabe und Navigation ausgeschlossen."
       },
       "faq": {
         "eyebrow": "Praktische Fragen",
         "title": "Was passiert in den entscheidenden Momenten?",
-        "lead": "Kurze Antworten auf die Fragen zum Hochladen, \u00dcberpr\u00fcfen, Ver\u00f6ffentlichen und Bereithalten eines Portfolios.",
-        "publishQuestion": "Wird durch das Hochladen meines Lebenslaufs etwas ver\u00f6ffentlicht?",
-        "publishAnswer": "Nein. Beim Import wird ein privater Entwurf erstellt. Die Ver\u00f6ffentlichung ist eine separate Aktion, nachdem Sie den Inhalt und die \u00f6ffentliche Ansprache \u00fcberpr\u00fcft haben.",
-        "missingQuestion": "Was passiert, wenn der Lebenslauf kein Feld enth\u00e4lt?",
-        "missingAnswer": "Das Feld bleibt leer. Der Extraktor ist nicht berechtigt, einen beruflichen Anspruch allein aufgrund der Plausibilit\u00e4t zu vervollst\u00e4ndigen.",
-        "cvQuestion": "K\u00f6nnen Besucher meinen Original-Lebenslauf herunterladen?",
-        "cvAnswer": "Der Quell-Upload bleibt privat. Ein Besucher kann nur auf einen Anhang zugreifen, den Sie explizit einem \u00fcberpr\u00fcften ver\u00f6ffentlichten Dokument hinzuf\u00fcgen.",
-        "outageQuestion": "Ben\u00f6tigt eine ver\u00f6ffentlichte Seite KI zum Laden?",
-        "outageAnswer": "Nein. Ver\u00f6ffentlichte Portfolios werden aus validierten gespeicherten Snapshots gerendert, unabh\u00e4ngig von KI-Extraktion und PDF-Parsing-Diensten.",
-        "manyQuestion": "Kann ein Konto mehr als ein Portfolio ver\u00f6ffentlichen?",
-        "manyAnswer": "Ja. Jedes Portfolio verf\u00fcgt \u00fcber einen eigenen Entwurf, Seiten, Themenauswahl, Ver\u00f6ffentlichungsstatus und \u00f6ffentliche Ansprache."
+        "lead": "Kurze Antworten auf die Fragen zum Hochladen, Überprüfen, Veröffentlichen und Bereithalten eines Portfolios.",
+        "publishQuestion": "Wird durch das Hochladen meines Lebenslaufs etwas veröffentlicht?",
+        "publishAnswer": "Nein. Beim Import wird ein privater Entwurf erstellt. Die Veröffentlichung ist eine separate Aktion, nachdem Sie den Inhalt und die öffentliche Ansprache überprüft haben.",
+        "missingQuestion": "Was passiert, wenn der Lebenslauf kein Feld enthält?",
+        "missingAnswer": "Das Feld bleibt leer. Der Extraktor ist nicht berechtigt, einen beruflichen Anspruch allein aufgrund der Plausibilität zu vervollständigen.",
+        "cvQuestion": "Können Besucher meinen Original-Lebenslauf herunterladen?",
+        "cvAnswer": "Der Quell-Upload bleibt privat. Ein Besucher kann nur auf einen Anhang zugreifen, den Sie explizit einem überprüften veröffentlichten Dokument hinzufügen.",
+        "outageQuestion": "Benötigt eine veröffentlichte Seite KI zum Laden?",
+        "outageAnswer": "Nein. Veröffentlichte Portfolios werden aus validierten gespeicherten Snapshots gerendert, unabhängig von KI-Extraktion und PDF-Parsing-Diensten.",
+        "manyQuestion": "Kann ein Konto mehr als ein Portfolio veröffentlichen?",
+        "manyAnswer": "Ja. Jedes Portfolio verfügt über einen eigenen Entwurf, Seiten, Themenauswahl, Veröffentlichungsstatus und öffentliche Ansprache."
       },
       "cta": {
-        "title": "Beginnen Sie mit einem Entwurf, den Sie pr\u00fcfen k\u00f6nnen",
-        "description": "Erstellen Sie ein Portfolio, importieren Sie ein lesbares PDF oder beginnen Sie manuell und entscheiden Sie, was ver\u00f6ffentlicht werden soll.",
-        "learnMore": "Sehen Sie sich den vollst\u00e4ndigen Workflow an"
+        "title": "Beginnen Sie mit einem Entwurf, den Sie prüfen können",
+        "description": "Erstellen Sie ein Portfolio, importieren Sie ein lesbares PDF oder beginnen Sie manuell und entscheiden Sie, was veröffentlicht werden soll.",
+        "learnMore": "Sehen Sie sich den vollständigen Workflow an"
       }
     },
     "pages": {
       "features": {
-        "title": "Alles, was Sie zur Ver\u00f6ffentlichung Ihrer beruflichen Geschichte ben\u00f6tigen",
-        "description": "Importieren Sie Fakten, bearbeiten Sie jedes Feld, verfassen Sie Seiten und ver\u00f6ffentlichen Sie ein oder mehrere Portfolios von einem Konto aus.",
+        "title": "Alles, was Sie zur Veröffentlichung Ihrer beruflichen Geschichte benötigen",
+        "description": "Importieren Sie Fakten, bearbeiten Sie jedes Feld, verfassen Sie Seiten und veröffentlichen Sie ein oder mehrere Portfolios von einem Konto aus.",
         "sections": {
-          "first": "Durch die \u00fcberpr\u00fcfbare Lebenslaufextraktion behalten Sie die Kontrolle \u00fcber jeden Anspruch.",
-          "second": "Flexible Seiten kombinieren Erfahrungen, Projekte, F\u00e4higkeiten, Ausbildung und Ihre eigenen Abschnitte.",
-          "third": "Ver\u00f6ffentlichte Snapshots bleiben auch dann schnell erhalten, wenn die Autorendienste nicht verf\u00fcgbar sind."
+          "first": "Durch die überprüfbare Lebenslaufextraktion behalten Sie die Kontrolle über jeden Anspruch.",
+          "second": "Flexible Seiten kombinieren Erfahrungen, Projekte, Fähigkeiten, Ausbildung und Ihre eigenen Abschnitte.",
+          "third": "Veröffentlichte Snapshots bleiben auch dann schnell erhalten, wenn die Autorendienste nicht verfügbar sind.",
+          "firstTitle": "Überprüfte Extraktion",
+          "secondTitle": "Seiten aus echten Inhalten",
+          "thirdTitle": "Snapshots, die nicht von uns abhängen",
+          "fourthTitle": "Jeder Abschnitt ist optional",
+          "fourth": "Ordnen Sie jeden Abschnitt neu an, blenden Sie ihn aus oder entfernen Sie ihn – nichts ist festgelegt, sodass die Seite zur Karriere passt, nicht zu einer Vorlage.",
+          "fifthTitle": "Ein Konto, mehrere Portfolios",
+          "fifth": "Veröffentlichen Sie von einem einzigen Konto aus ein Portfolio pro Rolle oder Zielgruppe – jedes mit eigener Adresse und eigener Überprüfung.",
+          "sixthTitle": "Integrierte Extras",
+          "sixth": "Ein herunterladbares PDF, eine installierbare App und ein öffentlicher Feed stammen aus denselben veröffentlichten Daten – ohne separate Einrichtung."
         }
       },
       "how-it-works": {
-        "title": "Vom PDF zum \u00f6ffentlichen Portfolio in vier bewussten Schritten",
-        "description": "Hochladen, \u00fcberpr\u00fcfen, verfassen und dann ver\u00f6ffentlichen. Jede Grenze ist sichtbar und umkehrbar.",
+        "title": "Vom PDF zum öffentlichen Portfolio in vier bewussten Schritten",
+        "description": "Hochladen, überprüfen, verfassen und dann veröffentlichen. Jede Grenze ist sichtbar und umkehrbar.",
         "sections": {
           "first": "Ihr PDF wird validiert und als privates Quelldokument gelesen.",
-          "second": "Extrahierte Fakten werden zu einem bearbeitbaren Entwurf mit Warnungen, niemals zu einer \u00f6ffentlichen Seite.",
-          "third": "Sie w\u00e4hlen die Adresse und ver\u00f6ffentlichen erst, nachdem die Vorschau korrekt ist."
+          "second": "Extrahierte Fakten werden zu einem bearbeitbaren Entwurf mit Warnungen, niemals zu einer öffentlichen Seite.",
+          "third": "Sie wählen die Adresse und veröffentlichen erst, nachdem die Vorschau korrekt ist.",
+          "firstTitle": "Hochladen",
+          "secondTitle": "Entwurf überprüfen",
+          "thirdTitle": "Veröffentlichen nach Ihren Bedingungen",
+          "fourthTitle": "Nichts wird versehentlich veröffentlicht",
+          "fourth": "Durch den Import entsteht ein Entwurf, keine Seite – die von Ihnen gewählte Adresse bleibt unbeansprucht, bis Sie sie selbst veröffentlichen.",
+          "fifthTitle": "Jederzeit erneut bearbeiten",
+          "fifth": "Öffnen Sie den Editor nach der Veröffentlichung erneut, um eine Rolle zu aktualisieren, ein Projekt hinzuzufügen oder eine Seite auszublenden – Änderungen bleiben privat, bis Sie speichern und erneut veröffentlichen.",
+          "sixthTitle": "Sehen Sie den kompletten Ablauf",
+          "sixth": "Der direkte Weg vom Lebenslauf zur öffentlichen Adresse dauert Minuten – keine Vorlage, mit der Sie kämpfen müssen."
         }
       },
       "examples": {
-        "title": "Von der Arbeit gepr\u00e4gte Portfolios, keine Demo-Vorlage",
-        "description": "Erfahren Sie, wie unterschiedliche Karrieren in einem konsistenten, zug\u00e4nglichen System erkennbar bleiben.",
+        "title": "Von der Arbeit geprägte Portfolios, keine Demo-Vorlage",
+        "description": "Erfahren Sie, wie unterschiedliche Karrieren in einem konsistenten, zugänglichen System erkennbar bleiben.",
         "sections": {
           "first": "Bei technischen Portfolios stehen Systeme, Ergebnisse und technische Tiefe im Vordergrund.",
-          "second": "Designportfolios k\u00f6nnen Projekterz\u00e4hlungen mit eigenen Galeriemedien kombinieren.",
-          "third": "Portfolios f\u00fcr den Berufseinstieg k\u00f6nnen mit Ausbildung, Kursen und nachweisbaren Projekten beginnen."
+          "second": "Designportfolios können Projekterzählungen mit eigenen Galeriemedien kombinieren.",
+          "third": "Portfolios für den Berufseinstieg können mit Ausbildung, Kursen und nachweisbaren Projekten beginnen.",
+          "firstTitle": "Ingenieurwesen",
+          "secondTitle": "Design",
+          "thirdTitle": "Berufseinstieg",
+          "fourthTitle": "Mehrere Rollen, eine Identität",
+          "fourth": "Ein Berater oder unabhängiger Spezialist kann pro Spezialisierung ein fokussiertes Portfolio veröffentlichen, jedes basierend auf denselben überprüften Fakten.",
+          "fifthTitle": "Konsistent, nicht identisch",
+          "fifth": "Jedes Portfolio teilt sich dieselbe barrierefreie Struktur, sodass keine zwei gleich aussehen und keines unfertig wirkt.",
+          "sixthTitle": "Starten Sie mit Ihrem Lebenslauf",
+          "sixth": "Der Import zeigt, was Ihr eigener Lebenslauf ergibt, bevor Sie entscheiden, ob Sie es veröffentlichen."
         }
       },
       "templates": {
-        "title": "Eine disziplinierte Vorlage mit Platz f\u00fcr eine individuelle Stimme",
-        "description": "Eine stabile Informationsarchitektur lenkt die Aufmerksamkeit auf Beweise, w\u00e4hrend Themen ihren Ton anpassen.",
+        "title": "Eine disziplinierte Vorlage mit Platz für eine individuelle Stimme",
+        "description": "Eine stabile Informationsarchitektur lenkt die Aufmerksamkeit auf Beweise, während Themen ihren Ton anpassen.",
         "sections": {
-          "first": "Semantische Abschnitte erzeugen auf jeder Bildschirmgr\u00f6\u00dfe eine lesbare Hierarchie.",
-          "second": "Benannte Akzent- und Themenauswahlen bewahren den bew\u00e4hrten Kontrast.",
-          "third": "Keine willk\u00fcrlichen Skripte, Stile oder Einbettungen k\u00f6nnen einen Besucher gef\u00e4hrden."
+          "first": "Semantische Abschnitte erzeugen auf jeder Bildschirmgröße eine lesbare Hierarchie.",
+          "second": "Benannte Akzent- und Themenauswahlen bewahren den bewährten Kontrast.",
+          "third": "Keine willkürlichen Skripte, Stile oder Einbettungen können einen Besucher gefährden.",
+          "firstTitle": "Struktur statt Dekoration",
+          "secondTitle": "Themen mit Leitplanken",
+          "thirdTitle": "Keine offene Angriffsfläche für Skripte",
+          "fourthTitle": "Hell und Dunkel, aufeinander abgestimmt",
+          "fourth": "Jedes Thema wird in einer hellen und einer dunklen Variante ausgeliefert, die dieselbe Kontrastanforderung erfüllen – die Präferenz eines Besuchers ist also nie ein Nachteil.",
+          "fifthTitle": "Abschnitte, die Sie wählen",
+          "fifth": "Die Vorlage passt sich an die sichtbaren Abschnitte an – ein Portfolio mit nur Projekten und Fähigkeiten wirkt durchdacht, nicht unvollständig.",
+          "sixthTitle": "In der Praxis sehen",
+          "sixth": "Beispielportfolios zeigen, wie dieselbe Vorlage sehr unterschiedliche Karrieren trägt."
         }
       },
       "cv-import": {
         "title": "Lebenslaufimport, der das Dokument als Beweismittel behandelt",
-        "description": "Der Importer meldet, was er unterst\u00fctzen kann, und l\u00e4sst nicht unterst\u00fctzte Felder leer.",
+        "description": "Der Importer meldet, was er unterstützen kann, und lässt nicht unterstützte Felder leer.",
         "sections": {
-          "first": "PDF-Signaturen und -Grenzwerte werden vor Beginn der Analyse \u00fcberpr\u00fcft.",
-          "second": "Extrahierte Werte behalten Warnungen bei, wenn eine menschliche \u00dcberpr\u00fcfung wichtig ist.",
-          "third": "Der urspr\u00fcngliche Lebenslauf bleibt privat und wird beim Importieren niemals ver\u00f6ffentlicht."
+          "first": "PDF-Signaturen und -Grenzwerte werden vor Beginn der Analyse überprüft.",
+          "second": "Extrahierte Werte behalten Warnungen bei, wenn eine menschliche Überprüfung wichtig ist.",
+          "third": "Der ursprüngliche Lebenslauf bleibt privat und wird beim Importieren niemals veröffentlicht.",
+          "firstTitle": "Überprüft, bevor gelesen wird",
+          "secondTitle": "Warnungen statt stiller Lücken",
+          "thirdTitle": "Privat, bis Sie veröffentlichen",
+          "fourthTitle": "Auch Word-Dokumente",
+          "fourth": "DOCX-Importe durchlaufen vor Beginn der Extraktion dieselbe scannergeprüfte Pipeline wie ein PDF.",
+          "fifthTitle": "Nichts ist erfunden",
+          "fifth": "Ein Feld, das der Lebenslauf nicht enthält, bleibt leer, anstatt mit einer plausiblen Vermutung aufgefüllt zu werden.",
+          "sixthTitle": "Was der Importeur ablehnt",
+          "sixth": "Dateien, die die Validierung nicht bestehen – falscher Typ, zu groß oder unlesbar – werden mit einer Begründung abgelehnt, nicht stillschweigend akzeptiert."
         }
       },
       "ai-accuracy": {
-        "title": "KI unterst\u00fctzt den Entwurf; es bekommt nie das letzte Wort",
-        "description": "Die strukturierte Extraktion wird durch eine einfache Regel eingeschr\u00e4nkt: Fehlende Beweise bedeuten ein leeres Feld.",
+        "title": "KI unterstützt den Entwurf; es bekommt nie das letzte Wort",
+        "description": "Die strukturierte Extraktion wird durch eine einfache Regel eingeschränkt: Fehlende Beweise bedeuten ein leeres Feld.",
         "sections": {
-          "first": "Das Modell erh\u00e4lt extrahierten Text \u00fcber einen begrenzten strukturierten Vertrag.",
-          "second": "Die Schemavalidierung weist fehlerhafte Ausgaben zur\u00fcck, bevor sie den Editor erreichen.",
-          "third": "Schreibverbesserungen sind separate Ma\u00dfnahmen und k\u00f6nnen Fakten nicht stillschweigend ersetzen."
+          "first": "Das Modell erhält extrahierten Text über einen begrenzten strukturierten Vertrag.",
+          "second": "Die Schemavalidierung weist fehlerhafte Ausgaben zurück, bevor sie den Editor erreichen.",
+          "third": "Schreibverbesserungen sind separate Maßnahmen und können Fakten nicht stillschweigend ersetzen.",
+          "firstTitle": "Ein begrenzter Vertrag",
+          "secondTitle": "Schemageprüfte Ausgabe",
+          "thirdTitle": "Schreibhilfe bleibt getrennt",
+          "fourthTitle": "Funktioniert auch ohne Modell",
+          "fourth": "Ein deterministischer Fallback liest strukturierten Lebenslauftext direkt, wenn kein KI-Anbieter verfügbar ist, sodass der Import nie von der Verfügbarkeit eines einzigen Dienstes abhängt.",
+          "fifthTitle": "Eine Anweisung in einem Lebenslauf ist immer noch nur Text",
+          "fifth": "Aus einem Dokument extrahierte Inhalte werden als anzuzeigende Daten behandelt, niemals als Anweisung, der die KI folgt.",
+          "sixthTitle": "Sie überprüfen, bevor es öffentlich wird",
+          "sixth": "Jedes extrahierte Feld erscheint zur Korrektur im Editor, bevor irgendetwas eine veröffentlichte Seite erreicht."
         }
       },
       "security": {
         "title": "Sicherheitsgrenzen rund um einen privaten Lebenslauf",
-        "description": "Eigentumspr\u00fcfungen, validierte Uploads und isolierte \u00f6ffentliche Snapshots reduzieren das, was jede Anfrage offenlegen kann.",
+        "description": "Eigentumsprüfungen, validierte Uploads und isolierte öffentliche Snapshots reduzieren das, was jede Anfrage offenlegen kann.",
         "sections": {
-          "first": "Dashboard-Lese- und Schreibvorg\u00e4nge sind auf den authentifizierten Besitzer beschr\u00e4nkt.",
-          "second": "Uploads werden anhand des Inhalts identifiziert, gescannt und unter servergenerierten Schl\u00fcsseln gespeichert.",
-          "third": "\u00d6ffentliches Rendering erfordert keinen Authoring-, Parser-, KI- oder privaten Speicherpfad."
+          "first": "Dashboard-Lese- und Schreibvorgänge sind auf den authentifizierten Besitzer beschränkt.",
+          "second": "Uploads werden anhand des Inhalts identifiziert, gescannt und unter servergenerierten Schlüsseln gespeichert.",
+          "third": "Öffentliches Rendering erfordert keinen Authoring-, Parser-, KI- oder privaten Speicherpfad.",
+          "firstTitle": "Auf den Besitzer beschränkt",
+          "secondTitle": "Uploads werden geprüft, nicht vertraut",
+          "thirdTitle": "Eine kleine öffentliche Angriffsfläche",
+          "fourthTitle": "Passwörter, die der Seiteneigentümer kontrolliert",
+          "fourth": "Jede Seite kann ein eigenes, serverseitig geprüftes Freigabepasswort erhalten, ohne jemandem ohne dieses Passwort zu verraten, welche Seiten überhaupt existieren.",
+          "fifthTitle": "Das Erraten einer Entwurfsadresse scheitert auf dieselbe Weise",
+          "fifth": "Ein unveröffentlichtes Portfolio und ein Tippfehler liefern dieselbe Antwort, sodass das Durchprobieren von Adressen die beiden nicht unterscheiden kann.",
+          "sixthTitle": "Gemeldet, nicht erraten",
+          "sixth": "Ein Sicherheitsbedenken erreicht das Team direkt über die Kontaktseite – es muss nicht zuerst öffentlich beschrieben werden."
         }
       },
       "privacy": {
-        "title": "Ihr Quelldokument bleibt standardm\u00e4\u00dfig privat",
-        "description": "Nur \u00fcberpr\u00fcfte Snapshot-Felder und explizit \u00f6ffentliche Assets k\u00f6nnen eine ver\u00f6ffentlichte Adresse erreichen.",
+        "title": "Ihr Quelldokument bleibt standardmäßig privat",
+        "description": "Nur überprüfte Snapshot-Felder und explizit öffentliche Assets können eine veröffentlichte Adresse erreichen.",
         "sections": {
-          "first": "Ein Roh-CV wird niemals von einem \u00f6ffentlichen Objekt URL bereitgestellt.",
-          "second": "Versteckte Kontaktkan\u00e4le und -seiten werden weggelassen und nicht verschleiert.",
-          "third": "Beim L\u00f6schen des Kontos werden identifizierende Zeilen und eigene Dateien entfernt."
+          "first": "Ein Roh-CV wird niemals von einem öffentlichen Objekt URL bereitgestellt.",
+          "second": "Versteckte Kontaktkanäle und -seiten werden weggelassen und nicht verschleiert.",
+          "third": "Beim Löschen des Kontos werden identifizierende Zeilen und eigene Dateien entfernt.",
+          "firstTitle": "Kein öffentlicher Link zu einer Rohdatei",
+          "secondTitle": "Versteckt heißt weg, nicht verschleiert",
+          "thirdTitle": "Löschen entfernt den Datensatz",
+          "fourthTitle": "Indizierung ist eine Wahl",
+          "fourth": "Ein Portfolio kann die Suchindizierung vollständig deaktivieren oder eine bestimmte Seite aus der Sitemap ausschließen, während der Rest öffentlich bleibt.",
+          "fifthTitle": "Ein Passwort schützt eine Seite",
+          "fifth": "Die Freigabe einer privaten Seite gilt ausschließlich für genau diese Seite und Sprache – sie schaltet nichts anderes frei.",
+          "sixthTitle": "Lesen Sie die Bedingungen im Klartext",
+          "sixth": "Was der Dienst mit Ihren Uploads macht, steht klar in den Nutzungsbedingungen – nicht versteckt in einer Richtlinie, die niemand liest."
         }
       },
       "about": {
         "title": "Ein Portfolioprodukt, das auf sachlicher Autorenschaft basiert",
-        "description": "ProFolio dient dazu, die Einrichtung zu verk\u00fcrzen, ohne der dargestellten Person die Urheberschaft zu entziehen.",
+        "description": "ProFolio dient dazu, die Einrichtung zu verkürzen, ohne der dargestellten Person die Urheberschaft zu entziehen.",
         "sections": {
           "first": "Das Produkt beginnt mit den bereits in einem Lebenslauf niedergeschriebenen Nachweisen.",
-          "second": "Bearbeitung und Ver\u00f6ffentlichung bleiben explizite menschliche Entscheidungen.",
-          "third": "Bei \u00f6ffentlichen Seiten handelt es sich um dauerhafte Lesevorg\u00e4nge, nicht um Live-KI-Demonstrationen."
+          "second": "Bearbeitung und Veröffentlichung bleiben explizite menschliche Entscheidungen.",
+          "third": "Bei öffentlichen Seiten handelt es sich um dauerhafte Lesevorgänge, nicht um Live-KI-Demonstrationen.",
+          "firstTitle": "Beginnt mit Nachweisen",
+          "secondTitle": "Sie entscheiden",
+          "thirdTitle": "Seiten, die stillstehen",
+          "fourthTitle": "Warum es das gibt",
+          "fourth": "Einen Lebenslauf in eine präsentable Website zu verwandeln bedeutete früher einen Kampf mit Vorlagen oder die Rechnung eines Freiberuflers – das hier reduziert es auf einen Import und eine Überprüfung.",
+          "fifthTitle": "Bewusst klein gehalten",
+          "fifth": "Das Produkt macht eine Sache – vom Lebenslauf zum überprüften Portfolio – anstatt sich zu einem allgemeinen Website-Baukasten auszuweiten.",
+          "sixthTitle": "Lesen Sie die Mission",
+          "sixth": "Die Missionsseite legt die konkreten Verpflichtungen dar, die dieses Produkt einhalten will."
         }
       },
       "mission": {
         "title": "Machen Sie professionelles Publizieren ehrlich und eigenverantwortlich",
-        "description": "Ein n\u00fctzliches Portfolio sollte leicht zu erstellen, einfach zu \u00fcberpr\u00fcfen und zuverl\u00e4ssig zu besuchen sein.",
+        "description": "Ein nützliches Portfolio sollte leicht zu erstellen, einfach zu überprüfen und zuverlässig zu besuchen sein.",
         "sections": {
-          "first": "Reduzieren Sie die mechanischen Kosten f\u00fcr die Umwandlung eines Lebenslaufs in eine zusammenh\u00e4ngende Website.",
-          "second": "Tauschen Sie Geschwindigkeit niemals gegen plausible, aber nicht unterst\u00fctzte professionelle Behauptungen ein.",
-          "third": "Geben Sie jeder Person eine stabile Adresse und kontrollieren Sie, was sie sagt."
+          "first": "Reduzieren Sie die mechanischen Kosten für die Umwandlung eines Lebenslaufs in eine zusammenhängende Website.",
+          "second": "Tauschen Sie Geschwindigkeit niemals gegen plausible, aber nicht unterstützte professionelle Behauptungen ein.",
+          "third": "Geben Sie jeder Person eine stabile Adresse und kontrollieren Sie, was sie sagt.",
+          "firstTitle": "Die mechanischen Kosten reduzieren",
+          "secondTitle": "Geschwindigkeit erfindet keine Behauptung",
+          "thirdTitle": "Eine Adresse, die Ihnen gehört",
+          "fourthTitle": "Standardmäßig barrierefrei, nicht auf Anfrage",
+          "fourth": "Jedes Portfolio erfüllt automatisch denselben Barrierefreiheitsstandard – das ist keine Einstellung, die man erst kennen und aktivieren muss.",
+          "fifthTitle": "Auf Überprüfbarkeit ausgelegt",
+          "fifth": "Ein Besucher kann darauf vertrauen, dass das Gelesene von der beschriebenen Person überprüft wurde – und nicht erst kurz zuvor für sie generiert wurde.",
+          "sixthTitle": "Die Verpflichtungen in der Praxis sehen",
+          "sixth": "Die Seiten zu Funktionen und Sicherheit zeigen, wie sich diese Verpflichtungen als konkrete Produktentscheidungen niederschlagen."
         }
       },
       "contact": {
         "title": "Sprechen Sie mit dem ProFolio-Team",
-        "description": "Fragen Sie nach dem Produkt, melden Sie ein Problem mit der Barrierefreiheit oder \u00e4u\u00dfern Sie ein Sicherheitsbedenken.",
+        "description": "Fragen Sie nach dem Produkt, melden Sie ein Problem mit der Barrierefreiheit oder äußern Sie ein Sicherheitsbedenken.",
         "sections": {
-          "first": "Produktfragen erhalten praktische Antworten zum Import, Bearbeiten und Ver\u00f6ffentlichen.",
+          "first": "Produktfragen erhalten praktische Antworten zum Import, Bearbeiten und Veröffentlichen.",
           "second": "Barrierefreiheitsberichte sollten die Seite, den Browser und die verwendete Hilfstechnologie enthalten.",
-          "third": "Sicherheitsberichte werden diskret behandelt und erfordern niemals die Zusendung Ihres Lebenslaufs."
+          "third": "Sicherheitsberichte werden diskret behandelt und erfordern niemals die Zusendung Ihres Lebenslaufs.",
+          "firstTitle": "Produktfragen",
+          "secondTitle": "Barrierefreiheitsberichte",
+          "thirdTitle": "Sicherheitsberichte",
+          "fourthTitle": "Bevor Sie uns schreiben",
+          "fourth": "Die FAQ- und Hilfeseiten beantworten die häufigsten Fragen zu Import, Datenschutz und Veröffentlichung, bevor Sie auf eine Antwort warten müssen.",
+          "fifthTitle": "Was wir nicht von Ihnen brauchen",
+          "fifth": "Ein Bericht erfordert niemals, dass Sie Ihren Lebenslauf anhängen oder Ihr Kontopasswort weitergeben – beschreiben Sie das Problem, nicht das private Dokument.",
+          "sixthTitle": "Antwortzeit",
+          "sixth": "Nachrichten gehen direkt an ein kleines Team, nicht in eine Warteschlange – erwarten Sie eine Antwort, keinen Autoresponder."
         }
       },
       "help": {
-        "title": "Hilfe f\u00fcr jeden Schritt vom Import bis zur Ver\u00f6ffentlichung",
-        "description": "Finden Sie direkte Anleitung f\u00fcr h\u00e4ufige Entscheidungen und behebbare Probleme.",
+        "title": "Hilfe für jeden Schritt vom Import bis zur Veröffentlichung",
+        "description": "Finden Sie direkte Anleitung für häufige Entscheidungen und behebbare Probleme.",
         "sections": {
           "first": "Die Importhilfe deckt lesbare PDFs, Grenzwerte, Scans und abgelehnte Dateien ab.",
-          "second": "Die Editor-Hilfe erl\u00e4utert Sichtbarkeit, Reihenfolge, Vorschauen und Warnungen.",
-          "third": "Die Ver\u00f6ffentlichungshilfe umfasst Adressen, Aktualisierungen, private Seiten und das Aufheben der Ver\u00f6ffentlichung."
+          "second": "Die Editor-Hilfe erläutert Sichtbarkeit, Reihenfolge, Vorschauen und Warnungen.",
+          "third": "Die Veröffentlichungshilfe umfasst Adressen, Aktualisierungen, private Seiten und das Aufheben der Veröffentlichung.",
+          "firstTitle": "Import",
+          "secondTitle": "Editor",
+          "thirdTitle": "Veröffentlichung",
+          "fourthTitle": "Noch offene Fragen?",
+          "fourth": "Die FAQ-Seite sammelt die Fragen, die am häufigsten gestellt werden, bevor überhaupt eine Support-Nachricht geöffnet wird.",
+          "fifthTitle": "Sieht etwas falsch aus?",
+          "fifth": "Die Seite mit dem Änderungsprotokoll erklärt aktuelle Änderungen, die sich auf das auswirken können, was Sie im Editor oder auf einer veröffentlichten Seite sehen.",
+          "sixthTitle": "Mit einem Menschen sprechen",
+          "sixth": "Die Kontaktseite erreicht das Team direkt für alles, was diese Seite nicht beantwortet."
         }
       },
       "faq": {
         "title": "Fragen, die sich Menschen stellen, bevor sie einem Lebenslaufimporteur vertrauen",
-        "description": "Klare Antworten zu KI, Datenschutz, Kosten, Eigentum und was nach der Ver\u00f6ffentlichung passiert.",
+        "description": "Klare Antworten zu KI, Datenschutz, Kosten, Eigentum und was nach der Veröffentlichung passiert.",
         "sections": {
-          "first": "Nichts wird automatisch ver\u00f6ffentlicht: Jeder Import erzeugt einen Entwurf.",
-          "second": "Fehlende Fakten zum Lebenslauf bleiben leer und werden nicht durch Schlussfolgerungen erg\u00e4nzt.",
-          "third": "Ein ver\u00f6ffentlichtes Portfolio funktioniert weiterhin ohne den KI-Anbieter oder den PDF-Parser."
+          "first": "Nichts wird automatisch veröffentlicht: Jeder Import erzeugt einen Entwurf.",
+          "second": "Fehlende Fakten zum Lebenslauf bleiben leer und werden nicht durch Schlussfolgerungen ergänzt.",
+          "third": "Ein veröffentlichtes Portfolio funktioniert weiterhin ohne den KI-Anbieter oder den PDF-Parser.",
+          "firstTitle": "Wird automatisch veröffentlicht?",
+          "secondTitle": "Was passiert, wenn eine Tatsache fehlt?",
+          "thirdTitle": "Was passiert nach der Veröffentlichung?",
+          "fourthTitle": "Kann ich mehr als ein Portfolio haben?",
+          "fourth": "Ja – ein Konto kann mehrere Portfolios enthalten, jedes mit eigener Adresse und eigener Überprüfung vor der Veröffentlichung.",
+          "fifthTitle": "Kann ich eine Seite offline nehmen?",
+          "fifth": "Das Aufheben der Veröffentlichung oder das Löschen eines Portfolios ist jederzeit über das Dashboard möglich; dafür ist keine Kontaktaufnahme mit dem Support nötig.",
+          "sixthTitle": "Ist etwas davon kostenlos?",
+          "sixth": "Die Kontoeinstellungen zeigen den aktuellen Tarif und dessen Leistungen; für neue Abonnements gilt eine Testphase."
         }
       },
       "accessibility": {
         "title": "Barrierefreiheit ist Bestandteil des Verlagsvertrages",
-        "description": "Der Herausgeber und jedes \u00f6ffentliche Portfolio zielen auf WCAG 2.2 AA in Bezug auf Tastatur, Ber\u00fchrung, Kontrast und Struktur ab.",
+        "description": "Der Herausgeber und jedes öffentliche Portfolio zielen auf WCAG 2.2 AA in Bezug auf Tastatur, Berührung, Kontrast und Struktur ab.",
         "sections": {
-          "first": "Orientierungspunkte, \u00dcberschriften, Beschriftungen und aktuelle Seitenzust\u00e4nde unterst\u00fctzen die Navigation.",
-          "second": "Sichtbarer Fokus und ber\u00fchrungsgro\u00dfe Bedienelemente dienen Tastatur- und mobilen Leseger\u00e4ten.",
-          "third": "Galeriebilder erfordern n\u00fctzliche Alternativen und Bewegungen respektieren reduzierte Bewegungseinstellungen."
+          "first": "Orientierungspunkte, Überschriften, Beschriftungen und aktuelle Seitenzustände unterstützen die Navigation.",
+          "second": "Sichtbarer Fokus und berührungsgroße Bedienelemente dienen Tastatur- und mobilen Lesegeräten.",
+          "third": "Galeriebilder erfordern nützliche Alternativen und Bewegungen respektieren reduzierte Bewegungseinstellungen.",
+          "firstTitle": "Struktur, die angekündigt wird",
+          "secondTitle": "Bedienbar ohne Maus",
+          "thirdTitle": "Medien, die Präferenzen respektieren",
+          "fourthTitle": "Geprüft, nicht angenommen",
+          "fourth": "Jede öffentliche Seite und der Editor selbst werden gegen WCAG 2.2 AA getestet, anstatt sich auf die Standardeinstellungen des Frameworks zu verlassen.",
+          "fifthTitle": "Auch der Editor ist barrierefrei",
+          "fifth": "Abschnitte neu anordnen, Dateien hochladen und extrahierte Felder überprüfen funktionieren alle über die Tastatur – nicht nur das veröffentlichte Ergebnis.",
+          "sixthTitle": "Ein Problem gefunden?",
+          "sixth": "Die Kontaktseite bietet einen eigenen Weg für Barrierefreiheitsberichte, einschließlich der Hilfstechnologie, mit der das Problem sichtbar wurde."
         }
       },
       "terms": {
         "title": "Begriffe rund um Kontrolle und verantwortungsvollen Umgang",
-        "description": "Nutzen Sie den Dienst f\u00fcr Inhalte, zu deren Ver\u00f6ffentlichung Sie berechtigt sind, und \u00fcberpr\u00fcfen Sie alle Fakten, bevor Sie sie ver\u00f6ffentlichen.",
+        "description": "Nutzen Sie den Dienst für Inhalte, zu deren Veröffentlichung Sie berechtigt sind, und überprüfen Sie alle Fakten, bevor Sie sie veröffentlichen.",
         "sections": {
-          "first": "Sie tragen die Verantwortung f\u00fcr die von Ihnen ver\u00f6ffentlichten beruflichen Informationen.",
+          "first": "Sie tragen die Verantwortung für die von Ihnen veröffentlichten beruflichen Informationen.",
           "second": "Laden Sie keine Malware hoch, geben Sie sich nicht als eine andere Person aus und umgehen Sie keine Zugriffskontrollen.",
-          "third": "Mithilfe der bereitgestellten Steuerelemente k\u00f6nnen Sie die Ver\u00f6ffentlichung Ihrer Daten aufheben oder l\u00f6schen."
+          "third": "Mithilfe der bereitgestellten Steuerelemente können Sie die Veröffentlichung Ihrer Daten aufheben oder löschen.",
+          "firstTitle": "Sie sind verantwortlich für das, was Sie veröffentlichen",
+          "secondTitle": "Was nicht erlaubt ist",
+          "thirdTitle": "Sie können gehen",
+          "fourthTitle": "Was der Dienst speichert",
+          "fourth": "Für ein veröffentlichtes Portfolio werden nur der überprüfte Snapshot und die von Ihnen ausdrücklich angehängten Dateien gespeichert – die vollständige Abgrenzung finden Sie auf der Datenschutzseite.",
+          "fifthTitle": "Änderungen dieser Bedingungen",
+          "fifth": "Wesentliche Änderungen werden hier festgehalten und, sofern relevant, auf der Seite mit dem Änderungsprotokoll hervorgehoben.",
+          "sixthTitle": "Fragen zu einer Bedingung",
+          "sixth": "Die Kontaktseite erreicht das Team für alles, was diese Bedingungen nicht klar regeln."
         }
       },
       "changelog": {
-        "title": "Was sich ge\u00e4ndert hat und warum es wichtig ist",
-        "description": "Eine pr\u00e4gnante Aufzeichnung von Produkt\u00e4nderungen, die sich auf die Erstellung, den Datenschutz, die Zug\u00e4nglichkeit oder die \u00f6ffentliche Ausgabe auswirken.",
+        "title": "Was sich geändert hat und warum es wichtig ist",
+        "description": "Eine prägnante Aufzeichnung von Produktänderungen, die sich auf die Erstellung, den Datenschutz, die Zugänglichkeit oder die öffentliche Ausgabe auswirken.",
         "sections": {
-          "first": "Dokument\u00e4nderungen erkl\u00e4ren neue Felder und Migrationsverhalten.",
-          "second": "Sicherheits\u00e4nderungen identifizieren verst\u00e4rkte Grenzen, ohne Exploit-Details preiszugeben.",
-          "third": "Renderer-\u00c4nderungen f\u00fchren zu sichtbaren Verbesserungen des Verhaltens und der Barrierefreiheit."
+          "first": "Dokumentänderungen erklären neue Felder und Migrationsverhalten.",
+          "second": "Sicherheitsänderungen identifizieren verstärkte Grenzen, ohne Exploit-Details preiszugeben.",
+          "third": "Renderer-Änderungen führen zu sichtbaren Verbesserungen des Verhaltens und der Barrierefreiheit.",
+          "firstTitle": "Dokumentänderungen",
+          "secondTitle": "Sicherheitsänderungen",
+          "thirdTitle": "Renderer-Änderungen",
+          "fourthTitle": "Warum überhaupt ein Änderungsprotokoll",
+          "fourth": "Ein Portfolio ist eine dauerhafte Adresse – zu wissen, was sich darunter verändert hat, ist genauso wichtig wie zu wissen, was neu ist.",
+          "fifthTitle": "Hier geschieht nichts stillschweigend",
+          "fifth": "Eine Änderung, die beeinflusst, was ein Besucher sieht oder was ein Eigentümer steuern kann, bekommt einen Eintrag, nicht nur eine höhere Versionsnummer.",
+          "sixthTitle": "Fehlt etwas?",
+          "sixth": "Über die Kontaktseite können Sie eine Änderung melden, die hier hätte dokumentiert werden sollen, es aber nicht wurde."
         }
       }
     }
   },
   "contact": {
     "title": "Kontaktieren Sie uns",
-    "lead": "Senden Sie eine Frage zu ProFolio. Wir verwenden Ihre Daten ausschlie\u00dflich zur Beantwortung dieser Nachricht.",
+    "lead": "Senden Sie eine Frage zu ProFolio. Wir verwenden Ihre Daten ausschließlich zur Beantwortung dieser Nachricht.",
     "name": "Name",
     "email": "E-Mail",
     "subject": "Betreff",
@@ -303,16 +447,16 @@
     "sending": "Nachricht senden",
     "accepted": "Ihre Nachricht wurde angenommen. Wir antworten per E-Mail.",
     "errors": {
-      "invalid": "\u00dcberpr\u00fcfen Sie die Felder und versuchen Sie es erneut.",
-      "rate-limited": "Von dieser Verbindung wurden zu viele Nachrichten gesendet. Versuchen Sie es sp\u00e4ter noch einmal.",
-      "unavailable": "Wir konnten die Nachricht gerade nicht senden. Versuchen Sie es in K\u00fcrze noch einmal."
+      "invalid": "Überprüfen Sie die Felder und versuchen Sie es erneut.",
+      "rate-limited": "Von dieser Verbindung wurden zu viele Nachrichten gesendet. Versuchen Sie es später noch einmal.",
+      "unavailable": "Wir konnten die Nachricht gerade nicht senden. Versuchen Sie es in Kürze noch einmal."
     }
   },
   "auth": {
     "signInTitle": "Melden Sie sich an",
     "signInLead": "Fahren Sie mit Ihrem Dashboard fort.",
     "signUpTitle": "Erstellen Sie Ihr Konto",
-    "signUpLead": "Ein Konto, so viele Portfolios wie Sie ben\u00f6tigen.",
+    "signUpLead": "Ein Konto, so viele Portfolios wie Sie benötigen.",
     "nameLabel": "Name",
     "emailLabel": "E-Mail",
     "passwordLabel": "Passwort",
@@ -332,24 +476,24 @@
       "emailNotVerified": "Ihre E-Mail-Adresse ist noch nicht bestätigt. Wir haben soeben einen neuen Bestätigungslink gesendet – bitte prüfen Sie Ihr Postfach."
     },
     "reset": {
-      "requestTitle": "Setzen Sie Ihr Passwort zur\u00fcck",
+      "requestTitle": "Setzen Sie Ihr Passwort zurück",
       "requestLead": "Geben Sie Ihre E-Mail-Adresse ein. Wenn ein Konto vorhanden ist, senden wir einen sicheren Reset-Link.",
-      "requestSubmit": "Link zum Zur\u00fccksetzen senden",
-      "requestPending": "Link zum Zur\u00fccksetzen wird gesendet",
-      "requested": "Wenn f\u00fcr diese E-Mail ein Konto vorhanden ist, ist ein Link zum Zur\u00fccksetzen unterwegs.",
-      "resetTitle": "W\u00e4hlen Sie ein neues Passwort",
+      "requestSubmit": "Link zum Zurücksetzen senden",
+      "requestPending": "Link zum Zurücksetzen wird gesendet",
+      "requested": "Wenn für diese E-Mail ein Konto vorhanden ist, ist ein Link zum Zurücksetzen unterwegs.",
+      "resetTitle": "Wählen Sie ein neues Passwort",
       "resetLead": "Verwenden Sie den sicheren Link aus Ihrer E-Mail, um Ihr Passwort zu ersetzen.",
       "newPassword": "Neues Passwort",
       "resetSubmit": "Neues Passwort speichern",
       "resetPending": "Neues Passwort speichern",
-      "completed": "Ihr Passwort wurde ge\u00e4ndert. Sie k\u00f6nnen sich jetzt anmelden."
+      "completed": "Ihr Passwort wurde geändert. Sie können sich jetzt anmelden."
     },
     "errors": {
-      "invalidCredentials": "Diese Kombination aus E-Mail-Adresse und Passwort stimmte nicht mit einem Konto \u00fcberein.",
-      "emailTaken": "F\u00fcr diese E-Mail existiert bereits ein Konto.",
-      "weakPassword": "W\u00e4hlen Sie ein Passwort mit mindestens 12 Zeichen.",
-      "invalidEmail": "Geben Sie eine g\u00fcltige E-Mail-Adresse ein.",
-      "nameRequired": "Geben Sie den Namen ein, mit dem Sie sich anmelden m\u00f6chten.",
+      "invalidCredentials": "Diese Kombination aus E-Mail-Adresse und Passwort stimmte nicht mit einem Konto überein.",
+      "emailTaken": "Für diese E-Mail existiert bereits ein Konto.",
+      "weakPassword": "Wählen Sie ein Passwort mit mindestens 12 Zeichen.",
+      "invalidEmail": "Geben Sie eine gültige E-Mail-Adresse ein.",
+      "nameRequired": "Geben Sie den Namen ein, mit dem Sie sich anmelden möchten.",
       "unknown": "Etwas ist schief gelaufen. Versuchen Sie es erneut."
     }
   },
@@ -373,26 +517,26 @@
       "ru": "Russisch"
     },
     "translation": {
-      "title": "Portfolio-\u00dcbersetzungen",
-      "hint": "Erstellen Sie einen Entwurf, \u00fcberpr\u00fcfen Sie die \u00fcbersetzten Fakten unten und markieren Sie ihn vor der Ver\u00f6ffentlichung als \u00fcberpr\u00fcft. Nichts ist \u00f6ffentlich, bis Sie es separat ver\u00f6ffentlichen.",
-      "locale": "\u00dcbersetzungssprache",
+      "title": "Portfolio-Übersetzungen",
+      "hint": "Erstellen Sie einen Entwurf, überprüfen Sie die übersetzten Fakten unten und markieren Sie ihn vor der Veröffentlichung als überprüft. Nichts ist öffentlich, bis Sie es separat veröffentlichen.",
+      "locale": "Übersetzungssprache",
       "generate": "Entwurf erstellen",
       "generating": "Entwurf erstellen",
-      "draft": "Entwurf \u2013 \u00dcberpr\u00fcfung erforderlich",
-      "reviewed": "Bewertet \u2013 bereit zur Ver\u00f6ffentlichung",
-      "published": "Ver\u00f6ffentlicht",
-      "stale": "Veraltet \u2013 Neugenerierung aus dem aktuellen englischen Entwurf",
-      "correctDocument": "Korrekt \u00fcbersetzter Entwurf JSON",
+      "draft": "Entwurf – Überprüfung erforderlich",
+      "reviewed": "Bewertet – bereit zur Veröffentlichung",
+      "published": "Veröffentlicht",
+      "stale": "Veraltet – Neugenerierung aus dem aktuellen englischen Entwurf",
+      "correctDocument": "Korrekt übersetzter Entwurf JSON",
       "saveCorrection": "Korrektur speichern",
       "correcting": "Korrektur speichern",
-      "versions": "Entwurfsversion {draft} \u00b7 ver\u00f6ffentlichte Version {published}",
-      "reviewDocument": "\u00dcberpr\u00fcfen Sie das vollst\u00e4ndig \u00fcbersetzte Dokument",
-      "markReviewed": "Mark \u00fcberpr\u00fcft",
-      "reviewing": "Markierung \u00fcberpr\u00fcft",
-      "publish": "\u00dcbersetzung ver\u00f6ffentlichen",
-      "publishing": "\u00dcbersetzung ver\u00f6ffentlichen",
+      "versions": "Entwurfsversion {draft} · veröffentlichte Version {published}",
+      "reviewDocument": "Überprüfen Sie das vollständig übersetzte Dokument",
+      "markReviewed": "Mark überprüft",
+      "reviewing": "Markierung überprüft",
+      "publish": "Übersetzung veröffentlichen",
+      "publishing": "Übersetzung veröffentlichen",
       "errors": {
-        "generic": "Der \u00dcbersetzungsvorgang konnte nicht abgeschlossen werden. Es wurde nichts ver\u00f6ffentlicht."
+        "generic": "Der Übersetzungsvorgang konnte nicht abgeschlossen werden. Es wurde nichts veröffentlicht."
       }
     }
   },
@@ -401,17 +545,17 @@
     "lead": "Die Seite konnte nicht gerendert werden. Das Problem wurde protokolliert.",
     "retry": "Versuchen Sie es erneut",
     "notFoundTitle": "Seite nicht gefunden",
-    "notFoundLead": "Unter dieser Adresse ist nichts ver\u00f6ffentlicht.",
+    "notFoundLead": "Unter dieser Adresse ist nichts veröffentlicht.",
     "backHome": "Gehen Sie zur Startseite",
     "unauthorized": "Sie haben keinen Zugriff auf dieses Portfolio."
   },
   "portfolio": {
     "sections": {
       "hero": "Profil",
-      "about": "\u00dcber",
+      "about": "Über",
       "experience": "Erfahrung",
       "projects": "Projekte",
-      "skills": "F\u00e4higkeiten",
+      "skills": "Fähigkeiten",
       "education": "Bildung",
       "certifications": "Zertifizierungen",
       "languages": "Sprachen",
@@ -422,78 +566,80 @@
     "emailLabel": "E-Mail",
     "phoneLabel": "Telefon",
     "locationLabel": "Standort",
-    "availability": "Offen f\u00fcr die Arbeit",
+    "availability": "Offen für die Arbeit",
     "contactCta": "Nehmen Sie Kontakt auf",
     "skipToContent": "Zum Inhalt springen",
-    "builtWith": "Ver\u00f6ffentlicht mit ProFolio",
+    "builtWith": "Veröffentlicht mit ProFolio",
     "navigationLabel": "Portfolioseiten",
-    "portraitAlt": "Portr\u00e4t",
-    "galleryClose": "Vollbild schlie\u00dfen",
+    "portraitAlt": "Porträt",
+    "galleryClose": "Vollbild schließen",
     "pdf": {
       "downloadCta": "PDF herunterladen"
     },
     "privatePage": {
       "title": "Diese Seite ist privat",
-      "description": "Geben Sie das Passwort ein, das Ihnen der Portfolioeigent\u00fcmer mitgeteilt hat.",
+      "description": "Geben Sie das Passwort ein, das Ihnen der Portfolioeigentümer mitgeteilt hat.",
       "password": "Geteiltes Passwort",
-      "submit": "Private Seite \u00f6ffnen",
-      "denied": "Dieses Passwort stimmte nicht \u00fcberein. \u00dcberpr\u00fcfen Sie es und versuchen Sie es erneut."
+      "submit": "Private Seite öffnen",
+      "denied": "Dieses Passwort stimmte nicht überein. Überprüfen Sie es und versuchen Sie es erneut."
     },
     "supplemental": {
       "softSkills": "Soft Skills",
       "courses": "Kurse",
-      "publications": "Ver\u00f6ffentlichungen",
+      "publications": "Veröffentlichungen",
       "volunteering": "Freiwilligenarbeit",
       "awards": "Auszeichnungen",
       "interests": "Interessen",
       "testimonials": "Erfahrungsberichte",
       "gallery": "Galerie",
       "attachments": "Downloads"
-    }
+    },
+    "homeLabel": "ProFolio-Startseite",
+    "menuToggleLabel": "Menü"
   },
   "dashboard": {
     "title": "Ihre Portfolios",
-    "lead": "Zu jedem Portfolio geh\u00f6rt ein privater Entwurf und nach der Ver\u00f6ffentlichung eine von Ihnen gew\u00e4hlte \u00f6ffentliche Ansprache.",
+    "lead": "Zu jedem Portfolio gehört ein privater Entwurf und nach der Veröffentlichung eine von Ihnen gewählte öffentliche Ansprache.",
     "empty": {
       "title": "Noch keine Portfolios",
-      "description": "Erstellen Sie einen, laden Sie Ihren Lebenslauf hoch und \u00fcberpr\u00fcfen Sie, was der Entf\u00fchrer gefunden hat, bevor etwas an die \u00d6ffentlichkeit gelangt."
+      "description": "Erstellen Sie einen, laden Sie Ihren Lebenslauf hoch und überprüfen Sie, was der Entführer gefunden hat, bevor etwas an die Öffentlichkeit gelangt."
     },
     "listTitle": "Portfolios",
     "create": {
       "title": "Erstellen Sie ein Portfolio",
-      "lead": "Beginnen Sie mit Ihrem Namen. Sie k\u00f6nnen die \u00f6ffentliche Adresse jederzeit vor der Ver\u00f6ffentlichung \u00e4ndern.",
+      "lead": "Beginnen Sie mit Ihrem Namen. Sie können die öffentliche Adresse jederzeit vor der Veröffentlichung ändern.",
       "nameLabel": "Anzeigename",
       "namePlaceholder": "Jane Doe",
-      "slugLabel": "\u00d6ffentliche Ansprache",
+      "slugLabel": "Öffentliche Ansprache",
       "slugHint": "Lassen Sie das Feld leer und wir schlagen Ihnen eines mit Ihrem Namen vor.",
       "submit": "Erstellen",
       "pending": "Erstellen"
     },
     "status": {
       "draft": "Entwurf",
-      "published": "Ver\u00f6ffentlicht",
-      "unpublished": "Unver\u00f6ffentlicht"
+      "published": "Veröffentlicht",
+      "unpublished": "Unveröffentlicht"
     },
     "actions": {
       "edit": "Bearbeiten",
       "preview": "Vorschau",
       "view": "Live ansehen",
       "import": "Lebenslauf importieren",
-      "publish": "Ver\u00f6ffentlichen"
+      "publish": "Veröffentlichen"
     },
     "meta": {
       "updated": "{when} aktualisiert",
-      "published": "Ver\u00f6ffentlicht {when}",
-      "neverPublished": "Noch nicht ver\u00f6ffentlicht"
+      "published": "Veröffentlicht {when}",
+      "neverPublished": "Noch nicht veröffentlicht"
     },
     "errors": {
-      "invalidInput": "\u00dcberpr\u00fcfen Sie den Namen und die Adresse und versuchen Sie es erneut.",
-      "limitReached": "Sie haben die maximale Anzahl an Portfolios f\u00fcr dieses Konto erreicht.",
+      "invalidInput": "Überprüfen Sie den Namen und die Adresse und versuchen Sie es erneut.",
+      "limitReached": "Sie haben die maximale Anzahl an Portfolios für dieses Konto erreicht.",
       "slugTaken": "Diese Adresse ist bereits vergeben. Versuchen Sie es mit einem anderen.",
       "notFound": "Dieses Portfolio existiert nicht mehr.",
-      "versionConflict": "Dieses Portfolio wurde in einem anderen Tab ge\u00e4ndert. Laden Sie es erneut, bevor Sie es erneut speichern.",
-      "slug.empty": "W\u00e4hlen Sie eine \u00f6ffentliche Adresse.",
-      "slug.too-short": "Die Adresse ben\u00f6tigt mindestens 3 Zeichen.",
+      "versionConflict": "Dieses Portfolio wurde in einem anderen Tab geändert. Laden Sie es erneut, bevor Sie es erneut speichern.",
+      "slug.empty": "Wählen Sie eine öffentliche Adresse.",
+      "slug.too-short": "Die Adresse benötigt mindestens 3 Zeichen.",
       "slug.too-long": "Die Adresse ist zu lang.",
       "slug.invalid-characters": "Verwenden Sie nur Kleinbuchstaben, Zahlen und einzelne Bindestriche.",
       "slug.reserved": "Diese Adresse ist von der Plattform reserviert. Versuchen Sie es mit einem anderen."
@@ -501,75 +647,75 @@
   },
   "ingestion": {
     "title": "Importieren Sie Ihren Lebenslauf",
-    "lead": "Laden Sie einen PDF hoch. Wir lesen es, strukturieren es und geben Ihnen einen Entwurf zur \u00dcberpr\u00fcfung \u2013 nichts wird \u00f6ffentlich, bis Sie es ver\u00f6ffentlichen.",
+    "lead": "Laden Sie einen PDF hoch. Wir lesen es, strukturieren es und geben Ihnen einen Entwurf zur Überprüfung – nichts wird öffentlich, bis Sie es veröffentlichen.",
     "upload": {
-      "title": "W\u00e4hlen Sie Ihren Lebenslauf",
+      "title": "Wählen Sie Ihren Lebenslauf",
       "hint": "PDF, DOCX, DOC oder RTF, bis zu {maxMegabytes} MB und {maxPages} Seiten.",
       "fieldLabel": "CV-Datei",
       "submit": "Importieren",
       "pending": "Importieren"
     },
     "facts": {
-      "privacyLabel": "Privatsph\u00e4re",
-      "privacyValue": "Die Datei wird privat gespeichert und ist niemals \u00f6ffentlich zug\u00e4nglich. Sie k\u00f6nnen es jederzeit l\u00f6schen.",
+      "privacyLabel": "Privatsphäre",
+      "privacyValue": "Die Datei wird privat gespeichert und ist niemals öffentlich zugänglich. Sie können es jederzeit löschen.",
       "reviewLabel": "Rezension",
-      "reviewValue": "Durch die Extraktion entsteht ein Entwurf. Sie genehmigen jede Tatsache, bevor etwas ver\u00f6ffentlicht wird.",
+      "reviewValue": "Durch die Extraktion entsteht ein Entwurf. Sie genehmigen jede Tatsache, bevor etwas veröffentlicht wird.",
       "accuracyLabel": "Genauigkeit",
-      "accuracyValue": "Nichts ist erfunden. Felder, die das Dokument nicht unterst\u00fctzt, bleiben leer und werden f\u00fcr Sie markiert.",
+      "accuracyValue": "Nichts ist erfunden. Felder, die das Dokument nicht unterstützt, bleiben leer und werden für Sie markiert.",
       "costLabel": "Kosten",
-      "costValue": "Der Text wird zuerst lokal gelesen, sodass ein normaler Lebenslauf einen Model-Aufruf kostet und Ihre ver\u00f6ffentlichte Seite keinen kostet."
+      "costValue": "Der Text wird zuerst lokal gelesen, sodass ein normaler Lebenslauf einen Model-Aufruf kostet und Ihre veröffentlichte Seite keinen kostet."
     },
     "warningsTitle": "Einen zweiten Blick wert",
     "errors": {
-      "empty": "Diese Datei ist leer. W\u00e4hlen Sie einen PDF und versuchen Sie es erneut.",
-      "tooLarge": "Diese Datei ist gr\u00f6\u00dfer als das Upload-Limit.",
+      "empty": "Diese Datei ist leer. Wählen Sie einen PDF und versuchen Sie es erneut.",
+      "tooLarge": "Diese Datei ist größer als das Upload-Limit.",
       "notAPdf": "Diese Datei ist kein lesbares PDF.",
       "unreadableDocument": "Wir konnten den Text aus diesem Dokument nicht sicher lesen. Exportieren Sie es erneut als PDF, DOCX, DOC oder RTF und versuchen Sie es erneut.",
-      "unsafeDocument": "Dieses Dokument enth\u00e4lt Makros, eingebettete Objekte oder externe Ressourcen und wurde daher nicht ge\u00f6ffnet.",
-      "encrypted": "Dieser PDF ist passwortgesch\u00fctzt. Entfernen Sie das Passwort und laden Sie es erneut hoch.",
+      "unsafeDocument": "Dieses Dokument enthält Makros, eingebettete Objekte oder externe Ressourcen und wurde daher nicht geöffnet.",
+      "encrypted": "Dieser PDF ist passwortgeschützt. Entfernen Sie das Passwort und laden Sie es erneut hoch.",
       "tooManyPages": "Dass PDF mehr Seiten als das Importlimit hat.",
       "scanned": "Das PDF sieht gescannt aus, es gibt also keinen zu lesenden Text. Laden Sie ein textbasiertes PDF hoch oder starten Sie Ihr Portfolio manuell.",
-      "quotaExceeded": "Sie haben Ihre Lebenslauf-Importe f\u00fcr heute verwendet. Versuchen Sie es morgen noch einmal.",
-      "rateLimited": "Im Moment gibt es zu viele Uploads. Versuchen Sie es sp\u00e4ter noch einmal.",
+      "quotaExceeded": "Sie haben Ihre Lebenslauf-Importe für heute verwendet. Versuchen Sie es morgen noch einmal.",
+      "rateLimited": "Im Moment gibt es zu viele Uploads. Versuchen Sie es später noch einmal.",
       "invalid": "Etwas an dieser Anfrage stimmte nicht. Versuchen Sie es erneut.",
       "notFound": "Dieses Portfolio existiert nicht mehr.",
-      "conflict": "Dieses Portfolio wurde in einem anderen Tab ge\u00e4ndert. Vor dem erneuten Import neu laden.",
+      "conflict": "Dieses Portfolio wurde in einem anderen Tab geändert. Vor dem erneuten Import neu laden.",
       "typeMismatch": "Diese Datei ist nicht das, was ihr Name verspricht. Laden Sie das Original PDF hoch und nicht eine umbenannte Kopie.",
-      "infected": "Da unser Scanner etwas in dieser Datei gefunden hat, wurde sie nicht gespeichert. \u00dcberpr\u00fcfen Sie die Datei auf Ihrem eigenen Computer, bevor Sie es erneut versuchen.",
+      "infected": "Da unser Scanner etwas in dieser Datei gefunden hat, wurde sie nicht gespeichert. Überprüfen Sie die Datei auf Ihrem eigenen Computer, bevor Sie es erneut versuchen.",
       "scannerUnavailable": "Wir konnten diese Datei gerade nicht scannen, daher wurde nichts gespeichert. Bitte versuchen Sie es in ein paar Minuten noch einmal."
     }
   },
   "editor": {
-    "title": "\u00dcberpr\u00fcfen und bearbeiten",
+    "title": "Überprüfen und bearbeiten",
     "untitled": "Portfolio ohne Titel",
     "save": "Speichern",
     "saving": "Sparen",
     "saved": "Gespeichert",
-    "unsaved": "Nicht gespeicherte \u00c4nderungen",
+    "unsaved": "Nicht gespeicherte Änderungen",
     "warningsTitle": "Einen zweiten Blick wert",
     "identityTitle": "Wer du bist",
-    "identityHint": "Dies ist das Erste, was ein Leser sieht. Alles hier stammt aus Ihrem Lebenslauf \u2013 korrigieren Sie alles, was der Extraktor falsch gemacht hat.",
+    "identityHint": "Dies ist das Erste, was ein Leser sieht. Alles hier stammt aus Ihrem Lebenslauf – korrigieren Sie alles, was der Extraktor falsch gemacht hat.",
     "displayName": "Anzeigename",
-    "headline": "\u00dcberschrift",
+    "headline": "Überschrift",
     "summary": "Zusammenfassung",
     "location": "Standort",
     "tagline": "Willkommensslogan",
-    "availabilityEnabled": "Zeigen Sie, dass ich f\u00fcr die Arbeit verf\u00fcgbar bin",
-    "availabilityNote": "Hinweis zur Verf\u00fcgbarkeit",
-    "coverLetter": "Anschreiben oder l\u00e4ngere Vorstellung",
+    "availabilityEnabled": "Zeigen Sie, dass ich für die Arbeit verfügbar bin",
+    "availabilityNote": "Hinweis zur Verfügbarkeit",
+    "coverLetter": "Anschreiben oder längere Vorstellung",
     "contactTitle": "Kontakt",
-    "contactHint": "Gespeichert und ver\u00f6ffentlicht werden unterschiedliche Entscheidungen. Auf Ihrer \u00f6ffentlichen Seite wird hier nichts angezeigt, es sei denn, Sie schalten es ein.",
+    "contactHint": "Gespeichert und veröffentlicht werden unterschiedliche Entscheidungen. Auf Ihrer öffentlichen Seite wird hier nichts angezeigt, es sei denn, Sie schalten es ein.",
     "email": "E-Mail",
     "phone": "Telefon",
-    "showPublicly": "Auf meiner \u00f6ffentlichen Seite anzeigen",
+    "showPublicly": "Auf meiner öffentlichen Seite anzeigen",
     "seoTitle": "Suchen und teilen",
-    "seoHint": "Wie Ihr Portfolio in Suchergebnissen und Linkvorschauen angezeigt wird. Lassen Sie das Feld leer, um Ihren Namen und Ihre \u00dcberschrift zu verwenden.",
+    "seoHint": "Wie Ihr Portfolio in Suchergebnissen und Linkvorschauen angezeigt wird. Lassen Sie das Feld leer, um Ihren Namen und Ihre Überschrift zu verwenden.",
     "seoTitleField": "Seitentitel",
     "seoDescriptionField": "Beschreibung",
     "indexable": "Erlauben Sie Suchmaschinen, dieses Portfolio zu indizieren",
     "sections": {
       "title": "Seitenabschnitte",
-      "hint": "Abschnitte neu anordnen und ausblenden. Ein Abschnitt, in dem sich nichts befindet, wird automatisch \u00fcbersprungen.",
+      "hint": "Abschnitte neu anordnen und ausblenden. Ein Abschnitt, in dem sich nichts befindet, wird automatisch übersprungen.",
       "moveUp": "Abschnitt nach oben verschieben",
       "moveDown": "Abschnitt nach unten verschieben",
       "show": "Zeigen",
@@ -577,7 +723,7 @@
     },
     "collections": {
       "title": "Portfolioinhalte",
-      "hint": "F\u00fcgen Sie die Fakten in Ihrem Entwurf hinzu, bearbeiten Sie sie, entfernen Sie sie und ordnen Sie sie. Leere Pflichtfelder m\u00fcssen vor dem Speichern ausgef\u00fcllt werden.",
+      "hint": "Fügen Sie die Fakten in Ihrem Entwurf hinzu, bearbeiten Sie sie, entfernen Sie sie und ordnen Sie sie. Leere Pflichtfelder müssen vor dem Speichern ausgefüllt werden.",
       "experience": "Erfahrung",
       "projects": "Projekte",
       "skills": "Technische Kompetenzgruppen",
@@ -587,12 +733,27 @@
       "certifications": "Zertifizierungen",
       "languages": "Sprachen",
       "awards": "Auszeichnungen",
-      "publications": "Ver\u00f6ffentlichungen",
+      "publications": "Veröffentlichungen",
       "volunteering": "Freiwilligenarbeit",
       "testimonials": "Erfahrungsberichte",
       "socialLinks": "Soziale Links",
       "interests": "Interessen, durch Kommas getrennt",
-      "add": "Eintrag hinzuf\u00fcgen",
+      "emptyHints": {
+        "experience": "In der Regel das Erste, was ein Besucher liest — die meisten Portfolios beginnen damit.",
+        "projects": "Was Sie gebaut haben, wirkt stärker als wo Sie gearbeitet haben. Verlinken Sie etwas Reales, wenn möglich.",
+        "skills": "Fassen Sie verwandte Werkzeuge unter einem Label zusammen — „Frontend“, „Cloud“ — statt einer langen Liste.",
+        "softSkills": "Lohnt sich, wenn die Art, wie Sie arbeiten, genauso zählt wie das, was Sie können.",
+        "education": "Auch spät in der Karriere noch erwartet — eine Zeile genügt, wenn es wenig zu sagen gibt.",
+        "courses": "Kurze, gezielte Weiterbildung, die nicht unter Bildung oder Zertifizierungen passt.",
+        "certifications": "Geben Sie den Aussteller und, falls vorhanden, einen Verifizierungslink an.",
+        "languages": "Ihre Arbeitssprachen, nicht nur die, mit denen Sie aufgewachsen sind.",
+        "awards": "Anerkennung von außerhalb des eigenen Teams überzeugt am meisten.",
+        "publications": "Alles, wofür Sie als Autor oder Mitautor genannt werden.",
+        "volunteering": "Ehrenamtliche Arbeit zählt trotzdem — besonders wenn sie Eigeninitiative zeigt, die ein Titel nicht zeigt.",
+        "testimonials": "Ein konkreter Satz von jemandem, mit dem Sie zusammengearbeitet haben, wirkt mehr als ein bloßer Titel.",
+        "socialLinks": "Optional — fügen Sie die Profile hinzu, die eine Personalerin tatsächlich öffnen würde."
+      },
+      "add": "Eintrag hinzufügen",
       "remove": "Eintrag entfernen",
       "moveUp": "Eintrag nach oben verschieben",
       "moveDown": "Eintrag nach unten verschieben",
@@ -610,12 +771,12 @@
         "slug": "Projektadresse",
         "role": "Rolle",
         "year": "Projektmonat",
-        "featured": "Ausgew\u00e4hltes Projekt",
-        "content": "Projektabs\u00e4tze, einer pro Zeile",
+        "featured": "Ausgewähltes Projekt",
+        "content": "Projektabsätze, einer pro Zeile",
         "links": "Projektlinks, ein Label | URL pro Zeile",
         "label": "Etikett",
-        "tier": "F\u00e4higkeitsniveau",
-        "items": "F\u00e4higkeiten, eine pro Zeile",
+        "tier": "Fähigkeitsniveau",
+        "items": "Fähigkeiten, eine pro Zeile",
         "detail": "Beweis oder Detail",
         "institution": "Institution",
         "degree": "Abschluss",
@@ -632,10 +793,10 @@
         "quote": "Zitat",
         "author": "Autor",
         "kind": "Plattform",
-        "visible": "\u00d6ffentlich zeigen"
+        "visible": "Öffentlich zeigen"
       },
       "skillTiers": {
-        "primary": "Prim\u00e4r",
+        "primary": "Primär",
         "strong": "Stark",
         "working": "Arbeiten",
         "familiar": "Vertraut"
@@ -663,15 +824,15 @@
     },
     "pages": {
       "title": "Portfolioseiten",
-      "hint": "Erstellen und bestellen Sie \u00f6ffentliche oder passwortgesch\u00fctzte Seiten. Legen Sie separat ein Passwort f\u00fcr die private Seite fest, damit niemals Klartext in den Entwurf gelangt.",
+      "hint": "Erstellen und bestellen Sie öffentliche oder passwortgeschützte Seiten. Legen Sie separat ein Passwort für die private Seite fest, damit niemals Klartext in den Entwurf gelangt.",
       "pageTitle": "Seitentitel",
       "navLabel": "Navigationsetikett",
       "slug": "Adresse",
       "visibility": "Zugang",
       "description": "Seitenbeschreibung",
-      "public": "\u00d6ffentlich",
+      "public": "Öffentlich",
       "private": "Privat",
-      "add": "Seite hinzuf\u00fcgen",
+      "add": "Seite hinzufügen",
       "remove": "Seite entfernen",
       "moveUp": "Seite nach oben verschieben",
       "moveDown": "Seite nach unten verschieben",
@@ -679,68 +840,68 @@
       "hide": "Verstecken",
       "privateAccess": {
         "visibility": "Seitenzugriff",
-        "public": "\u00d6ffentlich",
+        "public": "Öffentlich",
         "private": "Privat mit einem Freigabepasswort",
         "password": "Passwort teilen",
-        "passwordHint": "Verwenden Sie mindestens 12 Zeichen, wenn Sie diese Seite privat machen. Lassen Sie es leer, wenn Sie die Seite wieder \u00f6ffentlich zug\u00e4nglich machen.",
+        "passwordHint": "Verwenden Sie mindestens 12 Zeichen, wenn Sie diese Seite privat machen. Lassen Sie es leer, wenn Sie die Seite wieder öffentlich zugänglich machen.",
         "submit": "Seitenzugriff aktualisieren",
         "success": "Seitenzugriff aktualisiert.",
         "errors": {
-          "invalidInput": "W\u00e4hlen Sie eine Zugriffsebene und verwenden Sie ein Passwort mit mindestens 12 Zeichen f\u00fcr eine private Seite.",
-          "notFound": "Dieses Portfolio oder diese Seite ist nicht mehr verf\u00fcgbar.",
-          "versionConflict": "Das Portfolio wurde in einem anderen Tab ge\u00e4ndert. Laden Sie die Seite neu, bevor Sie den Seitenzugriff aktualisieren."
+          "invalidInput": "Wählen Sie eine Zugriffsebene und verwenden Sie ein Passwort mit mindestens 12 Zeichen für eine private Seite.",
+          "notFound": "Dieses Portfolio oder diese Seite ist nicht mehr verfügbar.",
+          "versionConflict": "Das Portfolio wurde in einem anderen Tab geändert. Laden Sie die Seite neu, bevor Sie den Seitenzugriff aktualisieren."
         }
       }
     },
     "publish": {
-      "title": "Ver\u00f6ffentlichen",
-      "hint": "W\u00e4hlen Sie Ihre \u00f6ffentliche Adresse und ver\u00f6ffentlichen Sie sie. Nichts ist \u00f6ffentlich, bis Sie es tun.",
-      "unsavedChanges": "Sie haben ungespeicherte \u00c4nderungen. Speichern Sie Ihren Entwurf vor der Ver\u00f6ffentlichung \u2014 Ver\u00f6ffentlichen pr\u00fcft den zuletzt gespeicherten Stand, nicht das, was gerade angezeigt wird.",
-      "slugLabel": "\u00d6ffentliche Ansprache",
+      "title": "Veröffentlichen",
+      "hint": "Wählen Sie Ihre öffentliche Adresse und veröffentlichen Sie sie. Nichts ist öffentlich, bis Sie es tun.",
+      "unsavedChanges": "Sie haben ungespeicherte Änderungen. Speichern Sie Ihren Entwurf vor der Veröffentlichung — Veröffentlichen prüft den zuletzt gespeicherten Stand, nicht das, was gerade angezeigt wird.",
+      "slugLabel": "Öffentliche Ansprache",
       "urlPreview": "Ihr Portfolio wird bei {url} sein",
       "claim": "Adresse speichern",
-      "publish": "Ver\u00f6ffentlichen",
-      "republish": "\u00c4nderungen ver\u00f6ffentlichen",
-      "unpublish": "Ver\u00f6ffentlichung aufheben",
-      "publishing": "Ver\u00f6ffentlichung",
-      "published": "Ver\u00f6ffentlicht",
+      "publish": "Veröffentlichen",
+      "republish": "Änderungen veröffentlichen",
+      "unpublish": "Veröffentlichung aufheben",
+      "publishing": "Veröffentlichung",
+      "published": "Veröffentlicht",
       "viewLive": "Live ansehen",
-      "blockersTitle": "Bevor Sie ver\u00f6ffentlichen k\u00f6nnen",
+      "blockersTitle": "Bevor Sie veröffentlichen können",
       "blockers": {
-        "missing-name": "F\u00fcgen Sie Ihren Anzeigenamen hinzu.",
-        "missing-headline": "F\u00fcgen Sie eine \u00dcberschrift hinzu, damit ein Leser wei\u00df, was Sie tun.",
-        "empty-portfolio": "F\u00fcgen Sie mindestens eine Rolle, ein Projekt, eine Qualifikation oder eine Zusammenfassung hinzu.",
-        "no-visible-home-page": "Ihre Homepage ist ausgeblendet. Machen Sie es zur Ver\u00f6ffentlichung sichtbar."
+        "missing-name": "Fügen Sie Ihren Anzeigenamen hinzu.",
+        "missing-headline": "Fügen Sie eine Überschrift hinzu, damit ein Leser weiß, was Sie tun.",
+        "empty-portfolio": "Fügen Sie mindestens eine Rolle, ein Projekt, eine Qualifikation oder eine Zusammenfassung hinzu.",
+        "no-visible-home-page": "Ihre Homepage ist ausgeblendet. Machen Sie es zur Veröffentlichung sichtbar."
       }
     },
     "errors": {
-      "invalidDocument": "Einige dieser Werte konnten nicht gespeichert werden. \u00dcberpr\u00fcfen Sie die hervorgehobenen Felder.",
-      "versionConflict": "Dieses Portfolio hat sich woanders ver\u00e4ndert. Laden Sie die Datei neu, um die neueste Version zu erhalten, bevor Sie sie erneut speichern.",
+      "invalidDocument": "Einige dieser Werte konnten nicht gespeichert werden. Überprüfen Sie die hervorgehobenen Felder.",
+      "versionConflict": "Dieses Portfolio hat sich woanders verändert. Laden Sie die Datei neu, um die neueste Version zu erhalten, bevor Sie sie erneut speichern.",
       "notFound": "Dieses Portfolio existiert nicht mehr.",
-      "notReady": "Dieses Portfolio ist noch nicht zur Ver\u00f6ffentlichung bereit.",
+      "notReady": "Dieses Portfolio ist noch nicht zur Veröffentlichung bereit.",
       "slugTaken": "Diese Adresse ist bereits vergeben. Versuchen Sie es mit einem anderen.",
       "invalidSlug": "Verwenden Sie nur Kleinbuchstaben, Zahlen und einzelne Bindestriche."
     },
-    "phoneCountry": "L\u00e4ndercode",
+    "phoneCountry": "Ländercode",
     "phoneCountryNone": "Kein Land",
     "assets": {
-      "portraitTitle": "Portr\u00e4t",
-      "portraitHint": "Laden Sie ein klares Bild hoch. Es wird gescannt und validiert, bevor es Ihrem Entwurf beigef\u00fcgt wird.",
-      "portraitLabel": "Portr\u00e4tbild",
+      "portraitTitle": "Porträt",
+      "portraitHint": "Laden Sie ein klares Bild hoch. Es wird gescannt und validiert, bevor es Ihrem Entwurf beigefügt wird.",
+      "portraitLabel": "Porträtbild",
       "portraitFormats": "PNG, JPEG, WebP, GIF oder AVIF, bis zu 5 MB.",
-      "uploadPortrait": "Portr\u00e4t hochladen",
-      "uploading": "Portr\u00e4t hochladen",
-      "removePortrait": "Portr\u00e4t entfernen",
-      "uploaded": "Portr\u00e4t hochgeladen. Speichern Sie den Entwurf, wenn die Vorschau richtig aussieht.",
+      "uploadPortrait": "Porträt hochladen",
+      "uploading": "Porträt hochladen",
+      "removePortrait": "Porträt entfernen",
+      "uploaded": "Porträt hochgeladen. Speichern Sie den Entwurf, wenn die Vorschau richtig aussieht.",
       "collectionsTitle": "Galerie und Downloads",
-      "collectionsHint": "Dateien werden validiert und auf Viren gescannt, bevor sie angeh\u00e4ngt werden. Sie werden erst \u00f6ffentlich, nachdem Sie diesen Entwurf gespeichert und ver\u00f6ffentlicht haben.",
+      "collectionsHint": "Dateien werden validiert und auf Viren gescannt, bevor sie angehängt werden. Sie werden erst öffentlich, nachdem Sie diesen Entwurf gespeichert und veröffentlicht haben.",
       "galleryFile": "Galeriebild",
       "galleryAlt": "Bildbeschreibung",
       "galleryCaption": "Bildunterschrift (optional)",
       "uploadGallery": "Galeriebild hochladen",
       "attachmentFile": "Herunterladbare Datei",
       "attachmentKind": "Dateityp",
-      "attachmentLabel": "\u00d6ffentliches Download-Label",
+      "attachmentLabel": "Öffentliches Download-Label",
       "uploadAttachment": "Anhang hochladen",
       "remove": "Aus Entwurf entfernen",
       "crop": {
@@ -758,27 +919,27 @@
         "other": "Anderes Dokument"
       },
       "errors": {
-        "invalid-input": "W\u00e4hlen Sie eine Datei und versuchen Sie es erneut.",
-        "not-found": "Dieses Portfolio ist nicht mehr verf\u00fcgbar.",
+        "invalid-input": "Wählen Sie eine Datei und versuchen Sie es erneut.",
+        "not-found": "Dieses Portfolio ist nicht mehr verfügbar.",
         "empty": "Diese Datei ist leer.",
-        "too-large": "Diese Datei ist gr\u00f6\u00dfer als das Limit f\u00fcr diesen Upload.",
-        "forbidden-extension": "Dieser Dateiname enth\u00e4lt einen verbotenen Dateityp.",
+        "too-large": "Diese Datei ist größer als das Limit für diesen Upload.",
+        "forbidden-extension": "Dieser Dateiname enthält einen verbotenen Dateityp.",
         "unknown-extension": "Diese Datei hat keine erkannte Erweiterung.",
-        "unsupported-type": "Dieser Dateityp wird f\u00fcr diesen Upload nicht akzeptiert.",
-        "signature-mismatch": "Der Dateiinhalt stimmt nicht mit dem Dateinamen \u00fcberein.",
-        "extension-mismatch": "Der Dateityp stimmt nicht mit seiner Erweiterung \u00fcberein.",
+        "unsupported-type": "Dieser Dateityp wird für diesen Upload nicht akzeptiert.",
+        "signature-mismatch": "Der Dateiinhalt stimmt nicht mit dem Dateinamen überein.",
+        "extension-mismatch": "Der Dateityp stimmt nicht mit seiner Erweiterung überein.",
         "image-unreadable": "Dieser Bildkopf konnte nicht gelesen werden.",
-        "image-too-large": "Die Abmessungen dieses Bildes sind zu gro\u00df, um sicher verarbeitet zu werden.",
-        "image-too-small": "W\u00e4hlen Sie ein Bild mit mindestens 8 x 8 Pixeln.",
+        "image-too-large": "Die Abmessungen dieses Bildes sind zu groß, um sicher verarbeitet zu werden.",
+        "image-too-small": "Wählen Sie ein Bild mit mindestens 8 x 8 Pixeln.",
         "infected": "Der Scanner hat unsichere Inhalte gefunden, daher wurde die Datei nicht gespeichert.",
-        "scanner-unavailable": "Die Datei konnte nicht gescannt werden. Es wurde nichts gespeichert; Versuchen Sie es in K\u00fcrze noch einmal.",
-        "rate-limited": "\u00dcber diese Verbindung wurden zu viele Dateien hochgeladen. Versuchen Sie es sp\u00e4ter noch einmal."
+        "scanner-unavailable": "Die Datei konnte nicht gescannt werden. Es wurde nichts gespeichert; Versuchen Sie es in Kürze noch einmal.",
+        "rate-limited": "Über diese Verbindung wurden zu viele Dateien hochgeladen. Versuchen Sie es später noch einmal."
       }
     }
   },
   "account": {
     "title": "Konto",
-    "lead": "Was wir \u00fcber Sie speichern und wie Sie es entfernen k\u00f6nnen.",
+    "lead": "Was wir über Sie speichern und wie Sie es entfernen können.",
     "summary": {
       "title": "Ihr Konto",
       "nameLabel": "Name",
@@ -795,47 +956,47 @@
     },
     "security": {
       "title": "Sicherheit",
-      "hint": "Best\u00e4tigen Sie Ihre E-Mail-Adresse, \u00e4ndern Sie Ihr Passwort und \u00fcberpr\u00fcfen Sie angemeldete Ger\u00e4te.",
-      "verificationTitle": "E-Mail-Best\u00e4tigung",
+      "hint": "Bestätigen Sie Ihre E-Mail-Adresse, ändern Sie Ihr Passwort und überprüfen Sie angemeldete Geräte.",
+      "verificationTitle": "E-Mail-Bestätigung",
       "verified": "Verifiziert",
       "unverified": "Nicht verifiziert",
       "resend": "Verifizierungs-E-Mail senden",
-      "sending": "Senden einer Best\u00e4tigungs-E-Mail",
-      "sent": "Wenn die Lieferung verf\u00fcgbar ist, ist eine Best\u00e4tigungs-E-Mail unterwegs.",
-      "passwordTitle": "Passwort \u00e4ndern",
+      "sending": "Senden einer Bestätigungs-E-Mail",
+      "sent": "Wenn die Lieferung verfügbar ist, ist eine Bestätigungs-E-Mail unterwegs.",
+      "passwordTitle": "Passwort ändern",
       "currentPassword": "Aktuelles Passwort",
       "showPassword": "Passwort anzeigen",
       "hidePassword": "Passwort ausblenden",
       "newPassword": "Neues Passwort",
-      "changePassword": "Passwort \u00e4ndern",
-      "changingPassword": "Passwort \u00e4ndern",
-      "passwordChanged": "Ihr Passwort wurde ge\u00e4ndert und andere Sitzungen wurden widerrufen.",
-      "sessionsTitle": "Angemeldete Ger\u00e4te",
+      "changePassword": "Passwort ändern",
+      "changingPassword": "Passwort ändern",
+      "passwordChanged": "Ihr Passwort wurde geändert und andere Sitzungen wurden widerrufen.",
+      "sessionsTitle": "Angemeldete Geräte",
       "currentSession": "Aktuelle Sitzung",
-      "revoke": "Ger\u00e4t abmelden",
-      "revoking": "Ger\u00e4t abmelden",
+      "revoke": "Gerät abmelden",
+      "revoking": "Gerät abmelden",
       "created": "Angemeldet",
-      "expires": "L\u00e4uft ab",
-      "unknownDevice": "Unbekanntes Ger\u00e4t",
+      "expires": "Läuft ab",
+      "unknownDevice": "Unbekanntes Gerät",
       "unknownAddress": "Unbekannte Adresse",
-      "noSessions": "Es wurden keine aktiven Sitzungen zur\u00fcckgegeben."
+      "noSessions": "Es wurden keine aktiven Sitzungen zurückgegeben."
     },
     "data": {
       "title": "Ihre Daten",
-      "hint": "Hochgeladene Lebensl\u00e4ufe werden privat gespeichert und nur von einer Anfrage gelesen, die bereits Ihrem Konto zugeordnet wurde. Der extrahierte Text bleibt erhalten, sodass Sie eine \u00dcberpr\u00fcfung erneut durchf\u00fchren k\u00f6nnen, ohne ihn erneut hochzuladen.",
+      "hint": "Hochgeladene Lebensläufe werden privat gespeichert und nur von einer Anfrage gelesen, die bereits Ihrem Konto zugeordnet wurde. Der extrahierte Text bleibt erhalten, sodass Sie eine Überprüfung erneut durchführen können, ohne ihn erneut hochzuladen.",
       "retentionTitle": "Aufbewahrung",
-      "retention": "Durch das L\u00f6schen eines Portfolios werden dessen Lebenslaufdateien sofort entfernt und die \u00f6ffentliche Adresse bleibt erhalten, sodass niemand anders eine Adresse \u00fcbernehmen kann, auf die Ihr Lebenslauf noch verweist. Durch das L\u00f6schen Ihres Kontos werden alle Dateien und Zeilen entfernt, die wir \u00fcber Sie gespeichert haben. Das Pr\u00fcfprotokoll zeichnet auf, dass die L\u00f6schung stattgefunden hat, ohne dass identifizierende Daten angeh\u00e4ngt sind."
+      "retention": "Durch das Löschen eines Portfolios werden dessen Lebenslaufdateien sofort entfernt und die öffentliche Adresse bleibt erhalten, sodass niemand anders eine Adresse übernehmen kann, auf die Ihr Lebenslauf noch verweist. Durch das Löschen Ihres Kontos werden alle Dateien und Zeilen entfernt, die wir über Sie gespeichert haben. Das Prüfprotokoll zeichnet auf, dass die Löschung stattgefunden hat, ohne dass identifizierende Daten angehängt sind."
     },
     "preferences": {
-      "title": "Pr\u00e4ferenzen",
-      "hint": "W\u00e4hlen Sie die Sprache, das Farbthema und das Standardtelefonland aus, die Sie beim Bearbeiten Ihrer Portfolios verwenden.",
+      "title": "Präferenzen",
+      "hint": "Wählen Sie die Sprache, das Farbthema und das Standardtelefonland aus, die Sie beim Bearbeiten Ihrer Portfolios verwenden.",
       "locale": "Sprache",
       "theme": "Farbthema",
       "country": "Standard-Telefonland",
       "noCountry": "Kein Standardland",
       "submit": "Einstellungen speichern",
-      "pending": "Pr\u00e4ferenzen speichern",
-      "saved": "Ihre Pr\u00e4ferenzen wurden gespeichert.",
+      "pending": "Präferenzen speichern",
+      "saved": "Ihre Präferenzen wurden gespeichert.",
       "locales": {
         "en": "Englisch",
         "ar": "Arabisch",
@@ -854,45 +1015,45 @@
       "themes": {
         "light": "Licht",
         "dark": "Dunkel",
-        "system": "Ger\u00e4teeinstellung verwenden"
+        "system": "Geräteeinstellung verwenden"
       }
     },
     "portfolio": {
-      "delete": "L\u00f6schen",
-      "deleteConfirm": "Dauerhaft l\u00f6schen",
+      "delete": "Löschen",
+      "deleteConfirm": "Dauerhaft löschen",
       "deleteCancel": "Behalte es",
-      "deleting": "L\u00f6schen",
-      "confirmMessage": "Dadurch werden das Portfolio und seine hochgeladenen Lebenslaufdateien entfernt. Es kann nicht r\u00fcckg\u00e4ngig gemacht werden."
+      "deleting": "Löschen",
+      "confirmMessage": "Dadurch werden das Portfolio und seine hochgeladenen Lebenslaufdateien entfernt. Es kann nicht rückgängig gemacht werden."
     },
     "delete": {
-      "title": "L\u00f6schen Sie Ihr Konto",
-      "hint": "Dadurch werden Ihre Portfolios, alle hochgeladenen Lebensl\u00e4ufe und Ihre Anmeldedaten entfernt. Ver\u00f6ffentlichte Seiten werden sofort nicht mehr aufgel\u00f6st. Es kann nicht r\u00fcckg\u00e4ngig gemacht werden.",
-      "confirmationLabel": "Geben Sie zur Best\u00e4tigung {word} ein",
-      "submit": "Mein Konto l\u00f6schen",
-      "submitting": "L\u00f6schen"
+      "title": "Löschen Sie Ihr Konto",
+      "hint": "Dadurch werden Ihre Portfolios, alle hochgeladenen Lebensläufe und Ihre Anmeldedaten entfernt. Veröffentlichte Seiten werden sofort nicht mehr aufgelöst. Es kann nicht rückgängig gemacht werden.",
+      "confirmationLabel": "Geben Sie zur Bestätigung {word} ein",
+      "submit": "Mein Konto löschen",
+      "submitting": "Löschen"
     },
     "errors": {
-      "deleteFailed": "Wir konnten den L\u00f6schvorgang nicht abschlie\u00dfen. Es wurde nichts entfernt. Bitte versuchen Sie es erneut.",
-      "confirmationMismatch": "Geben Sie das Best\u00e4tigungswort genau ein, um fortzufahren.",
-      "notFound": "Dieses Portfolio ist nicht mehr verf\u00fcgbar."
+      "deleteFailed": "Wir konnten den Löschvorgang nicht abschließen. Es wurde nichts entfernt. Bitte versuchen Sie es erneut.",
+      "confirmationMismatch": "Geben Sie das Bestätigungswort genau ein, um fortzufahren.",
+      "notFound": "Dieses Portfolio ist nicht mehr verfügbar."
     }
   },
   "payments": {
     "billing": {
       "title": "Abrechnung",
-      "hint": "ProFolio kostet {price} pro Monat, pauschal, ohne Stufen. Ein neues Portfolio erh\u00e4lt eine 10-t\u00e4gige kostenlose Testphase ab dem Tag der ersten Ver\u00f6ffentlichung.",
+      "hint": "ProFolio kostet {price} pro Monat, pauschal, ohne Stufen. Ein neues Portfolio erhält eine 10-tägige kostenlose Testphase ab dem Tag der ersten Veröffentlichung.",
       "status": {
-        "notStarted": "Ver\u00f6ffentlichen Sie ein Portfolio, um Ihre 10-t\u00e4gige kostenlose Testphase zu starten.",
+        "notStarted": "Veröffentlichen Sie ein Portfolio, um Ihre 10-tägige kostenlose Testphase zu starten.",
         "trialing": "Ihre Testphase endet in {days} Tagen.",
-        "deactivated": "Ihr Portfolio ist deaktiviert, bis Sie ein Abonnement abschlie\u00dfen.",
-        "active": "Sie sind abonniert \u2014 vielen Dank f\u00fcr Ihre Unterst\u00fctzung von ProFolio."
+        "deactivated": "Ihr Portfolio ist deaktiviert, bis Sie ein Abonnement abschließen.",
+        "active": "Sie sind abonniert — vielen Dank für Ihre Unterstützung von ProFolio."
       },
-      "activeNote": "Verwalten oder k\u00fcndigen Sie Ihr Abonnement jederzeit \u00fcber Ihr PayPal-Konto.",
+      "activeNote": "Verwalten oder kündigen Sie Ihr Abonnement jederzeit über Ihr PayPal-Konto.",
       "checkout": {
-        "unavailable": "Die Zahlungsabwicklung ist vor\u00fcbergehend nicht verf\u00fcgbar. Bitte versuchen Sie es in K\u00fcrze erneut.",
-        "processing": "Ihr Abonnement wird best\u00e4tigt \u2026",
-        "succeeded": "Abonnement \u00fcbermittelt. Die Aktivierung wird automatisch best\u00e4tigt und kann einen Moment dauern.",
-        "failed": "Wir konnten Ihr Abonnement nicht best\u00e4tigen. Bitte versuchen Sie es erneut oder wenden Sie sich an den Support, falls dies weiterhin auftritt."
+        "unavailable": "Die Zahlungsabwicklung ist vorübergehend nicht verfügbar. Bitte versuchen Sie es in Kürze erneut.",
+        "processing": "Ihr Abonnement wird bestätigt …",
+        "succeeded": "Abonnement übermittelt. Die Aktivierung wird automatisch bestätigt und kann einen Moment dauern.",
+        "failed": "Wir konnten Ihr Abonnement nicht bestätigen. Bitte versuchen Sie es erneut oder wenden Sie sich an den Support, falls dies weiterhin auftritt."
       }
     }
   }

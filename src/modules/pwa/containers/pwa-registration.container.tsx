@@ -4,13 +4,14 @@
 import { useEffect, useState, type ReactElement } from 'react';
 
 import {
+  dismissBrowserInstallPromptForSession,
   observeBrowserInstallPrompt,
   observeBrowserServiceWorker,
   type BrowserInstallPrompt,
   type BrowserServiceWorkerUpdate,
 } from '@/packages/browser';
 import { Button } from '@/packages/ui-primitives';
-import { ErrorState } from '@/shared/components/feedback/error-state.component';
+import { NoticeState } from '@/shared/components/feedback/notice-state.component';
 
 import { pwaClasses } from '../constants/pwa-style.constants';
 import { PWA_SERVICE_WORKER_PATH } from '../constants/pwa.constants';
@@ -47,6 +48,7 @@ export function PwaRegistrationContainer(
     if (serviceWorkerUpdate) {
       setServiceWorkerUpdate(null);
     } else {
+      dismissBrowserInstallPromptForSession();
       setInstallPrompt(null);
     }
   };
@@ -66,8 +68,10 @@ export function PwaRegistrationContainer(
   };
 
   return (
-    <aside className={pwaClasses.updateRegion} aria-live="polite" data-fixed-surface="pwa">
-      <ErrorState
+    // `role="status"` on `NoticeState` already owns the live-region
+    // announcement — a second `aria-live` here would just double it up.
+    <aside className={pwaClasses.updateRegion} data-fixed-surface="pwa">
+      <NoticeState
         title={title}
         description={description}
         onDismiss={dismiss}
@@ -75,6 +79,7 @@ export function PwaRegistrationContainer(
         action={
           serviceWorkerUpdate || installPrompt ? (
             <Button
+              size="sm"
               onClick={() => {
                 void runAction();
               }}

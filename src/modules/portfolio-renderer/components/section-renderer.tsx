@@ -11,11 +11,12 @@ import {
 } from '@/packages/icons';
 import { AppImage } from '@/packages/image';
 import { AppLink, toAppRoute } from '@/packages/link';
+import { cn } from '@/packages/ui-primitives';
 import { ManifestPanel } from '@/shared/components/data-display/manifest-panel.component';
 import { ExternalLink } from '@/shared/components/primitives/external-link';
 import type { ManifestRow } from '@/shared/components/types/shared-component.types';
 import { buildPublicAssetPath } from '@/shared/constants/route-paths.constants';
-import { formatPhoneNumber } from '@/shared/utils/phone-number.util';
+import { formatPhoneNumberParts, toTelHref } from '@/shared/utils/phone-number.util';
 import { toDisplayUrl } from '@/shared/utils/safe-url.util';
 
 import {
@@ -320,7 +321,45 @@ function renderHeroAside(
   }
 
   if (document.contact.email.visible && document.contact.email.value !== null) {
-    rows.push({ id: 'email', label: labels.emailLabel, value: document.contact.email.value });
+    rows.push({
+      id: 'email',
+      label: labels.emailLabel,
+      value: (
+        <a href={`mailto:${document.contact.email.value}`} className={contactClasses.link}>
+          {document.contact.email.value}
+        </a>
+      ),
+    });
+  }
+
+  const heroPhone = formatPhoneNumberParts(
+    document.contact.phone.countryIso,
+    document.contact.phone.nationalNumber,
+  );
+
+  if (heroPhone !== null && document.contact.phone.visible) {
+    const heroTelHref = toTelHref(
+      document.contact.phone.countryIso,
+      document.contact.phone.nationalNumber,
+    );
+
+    rows.push({
+      id: 'phone',
+      label: labels.phoneLabel,
+      value: (
+        <a
+          href={heroTelHref ?? undefined}
+          className={cn(contactClasses.link, contactClasses.phoneValue)}
+        >
+          {heroPhone.flag === null ? null : (
+            <span className={contactClasses.phoneFlag} aria-hidden="true">
+              {heroPhone.flag}
+            </span>
+          )}
+          {heroPhone.flag === null ? heroPhone.text : ` ${heroPhone.text}`}
+        </a>
+      ),
+    });
   }
 
   if (rows.length === 0) {
@@ -575,13 +614,41 @@ function buildContactRows(
     });
   }
 
-  const phone = formatPhoneNumber(
+  const phone = formatPhoneNumberParts(
     document.contact.phone.countryIso,
     document.contact.phone.nationalNumber,
   );
 
   if (phone !== null && config.showPhone && document.contact.phone.visible) {
-    rows.push({ id: 'phone', label: labels.phoneLabel, value: phone });
+    const telHref = toTelHref(
+      document.contact.phone.countryIso,
+      document.contact.phone.nationalNumber,
+    );
+
+    rows.push({
+      id: 'phone',
+      label: labels.phoneLabel,
+      value: (
+        <a
+          href={telHref ?? undefined}
+          className={cn(contactClasses.link, contactClasses.phoneValue)}
+        >
+          {phone.flag === null ? null : (
+            // The flag emoji has no fallback on every platform (some Windows
+            // builds render the two codepoints as bare letters). Badging it
+            // means either rendering reads as intentional, not broken — see
+            // `countryFlagEmoji` in phone-number.util.ts. The layout gap
+            // (`contactClasses.phoneValue`) is presentational only, so the
+            // space here is a real character too — otherwise copying the row
+            // glues the flag to the number with nothing between them.
+            <span className={contactClasses.phoneFlag} aria-hidden="true">
+              {phone.flag}
+            </span>
+          )}
+          {phone.flag === null ? phone.text : ` ${phone.text}`}
+        </a>
+      ),
+    });
   }
 
   const location = joinNonEmpty([document.identity.location], '');

@@ -60,7 +60,7 @@ export default async function DashboardLayout(props: {
         brand={
           <AppLink href={ROUTE_PATHS.dashboard} className={siteShellClasses.brand}>
             <span className={siteShellClasses.brandName}>{tApp('name')}</span>
-            <span className={siteShellClasses.brandRole}>{user.email}</span>
+            <span className={siteShellClasses.brandEmail}>{user.email}</span>
           </AppLink>
         }
         navigation={<SignOutButtonContainer />}

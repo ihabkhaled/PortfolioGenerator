@@ -44,7 +44,7 @@ export interface ErrorStateProps {
 export interface ManifestRow {
   readonly id: string;
   readonly label: string;
-  readonly value: string;
+  readonly value: ReactNode;
   readonly mono?: boolean;
 }
 

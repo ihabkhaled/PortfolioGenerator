@@ -50,8 +50,9 @@ export const topicClasses = {
   // sibling stacked above it.
   wrapper: 'relative overflow-hidden border-b border-border',
   grid: 'surface-grid pointer-events-none absolute inset-0',
-  hero: 'relative grid gap-5 px-5 py-20 sm:px-8 lg:px-10 lg:py-28',
-  eyebrow: 'font-mono text-xs font-medium uppercase tracking-[0.18em] text-primary-readable',
+  hero: 'relative grid gap-6 px-5 py-20 sm:px-8 lg:px-10 lg:py-28',
+  eyebrow:
+    'font-mono text-[0.6875rem] font-medium uppercase tracking-[0.18em] text-primary-readable',
   // Same fix as `heroClasses.title`: these topic-page headlines are long
   // enough to wrap, and `leading-none` made the wrapped second line collide
   // with the first instead of reading as a second, legible line.
@@ -65,7 +66,7 @@ export const topicClasses = {
 } as const;
 
 export const directoryClasses = {
-  grid: 'grid gap-px overflow-hidden rounded-lg border border-border bg-border sm:grid-cols-2 lg:grid-cols-3',
+  grid: 'grid gap-px overflow-hidden rounded-lg border border-border bg-border sm:grid-cols-2 lg:grid-cols-4',
   item: 'grid min-h-56 content-start gap-3 bg-surface-raised p-5',
   title: 'font-display text-lg font-semibold tracking-tight text-foreground',
   description: 'text-sm leading-relaxed text-muted-foreground text-pretty',
@@ -76,7 +77,7 @@ export const faqClasses = {
   list: 'divide-y divide-border overflow-hidden rounded-lg border border-border bg-surface-raised',
   item: 'px-5 py-1 sm:px-7',
   question:
-    'flex min-h-14 cursor-pointer items-center font-display font-semibold text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring',
+    'flex min-h-14 cursor-pointer items-center font-display font-semibold text-foreground hover:bg-muted focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring',
   answer: 'max-w-3xl pb-5 text-sm leading-relaxed text-muted-foreground text-pretty',
 } as const;
 

@@ -1,6 +1,11 @@
 export const localizationClasses = {
+  // `print:hidden`: `fixed` positioning is unreliable across paginated print
+  // output (some browsers repeat a fixed element on every page), and a
+  // language-switcher control has nothing to do once a page is printed —
+  // including every page the portfolio PDF renderer captures (`page.pdf()`
+  // uses print media by default).
   controls:
-    'fixed end-[max(1rem,env(safe-area-inset-right))] bottom-[max(1rem,env(safe-area-inset-bottom))] z-50 flex max-w-[calc(100vw-2rem)] items-center gap-2 rounded-xl border border-border bg-surface-raised/95 p-2 shadow-lg backdrop-blur rtl:end-[max(1rem,env(safe-area-inset-left))]',
+    'fixed end-[max(1rem,env(safe-area-inset-right))] bottom-[max(1rem,env(safe-area-inset-bottom))] z-50 flex max-w-[calc(100vw-2rem)] items-center gap-2 rounded-xl border border-border bg-surface-raised/95 p-2 shadow-lg backdrop-blur rtl:end-[max(1rem,env(safe-area-inset-left))] print:hidden',
   select: 'h-9 min-w-32 py-0',
   panel: 'grid gap-5 rounded-xl border border-border bg-surface-raised p-5',
   header: 'grid gap-1',

@@ -553,13 +553,18 @@ describe('EditorShell', () => {
         title="Review and edit"
         subtitle="Nothing is public until you publish."
         actions={<button type="button">Save</button>}
-        forms={<p>Forms</p>}
-        preview={<p>Preview</p>}
+        forms={<p>Forms content</p>}
+        preview={<p>Preview content</p>}
+        showingPreview={false}
+        onEditClick={vi.fn()}
+        onPreviewClick={vi.fn()}
+        mobileEditLabel="Edit"
+        mobilePreviewLabel="Preview"
       />,
     );
 
     expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('Review and edit');
-    expect(screen.getByText('Forms')).toBeInTheDocument();
-    expect(screen.getByText('Preview')).toBeInTheDocument();
+    expect(screen.getByText('Forms content')).toBeInTheDocument();
+    expect(screen.getByText('Preview content')).toBeInTheDocument();
   });
 });

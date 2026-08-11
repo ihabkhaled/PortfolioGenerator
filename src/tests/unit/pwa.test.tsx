@@ -13,6 +13,7 @@ const browser = vi.hoisted(() => ({
   installCleanup: vi.fn(),
   observe: vi.fn(),
   observeInstall: vi.fn(),
+  dismissInstallForSession: vi.fn(),
   installListener: null as ((prompt: BrowserInstallPrompt | null) => void) | null,
   updateListener: null as ((update: BrowserServiceWorkerUpdate) => void) | null,
 }));
@@ -31,6 +32,9 @@ vi.mock('@/packages/browser', () => ({
     browser.updateListener = listener;
     return browser.cleanup;
   },
+  dismissBrowserInstallPromptForSession: () => {
+    browser.dismissInstallForSession();
+  },
 }));
 
 beforeEach(() => {
@@ -38,6 +42,7 @@ beforeEach(() => {
   browser.installCleanup.mockReset();
   browser.observe.mockReset();
   browser.observeInstall.mockReset();
+  browser.dismissInstallForSession.mockReset();
   browser.installListener = null;
   browser.updateListener = null;
 });
@@ -148,6 +153,7 @@ describe('PWA boundaries', () => {
     await userEvent.click(screen.getByRole('button', { name: 'Dismiss' }));
 
     expect(screen.queryByText('Install ProFolio')).not.toBeInTheDocument();
+    expect(browser.dismissInstallForSession).toHaveBeenCalledOnce();
   });
 
   it('dismissing the update banner leaves a pending install prompt for later', async () => {
@@ -178,6 +184,9 @@ describe('PWA boundaries', () => {
     // must still be there to show next, not silently discarded with it.
     expect(screen.queryByText('Update available')).not.toBeInTheDocument();
     expect(screen.getByText('Install ProFolio')).toBeInTheDocument();
+    // Dismissing the *update* banner is not a verdict on the install offer
+    // underneath it, so it must not mark the install prompt dismissed too.
+    expect(browser.dismissInstallForSession).not.toHaveBeenCalled();
   });
 
   it('dismisses a browser prompt that is withdrawn before the user chooses it', async () => {

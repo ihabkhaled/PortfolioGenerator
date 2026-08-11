@@ -18,6 +18,7 @@ export {
   accountProfileSchema,
   portfolioDeletionSchema,
 } from './schemas/account.schema';
+export { describeSessionDevice, formatSessionTimestamp } from './helpers/session-view.helper';
 export type {
   AccountSummaryProps,
   DeleteAccountLabels,

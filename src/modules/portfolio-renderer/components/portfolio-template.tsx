@@ -6,6 +6,7 @@ import { sectionClasses } from '@/shared/components/data-display/section.variant
 import { buildPublicAssetPath, ROUTE_PATHS } from '@/shared/constants/route-paths.constants';
 
 import { portfolioShellClasses } from '../constants/template-style.constants';
+import { PortfolioNavMenuContainer } from '../containers/portfolio-nav-menu.container';
 import { hasContent } from '../helpers/section-content.helper';
 import type { PortfolioTemplateProps } from '../types/renderer.types';
 
@@ -35,6 +36,7 @@ export function PortfolioTemplate(props: Readonly<PortfolioTemplateProps>): Reac
       displayName={props.document.identity.displayName}
       headline={props.document.identity.headline}
       navigationLabel={props.labels.navigationLabel}
+      homeLabel={props.labels.homeLabel}
       footerNote={
         <AppLink href={ROUTE_PATHS.home} className={portfolioShellClasses.footerNoteLink}>
           {props.labels.builtWith}
@@ -42,6 +44,13 @@ export function PortfolioTemplate(props: Readonly<PortfolioTemplateProps>): Reac
       }
       banner={null}
       navigation={<PortfolioNav label={props.labels.navigationLabel} items={props.navigation} />}
+      mobileMenu={
+        <PortfolioNavMenuContainer
+          items={props.navigation}
+          navigationLabel={props.labels.navigationLabel}
+          toggleLabel={props.labels.menuToggleLabel}
+        />
+      }
       actions={props.actions}
       footerLinks={props.footerLinks}
     >

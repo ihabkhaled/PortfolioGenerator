@@ -234,63 +234,67 @@ export function ImageCropFieldContainer(props: Readonly<ImageCropFieldProps>): R
       />
 
       <dialog ref={dialogRef} className={editorClasses.cropDialog} onCancel={closeWithoutApplying}>
-        <p className={editorClasses.cropTitle}>{dialogTitle}</p>
+        <div className={editorClasses.cropDialogFrame}>
+          <p className={editorClasses.cropTitle}>{dialogTitle}</p>
 
-        <div
-          ref={viewportRef}
-          className={cn(
-            editorClasses.cropViewport,
-            shape === 'circle' ? editorClasses.cropViewportCircle : editorClasses.cropViewportRect,
-          )}
-          style={shape === 'rect' ? { aspectRatio } : undefined}
-          onPointerDown={handlePointerDown}
-          onPointerMove={handlePointerMove}
-          onPointerUp={handlePointerUp}
-          onPointerCancel={handlePointerUp}
-        >
-          {objectUrl === null ? null : (
-            <img
-              ref={imageRef}
-              src={objectUrl}
-              alt=""
-              className={editorClasses.cropSurface}
-              style={
-                naturalSize === null
-                  ? undefined
-                  : {
-                      width: naturalSize.width * baseScale * zoom,
-                      height: naturalSize.height * baseScale * zoom,
-                      transform: `translate(${offset.x}px, ${offset.y}px)`,
-                    }
-              }
-              onLoad={handleImageLoad}
-              draggable={false}
+          <div
+            ref={viewportRef}
+            className={cn(
+              editorClasses.cropViewport,
+              shape === 'circle'
+                ? editorClasses.cropViewportCircle
+                : editorClasses.cropViewportRect,
+            )}
+            style={shape === 'rect' ? { aspectRatio } : undefined}
+            onPointerDown={handlePointerDown}
+            onPointerMove={handlePointerMove}
+            onPointerUp={handlePointerUp}
+            onPointerCancel={handlePointerUp}
+          >
+            {objectUrl === null ? null : (
+              <img
+                ref={imageRef}
+                src={objectUrl}
+                alt=""
+                className={editorClasses.cropSurface}
+                style={
+                  naturalSize === null
+                    ? undefined
+                    : {
+                        width: naturalSize.width * baseScale * zoom,
+                        height: naturalSize.height * baseScale * zoom,
+                        transform: `translate(${offset.x}px, ${offset.y}px)`,
+                      }
+                }
+                onLoad={handleImageLoad}
+                draggable={false}
+              />
+            )}
+          </div>
+
+          <div className={editorClasses.cropZoomRow}>
+            <label htmlFor={`${inputProps.id}-zoom`}>{zoomLabel}</label>
+            <input
+              id={`${inputProps.id}-zoom`}
+              type="range"
+              min={IMAGE_CROP_MIN_ZOOM}
+              max={IMAGE_CROP_MAX_ZOOM}
+              step={0.01}
+              value={zoom}
+              onChange={(event) => {
+                handleZoomChange(Number(event.target.value));
+              }}
             />
-          )}
-        </div>
+          </div>
 
-        <div className={editorClasses.cropZoomRow}>
-          <label htmlFor={`${inputProps.id}-zoom`}>{zoomLabel}</label>
-          <input
-            id={`${inputProps.id}-zoom`}
-            type="range"
-            min={IMAGE_CROP_MIN_ZOOM}
-            max={IMAGE_CROP_MAX_ZOOM}
-            step={0.01}
-            value={zoom}
-            onChange={(event) => {
-              handleZoomChange(Number(event.target.value));
-            }}
-          />
-        </div>
-
-        <div className={editorClasses.cropActions}>
-          <Button type="button" variant="secondary" onClick={closeWithoutApplying}>
-            {cancelLabel}
-          </Button>
-          <Button type="button" onClick={applyCrop}>
-            {applyLabel}
-          </Button>
+          <div className={editorClasses.cropActions}>
+            <Button type="button" variant="secondary" onClick={closeWithoutApplying}>
+              {cancelLabel}
+            </Button>
+            <Button type="button" onClick={applyCrop}>
+              {applyLabel}
+            </Button>
+          </div>
         </div>
       </dialog>
     </>

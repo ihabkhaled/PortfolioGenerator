@@ -9,6 +9,7 @@ import type {
 } from './browser.types';
 
 const NO_BROWSER_CLEANUP = (): void => undefined;
+const PWA_INSTALL_DISMISSED_KEY = 'pwa-install-dismissed';
 
 interface InstallPromptEvent extends Event {
   prompt(): Promise<void>;
@@ -99,7 +100,50 @@ export function observeBrowserServiceWorker(
   };
 }
 
+/**
+ * Whether this page is already running as the installed app.
+ *
+ * `display-mode: standalone` covers Chromium and Firefox; `navigator.standalone`
+ * is Safari's own pre-standard flag on iOS, which never matches the media
+ * query. Either one true means there is nothing left to install.
+ */
+export function isBrowserAppInstalled(): boolean {
+  try {
+    const nav = globalThis.navigator as Navigator & { standalone?: boolean };
+    return globalThis.matchMedia('(display-mode: standalone)').matches || nav.standalone === true;
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * Whether the visitor already dismissed the install prompt this session.
+ *
+ * `sessionStorage`, not `localStorage`: the prompt is worth offering again on
+ * a fresh visit, just not repeatedly within the one the visitor is already in
+ * — some browsers re-fire `beforeinstallprompt` on later navigations in the
+ * same tab, which without this would reopen the banner the visitor just
+ * closed.
+ */
+export function isBrowserInstallPromptDismissed(): boolean {
+  try {
+    return globalThis.sessionStorage.getItem(PWA_INSTALL_DISMISSED_KEY) === '1';
+  } catch {
+    return false;
+  }
+}
+
+export function dismissBrowserInstallPromptForSession(): void {
+  try {
+    globalThis.sessionStorage.setItem(PWA_INSTALL_DISMISSED_KEY, '1');
+  } catch {
+    // A visitor with storage disabled just sees the prompt again next render.
+  }
+}
+
 export function observeBrowserInstallPrompt(onChange: BrowserInstallPromptListener): () => void {
+  if (isBrowserAppInstalled() || isBrowserInstallPromptDismissed()) return NO_BROWSER_CLEANUP;
+
   const handlePrompt = (event: Event): void => {
     event.preventDefault();
     const installEvent = event as InstallPromptEvent;

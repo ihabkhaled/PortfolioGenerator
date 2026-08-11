@@ -151,7 +151,16 @@
         "sections": {
           "first": "Reviewable CV extraction keeps every claim under your control.",
           "second": "Flexible pages combine experience, projects, skills, education, and your own sections.",
-          "third": "Published snapshots stay fast even when authoring services are unavailable."
+          "third": "Published snapshots stay fast even when authoring services are unavailable.",
+          "firstTitle": "Verified extraction",
+          "secondTitle": "Pages built from real content",
+          "thirdTitle": "Snapshots that don't depend on us",
+          "fourthTitle": "Every section is optional",
+          "fourth": "Reorder, hide, or remove any section — nothing is fixed, so the page matches the career, not a template.",
+          "fifthTitle": "One account, several portfolios",
+          "fifth": "Publish a portfolio per role or audience from a single account, each with its own address and its own review.",
+          "sixthTitle": "Built-in extras",
+          "sixth": "A downloadable PDF, an installable app, and a public feed come from the same published data — no separate setup."
         }
       },
       "how-it-works": {
@@ -160,7 +169,16 @@
         "sections": {
           "first": "Your PDF is validated and read as a private source document.",
           "second": "Extracted facts become an editable draft with warnings, never a public page.",
-          "third": "You choose the address and publish only after the preview is accurate."
+          "third": "You choose the address and publish only after the preview is accurate.",
+          "firstTitle": "Upload",
+          "secondTitle": "Review the draft",
+          "thirdTitle": "Publish on your terms",
+          "fourthTitle": "Nothing goes public by accident",
+          "fourth": "Import produces a draft, not a page — the address you choose stays unclaimed until you publish it yourself.",
+          "fifthTitle": "Revisit anytime",
+          "fifth": "Reopen the editor after publishing to update a role, add a project, or hide a page — changes stay private until you save and republish.",
+          "sixthTitle": "See it end to end",
+          "sixth": "The golden path from CV to public address takes minutes, not a template to fight with."
         }
       },
       "examples": {
@@ -169,7 +187,16 @@
         "sections": {
           "first": "Engineering portfolios foreground systems, outcomes, and technical depth.",
           "second": "Design portfolios can pair project narratives with owned gallery media.",
-          "third": "Early-career portfolios can lead with education, courses, and demonstrable projects."
+          "third": "Early-career portfolios can lead with education, courses, and demonstrable projects.",
+          "firstTitle": "Engineering",
+          "secondTitle": "Design",
+          "thirdTitle": "Early career",
+          "fourthTitle": "Multiple roles, one identity",
+          "fourth": "A consultant or freelancer can publish a focused portfolio per specialty, each drawing from the same reviewed facts.",
+          "fifthTitle": "Consistent, not identical",
+          "fifth": "Every portfolio shares the same accessible structure, so no two look alike, and none look unfinished.",
+          "sixthTitle": "Start from your CV",
+          "sixth": "Import shows what your own CV produces before you decide whether to publish it."
         }
       },
       "templates": {
@@ -178,7 +205,16 @@
         "sections": {
           "first": "Semantic sections create a readable hierarchy on every screen size.",
           "second": "Named accent and theme choices preserve tested contrast.",
-          "third": "No arbitrary scripts, styles, or embeds can compromise a visitor."
+          "third": "No arbitrary scripts, styles, or embeds can compromise a visitor.",
+          "firstTitle": "Structure over decoration",
+          "secondTitle": "Themes with guardrails",
+          "thirdTitle": "No open surface for scripts",
+          "fourthTitle": "Light and dark, matched",
+          "fourth": "Every theme ships in a light and dark variant that meets the same contrast bar, so a visitor's preference is never a downgrade.",
+          "fifthTitle": "Sections you choose",
+          "fifth": "The template adapts to whichever sections are visible — a portfolio with only projects and skills looks intentional, not incomplete.",
+          "sixthTitle": "See it applied",
+          "sixth": "Example portfolios show the same template carrying very different careers."
         }
       },
       "cv-import": {
@@ -187,7 +223,16 @@
         "sections": {
           "first": "PDF signatures and limits are checked before parsing begins.",
           "second": "Extracted values retain warnings where a human review matters.",
-          "third": "The original CV remains private and importing never publishes."
+          "third": "The original CV remains private and importing never publishes.",
+          "firstTitle": "Checked before it's read",
+          "secondTitle": "Warnings, not silent gaps",
+          "thirdTitle": "Private until you publish",
+          "fourthTitle": "Word documents too",
+          "fourth": "DOCX imports go through the same scanner-validated pipeline as a PDF before extraction begins.",
+          "fifthTitle": "Nothing invented",
+          "fifth": "A field the CV doesn't contain stays empty rather than being filled with a plausible guess.",
+          "sixthTitle": "What the importer rejects",
+          "sixth": "Files that fail validation — the wrong type, too large, or unreadable — are refused with a reason, not silently accepted."
         }
       },
       "ai-accuracy": {
@@ -196,7 +241,16 @@
         "sections": {
           "first": "The model receives extracted text through a bounded structured contract.",
           "second": "Schema validation rejects malformed output before it reaches the editor.",
-          "third": "Writing enhancements are separate actions and cannot silently replace facts."
+          "third": "Writing enhancements are separate actions and cannot silently replace facts.",
+          "firstTitle": "A bounded contract",
+          "secondTitle": "Schema-checked output",
+          "thirdTitle": "Writing help stays separate",
+          "fourthTitle": "Works even without a model",
+          "fourth": "A deterministic fallback reads structured resume text directly when a model provider is unavailable, so import never depends on a single service staying up.",
+          "fifthTitle": "An instruction in a CV is still just text",
+          "fifth": "Content extracted from a document is treated as data to display, never as an instruction the assistant follows.",
+          "sixthTitle": "You review before it's public",
+          "sixth": "Every extracted field appears in the editor for correction before anything reaches a published page."
         }
       },
       "security": {
@@ -205,7 +259,16 @@
         "sections": {
           "first": "Dashboard reads and writes are scoped to the authenticated owner.",
           "second": "Uploads are identified by content, scanned, and stored under server-generated keys.",
-          "third": "Public rendering imports no authoring, parser, AI, or private-storage path."
+          "third": "Public rendering imports no authoring, parser, AI, or private-storage path.",
+          "firstTitle": "Scoped to the owner",
+          "secondTitle": "Uploads are checked, not trusted",
+          "thirdTitle": "A narrow public surface",
+          "fourthTitle": "Passwords a page owner controls",
+          "fourth": "Any page can be given its own share password, checked server-side, without exposing which pages exist to someone who doesn't have it.",
+          "fifthTitle": "Guessing a draft address fails the same way",
+          "fifth": "An unpublished portfolio and a typo return the identical response, so probing addresses can't tell the two apart.",
+          "sixthTitle": "Reported, not guessed at",
+          "sixth": "A security concern reaches the team directly through the contact page — no need to describe it publicly first."
         }
       },
       "privacy": {
@@ -214,7 +277,16 @@
         "sections": {
           "first": "A raw CV is never served from a public object URL.",
           "second": "Hidden contact channels and pages are omitted rather than disguised.",
-          "third": "Account deletion removes identifying rows and owned files."
+          "third": "Account deletion removes identifying rows and owned files.",
+          "firstTitle": "No public link to a raw file",
+          "secondTitle": "Hidden means gone, not disguised",
+          "thirdTitle": "Deletion removes the record",
+          "fourthTitle": "Indexing is a choice",
+          "fourth": "A portfolio can opt out of search indexing entirely, or keep a specific page out of the sitemap while the rest stays public.",
+          "fifthTitle": "One password protects one page",
+          "fifth": "A private page's grant is scoped to that exact page and locale — it doesn't unlock anything else.",
+          "sixthTitle": "Read the terms plainly",
+          "sixth": "What the service does with what you upload is written out in the terms, not buried in a policy nobody reads."
         }
       },
       "about": {
@@ -223,7 +295,16 @@
         "sections": {
           "first": "The product begins with evidence already written in a CV.",
           "second": "Editing and publishing remain explicit human decisions.",
-          "third": "Public pages are durable reads, not live AI demonstrations."
+          "third": "Public pages are durable reads, not live AI demonstrations.",
+          "firstTitle": "Starts with evidence",
+          "secondTitle": "You make the call",
+          "thirdTitle": "Pages that hold still",
+          "fourthTitle": "Why it exists",
+          "fourth": "Turning a CV into a presentable site used to mean a template fight or a freelancer's invoice — this collapses that into an import and a review.",
+          "fifthTitle": "A small, deliberate surface",
+          "fifth": "The product does one thing — CV to reviewed portfolio — rather than expanding into a general site builder.",
+          "sixthTitle": "Read the mission",
+          "sixth": "The mission page sets out the specific commitments this product is trying to keep."
         }
       },
       "mission": {
@@ -232,7 +313,16 @@
         "sections": {
           "first": "Reduce the mechanical cost of turning a CV into a coherent site.",
           "second": "Never trade speed for plausible but unsupported professional claims.",
-          "third": "Give each person a stable address and control over what it says."
+          "third": "Give each person a stable address and control over what it says.",
+          "firstTitle": "Lower the mechanical cost",
+          "secondTitle": "Speed never invents a claim",
+          "thirdTitle": "An address that's yours",
+          "fourthTitle": "Accessible by default, not by request",
+          "fourth": "Every portfolio meets the same accessibility bar automatically — it isn't a setting someone has to know to turn on.",
+          "fifthTitle": "Built to be verified",
+          "fifth": "A visitor can trust that what they're reading was reviewed by the person it describes, not generated for them a moment before.",
+          "sixthTitle": "See the commitments in practice",
+          "sixth": "The features and security pages show what these commitments look like as working product decisions."
         }
       },
       "contact": {
@@ -241,7 +331,16 @@
         "sections": {
           "first": "Product questions receive practical answers about import, editing, and publishing.",
           "second": "Accessibility reports should include the page, browser, and assistive technology used.",
-          "third": "Security reports are handled discreetly and never require sending your CV."
+          "third": "Security reports are handled discreetly and never require sending your CV.",
+          "firstTitle": "Product questions",
+          "secondTitle": "Accessibility reports",
+          "thirdTitle": "Security reports",
+          "fourthTitle": "Before you write in",
+          "fourth": "The FAQ and help pages answer the most common questions about import, privacy, and publishing before you need to wait on a reply.",
+          "fifthTitle": "What we don't need from you",
+          "fifth": "A report never requires attaching your CV or sharing your account password — describe the problem, not the private document.",
+          "sixthTitle": "Response time",
+          "sixth": "Messages go to a small team directly, not a queue — expect a reply, not an autoresponder."
         }
       },
       "help": {
@@ -250,7 +349,16 @@
         "sections": {
           "first": "Import help covers readable PDFs, limits, scans, and rejected files.",
           "second": "Editor help explains visibility, ordering, previews, and warnings.",
-          "third": "Publishing help covers addresses, updates, private pages, and unpublishing."
+          "third": "Publishing help covers addresses, updates, private pages, and unpublishing.",
+          "firstTitle": "Import",
+          "secondTitle": "Editor",
+          "thirdTitle": "Publishing",
+          "fourthTitle": "Still stuck?",
+          "fourth": "The FAQ page collects the questions people ask most before they ever open a support message.",
+          "fifthTitle": "Something look wrong?",
+          "fifth": "The changelog page explains recent changes that might affect what you're seeing in the editor or on a published page.",
+          "sixthTitle": "Reach a person",
+          "sixth": "The contact page reaches the team directly for anything this page doesn't answer."
         }
       },
       "faq": {
@@ -259,7 +367,16 @@
         "sections": {
           "first": "Nothing publishes automatically: every import produces a draft.",
           "second": "Missing CV facts stay empty rather than being completed by inference.",
-          "third": "A published portfolio keeps working without the AI provider or PDF parser."
+          "third": "A published portfolio keeps working without the AI provider or PDF parser.",
+          "firstTitle": "Does it publish automatically?",
+          "secondTitle": "What if a fact is missing?",
+          "thirdTitle": "What happens after publishing?",
+          "fourthTitle": "Can I have more than one portfolio?",
+          "fourth": "Yes — one account can hold several portfolios, each with its own address and its own review before publishing.",
+          "fifthTitle": "Can I take a page down?",
+          "fifth": "Unpublishing or deleting a portfolio is available from the dashboard at any time; nothing requires contacting support.",
+          "sixthTitle": "Is any of this free?",
+          "sixth": "The account settings page shows the current plan and what it includes; a trial period applies to new subscriptions."
         }
       },
       "accessibility": {
@@ -268,7 +385,16 @@
         "sections": {
           "first": "Landmarks, headings, labels, and current-page states support navigation.",
           "second": "Visible focus and touch-sized controls serve keyboard and mobile readers.",
-          "third": "Gallery images require useful alternatives and motion respects reduced-motion settings."
+          "third": "Gallery images require useful alternatives and motion respects reduced-motion settings.",
+          "firstTitle": "Structure that's announced",
+          "secondTitle": "Operable without a mouse",
+          "thirdTitle": "Media that respects preferences",
+          "fourthTitle": "Checked, not assumed",
+          "fourth": "Every public page and the editor itself are tested against WCAG 2.2 AA rather than relying on the framework's defaults.",
+          "fifthTitle": "The editor is accessible too",
+          "fifth": "Reordering sections, uploading files, and reviewing extracted fields all work from the keyboard, not only the published result.",
+          "sixthTitle": "Found a problem?",
+          "sixth": "The contact page has a dedicated path for accessibility reports, including what assistive technology surfaced the issue."
         }
       },
       "terms": {
@@ -277,7 +403,16 @@
         "sections": {
           "first": "You retain responsibility for the professional information you publish.",
           "second": "Do not upload malware, impersonate another person, or evade access controls.",
-          "third": "You can unpublish or delete your data using the controls provided."
+          "third": "You can unpublish or delete your data using the controls provided.",
+          "firstTitle": "You're responsible for what you publish",
+          "secondTitle": "What isn't allowed",
+          "thirdTitle": "You can leave",
+          "fourthTitle": "What the service stores",
+          "fourth": "Only the reviewed snapshot and the assets you explicitly attach are stored for a published portfolio — see the privacy page for the full boundary.",
+          "fifthTitle": "Changes to these terms",
+          "fifth": "Material changes are reflected here and, where relevant, called out on the changelog page.",
+          "sixthTitle": "Questions about a term",
+          "sixth": "The contact page reaches the team for anything these terms don't make clear."
         }
       },
       "changelog": {
@@ -286,7 +421,16 @@
         "sections": {
           "first": "Document changes explain new fields and migration behavior.",
           "second": "Security changes identify strengthened boundaries without exposing exploit details.",
-          "third": "Renderer changes call out visible behavior and accessibility improvements."
+          "third": "Renderer changes call out visible behavior and accessibility improvements.",
+          "firstTitle": "Document changes",
+          "secondTitle": "Security changes",
+          "thirdTitle": "Renderer changes",
+          "fourthTitle": "Why a changelog at all",
+          "fourth": "A portfolio is a durable address — knowing what changed under it matters as much as knowing what's new.",
+          "fifthTitle": "Nothing here is silent",
+          "fifth": "A change that affects what a visitor sees or what an owner can control gets an entry, not just a version bump.",
+          "sixthTitle": "Something missing?",
+          "sixth": "The contact page is the way to flag a change that should have been documented here and wasn't."
         }
       }
     }
@@ -449,7 +593,9 @@
       "testimonials": "Testimonials",
       "gallery": "Gallery",
       "attachments": "Downloads"
-    }
+    },
+    "homeLabel": "ProFolio home",
+    "menuToggleLabel": "Menu"
   },
   "dashboard": {
     "title": "Your portfolios",
@@ -592,6 +738,21 @@
       "testimonials": "Testimonials",
       "socialLinks": "Social links",
       "interests": "Interests, separated by commas",
+      "emptyHints": {
+        "experience": "Usually the first thing a visitor reads — most portfolios lead with this.",
+        "projects": "What you built speaks louder than where you worked. Link to something real if you can.",
+        "skills": "Group related tools under one label — \"Frontend\", \"Cloud\" — rather than one long list.",
+        "softSkills": "Worth adding if how you work matters as much as what you know.",
+        "education": "Still expected even late in a career — one line covers it if there is little to say.",
+        "courses": "Short, focused learning that does not belong under Education or Certifications.",
+        "certifications": "Include the issuer and a verification link where you have one.",
+        "languages": "Your working languages, not just the ones you grew up with.",
+        "awards": "Recognition from outside your own team is the most convincing kind.",
+        "publications": "Anything you are credited as an author or co-author of.",
+        "volunteering": "Unpaid work still counts, especially if it shows initiative a job title would not.",
+        "testimonials": "A specific line from someone you worked with beats a generic title.",
+        "socialLinks": "Optional — add the profiles you would want a recruiter to actually open."
+      },
       "add": "Add entry",
       "remove": "Remove entry",
       "moveUp": "Move entry up",
@@ -851,7 +1012,11 @@
         "fa": "Persian",
         "ru": "Russian"
       },
-      "themes": { "light": "Light", "dark": "Dark", "system": "Use device setting" }
+      "themes": {
+        "light": "Light",
+        "dark": "Dark",
+        "system": "Use device setting"
+      }
     },
     "portfolio": {
       "delete": "Delete",

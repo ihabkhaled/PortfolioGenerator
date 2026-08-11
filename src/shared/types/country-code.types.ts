@@ -10,3 +10,10 @@ export interface SplitInternationalPhoneResult {
   readonly countryIso: string | null;
   readonly nationalNumber: string;
 }
+
+export interface FormattedPhoneNumberParts {
+  /** `null` when no country is set — nothing to render a flag for. */
+  readonly flag: string | null;
+  /** `(+20) 100-156-8256`, or the bare number when no country is set. */
+  readonly text: string;
+}

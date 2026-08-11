@@ -5,6 +5,7 @@ import {
   countryFlagEmoji,
   findCountryByIso,
   formatPhoneNumber,
+  formatPhoneNumberParts,
   sortCountriesByName,
   selectLongestDialPrefix,
   splitInternationalPhone,
@@ -143,6 +144,38 @@ describe('formatPhoneNumber', () => {
     ['blank', ' '.repeat(3)],
   ])('renders nothing when the number is %s', (_label, value) => {
     expect(formatPhoneNumber('EG', value)).toBeNull();
+  });
+});
+
+describe('formatPhoneNumberParts', () => {
+  // Split from `formatPhoneNumber` so a DOM caller can badge the flag
+  // separately — the flag emoji has no fallback glyph on every platform.
+  it('separates the flag from the bracketed dial code and number', () => {
+    expect(formatPhoneNumberParts('EG', '100-156-8256')).toEqual({
+      flag: '🇪🇬',
+      text: '(+20) 100-156-8256',
+    });
+  });
+
+  it('has no flag when no country was chosen', () => {
+    expect(formatPhoneNumberParts(null, '100-156-8256')).toEqual({
+      flag: null,
+      text: '100-156-8256',
+    });
+  });
+
+  it('has no flag when the country is unknown to us', () => {
+    expect(formatPhoneNumberParts('ZZ', '100-156-8256')).toEqual({
+      flag: null,
+      text: '100-156-8256',
+    });
+  });
+
+  it.each([
+    ['absent', null],
+    ['blank', ' '.repeat(3)],
+  ])('renders nothing when the number is %s', (_label, value) => {
+    expect(formatPhoneNumberParts('EG', value)).toBeNull();
   });
 });
 

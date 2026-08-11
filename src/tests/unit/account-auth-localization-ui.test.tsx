@@ -249,6 +249,89 @@ describe('account settings containers', () => {
 
     expect(screen.getByText('No sessions')).toBeInTheDocument();
   });
+
+  it('announces a rejected current password instead of failing silently', () => {
+    queueActionState();
+    queueActionState({ status: 'error', error: 'errors.invalidCredentials' });
+    render(
+      <AccountSecurityContainer
+        email="ada@example.com"
+        emailVerified
+        labels={securityLabels}
+        sessions={[]}
+      />,
+    );
+
+    expect(screen.getByRole('alert')).toBeVisible();
+  });
+
+  it('announces a failed verification email resend', () => {
+    queueActionState({ status: 'error', error: 'errors.unknown' });
+    queueActionState();
+    render(
+      <AccountSecurityContainer
+        email="ada@example.com"
+        emailVerified={false}
+        labels={securityLabels}
+        sessions={[]}
+      />,
+    );
+
+    expect(screen.getByRole('alert')).toBeVisible();
+  });
+
+  it('announces a failed session revocation instead of discarding it', () => {
+    queueActionState();
+    queueActionState();
+    queueActionState({ status: 'error', error: 'errors.unknown' });
+    render(
+      <AccountSecurityContainer
+        email="ada@example.com"
+        emailVerified
+        labels={securityLabels}
+        sessions={[
+          {
+            token: 'other',
+            current: false,
+            userAgent: null,
+            ipAddress: null,
+            createdAt: new Date('2026-08-01T10:00:00.000Z'),
+            expiresAt: new Date('2026-09-01T10:00:00.000Z'),
+          },
+        ]}
+      />,
+    );
+
+    expect(screen.getByRole('alert')).toBeVisible();
+  });
+
+  it('renders a parsed device label and locale-formatted timestamps', () => {
+    queueActionState();
+    queueActionState();
+    queueActionState();
+    render(
+      <AccountSecurityContainer
+        email="ada@example.com"
+        emailVerified
+        labels={securityLabels}
+        sessions={[
+          {
+            token: 'chrome-windows',
+            current: false,
+            userAgent:
+              'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36',
+            ipAddress: '203.0.113.9',
+            createdAt: new Date('2026-08-01T10:30:00.000Z'),
+            expiresAt: new Date('2026-09-01T10:30:00.000Z'),
+          },
+        ]}
+      />,
+    );
+
+    expect(screen.getByText('Chrome on Windows')).toBeInTheDocument();
+    expect(screen.getByText(/Created: Aug 1, 2026, 10:30 AM/)).toBeInTheDocument();
+    expect(screen.getByText(/Expires: Sep 1, 2026, 10:30 AM/)).toBeInTheDocument();
+  });
 });
 
 describe('password recovery UI', () => {

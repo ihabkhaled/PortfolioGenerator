@@ -71,6 +71,10 @@ export interface PortfolioShellProps {
   readonly headline: string | null;
   readonly navigation: ReactNode;
   readonly navigationLabel: string;
+  /** The `sm:`-and-below collapsible counterpart to `navigation`. */
+  readonly mobileMenu: ReactNode;
+  /** Accessible label for the brand link back to the platform's own home. */
+  readonly homeLabel: string;
   /** Controls that belong to the reader rather than to the portfolio. */
   readonly actions: ReactNode;
   readonly footerNote: ReactNode;

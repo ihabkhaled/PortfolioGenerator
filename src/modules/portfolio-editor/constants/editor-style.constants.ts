@@ -18,10 +18,23 @@ export const editorClasses = {
   subtitle: 'font-mono text-[0.6875rem] uppercase tracking-[0.12em] text-muted-foreground',
   headerActions: 'flex flex-wrap items-center gap-2',
 
+  // Below `lg` there is no room for both panes, so a segmented control swaps
+  // which one is visible; at `lg` and up the control disappears and both
+  // panes show, unconditionally, side by side. Each pane below has a
+  // complete, self-contained class string per visibility state rather than a
+  // shared base plus a toggled `hidden` — the crop dialog bug this module
+  // used to ship (see `cropDialog`) is exactly what happens when a `display`
+  // utility is layered onto another unscoped `display` utility and the
+  // result depends on generation order instead of the state you meant to
+  // express.
+  mobileTabs: 'grid grid-cols-2 gap-2 lg:hidden',
   panes: 'grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:items-start',
   formPane: 'grid gap-6',
+  formPaneMobileHidden: 'hidden gap-6 lg:grid',
   previewPane:
     'sticky top-24 hidden max-h-[calc(100dvh-8rem)] overflow-y-auto rounded-lg border border-border bg-canvas lg:block',
+  previewPaneMobileVisible:
+    'sticky top-24 block max-h-[calc(100dvh-8rem)] overflow-y-auto rounded-lg border border-border bg-canvas lg:block',
   previewFrame: 'origin-top scale-[0.82]',
 
   section: 'grid gap-4 rounded-lg border border-border bg-surface-raised px-5 py-5',
@@ -53,7 +66,19 @@ export const editorClasses = {
   blockerList: 'grid gap-2',
   blocker: 'flex items-start gap-2 text-sm text-warning-readable',
 
-  cropDialog: 'm-auto grid max-w-[min(28rem,90vw)] gap-4 rounded-lg border border-border p-5',
+  // No `display` utility here — same reason the mobile panes above never mix
+  // a bare `hidden` with a bare `grid`. `<dialog>`'s own UA stylesheet already
+  // switches between `display: none` and `display: block` on the `open`
+  // attribute; author-origin CSS beats the UA stylesheet regardless of
+  // specificity, so a "display: grid" utility applied straight to the dialog
+  // — as this one used to carry — stays visible even while closed and
+  // intercepts pointer events over whatever sits behind it. The grid layout
+  // lives on `cropDialogFrame`, an inner wrapper, instead; the dialog element
+  // only ever carries non-display box styling, matching the lightbox dialog
+  // in the renderer module (`template-style.constants.ts`'s `lightboxDialog`).
+  cropDialog:
+    'm-auto max-w-[min(28rem,90vw)] rounded-lg border border-border p-5 backdrop:bg-black/80',
+  cropDialogFrame: 'grid gap-4',
   cropTitle: 'font-display text-base font-semibold tracking-tight text-foreground',
   cropViewport:
     'relative mx-auto touch-none overflow-hidden bg-surface-raised outline outline-1 -outline-offset-1 outline-border',

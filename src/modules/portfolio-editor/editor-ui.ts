@@ -16,6 +16,7 @@ export { editorClasses } from './constants/editor-style.constants';
 export { AssetCollectionsUploadContainer } from './containers/asset-collections-upload.container';
 export { CollectionEntryContainer } from './containers/collection-entry.container';
 export { CollectionManagerContainer } from './containers/collection-manager.container';
+export { ImageCropFieldContainer } from './containers/image-crop-field.container';
 export { PageManagerContainer } from './containers/page-manager.container';
 export { PortfolioEditorContainer } from './containers/portfolio-editor.container';
 export { PortraitUploadContainer } from './containers/portrait-upload.container';

@@ -239,6 +239,8 @@ export function ImageCropFieldContainer(props: Readonly<ImageCropFieldProps>): R
 
           <div
             ref={viewportRef}
+            role="region"
+            aria-label={dialogTitle}
             className={cn(
               editorClasses.cropViewport,
               shape === 'circle'

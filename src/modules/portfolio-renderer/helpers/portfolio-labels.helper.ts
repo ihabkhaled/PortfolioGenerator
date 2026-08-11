@@ -41,6 +41,7 @@ export function buildPortfolioLabels(translate: (key: string) => string): Portfo
     builtWith: translate('builtWith'),
     navigationLabel: translate('navigationLabel'),
     homeLabel: translate('homeLabel'),
+    platformName: translate('platformName'),
     menuToggleLabel: translate('menuToggleLabel'),
     portraitAlt: translate('portraitAlt'),
     galleryClose: translate('galleryClose'),

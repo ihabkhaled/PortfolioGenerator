@@ -14,6 +14,11 @@ jobs:
   audit:
     name: npm audit (production dependencies)
     runs-on: ubuntu-latest
+    env:
+      # `npm ci` runs the Prisma client postinstall. The audit itself never
+      # connects, but generation still loads prisma.config.ts and therefore
+      # needs a syntactically valid URL, just like the complete CI job.
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/portfolio_generate_ci
     steps:
       - uses: actions/checkout@v7
 

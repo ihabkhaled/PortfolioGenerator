@@ -574,6 +574,7 @@
       "downloadCta": "ดาวน์โหลด PDF"
     },
     "builtWith": "เผยแพร่ด้วย ProFolio",
+    "platformName": "ProFolio",
     "privatePage": {
       "denied": "รหัสผ่านนั้นไม่ตรงกัน ตรวจสอบแล้วลองอีกครั้ง",
       "title": "เพจนี้เป็นเพจส่วนตัว",

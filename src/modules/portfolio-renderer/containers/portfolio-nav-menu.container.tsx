@@ -14,8 +14,8 @@ import { resolveNavIcon } from '../helpers/nav-icon.helper';
 import type { PortfolioNavMenuProps } from '../types/portfolio-nav-menu.types';
 
 /**
- * The `sm:hidden` counterpart to the header's horizontal nav bar
- * (`portfolioShellClasses.nav`, `sm:flex` and up): below that breakpoint a
+ * The `lg:hidden` counterpart to the header's horizontal nav bar
+ * (`portfolioShellClasses.nav`, `lg:flex` and up): below that breakpoint a
  * scrolling row of six-plus words has no discoverability, so this collapses
  * the same items behind a toggle instead.
  *

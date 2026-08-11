@@ -38,6 +38,7 @@ export function CreatePortfolioFormContainer(): ReactElement {
         <div className={dashboardClasses.field}>
           <Label htmlFor="displayName">{t('create.nameLabel')}</Label>
           <Input id="displayName" name="displayName" type="text" required maxLength={120} />
+          <span aria-hidden className={dashboardClasses.fieldHintPlaceholder} />
         </div>
 
         <div className={dashboardClasses.field}>
@@ -48,7 +49,7 @@ export function CreatePortfolioFormContainer(): ReactElement {
           </p>
         </div>
 
-        <Button type="submit" disabled={isPending}>
+        <Button type="submit" disabled={isPending} className={dashboardClasses.createSubmit}>
           {t(isPending ? 'create.pending' : 'create.submit')}
         </Button>
       </form>

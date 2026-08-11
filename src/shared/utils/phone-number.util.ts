@@ -31,7 +31,7 @@ export function findCountryByIso(iso: string | null): CountryDialCode | null {
  */
 export function countryFlagEmoji(iso: string): string {
   return String.fromCodePoint(
-    ...Array.from(iso.toUpperCase(), (letter) => 127_397 + (letter.codePointAt(0) ?? 0)),
+    ...Array.from(iso.toUpperCase(), (letter) => 127_397 + Number(letter.codePointAt(0))),
   );
 }
 
@@ -90,6 +90,11 @@ export function toTelHref(iso: string | null, nationalNumber: string | null): st
   }
 
   const digits = trimmed.replaceAll(/\D/gu, '');
+
+  if (digits === '') {
+    return null;
+  }
+
   const country = findCountryByIso(iso);
 
   return country === null ? `tel:${digits}` : `tel:${country.dial}${digits}`;

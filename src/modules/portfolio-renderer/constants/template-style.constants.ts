@@ -13,25 +13,29 @@
 export const portfolioShellClasses = {
   root: 'min-h-dvh bg-canvas text-foreground',
   header:
-    'sticky top-0 z-40 border-b border-border bg-canvas/85 backdrop-blur-md supports-[backdrop-filter]:bg-canvas/70',
+    'sticky top-0 z-40 border-b border-border bg-canvas/90 backdrop-blur-md supports-[backdrop-filter]:bg-canvas/75 print:hidden',
   headerInner:
-    'mx-auto flex min-h-16 max-w-6xl flex-wrap items-center justify-between gap-3 px-5 py-2 sm:px-8 lg:px-10',
-  brand: 'grid min-w-0',
+    'mx-auto grid min-h-16 max-w-[90rem] grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-x-3 px-5 py-2 sm:px-8 lg:grid-cols-[auto_minmax(10rem,0.75fr)_minmax(0,auto)_auto] lg:gap-x-5 lg:px-10',
+  brand: 'grid min-w-0 gap-0.5',
   // The brand name doubles as a link back to the platform's own marketing
   // home — distinct from the portfolio's own overview page (`navLinkCurrent`
   // et al.), which is why it carries a different icon (`OverviewIcon` there,
   // `HomeIcon` here) rather than reusing the same one for two different
   // destinations.
   brandLink:
-    'group flex min-w-0 items-center gap-2 rounded-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring',
+    'group inline-flex min-h-10 shrink-0 items-center gap-2 rounded-md border-e border-border pe-3 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring',
   brandHomeIcon:
-    'size-4 shrink-0 text-muted-foreground transition-colors group-hover:text-foreground',
-  headerActions: 'flex min-w-0 flex-wrap items-center justify-end gap-2 sm:gap-3',
+    'size-4 shrink-0 text-primary-readable transition-colors group-hover:text-foreground',
+  platformName:
+    'font-display text-sm font-bold tracking-tight text-foreground group-hover:text-primary-readable',
+  identity: 'hidden min-w-0 sm:block',
+  headerActions: 'flex min-w-0 items-center justify-end gap-2',
   footerLinks: 'flex flex-wrap items-center gap-3',
-  brandName: 'font-display truncate text-[0.95rem] font-bold tracking-tight text-foreground',
+  brandName:
+    'font-display truncate text-sm font-bold tracking-tight text-foreground sm:text-[0.95rem]',
   brandHeadline:
-    'truncate font-mono text-[0.6875rem] font-medium uppercase tracking-[0.14em] text-muted-foreground',
-  // The horizontal bar is a `sm:`-and-up affordance now that narrower
+    'hidden truncate font-mono text-[0.625rem] font-medium uppercase tracking-[0.12em] text-muted-foreground xl:block',
+  // The horizontal bar is a `lg:`-and-up affordance now that narrower
   // viewports get their own collapsible menu (`navToggle`/`mobileNav`
   // below) — a scrolling bar and a hamburger both trying to solve the same
   // "too many items" problem at once is worse than either alone.
@@ -41,16 +45,16 @@ export const portfolioShellClasses = {
   // vertical axis keeps the overflow behaviour without the furniture, for
   // the rarer case of a portfolio with enough custom pages to overflow even
   // the desktop width.
-  nav: 'scroll-fade-x hidden items-center gap-1 overflow-x-auto overflow-y-hidden [scrollbar-width:none] sm:flex [&::-webkit-scrollbar]:hidden',
+  nav: 'scroll-fade-x hidden min-w-0 items-center justify-center gap-0.5 overflow-x-auto overflow-y-hidden [scrollbar-width:none] lg:flex [&::-webkit-scrollbar]:hidden',
   navLink:
-    'relative inline-flex min-h-11 cursor-pointer items-center gap-1.5 rounded-md px-2.5 py-2 text-sm font-medium whitespace-nowrap text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring',
+    'relative inline-flex min-h-10 cursor-pointer items-center gap-1.5 rounded-md px-2.5 py-2 text-[0.8125rem] font-medium whitespace-nowrap text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring xl:px-3 xl:text-sm',
   navLinkCurrent:
-    'text-foreground after:absolute after:inset-x-3 after:-bottom-px after:h-px after:bg-primary after:content-[""]',
+    'bg-muted/70 text-foreground after:absolute after:inset-x-3 after:-bottom-[0.8125rem] after:h-0.5 after:rounded-full after:bg-primary after:content-[""]',
   // The hamburger toggle only exists below `sm` — the same breakpoint where
   // `nav` above disappears — so exactly one of the two navigation
   // affordances is ever on screen at once.
   navToggle:
-    'inline-flex size-9 shrink-0 cursor-pointer items-center justify-center rounded-md text-foreground transition-colors hover:bg-muted focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring sm:hidden',
+    'inline-flex size-11 shrink-0 cursor-pointer items-center justify-center rounded-md text-foreground transition-colors hover:bg-muted focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring lg:hidden',
   // `absolute` against `header`'s own `sticky` positioning (sticky counts as
   // a positioned ancestor) rather than pushing page content down in normal
   // flow — the toggle button and this panel share one client component
@@ -58,7 +62,7 @@ export const portfolioShellClasses = {
   // anchoring to the header itself is what keeps the panel full-width
   // regardless of the button's own position within that row.
   mobileNav:
-    'absolute inset-x-0 top-full z-40 grid gap-1 border-b border-border bg-canvas px-5 py-3 shadow-lg sm:hidden',
+    'absolute inset-x-0 top-full z-40 grid gap-1 border-b border-border bg-canvas px-5 py-3 shadow-lg lg:hidden',
   mobileNavLink:
     'relative flex min-h-11 cursor-pointer items-center gap-2.5 rounded-md px-3 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring',
   mobileNavLinkCurrent: 'bg-muted text-foreground',
@@ -69,7 +73,7 @@ export const portfolioShellClasses = {
   // reserve clears the switcher's own height (control padding + the select)
   // plus its bottom inset regardless of page length.
   main: 'mx-auto w-full max-w-6xl px-5 pb-[5.5rem] sm:px-8 lg:px-10',
-  footer: 'mt-24 border-t border-border bg-surface/40',
+  footer: 'mt-24 border-t border-border bg-surface/40 print:hidden',
   footerInner:
     'mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-6 px-5 py-12 sm:px-8 lg:px-10',
   footerNote: 'font-mono text-[0.6875rem] uppercase tracking-[0.12em] text-muted-foreground',

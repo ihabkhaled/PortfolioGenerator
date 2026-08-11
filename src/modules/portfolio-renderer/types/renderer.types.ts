@@ -26,6 +26,7 @@ export interface PortfolioLabels {
   readonly builtWith: string;
   readonly navigationLabel: string;
   readonly homeLabel: string;
+  readonly platformName: string;
   readonly menuToggleLabel: string;
   readonly portraitAlt: string;
   readonly galleryClose: string;

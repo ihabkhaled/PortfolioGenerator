@@ -20,7 +20,11 @@ export default defineConfig({
   test: {
     environment: 'jsdom',
     globals: false,
-    maxWorkers: 4,
+    // Four coverage-instrumented editor renders contend badly on shared CI
+    // runners: keystroke-driven integration tests cross their timeout while
+    // the same tests are stable with bounded parallelism. Two preserves useful
+    // concurrency without turning scheduler pressure into test failures.
+    maxWorkers: 2,
     setupFiles: ['./src/tests/setup/vitest.setup.ts'],
     include: ['src/**/*.test.{ts,tsx}'],
     exclude: ['**/node_modules/**', 'src/tests/e2e/**', 'src/tests/accessibility/**'],

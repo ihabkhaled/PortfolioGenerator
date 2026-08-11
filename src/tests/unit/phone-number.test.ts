@@ -192,6 +192,10 @@ describe('toTelHref', () => {
   it('returns nothing when there is no number', () => {
     expect(toTelHref('EG', null)).toBeNull();
   });
+
+  it('returns nothing when the value contains no dialable digits', () => {
+    expect(toTelHref(null, '---')).toBeNull();
+  });
 });
 
 describe('sortCountriesByName', () => {

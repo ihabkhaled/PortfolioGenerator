@@ -21,17 +21,20 @@ export function PortfolioShell(props: Readonly<PortfolioShellProps>): ReactEleme
             aria-label={props.homeLabel}
           >
             <HomeIcon aria-hidden size={16} className={portfolioShellClasses.brandHomeIcon} />
+            <span className={portfolioShellClasses.platformName}>{props.platformName}</span>
+          </AppLink>
+          <div className={portfolioShellClasses.identity}>
             <div className={portfolioShellClasses.brand}>
               <span className={portfolioShellClasses.brandName}>{props.displayName}</span>
               {props.headline === null ? null : (
                 <span className={portfolioShellClasses.brandHeadline}>{props.headline}</span>
               )}
             </div>
-          </AppLink>
+          </div>
+          <nav aria-label={props.navigationLabel} className={portfolioShellClasses.nav}>
+            {props.navigation}
+          </nav>
           <div className={portfolioShellClasses.headerActions}>
-            <nav aria-label={props.navigationLabel} className={portfolioShellClasses.nav}>
-              {props.navigation}
-            </nav>
             {props.mobileMenu}
             {props.actions}
           </div>

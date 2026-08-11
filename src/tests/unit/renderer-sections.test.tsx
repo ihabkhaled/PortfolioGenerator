@@ -142,6 +142,49 @@ describe('the hero band', () => {
     expect(within(panel).getByText('Lisbon, Portugal')).toBeInTheDocument();
     expect(within(panel).getByText('amina@example.com')).toBeInTheDocument();
   });
+
+  it('shows a visible phone even when no country flag can be derived', () => {
+    const document = buildFullPortfolioDocument();
+
+    renderSection(hero(), {
+      ...document,
+      contact: {
+        ...document.contact,
+        phone: { countryIso: null, nationalNumber: '555 0100', visible: true },
+      },
+    });
+
+    expect(screen.getByRole('link', { name: '555 0100' })).toHaveAttribute('href', 'tel:5550100');
+  });
+
+  it('shows a visible phone with its country badge in the hero evidence', () => {
+    const document = buildFullPortfolioDocument();
+    renderSection(hero(), {
+      ...document,
+      contact: {
+        ...document.contact,
+        phone: { countryIso: 'PT', nationalNumber: '000 000 000', visible: true },
+      },
+    });
+
+    expect(screen.getByRole('link', { name: '(+351) 000 000 000' })).toHaveAttribute(
+      'href',
+      'tel:+351000000000',
+    );
+  });
+
+  it('keeps a human-entered phone visible when it has no dialable digits', () => {
+    const document = buildFullPortfolioDocument();
+    renderSection(hero(), {
+      ...document,
+      contact: {
+        ...document.contact,
+        phone: { countryIso: null, nationalNumber: '---', visible: true },
+      },
+    });
+
+    expect(screen.getByText('---')).not.toHaveAttribute('href');
+  });
 });
 
 describe('the contact band', () => {
@@ -187,6 +230,34 @@ describe('the contact band', () => {
     renderSection(contact({ showLinks: false }));
 
     expect(screen.queryByRole('link', { name: 'Code' })).not.toBeInTheDocument();
+  });
+
+  it('renders a country-free phone number without an empty badge', () => {
+    const document = buildFullPortfolioDocument();
+    renderSection(contact({ showPhone: true }), {
+      ...document,
+      contact: {
+        ...document.contact,
+        phone: { countryIso: null, nationalNumber: '555 0100', visible: true },
+      },
+    });
+
+    expect(screen.getByRole('link', { name: '555 0100' })).toHaveAttribute('href', 'tel:5550100');
+  });
+
+  it.each([
+    [{ showEmail: false }, { value: 'amina@example.com', visible: true }],
+    [{ showEmail: true }, { value: 'amina@example.com', visible: false }],
+    [{ showEmail: true }, { value: null, visible: true }],
+  ] as const)('omits email unless every visibility condition is met', (config, email) => {
+    const document = buildFullPortfolioDocument();
+
+    renderSection(contact(config), {
+      ...document,
+      contact: { ...document.contact, email },
+    });
+
+    expect(screen.queryByRole('link', { name: 'amina@example.com' })).not.toBeInTheDocument();
   });
 });
 
@@ -263,9 +334,90 @@ describe('the fact-list bands', () => {
 
     expect(screen.getByText('Portuguese')).toBeInTheDocument();
   });
+
+  it('renders a publication without a URL as plain text', () => {
+    const document = buildFullPortfolioDocument();
+    renderSection(
+      {
+        id: 'publications',
+        type: 'publications',
+        visible: true,
+        order: 0,
+        config: { title: null },
+      },
+      {
+        ...document,
+        publications: document.publications.map((entry) => ({ ...entry, url: null })),
+      },
+    );
+
+    expect(screen.getByText('Reconciling a ledger you did not design')).toBeInTheDocument();
+    expect(screen.queryByRole('link')).not.toBeInTheDocument();
+  });
 });
 
 describe('the imported collection bands', () => {
+  it('renders every supported social channel with its default label', () => {
+    const document = buildFullPortfolioDocument();
+    const kinds = [
+      'github',
+      'gitlab',
+      'behance',
+      'linkedin',
+      'youtube',
+      'tiktok',
+      'instagram',
+      'facebook',
+      'x',
+      'threads',
+      'dribbble',
+      'stackoverflow',
+      'telegram',
+      'whatsapp',
+      'medium',
+      'website',
+      'mastodon',
+      'bluesky',
+    ] as const;
+
+    renderSection(
+      { id: 'section-social', type: 'social', visible: true, order: 0, config: { title: null } },
+      {
+        ...document,
+        socialLinks: kinds.map((kind) => ({
+          id: `social-${kind}`,
+          kind,
+          label: null,
+          url: `https://example.com/${kind}`,
+          visible: true,
+        })),
+      },
+    );
+
+    for (const label of [
+      'GitHub',
+      'GitLab',
+      'Behance',
+      'LinkedIn',
+      'YouTube',
+      'TikTok',
+      'Instagram',
+      'Facebook',
+      'X',
+      'Threads',
+      'Dribbble',
+      'Stack Overflow',
+      'Telegram',
+      'WhatsApp',
+      'Medium',
+      'Website',
+      'Mastodon',
+      'Bluesky',
+    ]) {
+      expect(screen.getByRole('link', { name: label })).toBeInTheDocument();
+    }
+  });
+
   it.each([
     ['soft-skills', 'Writing things down'],
     ['courses', 'Distributed Systems'],
@@ -406,6 +558,22 @@ describe('the experience band', () => {
     expect(screen.getByText('Northwind Payments')).toBeInTheDocument();
     expect(screen.queryByText('Harbour Analytics')).not.toBeInTheDocument();
   });
+
+  it('omits the supplemental volunteering band when there are no entries', () => {
+    const document = buildFullPortfolioDocument();
+    renderSection(
+      {
+        id: 'section-experience',
+        type: 'experience',
+        visible: true,
+        order: 0,
+        config: { title: null, limit: null },
+      },
+      { ...document, volunteering: [] },
+    );
+
+    expect(screen.queryByText('supplemental.volunteering')).not.toBeInTheDocument();
+  });
 });
 
 describe('the skills band', () => {
@@ -425,6 +593,16 @@ describe('the skills band', () => {
 
     expect(screen.getByText('Languages')).toBeInTheDocument();
     expect(screen.queryByText('Empty')).not.toBeInTheDocument();
+  });
+
+  it('omits the supplemental soft-skills band when there are no entries', () => {
+    const document = buildFullPortfolioDocument();
+    renderSection(
+      { id: 'section-skills', type: 'skills', visible: true, order: 0, config: { title: null } },
+      { ...document, softSkills: [] },
+    );
+
+    expect(screen.queryByText('supplemental.softSkills')).not.toBeInTheDocument();
   });
 });
 
@@ -494,6 +672,25 @@ describe('the about band', () => {
     expect(
       screen.queryByText('The settlement state machine, before it was code'),
     ).not.toBeInTheDocument();
+  });
+
+  it('omits every optional evidence collection when each one is empty or hidden', () => {
+    const document = buildFullPortfolioDocument();
+
+    renderSection(
+      { id: 'section-about', type: 'about', visible: true, order: 0, config: { title: null } },
+      {
+        ...document,
+        publications: [],
+        awards: [],
+        interests: [],
+        testimonials: [],
+        gallery: [],
+        attachments: document.attachments.map((entry) => ({ ...entry, visible: false })),
+      },
+    );
+
+    expect(screen.queryByText(/^supplemental\./)).not.toBeInTheDocument();
   });
 });
 

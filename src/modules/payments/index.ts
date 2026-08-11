@@ -17,6 +17,7 @@ export type {
   BillingStatusTag,
   BillingStatusView,
   OwnerBillingState,
+  PaypalButtonsOptions,
   PaymentsActionState,
   SubscriptionStatus,
 } from './types/payments.types';

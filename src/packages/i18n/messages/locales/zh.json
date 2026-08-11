@@ -594,6 +594,7 @@
       "description": "输入投资组合所有者与您共享的密码。"
     },
     "builtWith": "与 ProFolio 一起发布",
+    "platformName": "ProFolio",
     "homeLabel": "ProFolio 主页",
     "menuToggleLabel": "菜单"
   },

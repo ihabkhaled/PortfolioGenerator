@@ -37,6 +37,7 @@ export function PortfolioTemplate(props: Readonly<PortfolioTemplateProps>): Reac
       headline={props.document.identity.headline}
       navigationLabel={props.labels.navigationLabel}
       homeLabel={props.labels.homeLabel}
+      platformName={props.labels.platformName}
       footerNote={
         <AppLink href={ROUTE_PATHS.home} className={portfolioShellClasses.footerNoteLink}>
           {props.labels.builtWith}

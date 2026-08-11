@@ -11,6 +11,8 @@
 export { PortfolioNav } from './components/portfolio-nav.component';
 export { PortfolioTemplate } from './components/portfolio-template';
 export { SectionRenderer } from './components/section-renderer';
+export { GalleryLightboxContainer } from './containers/gallery-lightbox.container';
+export { PortfolioNavMenuContainer } from './containers/portfolio-nav-menu.container';
 export { buildPortfolioLabels } from './helpers/portfolio-labels.helper';
 export { formatDateRange, formatMonth } from './helpers/date-range.helper';
 export {

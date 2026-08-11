@@ -439,20 +439,26 @@ describe('collection controls', () => {
     expect(screen.getByLabelText('Start month')).not.toBeRequired();
   });
   it('updates interests and adds a blank owner-controlled entry', async () => {
+    const user = userEvent.setup();
+    const documentValue = buildMinimalPortfolioDocument();
     const onChange = vi.fn<(value: PortfolioDocument) => void>();
-    render(
-      <CollectionManagerContainer document={buildFullPortfolioDocument()} onChange={onChange} />,
-    );
+    render(<CollectionManagerContainer document={documentValue} onChange={onChange} />);
 
-    await userEvent.clear(screen.getByLabelText('Interests, separated by commas'));
-    await userEvent.type(
-      screen.getByLabelText('Interests, separated by commas'),
-      'Databases, Accessibility',
-    );
-    await userEvent.click(requireElement(screen.getAllByRole('button', { name: 'Add entry' })[0]));
+    const interests = screen.getByLabelText('Interests, separated by commas');
+    await user.click(interests);
+    await user.paste('Databases, Accessibility');
+    await user.click(requireElement(screen.getAllByRole('button', { name: 'Add entry' })[0]));
 
-    expect(onChange.mock.calls.some(([value]) => value.interests.length !== 1)).toBe(true);
-    expect(onChange.mock.calls.some(([value]) => value.experience.length === 3)).toBe(true);
+    expect(
+      onChange.mock.calls.some(
+        ([value]) => value.interests.join(', ') === 'Databases, Accessibility',
+      ),
+    ).toBe(true);
+    expect(
+      onChange.mock.calls.some(
+        ([value]) => value.experience.length === documentValue.experience.length + 1,
+      ),
+    ).toBe(true);
   });
 
   it('wires boolean, select, multiline, move, and remove controls for an entry', async () => {

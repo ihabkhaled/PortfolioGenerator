@@ -44,6 +44,8 @@ function observeServiceWorkerRegistration(
   };
 
   reportWaitingWorker();
+  observeInstallingWorker();
+  reportInstalledWorker();
   registration.addEventListener('updatefound', observeInstallingWorker);
 
   return (): void => {
@@ -86,9 +88,15 @@ export function observeBrowserServiceWorker(
       const existingRegistration = await serviceWorkers.getRegistration('/');
       const registration =
         existingRegistration ?? (await serviceWorkers.register(path, { scope: '/' }));
-      if (existingRegistration) await existingRegistration.update();
       if (observing) {
         registrationCleanup = observeServiceWorkerRegistration(registration, onUpdate);
+      }
+      // Observe first: `update()` can synchronously start an install, and a
+      // waiting/installing worker is already the update the UI must surface.
+      // Starting another check here can supersede that exact worker before the
+      // visitor has a chance to activate it.
+      if (existingRegistration?.waiting === null && existingRegistration.installing === null) {
+        await existingRegistration.update();
       }
     } catch {
       return;

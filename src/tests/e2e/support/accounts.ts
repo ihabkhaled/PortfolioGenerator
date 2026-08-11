@@ -72,6 +72,10 @@ export async function createPortfolio(page: Page, displayName: string): Promise<
   await page.getByLabel('Public address').fill(slug);
   await page.getByRole('button', { name: 'Create' }).click();
   await page.waitForURL('**/editor');
+  // App Router commits the URL before streamed metadata is guaranteed to
+  // replace the previous route's head. Consumers need the editor document,
+  // not merely its address, before inspecting accessibility or page state.
+  await expect(page).toHaveTitle(/^Review and edit/u);
 
   return slug;
 }

@@ -72,6 +72,7 @@ test.describe('signed-in pages', () => {
     await signUp(page, buildAccount('a11y-editor'));
     await createPortfolio(page, 'Accessible Editor');
 
+    await expect(page).toHaveTitle(/^Review and edit/u);
     expect(await findViolations(page)).toEqual([]);
   });
 });

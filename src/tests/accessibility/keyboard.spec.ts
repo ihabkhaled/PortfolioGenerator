@@ -70,6 +70,14 @@ test.describe('keyboard operation', () => {
     await signUp(page, buildAccount('kbd-delete'));
     await page.goto('/dashboard/settings');
 
+    const accountDeletionSummary = page
+      .locator('summary')
+      .filter({ has: page.getByText('Delete your account', { exact: true }) });
+    await accountDeletionSummary.focus();
+    await expect(accountDeletionSummary).toBeFocused();
+    await page.keyboard.press('Enter');
+    await expect(accountDeletionSummary.locator('..')).toHaveAttribute('open', '');
+
     const field = page.getByLabel(/type/i);
 
     await field.focus();

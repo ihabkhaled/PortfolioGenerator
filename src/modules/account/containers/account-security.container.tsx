@@ -99,17 +99,24 @@ export function AccountSecurityContainer(props: Readonly<AccountSecurityProps>):
 
       <div className={accountClasses.field}>
         <h3 className={accountClasses.subsectionTitle}>{props.labels.sessionsTitle}</h3>
-        {props.sessions.length === 0 ? (
+        {props.requiresRecentSignIn === true ? (
+          <p className={accountClasses.sectionHint} role="status">
+            {props.labels.recentSignInRequired}
+          </p>
+        ) : null}
+        {props.requiresRecentSignIn !== true && props.sessions.length === 0 ? (
           <p className={accountClasses.sectionHint}>{props.labels.noSessions}</p>
         ) : null}
-        {props.sessions.map((session) => (
-          <SessionRow
-            key={session.token}
-            session={session}
-            current={session.current}
-            labels={props.labels}
-          />
-        ))}
+        {props.requiresRecentSignIn === true
+          ? null
+          : props.sessions.map((session) => (
+              <SessionRow
+                key={session.token}
+                session={session}
+                current={session.current}
+                labels={props.labels}
+              />
+            ))}
       </div>
     </section>
   );

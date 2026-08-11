@@ -41,11 +41,13 @@ export const siteShellClasses = {
   // design system, not in the component that renders it.
   navPrimaryAction: buttonVariants({ variant: 'primary', size: 'sm' }),
 
-  accountMenu: 'relative shrink-0',
+  accountMenu: 'group relative shrink-0',
   accountMenuToggle:
-    'inline-flex size-11 list-none cursor-pointer items-center justify-center rounded-full focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring [&::-webkit-details-marker]:hidden',
+    'inline-flex min-h-11 min-w-14 list-none cursor-pointer items-center justify-center gap-0.5 rounded-full px-1 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring [&::-webkit-details-marker]:hidden',
   accountAvatar:
     'inline-flex size-9 items-center justify-center rounded-full border border-border bg-surface-raised font-display text-sm font-bold text-foreground shadow-sm transition-colors hover:border-primary hover:text-primary-readable',
+  accountMenuIndicator:
+    'shrink-0 text-muted-foreground transition-transform duration-200 group-open:rotate-180',
   accountMenuPanel:
     'absolute end-0 top-[calc(100%+0.5rem)] z-50 grid min-w-52 gap-1 rounded-lg border border-border bg-surface-raised p-2 shadow-lg',
   accountMenuLink:
@@ -60,9 +62,10 @@ export const siteShellClasses = {
   mobileMenuToggle:
     'inline-flex size-11 list-none items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring [&::-webkit-details-marker]:hidden',
   mobileMenuPanel:
-    'absolute end-0 top-[calc(100%+0.5rem)] z-50 grid w-64 gap-3 rounded-lg border border-border bg-surface-raised p-3 shadow-md',
-  mobileNav: 'grid gap-1',
-  mobileActions: 'flex flex-wrap items-center justify-center gap-2 border-t border-border pt-3',
+    'absolute end-0 top-[calc(100%+0.5rem)] z-50 grid w-[min(18rem,calc(100vw-2.5rem))] max-w-[calc(100vw-2.5rem)] gap-3 overflow-hidden rounded-lg border border-border bg-surface-raised p-3 shadow-md',
+  mobileNav:
+    'grid min-w-0 gap-1 [&_a]:h-auto [&_a]:min-h-11 [&_a]:w-full [&_a]:whitespace-normal [&_a]:break-words',
+  mobileActions: 'grid min-w-0 gap-2 border-t border-border pt-3 [&>*]:min-w-0 [&>*]:w-full',
 
   main: 'relative min-h-[60dvh]',
 

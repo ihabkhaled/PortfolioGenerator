@@ -1,6 +1,7 @@
 import { render, screen, within } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 
+import { AppLink } from '@/packages/link';
 import { ManifestPanel } from '@/shared/components/data-display/manifest-panel.component';
 import { Section } from '@/shared/components/data-display/section.component';
 import { EmptyState } from '@/shared/components/feedback/empty-state.component';
@@ -234,13 +235,40 @@ describe('AccountMenu', () => {
     );
 
     expect(screen.getByText('I')).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'Account menu' })).toBeInTheDocument();
+    const accountToggle = screen.getByRole('button', { name: 'Account menu' });
+    expect(accountToggle).toBeInTheDocument();
+    expect(within(accountToggle).getByTestId('account-menu-chevron')).toHaveAttribute(
+      'aria-hidden',
+      'true',
+    );
     expect(screen.getByRole('link', { name: 'Dashboard' })).toHaveAttribute('href', '/dashboard');
     expect(screen.getByRole('link', { name: 'Preferences' })).toHaveAttribute(
       'href',
       '/dashboard/settings',
     );
     expect(screen.getByRole('button', { name: 'Log out' })).toBeInTheDocument();
+  });
+
+  it('keeps mobile navigation content bounded and wrappable', () => {
+    render(
+      <SiteShell
+        navigationLabel="Primary"
+        brandName="ProFolio"
+        homeLink={<AppLink href="/">Home</AppLink>}
+        menuLabel="Menu"
+        brand={<span>ProFolio</span>}
+        navigation={<AppLink href="/guides">Turn a CV into a portfolio you control</AppLink>}
+        actions={<button type="button">Theme</button>}
+        footerNote="Private by design"
+        footerLinks={<span>Footer links</span>}
+      >
+        <p>Page body</p>
+      </SiteShell>,
+    );
+
+    const mobileMenu = screen.getAllByRole('navigation', { name: 'Primary' })[1];
+    expect(mobileMenu).toHaveClass('min-w-0');
+    expect(mobileMenu).toHaveClass('[&_a]:whitespace-normal');
   });
 
   it('falls back to the email initial when the account has no visible name', () => {

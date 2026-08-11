@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event';
 import { createElement } from 'react';
 import { describe, expect, it, vi } from 'vitest';
 
-import { AccountSummary } from '@/modules/account/account-ui';
+import { AccountDisclosure, AccountSummary, accountClasses } from '@/modules/account/account-ui';
 import { CredentialForm } from '@/modules/auth';
 import {
   LandingCta,
@@ -285,6 +285,31 @@ describe('AccountSummary', () => {
     expect(screen.getByRole('heading', { name: 'Your account' })).toBeInTheDocument();
     expect(screen.getByText('amina@example.com')).toBeInTheDocument();
     expect(screen.getByText('2')).toBeInTheDocument();
+  });
+});
+
+describe('AccountDisclosure', () => {
+  it('uses one native summary and honors its initial priority', async () => {
+    const user = userEvent.setup();
+    render(
+      <AccountDisclosure title="Preferences" hint="Language and appearance" defaultOpen>
+        <label htmlFor="theme">Theme</label>
+        <select id="theme" />
+      </AccountDisclosure>,
+    );
+
+    const disclosure = screen.getByRole('group');
+    expect(screen.getAllByText('Preferences')).toHaveLength(1);
+    expect(screen.getByRole('heading', { level: 2, name: 'Preferences' })).toBeVisible();
+    expect(disclosure).toHaveAttribute('open');
+    expect(screen.getByLabelText('Theme')).toBeVisible();
+
+    await user.click(screen.getByText('Preferences'));
+    expect(disclosure).not.toHaveAttribute('open');
+  });
+
+  it('keeps settings panels vertically separated', () => {
+    expect(accountClasses.page).toContain('gap-');
   });
 });
 

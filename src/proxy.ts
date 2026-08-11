@@ -36,16 +36,20 @@ const PRIVATE_DASHBOARD_HEADERS = {
 export function buildContentSecurityPolicy(
   nonce: string,
   isDevelopment = isDevelopmentEnvironment,
+  allowsPaypalCheckout = false,
 ): string {
+  const paypalSources = allowsPaypalCheckout
+    ? ' https://*.paypal.com https://*.paypalobjects.com https://*.venmo.com'
+    : '';
   const scriptSrc = isDevelopment
-    ? `'self' 'nonce-${nonce}' 'strict-dynamic' 'unsafe-eval' https://pagead2.googlesyndication.com`
-    : `'self' 'nonce-${nonce}' 'strict-dynamic' https://pagead2.googlesyndication.com`;
+    ? `'self' 'nonce-${nonce}' 'strict-dynamic' 'unsafe-eval' https://pagead2.googlesyndication.com${paypalSources}`
+    : `'self' 'nonce-${nonce}' 'strict-dynamic' https://pagead2.googlesyndication.com${paypalSources}`;
 
   return [
     `default-src 'self'`,
     `script-src ${scriptSrc}`,
-    `style-src 'self' 'unsafe-inline'`,
-    `img-src 'self' blob: data: https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net https://*.adtrafficquality.google`,
+    `style-src 'self' 'unsafe-inline'${paypalSources}`,
+    `img-src 'self' blob: data: https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net https://*.adtrafficquality.google${paypalSources}`,
     `font-src 'self'`,
     `worker-src 'self'`,
     // *.adtrafficquality.google is Google's ad-traffic-quality beacon,
@@ -54,8 +58,9 @@ export function buildContentSecurityPolicy(
     // change, not ours to enumerate. Without it Google cannot verify
     // impressions as non-fraudulent, which risks the AdSense account rather
     // than a visitor's data.
-    `connect-src 'self' https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net https://*.adtrafficquality.google`,
-    `frame-src https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net https://tpc.googlesyndication.com https://*.adtrafficquality.google`,
+    `connect-src 'self' https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net https://*.adtrafficquality.google${paypalSources}`,
+    ...(allowsPaypalCheckout ? [`child-src${paypalSources}`] : []),
+    `frame-src https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net https://tpc.googlesyndication.com https://*.adtrafficquality.google${paypalSources}`,
     `media-src 'none'`,
     `object-src 'none'`,
     `base-uri 'self'`,
@@ -156,12 +161,16 @@ async function buildLegacyPortfolioRedirect(
 
 export default async function proxy(request: NextRequest): Promise<NextResponse> {
   const nonce = Buffer.from(crypto.randomUUID()).toString('base64');
-  const contentSecurityPolicy = buildContentSecurityPolicy(nonce);
+  const resolvedPath = resolveLocalePath(request.nextUrl.pathname);
+  const contentSecurityPolicy = buildContentSecurityPolicy(
+    nonce,
+    isDevelopmentEnvironment,
+    resolvedPath.pathname === ROUTE_PATHS.dashboardSettings,
+  );
 
   const requestHeaders = new Headers(request.headers);
   requestHeaders.set('x-nonce', nonce);
   requestHeaders.set('content-security-policy', contentSecurityPolicy);
-  const resolvedPath = resolveLocalePath(request.nextUrl.pathname);
   const locale = resolveRuntimeLocale(
     resolvedPath.explicit ? resolvedPath.locale : null,
     request.cookies.get(SAVED_LOCALE_COOKIE)?.value ?? null,

@@ -1014,7 +1014,8 @@
       "expires": "Läuft ab",
       "unknownDevice": "Unbekanntes Gerät",
       "unknownAddress": "Unbekannte Adresse",
-      "noSessions": "Es wurden keine aktiven Sitzungen zurückgegeben."
+      "noSessions": "Es wurden keine aktiven Sitzungen zurückgegeben.",
+      "recentSignInRequired": "Melden Sie sich zu Ihrer Sicherheit ab und erneut an, um die angemeldeten Geräte zu überprüfen."
     },
     "data": {
       "title": "Ihre Daten",

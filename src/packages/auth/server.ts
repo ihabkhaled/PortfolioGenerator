@@ -79,6 +79,10 @@ export function isEmailNotVerifiedError(error: unknown): boolean {
   return error instanceof APIError && error.body?.code === BASE_ERROR_CODES.EMAIL_NOT_VERIFIED.code;
 }
 
+export function isSessionNotFreshError(error: unknown): boolean {
+  return error instanceof APIError && error.body?.code === BASE_ERROR_CODES.SESSION_NOT_FRESH.code;
+}
+
 export type AuthInstance = ReturnType<typeof createAuth>;
 
 const cache: { value: AuthInstance | null } = { value: null };

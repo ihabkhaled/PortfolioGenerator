@@ -18,10 +18,18 @@ vi.mock('@/modules/payments/actions/payments.actions', () => ({
 vi.mock('next/script', () => ({
   default: (props: {
     readonly src: string;
+    readonly nonce?: string;
+    readonly 'data-csp-nonce'?: string;
     readonly onLoad: () => void;
     readonly onError: () => void;
   }) => (
-    <button data-src={props.src} onClick={props.onLoad} onDoubleClick={props.onError}>
+    <button
+      data-src={props.src}
+      data-script-nonce={props.nonce}
+      data-sdk-csp-nonce={props['data-csp-nonce']}
+      onClick={props.onLoad}
+      onDoubleClick={props.onError}
+    >
       SDK
     </button>
   ),
@@ -43,11 +51,26 @@ describe('PayPal checkout', () => {
 
   it('reports an unavailable plan or SDK', async () => {
     paymentActions.getPlan.mockResolvedValue(null);
-    render(<PaypalCheckoutContainer ownerId="owner-1" clientId="client/id" labels={labels} />);
+    render(
+      <PaypalCheckoutContainer
+        ownerId="owner-1"
+        clientId="client/id"
+        nonce="request-nonce"
+        labels={labels}
+      />,
+    );
 
     expect(screen.getByRole('button', { name: 'SDK' })).toHaveAttribute(
       'data-src',
       expect.stringContaining('client-id=client%2Fid'),
+    );
+    expect(screen.getByRole('button', { name: 'SDK' })).toHaveAttribute(
+      'data-script-nonce',
+      'request-nonce',
+    );
+    expect(screen.getByRole('button', { name: 'SDK' })).toHaveAttribute(
+      'data-sdk-csp-nonce',
+      'request-nonce',
     );
     expect(await screen.findByText(labels.unavailable)).toBeInTheDocument();
 

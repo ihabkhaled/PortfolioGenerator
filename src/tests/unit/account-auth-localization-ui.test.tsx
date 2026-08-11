@@ -79,6 +79,7 @@ const securityLabels = {
   unknownDevice: 'Unknown device',
   unknownAddress: 'Unknown address',
   noSessions: 'No sessions',
+  recentSignInRequired: 'Sign in again to review signed-in devices.',
 };
 
 function queueActionState(
@@ -376,6 +377,24 @@ describe('account settings containers', () => {
     );
 
     expect(screen.getByText('No sessions')).toBeInTheDocument();
+  });
+
+  it('keeps security settings usable when device review requires a recent sign-in', () => {
+    queueActionState();
+    queueActionState();
+    render(
+      <AccountSecurityContainer
+        email="ada@example.com"
+        emailVerified
+        labels={securityLabels}
+        sessions={[]}
+        requiresRecentSignIn
+      />,
+    );
+
+    expect(screen.getByText('Sign in again to review signed-in devices.')).toBeVisible();
+    expect(screen.queryByText('No sessions')).not.toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Change password' })).toBeEnabled();
   });
 
   it('announces a rejected current password instead of failing silently', () => {

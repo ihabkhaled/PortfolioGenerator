@@ -1014,7 +1014,8 @@
       "expires": "Expire",
       "unknownDevice": "Appareil inconnu",
       "unknownAddress": "Adresse inconnue",
-      "noSessions": "Aucune session active n'a été renvoyée."
+      "noSessions": "Aucune session active n'a été renvoyée.",
+      "recentSignInRequired": "Pour votre sécurité, déconnectez-vous puis reconnectez-vous pour consulter les appareils connectés."
     },
     "data": {
       "title": "Vos données",

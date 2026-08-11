@@ -1,5 +1,6 @@
 import type { ReactElement } from 'react';
 
+import { ChevronDownIcon } from '@/packages/icons';
 import { AppLink } from '@/packages/link';
 import { accountInitial } from '@/shared/utils/account-initial.util';
 
@@ -19,6 +20,12 @@ export function AccountMenu(props: Readonly<AccountMenuProps>): ReactElement {
         <span aria-hidden className={siteShellClasses.accountAvatar}>
           {accountInitial(props.name, props.email)}
         </span>
+        <ChevronDownIcon
+          aria-hidden
+          data-testid="account-menu-chevron"
+          className={siteShellClasses.accountMenuIndicator}
+          size={14}
+        />
       </summary>
       <div className={siteShellClasses.accountMenuPanel}>
         <AppLink href={props.dashboardHref} className={siteShellClasses.accountMenuLink}>

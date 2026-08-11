@@ -1014,7 +1014,8 @@
       "expires": "Vence",
       "unknownDevice": "Dispositivo desconocido",
       "unknownAddress": "dirección desconocida",
-      "noSessions": "No se devolvieron sesiones activas."
+      "noSessions": "No se devolvieron sesiones activas.",
+      "recentSignInRequired": "Por tu seguridad, cierra sesión y vuelve a iniciarla para revisar los dispositivos con sesión iniciada."
     },
     "data": {
       "title": "Tus datos",

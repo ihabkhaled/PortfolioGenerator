@@ -99,6 +99,11 @@ export interface AccountMenuProps {
   readonly logout: ReactNode;
 }
 
+export interface RouteErrorBoundaryProps {
+  readonly error: Error & { digest?: string };
+  readonly reset: () => void;
+}
+
 export interface SiteFooterLinkItem {
   readonly id: string;
   readonly href: Route;

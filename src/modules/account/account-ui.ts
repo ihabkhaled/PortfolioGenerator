@@ -7,6 +7,7 @@
  */
 
 export { AccountSummary } from './components/account-summary.component';
+export { AccountDisclosure } from './components/account-disclosure.component';
 export { accountClasses } from './constants/account-style.constants';
 export { DeleteAccountContainer } from './containers/delete-account.container';
 export { DeletePortfolioContainer } from './containers/delete-portfolio.container';

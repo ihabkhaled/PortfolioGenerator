@@ -141,6 +141,7 @@ export type CheckoutPhase =
 export interface PaypalCheckoutContainerProps {
   readonly ownerId: string;
   readonly clientId: string;
+  readonly nonce?: string | undefined;
   readonly labels: {
     readonly unavailable: string;
     readonly processing: string;

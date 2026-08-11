@@ -11,6 +11,19 @@ function accountMenu(page: Page): Locator {
   return page.locator('details:has(> div > a[href="/dashboard/settings"])');
 }
 
+async function openAccountDisclosure(page: Page, title: string): Promise<Locator> {
+  const summary = page
+    .locator('main details > summary')
+    .filter({ has: page.getByText(title, { exact: true }) });
+  const disclosure = summary.locator('..');
+
+  await expect(summary).toBeVisible();
+  if ((await disclosure.getAttribute('open')) === null) await summary.click();
+  await expect(disclosure).toHaveAttribute('open', '');
+
+  return disclosure;
+}
+
 async function expectAccountMenu(page: Page, initial: string): Promise<void> {
   const menu = accountMenu(page);
   const toggle = menu.locator('summary');
@@ -97,6 +110,7 @@ test.describe('account recovery', () => {
       expect(response.headers()['location'] ?? '').not.toContain('token');
     }
     await page.goto('/dashboard/settings');
+    await openAccountDisclosure(page, 'Security');
     await expect(page.getByText(`${account.email} — Verified`)).toBeVisible();
 
     const reused = await page.request.get(verificationUrl, { maxRedirects: 0 });
@@ -244,6 +258,7 @@ test.describe('account profile and security workflows', () => {
     await signIn(otherPage, account);
 
     await page.goto('/dashboard/settings');
+    await openAccountDisclosure(page, 'Security');
     await expect(page.getByText('ProFolio E2E Other Session')).toBeVisible();
     await expect(page.getByText(/Signed in:/u)).toHaveCount(2);
     await expect(page.getByText(/Expires:/u)).toHaveCount(2);
@@ -255,6 +270,7 @@ test.describe('account profile and security workflows', () => {
     await otherPage.goto('/dashboard');
     await otherPage.waitForURL('**/sign-in**');
     await page.reload();
+    await openAccountDisclosure(page, 'Security');
     await expect(page).toHaveURL(/\/dashboard\/settings$/u);
     await expect(page.getByRole('button', { name: 'Sign out device' })).toHaveCount(0);
     await expect(page.getByText('ProFolio E2E Other Session')).toHaveCount(0);
@@ -270,10 +286,12 @@ test.describe('account profile and security workflows', () => {
     await signUp(page, account);
     await page.goto('/dashboard/settings');
 
+    await openAccountDisclosure(page, 'Profile');
     await page.getByLabel('Display name').fill('Updated Account Name');
     await page.getByRole('button', { name: 'Save profile' }).click();
     await expect(page.getByText('Your profile was updated.')).toBeVisible();
 
+    await openAccountDisclosure(page, 'Security');
     await page.getByLabel('Current password').fill(account.password);
     await page.getByLabel('New password').fill(replacementPassword);
     await page.getByRole('button', { name: 'Change password' }).click();

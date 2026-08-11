@@ -1010,6 +1010,7 @@
       "passwordChanged": "パスワードが変更され、他のセッションが取り消されました。",
       "revoking": "デバイスからサインアウトしています",
       "noSessions": "アクティブなセッションは返されませんでした。",
+      "recentSignInRequired": "セキュリティ保護のため、一度サインアウトしてから再度サインインし、サインイン中のデバイスを確認してください。",
       "unknownAddress": "不明な住所",
       "sessionsTitle": "サインインしたデバイス",
       "unknownDevice": "不明なデバイス",

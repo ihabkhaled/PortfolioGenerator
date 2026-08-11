@@ -1014,7 +1014,8 @@
       "sessionsTitle": "已登录的设备",
       "sent": "如果可以送货，则会发送一封验证电子邮件。",
       "passwordChanged": "您的密码已更改，其他会话已撤销。",
-      "noSessions": "没有返回任何活动会话。"
+      "noSessions": "没有返回任何活动会话。",
+      "recentSignInRequired": "为确保安全，请先退出登录并重新登录，以查看已登录的设备。"
     },
     "data": {
       "title": "您的数据",

@@ -1,4 +1,14 @@
+import type { ReactNode } from 'react';
+
 import type { AccountPreferences } from './settings.types';
+
+export interface AccountDisclosureProps {
+  readonly children: ReactNode;
+  readonly danger?: boolean;
+  readonly defaultOpen?: boolean;
+  readonly hint?: string;
+  readonly title: string;
+}
 
 export interface DeleteAccountLabels {
   readonly title: string;
@@ -60,6 +70,11 @@ export interface AccountSecuritySession {
   readonly ipAddress: string | null;
 }
 
+export interface AccountSecuritySessions {
+  readonly sessions: readonly AccountSecuritySession[];
+  readonly requiresRecentSignIn: boolean;
+}
+
 export interface AccountProfileFormProps {
   readonly name: string;
   readonly labels: Record<'title' | 'hint' | 'name' | 'submit' | 'pending' | 'saved', string>;
@@ -69,6 +84,7 @@ export interface AccountSecurityProps {
   readonly email: string;
   readonly emailVerified: boolean;
   readonly sessions: readonly AccountSecuritySession[];
+  readonly requiresRecentSignIn?: boolean;
   readonly labels: Record<
     | 'title'
     | 'hint'
@@ -94,7 +110,8 @@ export interface AccountSecurityProps {
     | 'expires'
     | 'unknownDevice'
     | 'unknownAddress'
-    | 'noSessions',
+    | 'noSessions'
+    | 'recentSignInRequired',
     string
   >;
 }

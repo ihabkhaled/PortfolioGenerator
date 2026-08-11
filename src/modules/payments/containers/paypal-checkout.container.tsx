@@ -41,7 +41,7 @@ declare global {
 export function PaypalCheckoutContainer(
   props: Readonly<PaypalCheckoutContainerProps>,
 ): ReactElement {
-  const { ownerId, clientId, labels } = props;
+  const { ownerId, clientId, nonce, labels } = props;
   const [phase, setPhase] = useState<CheckoutPhase>('loading');
   const [planId, setPlanId] = useState<string | null>(null);
   const [sdkReady, setSdkReady] = useState(false);
@@ -115,6 +115,8 @@ export function PaypalCheckoutContainer(
     <div className={paymentsClasses.checkout}>
       <Script
         src={sdkUrl}
+        nonce={nonce}
+        data-csp-nonce={nonce}
         strategy="afterInteractive"
         onLoad={() => {
           setSdkReady(true);

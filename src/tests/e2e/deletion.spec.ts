@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import type { Page } from '@playwright/test';
 
 import {
   buildAccount,
@@ -7,6 +8,15 @@ import {
   signIn,
   signUp,
 } from './support/accounts';
+
+async function openDeleteAccountPanel(page: Page): Promise<void> {
+  const summary = page
+    .locator('summary')
+    .filter({ has: page.getByText('Delete your account', { exact: true }) });
+
+  await summary.click();
+  await expect(summary.locator('..')).toHaveAttribute('open', '');
+}
 
 /**
  * Deletion, end to end.
@@ -60,6 +70,7 @@ test.describe('deleting an account', () => {
 
     await signUp(page, account);
     await page.goto('/dashboard/settings');
+    await openDeleteAccountPanel(page);
 
     const submit = page.getByRole('button', { name: 'Delete my account' });
 
@@ -77,8 +88,9 @@ test.describe('deleting an account', () => {
 
     await signUp(page, account);
     await page.goto('/dashboard/settings');
+    await openDeleteAccountPanel(page);
 
-    await expect(page.getByText(account.email).last()).toBeVisible();
+    await expect(page.getByRole('definition').filter({ hasText: account.email })).toBeVisible();
 
     await page.getByLabel(/type/i).fill('DELETE');
     await page.getByRole('button', { name: 'Delete my account' }).click();
@@ -111,6 +123,7 @@ test.describe('deleting an account', () => {
 
     await signUp(otherPage, doomed);
     await otherPage.goto('/dashboard/settings');
+    await openDeleteAccountPanel(otherPage);
     await otherPage.getByLabel(/type/i).fill('DELETE');
     await otherPage.getByRole('button', { name: 'Delete my account' }).click();
     await otherPage.waitForURL((url) => !url.pathname.startsWith('/dashboard'));

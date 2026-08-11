@@ -21,6 +21,35 @@ describe('proxy content security policy', () => {
     expect(policy).toContain("object-src 'none'");
     expect(policy).toContain("frame-ancestors 'none'");
   });
+
+  it('allows only PayPal checkout origins required by the official SDK', () => {
+    const ordinaryPolicy = buildContentSecurityPolicy('ordinary-nonce', false);
+    expect(ordinaryPolicy).not.toContain('paypal.com');
+    expect(ordinaryPolicy).not.toContain('paypalobjects.com');
+    expect(ordinaryPolicy).not.toContain('venmo.com');
+
+    const policy = buildContentSecurityPolicy('checkout-nonce', false, true);
+    const directives = policy.split('; ');
+
+    for (const directiveName of [
+      'child-src',
+      'connect-src',
+      'frame-src',
+      'img-src',
+      'script-src',
+      'style-src',
+    ]) {
+      const directive = directives.find((value) => value.startsWith(`${directiveName} `));
+      expect(directive).toBeDefined();
+      for (const origin of [
+        'https://*.paypal.com',
+        'https://*.paypalobjects.com',
+        'https://*.venmo.com',
+      ]) {
+        expect(directive).toContain(origin);
+      }
+    }
+  });
 });
 
 describe('dashboard editor ownership route matching', () => {

@@ -1014,7 +1014,8 @@
       "expires": "Expires",
       "unknownDevice": "Unknown device",
       "unknownAddress": "Unknown address",
-      "noSessions": "No active sessions were returned."
+      "noSessions": "No active sessions were returned.",
+      "recentSignInRequired": "For your security, sign out and sign in again to review signed-in devices."
     },
     "data": {
       "title": "Your data",

@@ -1014,7 +1014,8 @@
       "expires": "Scade",
       "unknownDevice": "Dispositivo sconosciuto",
       "unknownAddress": "Indirizzo sconosciuto",
-      "noSessions": "Non è stata restituita alcuna sessione attiva."
+      "noSessions": "Non è stata restituita alcuna sessione attiva.",
+      "recentSignInRequired": "Per la tua sicurezza, esci e accedi di nuovo per controllare i dispositivi connessi."
     },
     "data": {
       "title": "I tuoi dati",

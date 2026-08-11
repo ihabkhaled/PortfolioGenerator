@@ -62,11 +62,12 @@ function leaveAssetUploadIdle(): Promise<{ readonly status: 'idle' }> {
 
 function renderEditor(
   warnings: readonly { code: string; path: string; message: string }[] = [],
+  initialDocument = buildFullPortfolioDocument(),
 ): void {
   render(
     <PortfolioEditorContainer
       portfolioId="p1"
-      initialDocument={buildFullPortfolioDocument()}
+      initialDocument={initialDocument}
       initialVersion={1}
       labels={editorPageLabels}
       warnings={warnings}
@@ -277,18 +278,24 @@ describe('PortfolioEditorContainer', () => {
   });
 
   it('creates a subpage without collecting a password in draft state', async () => {
-    renderEditor();
+    renderEditor([], buildMinimalPortfolioDocument());
     const title = requireElement(screen.getAllByLabelText('Page title')[0]);
     const navigationLabel = requireElement(screen.getAllByLabelText('Navigation label')[0]);
     const address = requireElement(screen.getAllByLabelText('Address')[0]);
-    await userEvent.type(title, 'Speaking');
-    await userEvent.type(navigationLabel, 'Speaking');
-    await userEvent.type(address, 'speaking');
-    await userEvent.click(screen.getByRole('button', { name: 'Add page' }));
+    const user = userEvent.setup();
+    // Pasting exercises the user-facing controlled inputs while avoiding a full
+    // editor rerender for every character in each value.
+    await user.click(title);
+    await user.paste('Speaking');
+    await user.click(navigationLabel);
+    await user.paste('Speaking');
+    await user.click(address);
+    await user.paste('speaking');
+    await user.click(screen.getByRole('button', { name: 'Add page' }));
 
     expect(screen.getAllByDisplayValue('Speaking').length).toBeGreaterThanOrEqual(2);
     expect(screen.queryByLabelText('Password')).not.toBeInTheDocument();
-  }, 15_000);
+  });
 });
 
 describe('PublishPanelContainer', () => {

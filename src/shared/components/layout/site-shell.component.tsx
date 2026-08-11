@@ -43,6 +43,10 @@ export function SiteShell(props: Readonly<SiteShellProps>): ReactElement {
             {props.actions}
           </div>
 
+          {props.account === undefined ? null : (
+            <div className={siteShellClasses.headerAccount}>{props.account}</div>
+          )}
+
           <NavDisclosure label={props.menuLabel}>
             <nav aria-label={props.navigationLabel} className={siteShellClasses.mobileNav}>
               {props.navigation}

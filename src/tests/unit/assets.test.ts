@@ -176,9 +176,9 @@ describe('isPublishedAssetReferenced', () => {
     expect(isAssetReferencedOnPage(document, 'missing', 'private-cover')).toBe(false);
   });
 
-  it('requires an about section before private gallery or attachment media is reachable', () => {
+  it('requires the matching gallery or attachment section before private media is reachable', () => {
     const fixture = buildFullPortfolioDocument();
-    const document = {
+    const withoutMediaSections = {
       ...fixture,
       pages: fixture.pages.map((page) =>
         page.slug === 'notes'
@@ -193,7 +193,38 @@ describe('isPublishedAssetReferenced', () => {
       ),
     };
 
-    expect(isAssetReferencedOnPage(document, 'notes', 'gallery-image')).toBe(false);
+    expect(isAssetReferencedOnPage(withoutMediaSections, 'notes', 'asset-gallery-1')).toBe(false);
+    expect(isAssetReferencedOnPage(withoutMediaSections, 'notes', 'asset-cv')).toBe(false);
+
+    const withMediaSections = {
+      ...withoutMediaSections,
+      pages: withoutMediaSections.pages.map((page) =>
+        page.slug === 'notes'
+          ? {
+              ...page,
+              sections: [
+                {
+                  id: 'private-gallery',
+                  type: 'gallery' as const,
+                  visible: true,
+                  order: 10,
+                  config: { title: null },
+                },
+                {
+                  id: 'private-attachments',
+                  type: 'attachments' as const,
+                  visible: true,
+                  order: 20,
+                  config: { title: null },
+                },
+              ],
+            }
+          : page,
+      ),
+    };
+
+    expect(isAssetReferencedOnPage(withMediaSections, 'notes', 'asset-gallery-1')).toBe(true);
+    expect(isAssetReferencedOnPage(withMediaSections, 'notes', 'asset-cv')).toBe(true);
   });
 
   it('refuses references when their rendering section is hidden', () => {

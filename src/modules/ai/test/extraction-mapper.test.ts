@@ -24,7 +24,14 @@ import type { ResumeExtractionResult } from '../types/ai-provider.types';
 
 function extraction(overrides: Partial<ResumeExtractionResult> = {}): ResumeExtractionResult {
   return {
-    identity: { displayName: 'Amina Rahman', headline: 'Engineer', summary: null, location: null },
+    identity: {
+      displayName: 'Amina Rahman',
+      headline: 'Engineer',
+      summary: null,
+      location: null,
+      nationality: null,
+      militaryStatus: null,
+    },
     contact: { email: null, phone: null },
     links: [],
     experience: [],
@@ -178,6 +185,16 @@ function role(
 }
 
 describe('mapExtractionToDocument', () => {
+  it('preserves explicitly extracted nationality and military status exactly', () => {
+    const source = extraction();
+    source.identity.nationality = 'Egyptian';
+    source.identity.militaryStatus = 'Completed';
+
+    const result = mapExtractionToDocument(source, 'Fallback', 'upload-1');
+
+    expect(result.document.identity.nationality).toBe('Egyptian');
+    expect(result.document.identity.militaryStatus).toBe('Completed');
+  });
   it('produces a document the canonical schema accepts', () => {
     const result = mapExtractionToDocument(extraction(), 'Fallback Name', 'upload-1');
 
@@ -198,6 +215,8 @@ describe('mapExtractionToDocument', () => {
           headline: 'Engineer',
           summary: 'Backend engineer.',
           location: null,
+          nationality: null,
+          militaryStatus: null,
         },
         experience: [role()],
         projects: [{ name: 'Ledger', summary: null, highlights: [], technologies: [], url: null }],
@@ -236,7 +255,14 @@ describe('mapExtractionToDocument', () => {
   it('falls back to the account name when the model found no name', () => {
     const result = mapExtractionToDocument(
       extraction({
-        identity: { displayName: null, headline: null, summary: null, location: null },
+        identity: {
+          displayName: null,
+          headline: null,
+          summary: null,
+          location: null,
+          nationality: null,
+          militaryStatus: null,
+        },
       }),
       'Fallback Name',
       'upload-1',

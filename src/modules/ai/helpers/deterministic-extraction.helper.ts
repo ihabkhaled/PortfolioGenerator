@@ -16,6 +16,8 @@ import type {
   ResumeSection,
 } from '../types/deterministic.types';
 
+import { extractExplicitIdentityValue } from './explicit-sensitive-identity.helper';
+
 /**
  * A rule-based resume parser used offline and in CI.
  *
@@ -398,6 +400,8 @@ export function parseDeterministicResume(resumeText: string): ResumeExtractionRe
       headline,
       summary: summaryLines.length === 0 ? null : summaryLines.join('\n'),
       location: null,
+      nationality: extractExplicitIdentityValue(resumeText, 'Nationality'),
+      militaryStatus: extractExplicitIdentityValue(resumeText, 'Military status'),
     },
     contact: {
       email: findEmail(resumeText),

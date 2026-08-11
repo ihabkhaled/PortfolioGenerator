@@ -24,6 +24,8 @@
     "loading": "Cargando",
     "footerNote": "Tu CV permanece privado. Sólo lo que revisas y publicas se vuelve público.",
     "nav": {
+      "accountMenu": "Menú de cuenta",
+      "preferences": "Preferencias",
       "home": "Inicio",
       "menu": "Menú",
       "dashboard": "Panel",
@@ -550,7 +552,19 @@
     "unauthorized": "No tienes acceso a esa cartera."
   },
   "portfolio": {
+    "nationalityLabel": "Nacionalidad",
+    "militaryStatusLabel": "Estado militar",
     "sections": {
+      "soft-skills": "Habilidades blandas",
+      "courses": "Cursos",
+      "publications": "Publicaciones",
+      "volunteering": "Voluntariado",
+      "awards": "Premios",
+      "interests": "Intereses",
+      "testimonials": "Testimonios",
+      "gallery": "Galería",
+      "attachments": "Descargas",
+      "social": "Contacto",
       "hero": "Perfil",
       "about": "Acerca de",
       "experience": "Experiencia",
@@ -687,6 +701,26 @@
     }
   },
   "editor": {
+    "disclosures": {
+      "identity": "quien eres",
+      "contact": "Contacto",
+      "assets": "Galería y descargas",
+      "collections": "Contenido del portafolio",
+      "pages": "Páginas del portafolio",
+      "seo": "Buscar y compartir",
+      "sections": "Secciones de página",
+      "items": "{count} elementos"
+    },
+    "issues": {
+      "count": "{count} problemas requieren atención",
+      "previous": "Problema anterior",
+      "next": "Problema siguiente",
+      "general": "Problemas generales",
+      "fieldMessage": "Revisa este campo antes de guardar.",
+      "required": "Obligatorio"
+    },
+    "nationality": "Nacionalidad",
+    "militaryStatus": "Estado militar",
     "title": "Revisar y editar",
     "untitled": "Portafolio sin título",
     "save": "Ahorrar",
@@ -939,8 +973,8 @@
     }
   },
   "account": {
-    "title": "Cuenta",
-    "lead": "Qué tenemos sobre usted y cómo eliminarlo.",
+    "title": "Preferencias y cuenta",
+    "lead": "Gestiona tu perfil, idioma, tema, seguridad, sesiones y datos de la cuenta.",
     "summary": {
       "title": "tu cuenta",
       "nameLabel": "Nombre",

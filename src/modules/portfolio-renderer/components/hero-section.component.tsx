@@ -26,9 +26,17 @@ export function HeroSection(props: Readonly<HeroSectionProps>): ReactElement {
             <p className={heroClasses.headline}>{props.headline}</p>
           )}
           {props.summary === null ? null : <p className={heroClasses.summary}>{props.summary}</p>}
-          <div className={heroClasses.socialRow}>{props.links}</div>
         </div>
-        <div className={heroClasses.aside}>{props.aside}</div>
+        {props.aside === null && props.links === null ? null : (
+          <div className={heroClasses.aside}>
+            {props.aside}
+            {props.links === null ? null : (
+              <div className={heroClasses.socialRow} data-testid="hero-social-links">
+                {props.links}
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );

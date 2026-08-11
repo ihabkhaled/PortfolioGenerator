@@ -63,6 +63,8 @@ export function mapExtractionToDocument(
       headline: extraction.identity.headline,
       summary: extraction.identity.summary,
       location: extraction.identity.location,
+      nationality: extraction.identity.nationality ?? null,
+      militaryStatus: extraction.identity.militaryStatus ?? null,
       tagline: extraction.identity.tagline ?? null,
       coverLetter: extraction.identity.coverLetter ?? null,
       availabilityEnabled: extraction.identity.availabilityEnabled === true,

@@ -80,6 +80,37 @@ function custom(blocks: PortfolioCustomBlock[]) {
 }
 
 describe('the hero band', () => {
+  it('orders contact evidence before social profiles and uses a dialable phone link', () => {
+    const document = buildFullPortfolioDocument();
+    renderSection(hero(), {
+      ...document,
+      identity: { ...document.identity, location: 'Cairo, Egypt' },
+      contact: {
+        ...document.contact,
+        email: { value: 'ihab@example.com', visible: true },
+        phone: { countryIso: 'EG', nationalNumber: '0100 123 4567', visible: true },
+      },
+      socialLinks: [
+        {
+          id: 'github',
+          kind: 'github',
+          label: 'GitHub',
+          url: 'https://github.com/ihab',
+          visible: true,
+        },
+      ],
+    });
+
+    const location = screen.getByText('Cairo, Egypt');
+    const email = screen.getByRole('link', { name: 'ihab@example.com' });
+    const phone = screen.getByRole('link', { name: /0100 123 4567/ });
+    const social = screen.getByRole('link', { name: 'GitHub' });
+    expect(location.compareDocumentPosition(email)).toBe(Node.DOCUMENT_POSITION_FOLLOWING);
+    expect(email.compareDocumentPosition(phone)).toBe(Node.DOCUMENT_POSITION_FOLLOWING);
+    expect(phone.compareDocumentPosition(social)).toBe(Node.DOCUMENT_POSITION_FOLLOWING);
+    expect(phone).toHaveAttribute('href', 'tel:+2001001234567');
+  });
+
   it('shows the availability note when both the section and the person allow it', () => {
     renderSection(hero());
 
@@ -517,6 +548,22 @@ describe('the imported collection bands', () => {
 });
 
 describe('the projects band', () => {
+  it('lays cards into independent columns instead of shared grid rows', () => {
+    renderSection({
+      id: 'section-projects',
+      type: 'projects',
+      visible: true,
+      order: 0,
+      config: { title: null, limit: null },
+    });
+
+    const list = screen.getByTestId('project-card-list');
+    const card = screen.getAllByRole('article')[0];
+    expect(list).toHaveClass('columns-1');
+    expect(card).toHaveClass('break-inside-avoid');
+    expect(list).not.toHaveClass('grid');
+  });
+
   it('renders every project when no limit is set', () => {
     renderSection({
       id: 'section-projects',
@@ -577,6 +624,22 @@ describe('the experience band', () => {
 });
 
 describe('the skills band', () => {
+  it('lets a single skill group consume the complete panel', () => {
+    const document = buildFullPortfolioDocument();
+    renderSection(
+      { id: 'section-skills', type: 'skills', visible: true, order: 0, config: { title: null } },
+      {
+        ...document,
+        skills: [{ id: 'skills-1', label: 'Languages', tier: 'primary', items: ['TypeScript'] }],
+        softSkills: [],
+      },
+    );
+
+    const list = screen.getByTestId('skill-group-list');
+    expect(list).toHaveClass('grid-cols-[repeat(auto-fit,minmax(min(100%,18rem),1fr))]');
+    expect(list).not.toHaveClass('sm:grid-cols-2');
+  });
+
   it('omits a group the author emptied', () => {
     const document: PortfolioDocument = {
       ...buildFullPortfolioDocument(),
@@ -827,8 +890,9 @@ describe('bands rendered from entries with nothing optional filled in', () => {
   });
 
   it('renders a hero for someone with no links at all', () => {
-    renderSection(hero(), { ...bare, links: [] });
+    renderSection(hero(), { ...bare, socialLinks: [] });
 
     expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('Amina Rahman');
+    expect(screen.queryByTestId('hero-social-links')).not.toBeInTheDocument();
   });
 });

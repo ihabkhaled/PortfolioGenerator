@@ -7,13 +7,15 @@
  * strings would make a single portfolio able to degrade the whole platform.
  */
 
-export const PORTFOLIO_SCHEMA_VERSION = 3;
+export const PORTFOLIO_SCHEMA_VERSION = 4;
 
 export const DOCUMENT_LIMITS = {
   displayName: 120,
   headline: 180,
   summary: 3000,
   location: 160,
+  nationality: 160,
+  militaryStatus: 240,
   assetId: 120,
   id: 120,
   email: 320,

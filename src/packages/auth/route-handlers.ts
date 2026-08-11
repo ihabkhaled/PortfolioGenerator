@@ -10,5 +10,17 @@ import { getAuth } from './server';
  * vendor import has exactly one home.
  */
 export function createAuthRouteHandlers(): ReturnType<typeof toNextJsHandler> {
-  return toNextJsHandler(getAuth());
+  const handlers = toNextJsHandler(getAuth());
+
+  return {
+    ...handlers,
+    POST: (request: Request) => handlers.POST(withAnonymousVerificationResend(request)),
+  };
+}
+
+function withAnonymousVerificationResend(request: Request): Request {
+  if (new URL(request.url).pathname !== '/api/auth/send-verification-email') return request;
+
+  request.headers.delete('cookie');
+  return request;
 }

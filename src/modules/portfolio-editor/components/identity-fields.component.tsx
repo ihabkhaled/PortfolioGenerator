@@ -3,7 +3,10 @@ import type { ReactElement } from 'react';
 import { Input, Label, Textarea } from '@/packages/ui-primitives';
 
 import { editorClasses } from '../constants/editor-style.constants';
+import { IDENTITY_DISPLAY_NAME_LABEL_ID } from '../constants/editor.constants';
 import type { IdentityFieldsProps } from '../types/editor-field.types';
+
+import { RequiredFieldLabel } from './required-field-label.component';
 
 export function IdentityFields(props: Readonly<IdentityFieldsProps>): ReactElement {
   return (
@@ -15,11 +18,18 @@ export function IdentityFields(props: Readonly<IdentityFieldsProps>): ReactEleme
 
       <div className={editorClasses.fieldGrid}>
         <div className={editorClasses.field}>
-          <Label htmlFor="identity-display-name">{props.labels.displayName}</Label>
+          <RequiredFieldLabel
+            htmlFor="identity-display-name"
+            label={props.labels.displayName}
+            requiredLabel={props.labels.required}
+          />
           <Input
             id="identity-display-name"
             value={props.displayName}
             maxLength={120}
+            required
+            aria-required
+            aria-labelledby={IDENTITY_DISPLAY_NAME_LABEL_ID}
             onChange={props.onDisplayNameChange}
           />
         </div>
@@ -73,6 +83,26 @@ export function IdentityFields(props: Readonly<IdentityFieldsProps>): ReactEleme
             value={props.location}
             maxLength={160}
             onChange={props.onLocationChange}
+          />
+        </div>
+
+        <div className={editorClasses.field}>
+          <Label htmlFor="identity-nationality">{props.labels.nationality}</Label>
+          <Input
+            id="identity-nationality"
+            value={props.nationality}
+            maxLength={160}
+            onChange={props.onNationalityChange}
+          />
+        </div>
+
+        <div className={editorClasses.field}>
+          <Label htmlFor="identity-military-status">{props.labels.militaryStatus}</Label>
+          <Input
+            id="identity-military-status"
+            value={props.militaryStatus}
+            maxLength={240}
+            onChange={props.onMilitaryStatusChange}
           />
         </div>
 

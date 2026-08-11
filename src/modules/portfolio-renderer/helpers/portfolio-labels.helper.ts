@@ -35,6 +35,8 @@ export function buildPortfolioLabels(translate: (key: string) => string): Portfo
     emailLabel: translate('emailLabel'),
     phoneLabel: translate('phoneLabel'),
     locationLabel: translate('locationLabel'),
+    nationalityLabel: translate('nationalityLabel'),
+    militaryStatusLabel: translate('militaryStatusLabel'),
     availability: translate('availability'),
     contactCta: translate('contactCta'),
     skipToContent: translate('skipToContent'),

@@ -24,6 +24,8 @@
     "loading": "Caricamento",
     "footerNote": "Il tuo CV rimane privato. Solo ciò che rivedi e pubblichi diventa pubblico.",
     "nav": {
+      "accountMenu": "Menu account",
+      "preferences": "Preferenze",
       "home": "Home",
       "menu": "Menu",
       "dashboard": "Pannello di controllo",
@@ -550,7 +552,19 @@
     "unauthorized": "Non hai accesso a quel portafoglio."
   },
   "portfolio": {
+    "nationalityLabel": "Nazionalità",
+    "militaryStatusLabel": "Stato militare",
     "sections": {
+      "soft-skills": "Competenze trasversali",
+      "courses": "Corsi",
+      "publications": "Pubblicazioni",
+      "volunteering": "Volontariato",
+      "awards": "Premi",
+      "interests": "Interessi",
+      "testimonials": "Testimonianze",
+      "gallery": "Galleria",
+      "attachments": "Download",
+      "social": "Contatto",
       "hero": "Profilo",
       "about": "Di",
       "experience": "Esperienza",
@@ -687,6 +701,26 @@
     }
   },
   "editor": {
+    "disclosures": {
+      "identity": "Chi sei",
+      "contact": "Contatto",
+      "assets": "Galleria e download",
+      "collections": "Contenuto del portafoglio",
+      "pages": "Pagine del portfolio",
+      "seo": "Ricerca e condivisione",
+      "sections": "Sezioni di pagina",
+      "items": "{count} elementi"
+    },
+    "issues": {
+      "count": "{count} problemi richiedono attenzione",
+      "previous": "Problema precedente",
+      "next": "Problema successivo",
+      "general": "Problemi generali",
+      "fieldMessage": "Controlla questo campo prima di salvare.",
+      "required": "Obbligatorio"
+    },
+    "nationality": "Nazionalità",
+    "militaryStatus": "Stato militare",
     "title": "Rivedi e modifica",
     "untitled": "Portafoglio senza titolo",
     "save": "Salva",
@@ -939,8 +973,8 @@
     }
   },
   "account": {
-    "title": "Account",
-    "lead": "Cosa teniamo su di te e come rimuoverlo.",
+    "title": "Preferenze e account",
+    "lead": "Gestisci profilo, lingua, tema, sicurezza, sessioni e dati dell’account.",
     "summary": {
       "title": "Il tuo conto",
       "nameLabel": "Nome",

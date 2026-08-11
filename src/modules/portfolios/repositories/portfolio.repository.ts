@@ -70,6 +70,15 @@ export async function getOwnedPortfolio(
   return row === null ? null : toOwnedPortfolio(row);
 }
 
+export async function hasOwnedPortfolio(ownerId: string, portfolioId: string): Promise<boolean> {
+  const row = await getDatabase().portfolio.findFirst({
+    where: { id: portfolioId, ownerId, deletedAt: null },
+    select: { id: true },
+  });
+
+  return row !== null;
+}
+
 export async function createPortfolio(input: CreatePortfolioInput): Promise<OwnedPortfolio> {
   const document = createEmptyPortfolioDocument(input.displayName);
 

@@ -7,6 +7,7 @@ import { I18N_NAMESPACES, useAppTranslation } from '@/packages/i18n';
 import { ChevronDownIcon, ChevronUpIcon } from '@/packages/icons';
 import { Button, Input, Label, Select, Textarea } from '@/packages/ui-primitives';
 
+import { RequiredFieldLabel } from '../components/required-field-label.component';
 import { editorClasses } from '../constants/editor-style.constants';
 import {
   EDITOR_COLLECTION_FIELDS,
@@ -32,15 +33,25 @@ export function CollectionEntryContainer(props: Readonly<CollectionEntryProps>):
         {EDITOR_COLLECTION_FIELDS[key].map((field) => {
           const id = `${key}-${item.id}-${field.name}`;
           const label = t(`collections.fields.${field.name}`);
+          const fieldLabel =
+            field.required === true ? (
+              <RequiredFieldLabel htmlFor={id} label={label} requiredLabel={t('issues.required')} />
+            ) : (
+              <Label htmlFor={id}>{label}</Label>
+            );
+          const requiredLabelId = field.required === true ? `${id}-label` : undefined;
           if (field.kind === 'boolean') {
             const checked = collectionBooleanFieldValue(item, field.name);
             return (
               <div key={field.name} className={editorClasses.field}>
-                <Label htmlFor={id}>{label}</Label>
+                {fieldLabel}
                 <Input
                   id={id}
                   type="checkbox"
                   checked={checked}
+                  required={field.required}
+                  aria-required={field.required}
+                  aria-labelledby={requiredLabelId}
                   onChange={(event) => {
                     props.onChange(
                       setCollectionField(document, key, item.id, field.name, event.target.checked),
@@ -54,11 +65,14 @@ export function CollectionEntryContainer(props: Readonly<CollectionEntryProps>):
           if (field.kind === 'month') {
             return (
               <div key={field.name} className={editorClasses.field}>
-                <Label htmlFor={id}>{label}</Label>
+                {fieldLabel}
                 <Input
                   id={id}
                   type="month"
                   value={value}
+                  required={field.required}
+                  aria-required={field.required}
+                  aria-labelledby={requiredLabelId}
                   onChange={(event) => {
                     props.onChange(
                       setCollectionField(document, key, item.id, field.name, event.target.value),
@@ -73,10 +87,13 @@ export function CollectionEntryContainer(props: Readonly<CollectionEntryProps>):
             const labelPrefix = field.kind === 'social-kind' ? 'socialKinds' : 'skillTiers';
             return (
               <div key={field.name} className={editorClasses.field}>
-                <Label htmlFor={id}>{label}</Label>
+                {fieldLabel}
                 <Select
                   id={id}
                   value={value}
+                  required={field.required}
+                  aria-required={field.required}
+                  aria-labelledby={requiredLabelId}
                   onChange={(event) => {
                     props.onChange(
                       setCollectionField(document, key, item.id, field.name, event.target.value),
@@ -98,10 +115,13 @@ export function CollectionEntryContainer(props: Readonly<CollectionEntryProps>):
           if (isMultiline) {
             return (
               <div key={field.name} className={editorClasses.fieldWide}>
-                <Label htmlFor={id}>{label}</Label>
+                {fieldLabel}
                 <Textarea
                   id={id}
                   value={value}
+                  required={field.required}
+                  aria-required={field.required}
+                  aria-labelledby={requiredLabelId}
                   onChange={(event) => {
                     const isList = ['list', 'project-content', 'project-links'].includes(
                       field.kind,
@@ -120,10 +140,13 @@ export function CollectionEntryContainer(props: Readonly<CollectionEntryProps>):
           }
           return (
             <div key={field.name} className={editorClasses.field}>
-              <Label htmlFor={id}>{label}</Label>
+              {fieldLabel}
               <Input
                 id={id}
                 value={value}
+                required={field.required}
+                aria-required={field.required}
+                aria-labelledby={requiredLabelId}
                 onChange={(event) => {
                   props.onChange(
                     setCollectionField(document, key, item.id, field.name, event.target.value),

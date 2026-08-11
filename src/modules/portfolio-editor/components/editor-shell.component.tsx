@@ -13,7 +13,7 @@ import type { EditorShellProps } from '../types/editor-view.types';
  */
 export function EditorShell(props: Readonly<EditorShellProps>): ReactElement {
   return (
-    <div className={editorClasses.shell}>
+    <section className={editorClasses.shellWithDock} aria-label={props.title}>
       <header className={editorClasses.header}>
         <div className={editorClasses.headerMain}>
           <h1 className={editorClasses.title}>{props.title}</h1>
@@ -61,6 +61,6 @@ export function EditorShell(props: Readonly<EditorShellProps>): ReactElement {
           <div className={editorClasses.previewFrame}>{props.preview}</div>
         </div>
       </div>
-    </div>
+    </section>
   );
 }

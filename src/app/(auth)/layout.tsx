@@ -1,13 +1,15 @@
 import type { Metadata } from 'next';
 import type { ReactElement, ReactNode } from 'react';
 
-import { authClasses } from '@/modules/auth';
+import { authClasses, SignOutButtonContainer } from '@/modules/auth';
+import { getCurrentUser } from '@/modules/auth/server';
 import { buildThemeOptions } from '@/modules/preferences';
 import { ThemeToggleContainer } from '@/modules/preferences/preferences-ui';
 import { I18N_NAMESPACES } from '@/packages/i18n';
 import { getServerTranslations } from '@/packages/i18n/server';
 import { HomeIcon } from '@/packages/icons';
 import { AppLink } from '@/packages/link';
+import { AccountMenu } from '@/shared/components/layout/account-menu.component';
 import { SiteFooterNav } from '@/shared/components/layout/site-footer-nav.component';
 import { SiteShell } from '@/shared/components/layout/site-shell.component';
 import { siteShellClasses } from '@/shared/components/layout/site-shell.variants';
@@ -22,10 +24,27 @@ export const metadata: Metadata = {
 export default async function AuthLayout(props: {
   readonly children: ReactNode;
 }): Promise<ReactElement> {
-  const tApp = await getServerTranslations(I18N_NAMESPACES.app);
+  const [user, tApp] = await Promise.all([
+    getCurrentUser(),
+    getServerTranslations(I18N_NAMESPACES.app),
+  ]);
 
   return (
     <SiteShell
+      account={
+        user === null ? undefined : (
+          <AccountMenu
+            name={user.name}
+            email={user.email}
+            menuLabel={tApp('nav.accountMenu')}
+            dashboardHref={ROUTE_PATHS.dashboard}
+            dashboardLabel={tApp('nav.dashboard')}
+            preferencesHref={ROUTE_PATHS.dashboardSettings}
+            preferencesLabel={tApp('nav.preferences')}
+            logout={<SignOutButtonContainer />}
+          />
+        )
+      }
       navigationLabel={tApp('name')}
       brandName={tApp('name')}
       homeLink={
@@ -44,9 +63,15 @@ export default async function AuthLayout(props: {
         </AppLink>
       }
       navigation={
-        <AppLink href={ROUTE_PATHS.home} className={siteShellClasses.navLink}>
-          {tApp('tagline')}
-        </AppLink>
+        user === null ? (
+          <AppLink href={ROUTE_PATHS.home} className={siteShellClasses.navLink}>
+            {tApp('tagline')}
+          </AppLink>
+        ) : (
+          <AppLink href={ROUTE_PATHS.dashboard} className={siteShellClasses.navLink}>
+            {tApp('nav.dashboard')}
+          </AppLink>
+        )
       }
       actions={
         <ThemeToggleContainer label={tApp('theme.label')} options={buildThemeOptions(tApp)} />

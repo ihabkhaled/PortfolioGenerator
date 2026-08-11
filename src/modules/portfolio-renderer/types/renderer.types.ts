@@ -20,6 +20,8 @@ export interface PortfolioLabels {
   readonly emailLabel: string;
   readonly phoneLabel: string;
   readonly locationLabel: string;
+  readonly nationalityLabel: string;
+  readonly militaryStatusLabel: string;
   readonly availability: string;
   readonly contactCta: string;
   readonly skipToContent: string;

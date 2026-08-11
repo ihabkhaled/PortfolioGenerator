@@ -17,13 +17,13 @@ export const siteShellClasses = {
   headerInner:
     'mx-auto flex min-h-16 max-w-6xl items-center justify-between gap-2 px-5 py-2 sm:gap-4 sm:px-8 lg:px-10',
 
-  brandGroup: 'flex min-w-0 shrink-0 items-center gap-0.5 sm:gap-1',
+  brandGroup: 'flex min-w-0 shrink-0 items-center gap-1 sm:gap-2',
   homeLink:
     'inline-flex size-11 shrink-0 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring',
-  brand: 'group inline-flex min-w-0 shrink-0 items-baseline gap-2.5 text-foreground',
+  brand: 'group inline-flex min-w-0 shrink-0 items-baseline gap-4 text-foreground',
   brandName: 'font-display whitespace-nowrap text-[0.95rem] font-bold tracking-tight',
   brandRole:
-    'hidden truncate font-mono text-[0.6875rem] font-medium uppercase tracking-[0.14em] text-muted-foreground sm:inline',
+    'hidden truncate border-s border-border ps-4 font-mono text-[0.6875rem] font-medium uppercase tracking-[0.14em] text-muted-foreground md:inline',
   // For real user-supplied data next to the brand mark — a signed-in email,
   // not a marketing tagline. `brandRole`'s uppercase tracked mono treatment is
   // built for a handful of short display words; forcing an email address
@@ -32,6 +32,7 @@ export const siteShellClasses = {
   brandEmail: 'hidden truncate text-[0.8125rem] font-medium text-muted-foreground sm:inline',
 
   headerActions: 'hidden min-w-0 items-center justify-end gap-2 sm:flex sm:gap-3',
+  headerAccount: 'flex shrink-0 items-center',
   nav: 'flex items-center gap-1 sm:gap-2',
   navLink:
     'inline-flex min-h-11 cursor-pointer items-center gap-1.5 rounded-md px-2.5 py-2 text-sm font-medium whitespace-nowrap text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring',
@@ -39,6 +40,17 @@ export const siteShellClasses = {
   // `*.component.tsx`, and a config-object call in a JSX prop belongs in the
   // design system, not in the component that renders it.
   navPrimaryAction: buttonVariants({ variant: 'primary', size: 'sm' }),
+
+  accountMenu: 'relative shrink-0',
+  accountMenuToggle:
+    'inline-flex size-11 list-none cursor-pointer items-center justify-center rounded-full focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring [&::-webkit-details-marker]:hidden',
+  accountAvatar:
+    'inline-flex size-9 items-center justify-center rounded-full border border-border bg-surface-raised font-display text-sm font-bold text-foreground shadow-sm transition-colors hover:border-primary hover:text-primary-readable',
+  accountMenuPanel:
+    'absolute end-0 top-[calc(100%+0.5rem)] z-50 grid min-w-52 gap-1 rounded-lg border border-border bg-surface-raised p-2 shadow-lg',
+  accountMenuLink:
+    'inline-flex min-h-11 items-center rounded-md px-3 text-sm font-medium text-foreground transition-colors hover:bg-muted focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring',
+  accountMenuLogout: 'border-t border-border pt-1 [&_button]:w-full [&_button]:justify-start',
 
   // The hamburger disclosure: hidden once `headerActions` has room to show
   // inline, `relative` so its panel anchors to the toggle rather than the
@@ -67,5 +79,5 @@ export const siteShellClasses = {
     'font-mono text-[0.6875rem] font-medium uppercase tracking-[0.14em] text-muted-foreground',
   footerColumnList: 'grid gap-2.5',
   footerLink:
-    'inline-flex min-h-11 cursor-pointer items-center text-sm text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring',
+    'inline-flex min-h-11 min-w-6 cursor-pointer items-center text-sm text-foreground hover:text-primary-readable focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring',
 } as const;

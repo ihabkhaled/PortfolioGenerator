@@ -22,6 +22,8 @@ export function createEmptyPortfolioDocument(displayName: string): PortfolioDocu
       headline: null,
       summary: null,
       location: null,
+      nationality: null,
+      militaryStatus: null,
       portraitAssetId: null,
       availabilityEnabled: false,
       tagline: null,

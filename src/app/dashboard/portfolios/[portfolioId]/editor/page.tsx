@@ -51,6 +51,8 @@ export default async function EditorPage(props: EditorPageProps): Promise<ReactE
     headline: t('headline'),
     summary: t('summary'),
     location: t('location'),
+    nationality: t('nationality'),
+    militaryStatus: t('militaryStatus'),
     tagline: t('tagline'),
     availabilityEnabled: t('availabilityEnabled'),
     availabilityNote: t('availabilityNote'),
@@ -72,6 +74,7 @@ export default async function EditorPage(props: EditorPageProps): Promise<ReactE
     saved: t('saved'),
     unsaved: t('unsaved'),
     warningsTitle: t('warningsTitle'),
+    required: t('issues.required'),
   };
 
   return (

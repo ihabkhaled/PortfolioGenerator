@@ -14,6 +14,7 @@ export {
   findPublishedBySlugUnscoped,
   findPublishedTranslationBySlugAndLocaleUnscoped,
   getOwnedPortfolio,
+  hasOwnedPortfolio,
   isSlugAvailable,
   listOwnedPortfolios,
   listOwnedSlugs,

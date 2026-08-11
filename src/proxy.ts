@@ -1,5 +1,6 @@
 import { NextResponse, type NextRequest } from 'next/server';
 
+import { getOptionalUser } from '@/modules/auth/server';
 import {
   buildLocaleRewrite,
   getLocaleDirection,
@@ -9,7 +10,7 @@ import {
   type ResolvedLocalePath,
 } from '@/modules/localization';
 import { findVisiblePage } from '@/modules/portfolio-document';
-import { getPublishedPortfolioForLocale } from '@/modules/portfolios/server';
+import { getPublishedPortfolioForLocale, hasOwnedPortfolio } from '@/modules/portfolios/server';
 import { resolveRuntimeLocale, SAVED_LOCALE_COOKIE } from '@/modules/preferences';
 import { PRIVATE_PAGE_RESPONSE_HEADERS } from '@/modules/private-page-access';
 import { isDevelopmentEnvironment } from '@/packages/env';
@@ -17,6 +18,11 @@ import { ROUTE_PATHS } from '@/shared/constants/route-paths.constants';
 
 /** `ROUTE_PATHS.portfolios` without its leading slash — the one place that strips it. */
 const PORTFOLIOS_SEGMENT = ROUTE_PATHS.portfolios.slice(1);
+const DASHBOARD_EDITOR_PATH = /^\/dashboard\/portfolios\/([^/]+)\/editor\/?$/u;
+const PRIVATE_DASHBOARD_HEADERS = {
+  'Cache-Control': 'private, no-store, max-age=0',
+  'X-Robots-Tag': 'noindex, nofollow',
+} as const;
 
 /**
  * Per-request nonce-based Content-Security-Policy. Next.js reads the CSP from
@@ -63,6 +69,24 @@ export function buildLocaleRewriteUrl(requestUrl: string | URL, pathname: string
   const rewritten = new URL(requestUrl.toString());
   rewritten.pathname = pathname;
   return rewritten;
+}
+
+export function resolveDashboardEditorPortfolioId(pathname: string): string | null {
+  return DASHBOARD_EDITOR_PATH.exec(resolveLocalePath(pathname).pathname)?.[1] ?? null;
+}
+
+async function buildDashboardEditorNotFoundResponse(
+  request: NextRequest,
+  requestHeaders: Headers,
+): Promise<NextResponse | null> {
+  const portfolioId = resolveDashboardEditorPortfolioId(request.nextUrl.pathname);
+  if (portfolioId === null) return null;
+
+  const user = await getOptionalUser(request.headers);
+  if (user === null || (await hasOwnedPortfolio(user.id, portfolioId))) return null;
+
+  const target = new URL('/__portfolio-not-found', request.url);
+  return NextResponse.rewrite(target, { status: 404, request: { headers: requestHeaders } });
 }
 
 async function applyPrivatePageResponseHeaders(
@@ -144,6 +168,16 @@ export default async function proxy(request: NextRequest): Promise<NextResponse>
   );
   requestHeaders.set('x-app-locale', locale);
   requestHeaders.set('x-app-direction', getLocaleDirection(locale));
+
+  const dashboardNotFound = await buildDashboardEditorNotFoundResponse(request, requestHeaders);
+  if (dashboardNotFound) {
+    dashboardNotFound.headers.set('content-security-policy', contentSecurityPolicy);
+    dashboardNotFound.headers.set('content-language', locale);
+    for (const [name, value] of Object.entries(PRIVATE_DASHBOARD_HEADERS)) {
+      dashboardNotFound.headers.set(name, value);
+    }
+    return dashboardNotFound;
+  }
 
   const legacyRedirect = await buildLegacyPortfolioRedirect(request, resolvedPath, locale);
 

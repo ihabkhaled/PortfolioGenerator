@@ -1,16 +1,17 @@
+import { readFile } from 'node:fs/promises';
+import path from 'node:path';
+
 import { expect, test } from '@playwright/test';
 
-import { buildAccount, createPortfolio, saveEditor, signUp } from './support/accounts';
+import {
+  buildAccount,
+  createPortfolio,
+  openEditorDisclosure,
+  saveEditor,
+  signUp,
+} from './support/accounts';
 
-function buildPngHeader(width: number, height: number): Buffer {
-  const buffer = Buffer.alloc(64);
-
-  buffer.set([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a], 0);
-  buffer.writeUInt32BE(width, 16);
-  buffer.writeUInt32BE(height, 20);
-
-  return buffer;
-}
+const PORTRAIT_FIXTURE = path.resolve('public/icon-maskable-512.png');
 
 function requireValue(value: string | null, message: string): string {
   if (value === null) throw new Error(message);
@@ -23,12 +24,14 @@ test.describe('owned portrait assets', () => {
 
     await signUp(page, account);
     const slug = await createPortfolio(page, 'Portrait Owner');
+    await openEditorDisclosure(page, 'Photos and downloads');
 
     await page.getByLabel('Portrait image').setInputFiles({
       name: 'portrait.png',
       mimeType: 'image/png',
-      buffer: buildPngHeader(800, 800),
+      buffer: await readFile(PORTRAIT_FIXTURE),
     });
+    await page.getByRole('button', { name: 'Use this framing' }).click();
     await page.getByRole('button', { name: 'Upload portrait' }).click();
     await expect(page.getByText(/portrait uploaded/i)).toBeVisible();
 
@@ -56,7 +59,7 @@ test.describe('owned portrait assets', () => {
     const response = await request.get(directPath);
 
     expect(response.status()).toBe(200);
-    expect(response.headers()['content-type']).toBe('image/png');
+    expect(response.headers()['content-type']).toBe('image/jpeg');
   });
 
   test('rejects a dangerous double extension before storing anything', async ({ page }) => {
@@ -64,12 +67,14 @@ test.describe('owned portrait assets', () => {
 
     await signUp(page, account);
     await createPortfolio(page, 'Portrait Guard');
+    await openEditorDisclosure(page, 'Photos and downloads');
 
     await page.getByLabel('Portrait image').setInputFiles({
       name: 'portrait.exe.png',
       mimeType: 'image/png',
-      buffer: buildPngHeader(800, 800),
+      buffer: await readFile(PORTRAIT_FIXTURE),
     });
+    await page.getByRole('button', { name: 'Use this framing' }).click();
     await page.getByRole('button', { name: 'Upload portrait' }).click();
 
     await expect(page.getByText('That filename contains a forbidden file type.')).toBeVisible();

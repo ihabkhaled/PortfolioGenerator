@@ -28,6 +28,7 @@ import {
   setSectionVisibility,
   setAssetSectionPlacement,
   setSeoField,
+  resolveEditorIssueTarget,
 } from '@/modules/portfolio-editor';
 import { parseSchema } from '@/packages/zod';
 
@@ -58,6 +59,66 @@ describe('setIdentityField', () => {
     setIdentityField(document, 'location', 'Cairo');
 
     expect(document.identity.location).toBe('Lisbon, Portugal');
+  });
+});
+
+describe('resolveEditorIssueTarget', () => {
+  it('maps an indexed collection path to the stable item control and disclosures', () => {
+    const document = buildFullPortfolioDocument();
+
+    expect(
+      resolveEditorIssueTarget(document, {
+        path: ['projects', 0, 'name'],
+        code: 'custom',
+      }),
+    ).toEqual({
+      controlId: `projects-${document.projects[0]?.id}-name`,
+      disclosureIds: [
+        'editor-collections',
+        'editor-collection-projects',
+        `editor-projects-${document.projects[0]?.id}`,
+      ],
+    });
+  });
+
+  it('maps identity fields and leaves root issues for the general issue list', () => {
+    const document = buildFullPortfolioDocument();
+
+    expect(
+      resolveEditorIssueTarget(document, { path: ['identity', 'displayName'], code: 'custom' }),
+    ).toEqual({
+      controlId: 'identity-display-name',
+      disclosureIds: ['editor-identity'],
+    });
+    expect(resolveEditorIssueTarget(document, { path: [], code: 'custom' })).toBeNull();
+  });
+
+  it('maps sensitive identity, pages, assets, and section controls through stable ids', () => {
+    const document = buildFullPortfolioDocument();
+    expect(
+      resolveEditorIssueTarget(document, { path: ['identity', 'nationality'], code: 'custom' }),
+    ).toEqual({
+      controlId: 'identity-nationality',
+      disclosureIds: ['editor-identity'],
+    });
+    expect(
+      resolveEditorIssueTarget(document, { path: ['pages', 1, 'title'], code: 'custom' }),
+    ).toEqual({
+      controlId: `${document.pages[1]?.id}-title`,
+      disclosureIds: ['editor-pages', `editor-page-${document.pages[1]?.id}`],
+    });
+    expect(
+      resolveEditorIssueTarget(document, { path: ['gallery', 0, 'alt'], code: 'custom' }),
+    ).toBeNull();
+    expect(
+      resolveEditorIssueTarget(document, { path: ['attachments', 0, 'label'], code: 'custom' }),
+    ).toBeNull();
+    expect(
+      resolveEditorIssueTarget(document, { path: ['pages', 0, 'sections'], code: 'custom' }),
+    ).toEqual({
+      controlId: 'editor-sections-list',
+      disclosureIds: ['editor-sections'],
+    });
   });
 });
 

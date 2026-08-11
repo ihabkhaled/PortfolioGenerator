@@ -37,6 +37,7 @@ export {
 } from './helpers/portfolio-document-v2.migration';
 
 export { upgradeDocumentToVersion3 } from './helpers/portfolio-document-v3.migration';
+export { upgradeDocumentToVersion4 } from './helpers/portfolio-document-v4.migration';
 
 export {
   applyMigrationSteps,

@@ -8,6 +8,8 @@
 
 export { ContactFields } from './components/contact-fields.component';
 export { EditorShell } from './components/editor-shell.component';
+export { EditorDisclosure } from './components/editor-disclosure.component';
+export { EditorIssueNavigatorContainer } from './containers/editor-issue-navigator.container';
 export { IdentityFields } from './components/identity-fields.component';
 export { SectionList } from './components/section-list.component';
 export { SeoFields } from './components/seo-fields.component';

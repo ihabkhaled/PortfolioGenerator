@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import type { ReactElement, ReactNode } from 'react';
 
 import type { Route } from '@/packages/navigation';
 
@@ -54,6 +54,8 @@ export interface ManifestPanelProps {
 }
 
 export interface SiteShellProps {
+  /** Authenticated account menu kept visible at every header width. */
+  readonly account?: ReactElement | undefined;
   /** Reader-owned controls rendered beside the primary navigation. */
   readonly actions?: ReactNode;
   readonly brand: ReactNode;
@@ -84,6 +86,17 @@ export interface SiteAuthNavProps {
   readonly dashboardLabel: string;
   readonly signInLabel: string;
   readonly signUpLabel: string;
+}
+
+export interface AccountMenuProps {
+  readonly name: string;
+  readonly email: string;
+  readonly menuLabel: string;
+  readonly dashboardHref: Route;
+  readonly dashboardLabel: string;
+  readonly preferencesHref: Route;
+  readonly preferencesLabel: string;
+  readonly logout: ReactNode;
 }
 
 export interface SiteFooterLinkItem {

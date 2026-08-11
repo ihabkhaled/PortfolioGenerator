@@ -2,10 +2,12 @@ import type { ReactElement } from 'react';
 
 import { AppLink } from '@/packages/link';
 import { Section } from '@/shared/components/data-display/section.component';
-import { sectionClasses } from '@/shared/components/data-display/section.variants';
 import { buildPublicAssetPath, ROUTE_PATHS } from '@/shared/constants/route-paths.constants';
 
-import { portfolioShellClasses } from '../constants/template-style.constants';
+import {
+  portfolioSectionClasses,
+  portfolioShellClasses,
+} from '../constants/template-style.constants';
 import { PortfolioNavMenuContainer } from '../containers/portfolio-nav-menu.container';
 import { hasContent } from '../helpers/section-content.helper';
 import type { PortfolioTemplateProps } from '../types/renderer.types';
@@ -44,6 +46,7 @@ export function PortfolioTemplate(props: Readonly<PortfolioTemplateProps>): Reac
         </AppLink>
       }
       banner={null}
+      isPreview={props.isPreview}
       navigation={<PortfolioNav label={props.labels.navigationLabel} items={props.navigation} />}
       mobileMenu={
         <PortfolioNavMenuContainer
@@ -64,7 +67,7 @@ export function PortfolioTemplate(props: Readonly<PortfolioTemplateProps>): Reac
         />
       )}
 
-      <div className={sectionClasses.page}>
+      <div className={portfolioSectionClasses.page} data-testid="portfolio-section-page">
         {bandSections.map((section) => (
           <Section
             key={section.id}

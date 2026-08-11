@@ -87,7 +87,7 @@ test.describe('deleting an account', () => {
 
     // The session is gone with the row, so the dashboard is unreachable.
     await page.goto('/dashboard');
-    expect(page.url()).toContain('/sign-in');
+    await expect(page).toHaveURL(/\/sign-in/u);
 
     // And the account cannot be signed back into.
     await page.goto('/sign-in');
@@ -119,7 +119,10 @@ test.describe('deleting an account', () => {
     await page.goto('/dashboard');
     await expect(page.getByText('Survivor Portfolio').first()).toBeVisible();
 
-    await signIn(page, survivor);
-    await expect(page.getByText('Survivor Portfolio').first()).toBeVisible();
+    const survivorContext = await browser.newContext();
+    const survivorPage = await survivorContext.newPage();
+    await signIn(survivorPage, survivor);
+    await expect(survivorPage.getByText('Survivor Portfolio').first()).toBeVisible();
+    await survivorContext.close();
   });
 });

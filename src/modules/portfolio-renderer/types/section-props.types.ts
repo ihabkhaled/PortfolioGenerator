@@ -71,7 +71,7 @@ export interface PortfolioShellProps {
   readonly headline: string | null;
   readonly navigation: ReactNode;
   readonly navigationLabel: string;
-  /** The below-`lg` collapsible counterpart to `navigation`. */
+  /** The narrow-container collapsible counterpart to `navigation`. */
   readonly mobileMenu: ReactNode;
   /** Accessible label for the brand link back to the platform's own home. */
   readonly homeLabel: string;
@@ -82,6 +82,8 @@ export interface PortfolioShellProps {
   readonly footerNote: ReactNode;
   readonly footerLinks: ReactNode;
   readonly banner: ReactNode;
+  /** Embedded draft previews must not introduce a second page-level main landmark. */
+  readonly isPreview: boolean;
   readonly children: ReactNode;
 }
 

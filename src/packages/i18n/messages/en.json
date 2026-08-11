@@ -29,7 +29,9 @@
       "dashboard": "Dashboard",
       "signIn": "Sign in",
       "signUp": "Create account",
-      "signOut": "Sign out"
+      "signOut": "Sign out",
+      "accountMenu": "Account menu",
+      "preferences": "Preferences"
     },
     "footer": {
       "columns": {
@@ -560,12 +562,24 @@
       "certifications": "Certifications",
       "languages": "Languages",
       "contact": "Contact",
-      "custom": "More"
+      "custom": "More",
+      "soft-skills": "Soft skills",
+      "courses": "Courses",
+      "publications": "Publications",
+      "volunteering": "Volunteering",
+      "awards": "Awards",
+      "interests": "Interests",
+      "testimonials": "Testimonials",
+      "gallery": "Gallery",
+      "attachments": "Downloads",
+      "social": "Social links"
     },
     "present": "Present",
     "emailLabel": "Email",
     "phoneLabel": "Phone",
     "locationLabel": "Location",
+    "nationalityLabel": "Nationality",
+    "militaryStatusLabel": "Military status",
     "availability": "Open to work",
     "contactCta": "Get in touch",
     "skipToContent": "Skip to content",
@@ -687,6 +701,24 @@
     }
   },
   "editor": {
+    "disclosures": {
+      "identity": "Identity",
+      "contact": "Contact",
+      "assets": "Photos and downloads",
+      "collections": "Portfolio content",
+      "pages": "Pages",
+      "seo": "Search and sharing",
+      "sections": "Page sections",
+      "items": "{count} items"
+    },
+    "issues": {
+      "count": "{count} issues need attention",
+      "previous": "Previous issue",
+      "next": "Next issue",
+      "general": "General issues",
+      "fieldMessage": "Check this field before saving.",
+      "required": "Required"
+    },
     "title": "Review and edit",
     "untitled": "Untitled portfolio",
     "save": "Save",
@@ -700,6 +732,8 @@
     "headline": "Headline",
     "summary": "Summary",
     "location": "Location",
+    "nationality": "Nationality",
+    "militaryStatus": "Military status",
     "tagline": "Welcome tagline",
     "availabilityEnabled": "Show that I am available for work",
     "availabilityNote": "Availability note",
@@ -939,8 +973,8 @@
     }
   },
   "account": {
-    "title": "Account",
-    "lead": "What we hold about you, and how to remove it.",
+    "title": "Preferences & account",
+    "lead": "Manage your profile, language, theme, security, sessions, and account data.",
     "summary": {
       "title": "Your account",
       "nameLabel": "Name",

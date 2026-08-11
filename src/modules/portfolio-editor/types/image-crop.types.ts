@@ -18,3 +18,16 @@ export interface ImageCropPoint {
   readonly x: number;
   readonly y: number;
 }
+
+export interface ImageCropSize {
+  readonly width: number;
+  readonly height: number;
+}
+
+export interface ZoomAroundViewportCenterInput {
+  readonly currentOffset: ImageCropPoint;
+  readonly currentZoom: number;
+  readonly nextZoom: number;
+  readonly viewport: ImageCropSize;
+  readonly nextRendered: ImageCropSize;
+}

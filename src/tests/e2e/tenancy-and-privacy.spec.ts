@@ -5,6 +5,8 @@ import { buildFullPortfolioDocument } from '../fixtures/portfolio-document.fixtu
 import {
   buildAccount,
   createPortfolio,
+  openEditorDisclosure,
+  openEditorPageEntries,
   publishPortfolio,
   saveEditor,
   signUp,
@@ -30,7 +32,7 @@ test.describe('what an anonymous visitor can reach', () => {
   test('the dashboard sends an unauthenticated visitor to sign in', async ({ page }) => {
     const response = await page.goto('/dashboard');
 
-    expect(page.url()).toContain('/sign-in');
+    await expect(page).toHaveURL(/\/sign-in/u);
     expect(response?.status()).toBeLessThan(400);
   });
 
@@ -38,7 +40,7 @@ test.describe('what an anonymous visitor can reach', () => {
     test(`redirects ${path} to sign in rather than answering`, async ({ page }) => {
       await page.goto(path);
 
-      expect(page.url()).toContain('/sign-in');
+      await expect(page).toHaveURL(/\/sign-in/u);
     });
   }
 
@@ -121,12 +123,14 @@ test.describe('one tenant cannot reach another', () => {
       ...buildFullPortfolioDocument(),
       identity: { ...buildFullPortfolioDocument().identity, headline: 'Foreign mutation' },
     };
+    await openEditorDisclosure(page, 'Pages');
     await page.locator('#new-page-title').fill('Owner notes');
     await page.locator('#new-page-nav').fill('Notes');
     await page.locator('#new-page-slug').fill('notes');
     await page.getByRole('button', { name: 'Add page' }).click();
     await saveEditor(page);
     await expect(page.getByText('Saved').first()).toBeVisible();
+    await openEditorPageEntries(page);
     const ownerAccessForm = page.locator('form').filter({
       has: page.getByRole('button', { name: 'Update page access' }),
     });
@@ -145,11 +149,13 @@ test.describe('one tenant cannot reach another', () => {
     });
     expect(foreignSave.status()).toBe(404);
     expect(await foreignSave.json()).toEqual({ error: 'rejected' });
+    await openEditorDisclosure(strangerPage, 'Pages');
     await strangerPage.locator('#new-page-title').fill('Stranger notes');
     await strangerPage.locator('#new-page-nav').fill('Notes');
     await strangerPage.locator('#new-page-slug').fill('notes');
     await strangerPage.getByRole('button', { name: 'Add page' }).click();
     await saveEditor(strangerPage);
+    await openEditorPageEntries(strangerPage);
 
     const strangerAccessForm = strangerPage.locator('form').filter({
       has: strangerPage.getByRole('button', { name: 'Update page access' }),
@@ -170,18 +176,19 @@ test.describe('one tenant cannot reach another', () => {
       'This portfolio or page is no longer available.',
     );
 
+    await openEditorDisclosure(strangerPage, 'Photos and downloads');
     const uploadForm = strangerPage.locator('form').filter({
       has: strangerPage.getByRole('button', { name: 'Upload attachment' }),
     });
-    await uploadForm.locator('input[name="portfolioId"]').evaluate((input, value) => {
-      (input as HTMLInputElement).value = value;
-    }, ownerPortfolioId);
     await uploadForm.getByLabel('Downloadable file').setInputFiles({
       name: 'tampered.pdf',
       mimeType: 'application/pdf',
       buffer: buildResumePdf(['Cross-tenant upload attempt']),
     });
     await strangerPage.getByLabel('Public download label').fill('Tampered upload');
+    await uploadForm.locator('input[name="portfolioId"]').evaluate((input, value) => {
+      (input as HTMLInputElement).value = value;
+    }, ownerPortfolioId);
     await uploadForm.getByRole('button', { name: 'Upload attachment' }).click();
     await expect(uploadForm.getByRole('alert')).toContainText(
       'That portfolio is no longer available.',
@@ -201,6 +208,8 @@ test.describe('one tenant cannot reach another', () => {
 
     await page.goto(ownerEditorUrl);
     await expect(page.getByLabel('Headline')).toHaveValue('');
+    await openEditorDisclosure(page, 'Pages');
+    await openEditorPageEntries(page);
     await expect(page.getByLabel('Page access')).toHaveValue('public');
     await expect(page.getByText('Tampered upload')).toHaveCount(0);
     await page.goto('/dashboard');

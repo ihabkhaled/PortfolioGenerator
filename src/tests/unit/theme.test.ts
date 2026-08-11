@@ -1,3 +1,4 @@
+import { renderHook, waitFor } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { buildThemeOptions } from '@/modules/preferences';
@@ -8,8 +9,12 @@ import {
   readPreference,
   readSystemTheme,
   resolveTheme,
+  SAVED_THEME_COOKIE,
   THEME_ATTRIBUTE,
+  THEME_ACCOUNT_SYNC_COOKIE,
   THEME_STORAGE_KEY,
+  THEME_SYSTEM_OVERRIDE_KEY,
+  useTheme,
   watchSystemTheme,
 } from '@/packages/theme';
 import { toInlineScript } from '@/shared/utils/inline-script.util';
@@ -38,6 +43,8 @@ function stubMatchMedia(matches: boolean, listeners: ((event: MediaQueryListEven
 beforeEach(() => {
   globalThis.localStorage.clear();
   globalThis.document.documentElement.removeAttribute(THEME_ATTRIBUTE);
+  Reflect.set(globalThis.document, 'cookie', `${SAVED_THEME_COOKIE}=; path=/; max-age=0`);
+  Reflect.set(globalThis.document, 'cookie', `${THEME_ACCOUNT_SYNC_COOKIE}=; path=/; max-age=0`);
 });
 
 afterEach(() => {
@@ -55,6 +62,14 @@ describe('buildThemeScript', () => {
     expect(script).toContain(THEME_STORAGE_KEY);
     expect(script).toContain(THEME_ATTRIBUTE);
     expect(script).toContain('prefers-color-scheme: dark');
+  });
+
+  it('lets a freshly authenticated account replace stale device theme state once', () => {
+    const script = buildThemeScript();
+
+    expect(script).toContain(THEME_ACCOUNT_SYNC_COOKIE);
+    expect(script).toContain(`localStorage.setItem('${THEME_STORAGE_KEY}'`);
+    expect(script).toContain('max-age=0');
   });
 
   // A throwing `localStorage` — Safari in private mode — must not take the page
@@ -89,6 +104,45 @@ describe('readPreference', () => {
     });
 
     expect(readPreference()).toBe('system');
+  });
+
+  it('lets a signed-in account replace stale local theme state after a soft navigation', () => {
+    const deleteCookie = vi.fn().mockResolvedValue(undefined);
+    vi.stubGlobal('cookieStore', { delete: deleteCookie });
+    globalThis.localStorage.setItem(THEME_STORAGE_KEY, 'light');
+    Reflect.set(globalThis.document, 'cookie', `${SAVED_THEME_COOKIE}=dark; path=/`);
+    Reflect.set(globalThis.document, 'cookie', `${THEME_ACCOUNT_SYNC_COOKIE}=1; path=/`);
+
+    expect(readPreference()).toBe('dark');
+    expect(globalThis.localStorage.getItem(THEME_STORAGE_KEY)).toBe('dark');
+    expect(deleteCookie).toHaveBeenCalledWith({ name: THEME_ACCOUNT_SYNC_COOKIE, path: '/' });
+  });
+
+  it('restores an account that follows the system after a soft navigation', () => {
+    globalThis.localStorage.setItem(THEME_STORAGE_KEY, 'dark');
+    Reflect.set(globalThis.document, 'cookie', `${SAVED_THEME_COOKIE}=system; path=/`);
+    Reflect.set(globalThis.document, 'cookie', `${THEME_ACCOUNT_SYNC_COOKIE}=1; path=/`);
+
+    expect(readPreference()).toBe('system');
+    expect(globalThis.localStorage.getItem(THEME_STORAGE_KEY)).toBeNull();
+    expect(globalThis.localStorage.getItem(THEME_SYSTEM_OVERRIDE_KEY)).toBe('1');
+  });
+});
+
+describe('useTheme', () => {
+  it('applies an account theme reconciled after a soft navigation', async () => {
+    vi.stubGlobal('cookieStore', { delete: vi.fn().mockResolvedValue(undefined) });
+    stubMatchMedia(false, []);
+    globalThis.localStorage.setItem(THEME_STORAGE_KEY, 'light');
+    Reflect.set(globalThis.document, 'cookie', `${SAVED_THEME_COOKIE}=dark; path=/`);
+    Reflect.set(globalThis.document, 'cookie', `${THEME_ACCOUNT_SYNC_COOKIE}=1; path=/`);
+
+    const { result } = renderHook(() => useTheme());
+
+    await waitFor(() => {
+      expect(result.current.preference).toBe('dark');
+      expect(globalThis.document.documentElement).toHaveAttribute(THEME_ATTRIBUTE, 'dark');
+    });
   });
 });
 

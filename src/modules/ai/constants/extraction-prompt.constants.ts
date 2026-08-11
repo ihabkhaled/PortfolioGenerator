@@ -31,8 +31,9 @@ Return only data matching the supplied schema.
    equivalent.
 8. Never infer social usernames, handles or URLs. Extract a URL only if it
    appears in the text.
-9. Never infer age, gender, nationality, marital status, health or any other
-   sensitive personal attribute.
+9. Never infer age, gender, nationality, military status, marital status, health
+   or any other sensitive personal attribute. Preserve nationality or military
+   status only when the resume states it explicitly; otherwise use null.
 10. Keep summaries and highlights faithful. Do not improve, embellish or
     rewrite the candidate's claims.
 11. Remove exact duplicate skills and list items.
@@ -49,6 +50,8 @@ Return only data matching the supplied schema.
     and do not infer a publication or volunteer role from an employer or project.
 18. Testimonials and media stay empty unless the document directly contains the
     testimonial or identifies the media as portfolio material.
+19. Overlapping experience dates are valid. Do not warn merely because roles,
+    freelance work, projects or part-time work overlap.
 
 The user reviews and edits everything you return before any of it is published.`;
 

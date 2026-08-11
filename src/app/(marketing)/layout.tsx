@@ -1,5 +1,6 @@
 import type { ReactElement, ReactNode } from 'react';
 
+import { SignOutButtonContainer } from '@/modules/auth';
 import { getCurrentUser } from '@/modules/auth/server';
 import { buildThemeOptions } from '@/modules/preferences';
 import { ThemeToggleContainer } from '@/modules/preferences/preferences-ui';
@@ -7,6 +8,7 @@ import { I18N_NAMESPACES } from '@/packages/i18n';
 import { getServerTranslations } from '@/packages/i18n/server';
 import { HomeIcon } from '@/packages/icons';
 import { AppLink } from '@/packages/link';
+import { AccountMenu } from '@/shared/components/layout/account-menu.component';
 import { SiteAuthNav } from '@/shared/components/layout/site-auth-nav.component';
 import { SiteFooterNav } from '@/shared/components/layout/site-footer-nav.component';
 import { SiteShell } from '@/shared/components/layout/site-shell.component';
@@ -24,6 +26,20 @@ export default async function MarketingLayout(
 
   return (
     <SiteShell
+      account={
+        user === null ? undefined : (
+          <AccountMenu
+            name={user.name}
+            email={user.email}
+            menuLabel={t('nav.accountMenu')}
+            dashboardHref={ROUTE_PATHS.dashboard}
+            dashboardLabel={t('nav.dashboard')}
+            preferencesHref={ROUTE_PATHS.dashboardSettings}
+            preferencesLabel={t('nav.preferences')}
+            logout={<SignOutButtonContainer />}
+          />
+        )
+      }
       navigationLabel={t('name')}
       brandName={t('name')}
       homeLink={

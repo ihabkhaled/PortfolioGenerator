@@ -2,6 +2,7 @@
 
 import { headers } from 'next/headers';
 
+import { synchronizeOwnedAccountPreferences } from '@/modules/account/server';
 import { getAuth, isEmailNotVerifiedError } from '@/packages/auth/server';
 import type { AuthInstance } from '@/packages/auth/server';
 import { logger } from '@/packages/logger';
@@ -89,8 +90,10 @@ export async function signInAction(
     return { status: 'error', error: AUTH_ERROR_KEYS.invalidCredentials, notice: null };
   }
 
+  let result: Awaited<ReturnType<AuthInstance['api']['signInEmail']>>;
+
   try {
-    await getAuth().api.signInEmail({
+    result = await getAuth().api.signInEmail({
       // Also the callback for a verification email resent as a side effect
       // of this call (emailVerification.sendOnSignIn) — see signUpEmail above.
       body: {
@@ -113,6 +116,14 @@ export async function signInAction(
     logger.info('auth.sign_in.rejected');
 
     return { status: 'error', error: AUTH_ERROR_KEYS.invalidCredentials, notice: null };
+  }
+
+  try {
+    await synchronizeOwnedAccountPreferences(result.user.id);
+  } catch (error) {
+    logger.warn('auth.preference_sync.failed', {
+      reason: error instanceof Error ? error.name : 'unknown',
+    });
   }
 
   appRedirect(ROUTE_PATHS.dashboard);

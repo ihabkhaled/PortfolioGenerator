@@ -1,6 +1,7 @@
 import { randomUUID } from 'node:crypto';
 
-import type { Browser, BrowserContext, Page } from '@playwright/test';
+import { expect } from '@playwright/test';
+import type { Browser, BrowserContext, Locator, Page } from '@playwright/test';
 
 /**
  * Every spec creates its own account.
@@ -34,7 +35,7 @@ export async function signUp(page: Page, account: TestAccount): Promise<void> {
   await page.getByLabel('Email').fill(account.email);
   await page.getByLabel('Password', { exact: true }).fill(account.password);
   await page.getByRole('button', { name: /create account/i }).click();
-  await page.waitForURL('**/dashboard');
+  await expect(page).toHaveURL(/\/dashboard$/u);
 }
 
 export async function signIn(page: Page, account: TestAccount): Promise<void> {
@@ -42,7 +43,7 @@ export async function signIn(page: Page, account: TestAccount): Promise<void> {
   await page.getByLabel('Email').fill(account.email);
   await page.getByLabel('Password', { exact: true }).fill(account.password);
   await page.getByRole('button', { name: /sign in/i }).click();
-  await page.waitForURL('**/dashboard');
+  await expect(page).toHaveURL(/\/dashboard$/u);
 }
 
 /**
@@ -108,7 +109,59 @@ export function requireBrowser(context: BrowserContext): Browser {
  * relying on which one happens to come first in the DOM.
  */
 export async function saveEditor(page: Page): Promise<void> {
-  await page.locator('header').getByRole('button', { name: 'Save', exact: true }).click();
+  const actionDock = page.locator('[data-fixed-surface="editor-actions"]');
+  const saveButton = actionDock.getByRole('button', { name: 'Save', exact: true });
+
+  await expect(saveButton).toBeEnabled();
+  await saveButton.click();
+  await expect(actionDock.getByText('Saved', { exact: true })).toBeVisible();
+}
+
+/** Submit one editor server action and wait for its exact route response. */
+export async function submitEditorServerAction(page: Page, button: Locator): Promise<void> {
+  const editorPath = new URL(page.url()).pathname;
+  const completed = page.waitForResponse(
+    (response) =>
+      response.request().method() === 'POST' && new URL(response.url()).pathname === editorPath,
+  );
+
+  await button.click();
+  await completed;
+}
+
+/** Open one editor disclosure through the same summary control a user operates. */
+export async function openEditorDisclosure(page: Page, label: string): Promise<Locator> {
+  const summary = page
+    .locator('summary')
+    .filter({ has: page.getByText(label, { exact: true }) })
+    .first();
+  const disclosure = summary.locator('..');
+
+  await expect(summary).toBeVisible();
+  if ((await disclosure.getAttribute('open')) === null) await summary.click();
+  await expect(disclosure).toHaveAttribute('open', '');
+
+  return disclosure;
+}
+
+/** Open every still-collapsed disclosure below an already-open editor region. */
+export async function openNestedEditorDisclosures(region: Locator): Promise<void> {
+  const summaries = region.locator('details > summary');
+  const count = await summaries.count();
+
+  for (let index = 0; index < count; index += 1) {
+    const summary = summaries.nth(index);
+    const disclosure = summary.locator('..');
+    if ((await disclosure.getAttribute('open')) === null) await summary.click();
+    await expect(disclosure).toHaveAttribute('open', '');
+  }
+}
+
+/** Open every authored page card inside the editor's Pages disclosure. */
+export async function openEditorPageEntries(page: Page): Promise<Locator> {
+  const pages = await openEditorDisclosure(page, 'Pages');
+  await openNestedEditorDisclosures(pages);
+  return pages.getByRole('list');
 }
 
 /**

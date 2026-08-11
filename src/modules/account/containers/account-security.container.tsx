@@ -115,12 +115,18 @@ export function AccountSecurityContainer(props: Readonly<AccountSecurityProps>):
   );
 }
 
-function SessionRow({ session, current, labels }: Readonly<AccountSessionRowProps>): ReactElement {
+function SessionRow({
+  session,
+  current,
+  labels,
+}: Readonly<AccountSessionRowProps>): ReactElement | null {
   const t = useAppTranslation(I18N_NAMESPACES.account);
   const [state, revoke, pending] = useActionState(
     revokeAccountSessionAction,
     ACCOUNT_SETTINGS_INITIAL_STATE,
   );
+
+  if (state.status === 'success') return null;
 
   return (
     <div className={accountClasses.field}>

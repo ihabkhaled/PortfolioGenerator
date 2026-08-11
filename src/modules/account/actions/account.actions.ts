@@ -3,14 +3,7 @@
 import { headers } from 'next/headers';
 
 import { requireOwner, signOutCurrentSession } from '@/modules/auth/server';
-import {
-  PREFERENCE_COOKIE_MAX_AGE_SECONDS,
-  SAVED_LOCALE_COOKIE,
-  SAVED_THEME_COOKIE,
-} from '@/modules/preferences';
 import { getAuth } from '@/packages/auth/server';
-import { getServerEnv } from '@/packages/env/server';
-import { setResponseCookie } from '@/packages/headers';
 import { logger } from '@/packages/logger';
 import { appRedirect } from '@/packages/navigation';
 import { parseSchema } from '@/packages/zod';
@@ -29,7 +22,10 @@ import {
   portfolioDeletionSchema,
 } from '../schemas/account.schema';
 import { deleteAccount, deletePortfolio } from '../services/deletion.service';
-import { saveOwnedAccountPreferences } from '../services/settings.service';
+import {
+  saveOwnedAccountPreferences,
+  writeAccountPreferenceCookies,
+} from '../services/settings.service';
 import type { AccountActionState } from '../types/deletion.types';
 import type { AccountSettingsActionState } from '../types/settings.types';
 
@@ -46,19 +42,7 @@ export async function updateAccountPreferencesAction(
   if (!parsed.ok) return { status: 'error', error: ACCOUNT_SETTINGS_ERROR_KEYS.unknown };
   const saved = await saveOwnedAccountPreferences(owner.id, parsed.value);
   if (saved) {
-    const secure = getServerEnv().NODE_ENV === 'production';
-    await Promise.all([
-      setResponseCookie(SAVED_LOCALE_COOKIE, parsed.value.locale, {
-        httpOnly: true,
-        maxAge: PREFERENCE_COOKIE_MAX_AGE_SECONDS,
-        secure,
-      }),
-      setResponseCookie(SAVED_THEME_COOKIE, parsed.value.themePreference, {
-        httpOnly: false,
-        maxAge: PREFERENCE_COOKIE_MAX_AGE_SECONDS,
-        secure,
-      }),
-    ]);
+    await writeAccountPreferenceCookies(parsed.value);
   }
   return saved
     ? { status: 'success', error: null }
@@ -104,14 +88,16 @@ export async function changeAccountPasswordAction(
   }
 
   try {
+    const requestHeaders = await headers();
     await getAuth().api.changePassword({
       body: {
         currentPassword: parsed.value.currentPassword,
         newPassword: parsed.value.newPassword,
-        revokeOtherSessions: true,
+        revokeOtherSessions: false,
       },
-      headers: await headers(),
+      headers: requestHeaders,
     });
+    await getAuth().api.revokeOtherSessions({ headers: requestHeaders });
   } catch {
     logger.info('account.password_change.rejected');
 

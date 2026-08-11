@@ -13,6 +13,8 @@ export interface IdentityFieldsProps {
   readonly headline: string;
   readonly summary: string;
   readonly location: string;
+  readonly nationality: string;
+  readonly militaryStatus: string;
   readonly tagline: string;
   readonly availabilityEnabled: boolean;
   readonly availabilityNote: string;
@@ -21,6 +23,8 @@ export interface IdentityFieldsProps {
   readonly onHeadlineChange: TextChange;
   readonly onSummaryChange: AreaChange;
   readonly onLocationChange: TextChange;
+  readonly onNationalityChange: TextChange;
+  readonly onMilitaryStatusChange: TextChange;
   readonly onTaglineChange: TextChange;
   readonly onAvailabilityEnabledChange: TextChange;
   readonly onAvailabilityNoteChange: TextChange;

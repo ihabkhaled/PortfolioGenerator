@@ -76,12 +76,17 @@ export function observeBrowserServiceWorker(
   const serviceWorkers = globalThis.navigator.serviceWorker;
   let registrationCleanup = NO_BROWSER_CLEANUP;
   let observing = true;
+  let hasController = serviceWorkers.controller !== null;
   const reloadOnControllerChange = (): void => {
-    globalThis.location.reload();
+    if (hasController) globalThis.location.reload();
+    hasController = true;
   };
   const register = async (): Promise<void> => {
     try {
-      const registration = await serviceWorkers.register(path, { scope: '/' });
+      const existingRegistration = await serviceWorkers.getRegistration('/');
+      const registration =
+        existingRegistration ?? (await serviceWorkers.register(path, { scope: '/' }));
+      if (existingRegistration) await existingRegistration.update();
       if (observing) {
         registrationCleanup = observeServiceWorkerRegistration(registration, onUpdate);
       }

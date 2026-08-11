@@ -31,6 +31,7 @@ export type CollectionFieldKind =
 export interface CollectionFieldDefinition {
   readonly name: string;
   readonly kind: CollectionFieldKind;
+  readonly required?: boolean;
 }
 
 export interface CreatePageInput {

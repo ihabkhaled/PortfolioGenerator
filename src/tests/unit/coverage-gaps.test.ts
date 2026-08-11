@@ -26,7 +26,14 @@ import { buildFullPortfolioDocument } from '../fixtures/portfolio-document.fixtu
 
 function extraction(overrides: Partial<ResumeExtractionResult> = {}): ResumeExtractionResult {
   return {
-    identity: { displayName: 'Amina Rahman', headline: 'Engineer', summary: null, location: null },
+    identity: {
+      displayName: 'Amina Rahman',
+      headline: 'Engineer',
+      summary: null,
+      location: null,
+      nationality: null,
+      militaryStatus: null,
+    },
     contact: { email: null, phone: null },
     links: [],
     experience: [],

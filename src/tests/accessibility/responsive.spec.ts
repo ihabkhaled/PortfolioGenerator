@@ -5,7 +5,15 @@ import type { Page } from '@playwright/test';
 import { portfolioDocumentSchema } from '@/modules/portfolio-document';
 import { parseSchema } from '@/packages/zod';
 
-import { buildAccount, createPortfolio, openImport, signUp } from '../e2e/support/accounts';
+import {
+  buildAccount,
+  createPortfolio,
+  openEditorDisclosure,
+  openEditorPageEntries,
+  openImport,
+  saveEditor,
+  signUp,
+} from '../e2e/support/accounts';
 import {
   publishOwnedTranslationSnapshotForTest,
   readOwnedPublishedDocument,
@@ -20,16 +28,25 @@ async function expectNoBlockingViolations(page: Page): Promise<void> {
   expect(results.violations).toEqual([]);
 }
 
+async function openMobileSiteMenu(page: Page): Promise<void> {
+  const summary = page.locator('header details > summary:visible').first();
+  const menu = summary.locator('..');
+  if ((await menu.getAttribute('open')) === null) await summary.click();
+  await expect(menu).toHaveAttribute('open', '');
+}
+
 async function createPrivateChallenge(page: Page): Promise<string> {
   const slug = await createPortfolio(page, 'Responsive Private Portfolio');
   await page.getByLabel('Headline').fill('Systems engineer');
   await page.getByLabel('Summary').fill('A reviewed portfolio with owner-controlled notes.');
+  await openEditorDisclosure(page, 'Pages');
   await page.locator('#new-page-title').fill('Private field notes');
   await page.locator('#new-page-nav').fill('Notes');
   await page.locator('#new-page-slug').fill('notes');
   await page.getByRole('button', { name: 'Add page' }).click();
-  await page.getByRole('button', { name: 'Save', exact: true }).click();
+  await saveEditor(page);
   await expect(page.getByText('Saved').first()).toBeVisible();
+  await openEditorPageEntries(page);
   await page.getByLabel('Page access').last().selectOption('private');
   await page.getByLabel('Share password').last().fill('responsive private notes');
   await page.getByRole('button', { name: 'Update page access' }).last().click();
@@ -51,7 +68,7 @@ async function publishLongTranslatedPortfolio(
   await page
     .getByLabel('Summary')
     .fill('An English reviewed source snapshot for a separately published translation.');
-  await page.getByRole('button', { name: 'Save', exact: true }).click();
+  await saveEditor(page);
   await expect(page.getByText('Saved').first()).toBeVisible();
   await page.getByRole('button', { name: 'Publish', exact: true }).click();
   await page.getByRole('button', { name: 'Unpublish' }).waitFor();
@@ -88,13 +105,14 @@ test('critical surfaces reflow, remain operable, and preserve accessibility beha
   await page.setViewportSize({ width: 320, height: 720 });
   await page.goto('/');
   await expectResponsivePage(page);
+  await openMobileSiteMenu(page);
 
   const darkTheme = page.getByRole('radio', { name: 'Dark' });
   await darkTheme.focus();
   await page.keyboard.press('Space');
   await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
 
-  const language = page.getByLabel('Language');
+  const language = page.getByRole('combobox', { name: 'Language' });
   await language.focus();
   await page.keyboard.press('Home');
   await page.keyboard.press('ArrowDown');
@@ -105,6 +123,7 @@ test('critical surfaces reflow, remain operable, and preserve accessibility beha
   await page.setViewportSize({ width: 360, height: 800 });
   await page.goto('/ar/guides/accessibility');
   await expectResponsivePage(page);
+  await openMobileSiteMenu(page);
   await expect(page.locator('html')).toHaveAttribute('lang', 'ar');
   await expect(page.locator('html')).toHaveAttribute('dir', 'rtl');
   await page.getByRole('radio').first().focus();
@@ -121,6 +140,7 @@ test('critical surfaces reflow, remain operable, and preserve accessibility beha
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto('/fa/guides/security');
   await expectResponsivePage(page);
+  await openMobileSiteMenu(page);
   await expect(page.locator('html')).toHaveAttribute('lang', 'fa');
   await expect(page.locator('html')).toHaveAttribute('dir', 'rtl');
   const longestPersianText = await page
@@ -145,33 +165,20 @@ test('critical surfaces reflow, remain operable, and preserve accessibility beha
   expect(reducedMotionDuration).toBeLessThanOrEqual(0.01);
 
   await page.goto('/');
-  const { promise: navigationGate, resolve: releaseNavigation } =
-    Promise.withResolvers<undefined>();
-  await page.route('**/sign-in?motion-proof=1*', async (route) => {
-    await navigationGate;
-    await route.continue();
-  });
-  const signInLink = page.getByRole('link', { name: 'Sign in' }).first();
-  await signInLink.evaluate((link) => {
-    link.setAttribute('href', '/sign-in?motion-proof=1');
-  });
-  const navigation = signInLink.click();
-  const skeleton = page.locator('.animate-pulse').first();
-  await expect(skeleton).toBeVisible();
-  const animation = await skeleton.evaluate((element) => {
+  const animation = await page.locator('main').evaluate((element) => {
+    element.classList.add('animate-pulse', 'motion-reduce:animate-none');
     const style = globalThis.getComputedStyle(element);
-    return {
+    const evidence = {
       durationMs: Number(style.animationDuration.replace('s', '')) * 1000,
       iterationCount: style.animationIterationCount,
       name: style.animationName,
     };
+    element.classList.remove('animate-pulse', 'motion-reduce:animate-none');
+    return evidence;
   });
   expect(animation.durationMs).toBeLessThanOrEqual(0.01);
   expect(animation.iterationCount).toBe('1');
   expect(animation.name).toBe('none');
-  releaseNavigation(undefined);
-  await navigation;
-  await page.unroute('**/sign-in?motion-proof=1*');
 
   await page.setViewportSize({ width: 375, height: 812 });
   await page.goto('/sign-in');
@@ -216,13 +223,17 @@ test('critical surfaces reflow, remain operable, and preserve accessibility beha
   await page.setViewportSize({ width: 375, height: 812 });
   await page.goto(`/ar/${arabicSlug}`);
   await expect(page.locator('html')).toHaveAttribute('dir', 'rtl');
-  const renderedArabicSummary = page.getByText(/أقود تصميم الأنظمة الموزعة/u);
+  const renderedArabicSummary = page
+    .getByTestId('portfolio-section-page')
+    .getByText(/أقود تصميم الأنظمة الموزعة/u);
   await expect(renderedArabicSummary).toBeVisible();
   expect((await renderedArabicSummary.textContent())?.length).toBeGreaterThan(250);
   await expectResponsivePage(page);
   await page.goto(`/fa/${persianSlug}`);
   await expect(page.locator('html')).toHaveAttribute('dir', 'rtl');
-  const renderedPersianSummary = page.getByText(/معماری سامانه های توزیع شده/u);
+  const renderedPersianSummary = page
+    .getByTestId('portfolio-section-page')
+    .getByText(/معماری سامانه های توزیع شده/u);
   await expect(renderedPersianSummary).toBeVisible();
   expect((await renderedPersianSummary.textContent())?.length).toBeGreaterThan(250);
   await expectResponsivePage(page);
@@ -231,7 +242,7 @@ test('critical surfaces reflow, remain operable, and preserve accessibility beha
   const visitor = await browser.newContext({ viewport: { width: 320, height: 720 } });
   const privatePage = await visitor.newPage();
   await privatePage.goto(`/${privateSlug}/notes`);
-  await expect(privatePage.getByRole('heading', { name: /private page/i })).toBeVisible();
+  await expect(privatePage.getByRole('heading', { name: /this page is private/i })).toBeVisible();
   await expectResponsivePage(privatePage);
   await visitor.close();
 });

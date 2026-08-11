@@ -20,6 +20,8 @@
     },
     "loading": "加载中",
     "nav": {
+      "accountMenu": "账户菜单",
+      "preferences": "偏好设置",
       "home": "首页",
       "menu": "菜单",
       "signIn": "登入",
@@ -550,7 +552,19 @@
     "backHome": "进入首页"
   },
   "portfolio": {
+    "nationalityLabel": "国籍",
+    "militaryStatusLabel": "服役状态",
     "sections": {
+      "soft-skills": "软技能",
+      "courses": "课程",
+      "publications": "刊物",
+      "volunteering": "志愿服务",
+      "awards": "奖项",
+      "interests": "兴趣",
+      "testimonials": "感言",
+      "gallery": "画廊",
+      "attachments": "下载",
+      "social": "接触",
       "hero": "轮廓",
       "experience": "经验",
       "skills": "技能",
@@ -687,6 +701,26 @@
     }
   },
   "editor": {
+    "disclosures": {
+      "identity": "你是谁",
+      "contact": "接触",
+      "assets": "图库和下载",
+      "collections": "作品集内容",
+      "pages": "作品集页面",
+      "seo": "搜索与分享",
+      "sections": "页面部分",
+      "items": "{count} 项"
+    },
+    "issues": {
+      "count": "有 {count} 个问题需要处理",
+      "previous": "上一个问题",
+      "next": "下一个问题",
+      "general": "一般问题",
+      "fieldMessage": "保存前请检查此字段。",
+      "required": "必填"
+    },
+    "nationality": "国籍",
+    "militaryStatus": "服役状态",
     "save": "保存",
     "saving": "正在保存",
     "saved": "已保存",
@@ -939,7 +973,7 @@
     "phoneCountryNone": "没有国家"
   },
   "account": {
-    "title": "帐户",
+    "title": "偏好设置和账户",
     "summary": {
       "nameLabel": "姓名",
       "title": "您的帐户",
@@ -954,7 +988,7 @@
       "saved": "您的个人资料已更新。",
       "pending": "保存配置文件"
     },
-    "lead": "我们掌握了您的什么信息，以及如何删除它。",
+    "lead": "管理您的个人资料、语言、主题、安全、会话和账户数据。",
     "security": {
       "title": "安全",
       "verificationTitle": "邮箱验证",

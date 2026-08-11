@@ -20,6 +20,7 @@ import {
   IMAGE_CROP_OUTPUT_MIME_TYPE,
   IMAGE_CROP_OUTPUT_QUALITY,
 } from '../constants/image-crop.constants';
+import { zoomAroundViewportCenter } from '../helpers/image-crop-geometry.helper';
 import type { ImageCropFieldProps, ImageCropPoint } from '../types/image-crop.types';
 
 /**
@@ -65,6 +66,39 @@ export function ImageCropFieldContainer(props: Readonly<ImageCropFieldProps>): R
       }
     };
   }, [objectUrl]);
+
+  useEffect(() => {
+    const viewport = viewportRef.current;
+    if (viewport === null || naturalSize === null || typeof ResizeObserver === 'undefined') {
+      return;
+    }
+
+    const observer = new ResizeObserver(() => {
+      const bounds = viewport.getBoundingClientRect();
+      const nextBaseScale = Math.max(
+        bounds.width / naturalSize.width,
+        bounds.height / naturalSize.height,
+      );
+      setOffset((current) =>
+        zoomAroundViewportCenter({
+          currentOffset: current,
+          currentZoom: baseScale * zoom,
+          nextZoom: nextBaseScale * zoom,
+          viewport: { width: bounds.width, height: bounds.height },
+          nextRendered: {
+            width: naturalSize.width * nextBaseScale * zoom,
+            height: naturalSize.height * nextBaseScale * zoom,
+          },
+        }),
+      );
+      setBaseScale(nextBaseScale);
+    });
+    observer.observe(viewport);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [baseScale, naturalSize, zoom]);
 
   function clampOffset(candidate: ImageCropPoint, scale: number): ImageCropPoint {
     const viewport = viewportRef.current;
@@ -120,8 +154,23 @@ export function ImageCropFieldContainer(props: Readonly<ImageCropFieldProps>): R
   }
 
   function handleZoomChange(nextZoom: number): void {
+    const viewport = viewportRef.current;
+    if (viewport !== null && naturalSize !== null) {
+      const bounds = viewport.getBoundingClientRect();
+      setOffset((current) =>
+        zoomAroundViewportCenter({
+          currentOffset: current,
+          currentZoom: zoom,
+          nextZoom,
+          viewport: { width: bounds.width, height: bounds.height },
+          nextRendered: {
+            width: naturalSize.width * baseScale * nextZoom,
+            height: naturalSize.height * baseScale * nextZoom,
+          },
+        }),
+      );
+    }
     setZoom(nextZoom);
-    setOffset((current) => clampOffset(current, nextZoom));
   }
 
   function handlePointerDown(event: ReactPointerEvent<HTMLDivElement>): void {

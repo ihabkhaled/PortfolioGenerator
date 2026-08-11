@@ -1,6 +1,10 @@
 import { describe, expect, it } from 'vitest';
 
-import { buildContentSecurityPolicy, buildLocaleRewriteUrl } from '@/proxy';
+import {
+  buildContentSecurityPolicy,
+  buildLocaleRewriteUrl,
+  resolveDashboardEditorPortfolioId,
+} from '@/proxy';
 
 describe('proxy content security policy', () => {
   it('keeps nonce enforcement while allowing only the AdSense delivery origins', () => {
@@ -16,6 +20,21 @@ describe('proxy content security policy', () => {
     expect(policy).toContain('https://tpc.googlesyndication.com');
     expect(policy).toContain("object-src 'none'");
     expect(policy).toContain("frame-ancestors 'none'");
+  });
+});
+
+describe('dashboard editor ownership route matching', () => {
+  it('extracts only an exact editor portfolio segment, including localized routes', () => {
+    expect(resolveDashboardEditorPortfolioId('/dashboard/portfolios/portfolio-1/editor')).toBe(
+      'portfolio-1',
+    );
+    expect(resolveDashboardEditorPortfolioId('/fr/dashboard/portfolios/portfolio-2/editor')).toBe(
+      'portfolio-2',
+    );
+    expect(resolveDashboardEditorPortfolioId('/dashboard/portfolios/portfolio-1')).toBeNull();
+    expect(
+      resolveDashboardEditorPortfolioId('/dashboard/portfolios/portfolio-1/editor/extra'),
+    ).toBeNull();
   });
 });
 

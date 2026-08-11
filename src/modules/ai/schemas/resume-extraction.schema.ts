@@ -115,6 +115,8 @@ export const resumeExtractionSchema = z.object({
     headline: shortText,
     summary: longText,
     location: shortText,
+    nationality: shortText,
+    militaryStatus: shortText,
     tagline: shortText.optional(),
     coverLetter: longText.optional(),
     availabilityEnabled: z.boolean().nullable().optional(),

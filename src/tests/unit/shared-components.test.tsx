@@ -5,6 +5,7 @@ import { ManifestPanel } from '@/shared/components/data-display/manifest-panel.c
 import { Section } from '@/shared/components/data-display/section.component';
 import { EmptyState } from '@/shared/components/feedback/empty-state.component';
 import { ErrorState } from '@/shared/components/feedback/error-state.component';
+import { AccountMenu } from '@/shared/components/layout/account-menu.component';
 import { SiteAuthNav } from '@/shared/components/layout/site-auth-nav.component';
 import { SiteFooterNav } from '@/shared/components/layout/site-footer-nav.component';
 import { SiteShell } from '@/shared/components/layout/site-shell.component';
@@ -150,6 +151,30 @@ describe('SiteShell', () => {
     expect(screen.getByRole('group')).toBeInTheDocument();
     expect(screen.getByLabelText('Menu')).toBeInTheDocument();
   });
+
+  it('keeps the authenticated account control outside the collapsible mobile menu', () => {
+    render(
+      <SiteShell
+        account={<button type="button">Account</button>}
+        brand={<span>ProFolio</span>}
+        brandName="ProFolio"
+        homeLink={<a href="#home">Home</a>}
+        menuLabel="Menu"
+        navigationLabel="Primary"
+        navigation={<a href="#dashboard">Dashboard</a>}
+        footerNote="Built for people who have a CV."
+        footerLinks={<a href="#privacy">Privacy</a>}
+      >
+        <p>Page body</p>
+      </SiteShell>,
+    );
+
+    expect(screen.getByRole('button', { name: 'Account' })).toBeInTheDocument();
+    const primaryNavigations = screen.getAllByRole('navigation', { name: 'Primary' });
+    for (const navigation of primaryNavigations) {
+      expect(within(navigation).queryByRole('button', { name: 'Account' })).not.toBeInTheDocument();
+    }
+  });
 });
 
 describe('SiteAuthNav', () => {
@@ -190,6 +215,49 @@ describe('SiteAuthNav', () => {
       '/sign-up',
     );
     expect(screen.queryByRole('link', { name: 'Dashboard' })).not.toBeInTheDocument();
+  });
+});
+
+describe('AccountMenu', () => {
+  it('shows the first name initial and exposes the authenticated destinations', () => {
+    render(
+      <AccountMenu
+        name="Ihab Khaled"
+        email="ihab@example.com"
+        menuLabel="Account menu"
+        dashboardHref="/dashboard"
+        dashboardLabel="Dashboard"
+        preferencesHref="/dashboard/settings"
+        preferencesLabel="Preferences"
+        logout={<button type="button">Log out</button>}
+      />,
+    );
+
+    expect(screen.getByText('I')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Account menu' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Dashboard' })).toHaveAttribute('href', '/dashboard');
+    expect(screen.getByRole('link', { name: 'Preferences' })).toHaveAttribute(
+      'href',
+      '/dashboard/settings',
+    );
+    expect(screen.getByRole('button', { name: 'Log out' })).toBeInTheDocument();
+  });
+
+  it('falls back to the email initial when the account has no visible name', () => {
+    render(
+      <AccountMenu
+        name="   "
+        email="ada@example.com"
+        menuLabel="Account menu"
+        dashboardHref="/dashboard"
+        dashboardLabel="Dashboard"
+        preferencesHref="/dashboard/settings"
+        preferencesLabel="Preferences"
+        logout={<button type="button">Log out</button>}
+      />,
+    );
+
+    expect(screen.getByText('A')).toBeInTheDocument();
   });
 });
 

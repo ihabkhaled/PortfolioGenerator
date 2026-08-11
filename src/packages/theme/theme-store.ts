@@ -5,6 +5,7 @@
 import {
   COLOR_SCHEME_QUERY,
   SAVED_THEME_COOKIE,
+  THEME_ACCOUNT_SYNC_COOKIE,
   THEME_ATTRIBUTE,
   THEME_STORAGE_KEY,
   THEME_SYSTEM_OVERRIDE_KEY,
@@ -22,15 +23,26 @@ import type { ResolvedTheme, ThemePreference } from './theme.types';
 
 export function readPreference(): ThemePreference {
   try {
+    const cookies = globalThis.document.cookie.split('; ');
+    const saved = cookies
+      .find((entry) => entry.startsWith(`${SAVED_THEME_COOKIE}=`))
+      ?.split('=', 2)[1];
+    const accountPreference = saved === 'light' || saved === 'dark' ? saved : 'system';
+    const shouldSyncAccount = cookies.some((entry) =>
+      entry.startsWith(`${THEME_ACCOUNT_SYNC_COOKIE}=`),
+    );
+
+    if (shouldSyncAccount) {
+      persistPreference(accountPreference);
+      void globalThis.cookieStore.delete({ name: THEME_ACCOUNT_SYNC_COOKIE, path: '/' });
+      return accountPreference;
+    }
+
     const stored = globalThis.localStorage.getItem(THEME_STORAGE_KEY);
 
     if (stored === 'light' || stored === 'dark') return stored;
     if (globalThis.localStorage.getItem(THEME_SYSTEM_OVERRIDE_KEY) === '1') return 'system';
-    const saved = globalThis.document.cookie
-      .split('; ')
-      .find((entry) => entry.startsWith(`${SAVED_THEME_COOKIE}=`))
-      ?.split('=', 2)[1];
-    return saved === 'light' || saved === 'dark' ? saved : 'system';
+    return accountPreference;
   } catch {
     return 'system';
   }

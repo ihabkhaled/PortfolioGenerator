@@ -26,7 +26,19 @@ export async function saveDraftAction(payload: SaveDraftPayload): Promise<Editor
   if (!parsed.ok) {
     logger.info('editor.save.invalid_document');
 
-    return { status: 'error', error: EDITOR_ERROR_KEYS.invalidDocument, version: null };
+    return {
+      status: 'error',
+      error: null,
+      version: null,
+      issues: parsed.issues.map((issue) => ({
+        path: issue.path
+          .split('.')
+          .filter(Boolean)
+          .slice(1)
+          .map((segment) => (/^\d+$/u.test(segment) ? Number(segment) : segment)),
+        code: issue.code,
+      })),
+    };
   }
 
   const current = await getOwnedPortfolio(owner.id, parsed.value.portfolioId);

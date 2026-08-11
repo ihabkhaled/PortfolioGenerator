@@ -35,7 +35,7 @@ export const editorClasses = {
     'sticky top-24 hidden max-h-[calc(100dvh-8rem)] overflow-y-auto rounded-lg border border-border bg-canvas lg:block',
   previewPaneMobileVisible:
     'sticky top-24 block max-h-[calc(100dvh-8rem)] overflow-y-auto rounded-lg border border-border bg-canvas lg:block',
-  previewFrame: 'origin-top scale-[0.82]',
+  previewFrame: 'w-full',
 
   section: 'grid gap-4 rounded-lg border border-border bg-surface-raised px-5 py-5',
   sectionHead: 'flex flex-wrap items-baseline justify-between gap-3',
@@ -45,6 +45,13 @@ export const editorClasses = {
   field: 'grid gap-1.5',
   fieldWide: 'grid gap-1.5 sm:col-span-2',
   fieldHint: 'text-xs text-muted-foreground',
+  requiredText: 'sr-only',
+  disclosure: 'group rounded-lg border border-border bg-surface-raised',
+  disclosureSummary:
+    'flex cursor-pointer list-none items-center justify-between gap-4 px-5 py-4 marker:hidden focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent',
+  disclosureTitle: 'font-display text-base font-semibold tracking-tight text-foreground',
+  disclosureMeta: 'font-mono text-[0.6875rem] uppercase tracking-[0.12em] text-muted-foreground',
+  disclosureBody: 'grid gap-4 border-t border-border px-5 py-5',
 
   collection: 'grid gap-3',
   entry: 'grid gap-3 rounded-md border border-border bg-surface/50 px-4 py-4',
@@ -60,6 +67,12 @@ export const editorClasses = {
   errorText: 'text-sm text-danger',
   status: 'font-mono text-[0.6875rem] uppercase tracking-[0.12em] text-muted-foreground',
   statusSaved: 'font-mono text-[0.6875rem] uppercase tracking-[0.12em] text-success-readable',
+  issueNavigator: 'flex flex-wrap items-center gap-2',
+  issueMessage: 'basis-full text-xs text-danger',
+  issueGeneral: 'basis-full border-t border-border pt-2',
+  actionDock:
+    'fixed inset-x-3 bottom-[calc(env(safe-area-inset-bottom)+var(--pwa-fixed-surface-reserve)+1rem)] z-40 mx-auto flex max-w-xl flex-wrap items-center justify-between gap-2 rounded-xl border border-border bg-surface-raised/95 p-3 shadow-xl backdrop-blur',
+  shellWithDock: 'mx-auto grid w-full max-w-7xl gap-6 px-5 pt-8 pb-36 sm:px-8 lg:px-10',
 
   slugRow: 'grid gap-3 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-end',
   slugPreview: 'truncate font-mono text-[0.6875rem] text-muted-foreground',

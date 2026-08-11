@@ -42,7 +42,7 @@ export const sectionClasses = {
  */
 export const manifestClasses = {
   panel: 'divide-y divide-border overflow-hidden rounded-lg border border-border bg-surface-raised',
-  row: 'grid grid-cols-[minmax(5.5rem,auto)_minmax(0,1fr)] gap-4 px-4 py-3 sm:px-5',
+  row: 'grid grid-cols-[minmax(5.5rem,auto)_minmax(0,1fr)] gap-4 px-4 py-3 sm:px-5 @max-2xl/portfolio:px-4',
   label: 'font-mono text-[0.6875rem] font-medium uppercase tracking-[0.12em] text-muted-foreground',
   value: 'min-w-0 text-sm text-foreground',
   valueMono: 'min-w-0 font-mono text-sm text-foreground',

@@ -17,10 +17,10 @@ test.describe('localized routes', () => {
   }
 
   test('language switching preserves the route, query and fragment', async ({ page }) => {
-    await page.goto('/features?source=locale-test#details');
-    await page.getByLabel('Language').selectOption('fr');
+    await page.goto('/guides/features?source=locale-test#details');
+    await page.getByRole('combobox', { name: 'Language' }).selectOption('fr');
 
-    await page.waitForURL('**/fr/features?source=locale-test#details');
+    await page.waitForURL('**/fr/guides/features?source=locale-test#details');
     await expect(page.locator('html')).toHaveAttribute('lang', 'fr');
   });
 

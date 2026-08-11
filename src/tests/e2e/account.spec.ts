@@ -1,10 +1,42 @@
 import { readFile, rm } from 'node:fs/promises';
 
 import { expect, test } from '@playwright/test';
+import type { Locator, Page } from '@playwright/test';
 
 import { buildAccount, signIn, signUp } from './support/accounts';
 
 const EMAIL_CAPTURE_PATH = 'test-results/email-capture.jsonl';
+
+function accountMenu(page: Page): Locator {
+  return page.locator('details:has(> div > a[href="/dashboard/settings"])');
+}
+
+async function expectAccountMenu(page: Page, initial: string): Promise<void> {
+  const menu = accountMenu(page);
+  const toggle = menu.locator('summary');
+  await expect(toggle).toBeVisible();
+  await expect(toggle).toContainText(initial);
+  await toggle.click();
+  await expect(menu.locator('a[href="/dashboard"]')).toBeVisible();
+  await expect(menu.locator('a[href="/dashboard/settings"]')).toBeVisible();
+  await expect(menu.locator('form button')).toBeVisible();
+}
+
+async function selectAndWaitForPreferenceSave(
+  page: Page,
+  fieldName: string,
+  value: string,
+  savedMessage: string,
+): Promise<void> {
+  const response = page.waitForResponse(
+    (candidate) =>
+      candidate.request().method() === 'POST' &&
+      new URL(candidate.url()).pathname === '/dashboard/settings',
+  );
+  await page.locator(`select[name="${fieldName}"]`).selectOption(value);
+  await response;
+  await expect(page.getByRole('status').filter({ hasText: savedMessage })).toBeVisible();
+}
 
 test.beforeEach(async () => {
   await rm(EMAIL_CAPTURE_PATH, { force: true });
@@ -76,6 +108,9 @@ test.describe('account recovery', () => {
   test('gives the same reset response for existing and unknown emails', async ({ page }) => {
     const account = buildAccount('reset-known');
     await signUp(page, account);
+    await expectAccountMenu(page, 'E');
+    await accountMenu(page).locator('form button').click();
+    await page.waitForURL(/\/$/u);
 
     for (const email of [account.email, `unknown-${Date.now()}@example.com`]) {
       await page.goto('/forgot-password');
@@ -106,26 +141,91 @@ test.describe('account preferences', () => {
     await signUp(page, account);
     await page.goto('/dashboard/settings');
 
-    await page.getByLabel('Language').selectOption('fr');
-    await page.getByLabel('Colour theme').selectOption('dark');
-    await page.getByLabel('Default phone country').selectOption('FR');
-    await page.getByRole('button', { name: 'Save preferences' }).click();
-    await expect(page.getByText('Your preferences were saved.')).toBeVisible();
+    await selectAndWaitForPreferenceSave(
+      page,
+      'themePreference',
+      'dark',
+      'Your preferences were saved.',
+    );
+    await selectAndWaitForPreferenceSave(
+      page,
+      'defaultCountryIso',
+      'FR',
+      'Your preferences were saved.',
+    );
+    await selectAndWaitForPreferenceSave(page, 'locale', 'fr', 'Your preferences were saved.');
     await page.reload();
 
-    await expect(page.getByLabel('Language')).toHaveValue('fr');
-    await expect(page.getByLabel('Colour theme')).toHaveValue('dark');
-    await expect(page.getByLabel('Default phone country')).toHaveValue('FR');
+    await expect(page.locator('html')).toHaveAttribute('lang', 'fr');
+    await expect(page.locator('select[name="locale"]')).toHaveValue('fr');
+    await expect(page.locator('select[name="themePreference"]')).toHaveValue('dark');
+    await expect(page.locator('select[name="defaultCountryIso"]')).toHaveValue('FR');
 
-    await page.goto('/features');
+    await page.goto('/guides/features');
     await expect(page.locator('html')).toHaveAttribute('lang', 'fr');
     await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
 
-    await page.goto('/ar/features');
+    await page.goto('/ar/guides/features');
     await expect(page.locator('html')).toHaveAttribute('lang', 'ar');
-    await page.getByRole('radio', { name: /light/i }).click();
+    await page.getByRole('radiogroup').getByRole('radio').first().click();
     await page.reload();
     await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
+  });
+
+  test('restores persisted preferences at sign-in and exposes the account menu globally', async ({
+    page,
+  }) => {
+    const account = buildAccount('global-account-menu');
+    await signUp(page, account);
+
+    await expectAccountMenu(page, 'E');
+    await expect(accountMenu(page).getByText('Dashboard', { exact: true })).toBeVisible();
+    await expect(accountMenu(page).getByText('Preferences', { exact: true })).toBeVisible();
+    await expect(accountMenu(page).getByRole('button', { name: 'Sign out' })).toBeVisible();
+
+    await page.goto('/dashboard/settings');
+    await expectAccountMenu(page, 'E');
+    await selectAndWaitForPreferenceSave(
+      page,
+      'themePreference',
+      'dark',
+      'Your preferences were saved.',
+    );
+    await selectAndWaitForPreferenceSave(page, 'locale', 'fr', 'Your preferences were saved.');
+
+    await page.goto('/guides/features');
+    await expect(page.locator('html')).toHaveAttribute('lang', 'fr');
+    await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
+    await expect(page.getByRole('button', { name: 'Menu du compte', exact: true })).toBeVisible();
+    await expectAccountMenu(page, 'E');
+    await expect(accountMenu(page).getByText('Tableau de bord', { exact: true })).toBeVisible();
+    await expect(accountMenu(page).getByText('Préférences', { exact: true })).toBeVisible();
+    await expect(accountMenu(page).getByRole('button', { name: 'se déconnecter' })).toBeVisible();
+    await accountMenu(page).locator('form button').click();
+    await page.waitForURL(/\/(?:fr)?$/u);
+
+    await page.context().addCookies([
+      { name: 'pg-saved-locale', value: 'en', url: page.url() },
+      { name: 'pg-saved-theme', value: 'light', url: page.url() },
+    ]);
+    await page.evaluate(() => {
+      globalThis.localStorage.setItem('pg-theme', 'light');
+      globalThis.localStorage.removeItem('pg-theme-system');
+    });
+
+    await signIn(page, account);
+    await expect(page.locator('html')).toHaveAttribute('lang', 'fr');
+    await expect
+      .poll(async () => {
+        const cookies = await page.context().cookies();
+        return cookies.find((cookie) => cookie.name === 'pg-saved-theme')?.value;
+      })
+      .toBe('dark');
+    await expect
+      .poll(() => page.evaluate(() => globalThis.localStorage.getItem('pg-theme')))
+      .toBe('dark');
+    await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
+    await expectAccountMenu(page, 'E');
   });
 });
 
@@ -145,18 +245,19 @@ test.describe('account profile and security workflows', () => {
 
     await page.goto('/dashboard/settings');
     await expect(page.getByText('ProFolio E2E Other Session')).toBeVisible();
-    await expect(page.getByText(/Created:/u)).toHaveCount(2);
+    await expect(page.getByText(/Signed in:/u)).toHaveCount(2);
     await expect(page.getByText(/Expires:/u)).toHaveCount(2);
     await expect(page.getByText(/Current session/u)).toHaveCount(1);
-    await expect(page.getByRole('button', { name: 'Revoke', exact: true })).toHaveCount(1);
-    await page.getByRole('button', { name: 'Revoke', exact: true }).click();
-    await expect(page.getByRole('button', { name: 'Revoke', exact: true })).toHaveCount(0);
+    await expect(page.getByRole('button', { name: 'Sign out device' })).toHaveCount(1);
+    await page.getByRole('button', { name: 'Sign out device' }).click();
     await expect(page.getByText('ProFolio E2E Other Session')).toHaveCount(0);
 
     await otherPage.goto('/dashboard');
     await otherPage.waitForURL('**/sign-in**');
     await page.reload();
     await expect(page).toHaveURL(/\/dashboard\/settings$/u);
+    await expect(page.getByRole('button', { name: 'Sign out device' })).toHaveCount(0);
+    await expect(page.getByText('ProFolio E2E Other Session')).toHaveCount(0);
     await expect(page.getByText('Current session')).toBeVisible();
     await otherContext.close();
   });
@@ -178,7 +279,8 @@ test.describe('account profile and security workflows', () => {
     await page.getByRole('button', { name: 'Change password' }).click();
     await expect(page.getByText(/Your password was changed/)).toBeVisible();
 
-    await page.getByRole('button', { name: 'Sign out' }).click();
+    await accountMenu(page).locator('summary').click();
+    await accountMenu(page).getByRole('button', { name: 'Sign out' }).click();
     await page.waitForURL('**/');
     await signIn(page, { ...account, password: replacementPassword });
     await page.goto('/dashboard/settings');

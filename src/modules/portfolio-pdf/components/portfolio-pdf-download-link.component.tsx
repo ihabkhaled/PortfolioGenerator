@@ -13,6 +13,7 @@ export function PortfolioPdfDownloadLink(
     <AppLink
       href={toAppRoute(props.href)}
       download={props.downloadFilename}
+      prefetch={false}
       className={portfolioPdfDownloadLinkClasses.link}
     >
       {props.label}

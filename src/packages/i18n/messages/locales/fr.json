@@ -24,6 +24,8 @@
     "loading": "Chargement",
     "footerNote": "Votre CV reste privé. Seul ce que vous examinez et publiez devient public.",
     "nav": {
+      "accountMenu": "Menu du compte",
+      "preferences": "Préférences",
       "home": "Accueil",
       "menu": "Menu",
       "dashboard": "Tableau de bord",
@@ -550,7 +552,19 @@
     "unauthorized": "Vous n'avez pas accès à ce portefeuille."
   },
   "portfolio": {
+    "nationalityLabel": "Nationalité",
+    "militaryStatusLabel": "Statut militaire",
     "sections": {
+      "soft-skills": "Compétences générales",
+      "courses": "Cours",
+      "publications": "Publications",
+      "volunteering": "Volontariat",
+      "awards": "Récompenses",
+      "interests": "Intérêts",
+      "testimonials": "Témoignages",
+      "gallery": "Galerie",
+      "attachments": "Téléchargements",
+      "social": "Contact",
       "hero": "Profil",
       "about": "À propos",
       "experience": "Expérience",
@@ -687,6 +701,26 @@
     }
   },
   "editor": {
+    "disclosures": {
+      "identity": "Qui tu es",
+      "contact": "Contact",
+      "assets": "Galerie et téléchargements",
+      "collections": "Contenu du portefeuille",
+      "pages": "Pages de portefeuille",
+      "seo": "Recherche et partage",
+      "sections": "Sections de pages",
+      "items": "{count} éléments"
+    },
+    "issues": {
+      "count": "{count} problèmes nécessitent votre attention",
+      "previous": "Problème précédent",
+      "next": "Problème suivant",
+      "general": "Problèmes généraux",
+      "fieldMessage": "Vérifiez ce champ avant d’enregistrer.",
+      "required": "Obligatoire"
+    },
+    "nationality": "Nationalité",
+    "militaryStatus": "Statut militaire",
     "title": "Réviser et modifier",
     "untitled": "Portfolio sans titre",
     "save": "Sauvegarder",
@@ -939,8 +973,8 @@
     }
   },
   "account": {
-    "title": "Compte",
-    "lead": "Ce que nous détenons sur vous et comment le supprimer.",
+    "title": "Préférences et compte",
+    "lead": "Gérez votre profil, votre langue, votre thème, votre sécurité, vos sessions et les données de votre compte.",
     "summary": {
       "title": "Votre compte",
       "nameLabel": "Nom",

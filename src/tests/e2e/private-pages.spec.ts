@@ -1,6 +1,14 @@
 import { expect, test } from '@playwright/test';
 
-import { buildAccount, createPortfolio, saveEditor, signUp } from './support/accounts';
+import {
+  buildAccount,
+  createPortfolio,
+  openEditorDisclosure,
+  openEditorPageEntries,
+  saveEditor,
+  signUp,
+  submitEditorServerAction,
+} from './support/accounts';
 import { readOwnedAssetStorageKey } from './support/database';
 import { buildResumePdf } from './support/pdf.fixture';
 
@@ -10,16 +18,14 @@ function requireAttribute(value: string | null): string {
 }
 
 test.describe('password-protected portfolio pages', () => {
-  test('serves private media only with the exact localized page grant', async ({
-    page,
-    browser,
-  }) => {
+  test('serves private media only with the exact page grant', async ({ page, browser }) => {
     const account = buildAccount('private-media');
     const notesPassword = 'localized private media';
     const otherPassword = 'wrong private page grant';
     const expectedBytes = buildResumePdf([`Private owner-approved brief for ${account.email}`]);
     await signUp(page, account);
     const slug = await createPortfolio(page, 'Private Media Owner');
+    await openEditorDisclosure(page, 'Pages');
 
     for (const [title, nav, pageSlug] of [
       ['Private notes', 'Notes', 'notes'],
@@ -30,6 +36,7 @@ test.describe('password-protected portfolio pages', () => {
       await page.locator('#new-page-slug').fill(pageSlug);
       await page.getByRole('button', { name: 'Add page' }).click();
     }
+    await openEditorDisclosure(page, 'Photos and downloads');
     await page.getByLabel('Downloadable file').setInputFiles({
       name: 'private-brief.pdf',
       mimeType: 'application/pdf',
@@ -51,11 +58,15 @@ test.describe('password-protected portfolio pages', () => {
 
     await saveEditor(page);
     await expect(page.getByText('Saved').first()).toBeVisible();
+    await openEditorPageEntries(page);
     for (const [index, password] of [notesPassword, otherPassword].entries()) {
       await page.getByLabel('Page access').nth(index).selectOption('private');
       await page.getByLabel('Share password').nth(index).fill(password);
-      await page.getByRole('button', { name: 'Update page access' }).nth(index).click();
-      await expect(page.getByText('Page access updated.')).toBeVisible();
+      await submitEditorServerAction(
+        page,
+        page.getByRole('button', { name: 'Update page access' }).nth(index),
+      );
+      await expect(page.getByText('Page access updated.').nth(index)).toBeVisible();
     }
     await page.getByLabel('Headline').fill('Security engineer');
     await page.getByLabel('Summary').fill('A reviewed private-media portfolio.');
@@ -78,22 +89,29 @@ test.describe('password-protected portfolio pages', () => {
     });
     expect((await wrongGrant.request.get(mediaPath)).status()).toBe(404);
 
-    const localized = await browser.newContext();
-    await localized.request.post('/api/private-page-access', {
-      form: { portfolioSlug: slug, pageSlug: 'notes', password: notesPassword, locale: 'fr' },
+    const granted = await browser.newContext();
+    const exactGrant = await granted.request.post('/api/private-page-access', {
+      form: { portfolioSlug: slug, pageSlug: 'notes', password: notesPassword, locale: 'en' },
       maxRedirects: 0,
     });
-    const localizedResponse = await localized.request.get(`/fr${mediaPath}`);
-    expect(localizedResponse.status()).toBe(200);
-    expect(localizedResponse.headers()['content-type']).toBe('application/pdf');
-    expect(localizedResponse.headers()['cache-control']).toContain('private, no-store');
-    expect(localizedResponse.headers()['x-robots-tag']).toContain('noindex, nofollow');
-    const localizedBody = await localizedResponse.body();
-    expect(localizedBody).toEqual(expectedBytes);
-    expect(JSON.stringify(localizedResponse.headers())).not.toContain(storageKey);
-    expect(localizedResponse.url()).not.toContain(storageKey);
-    expect(localizedBody.toString('latin1')).not.toContain(storageKey);
-    await Promise.all([anonymous.close(), wrongGrant.close(), localized.close()]);
+    expect(exactGrant.status()).toBe(303);
+    expect(
+      (await granted.cookies()).some(
+        (cookie) =>
+          cookie.path === `/portfolios/${slug}/notes` && cookie.name.startsWith('pg_private_'),
+      ),
+    ).toBe(true);
+    const grantedResponse = await granted.request.get(mediaPath);
+    expect(grantedResponse.status()).toBe(200);
+    expect(grantedResponse.headers()['content-type']).toBe('application/pdf');
+    expect(grantedResponse.headers()['cache-control']).toContain('private, no-store');
+    expect(grantedResponse.headers()['x-robots-tag']).toContain('noindex, nofollow');
+    const grantedBody = await grantedResponse.body();
+    expect(grantedBody).toEqual(expectedBytes);
+    expect(JSON.stringify(grantedResponse.headers())).not.toContain(storageKey);
+    expect(grantedResponse.url()).not.toContain(storageKey);
+    expect(grantedBody.toString('latin1')).not.toContain(storageKey);
+    await Promise.all([anonymous.close(), wrongGrant.close(), granted.close()]);
   });
 
   test('stays out of navigation and requires its share password', async ({ page, browser }) => {
@@ -104,16 +122,21 @@ test.describe('password-protected portfolio pages', () => {
     const slug = await createPortfolio(page, 'Private Page Owner');
     await page.getByLabel('Headline').fill('Systems engineer');
     await page.getByLabel('Summary').fill('Public profile with owner-controlled field notes.');
+    await openEditorDisclosure(page, 'Pages');
     await page.locator('#new-page-title').fill('Field notes');
     await page.locator('#new-page-nav').fill('Notes');
     await page.locator('#new-page-slug').fill('notes');
     await page.getByRole('button', { name: 'Add page' }).click();
     await saveEditor(page);
     await expect(page.getByText('Saved').first()).toBeVisible();
+    await openEditorPageEntries(page);
 
     await page.getByLabel('Page access').last().selectOption('private');
     await page.getByLabel('Share password').last().fill(password);
-    await page.getByRole('button', { name: 'Update page access' }).last().click();
+    await submitEditorServerAction(
+      page,
+      page.getByRole('button', { name: 'Update page access' }).last(),
+    );
     await expect(page.getByText('Page access updated.')).toBeVisible();
     await page.getByRole('button', { name: 'Publish', exact: true }).click();
     await page.getByRole('button', { name: 'Unpublish' }).waitFor();
@@ -126,18 +149,19 @@ test.describe('password-protected portfolio pages', () => {
     const challengeResponse = await publicPage.goto(`/portfolios/${slug}/notes`);
     expect(challengeResponse?.headers()['cache-control']).toContain('private, no-store');
     expect(challengeResponse?.headers()['x-robots-tag']).toContain('noindex, nofollow');
-    await expect(publicPage.getByRole('heading', { name: /private page/i })).toBeVisible();
+    await expect(publicPage.getByRole('heading', { name: /this page is private/i })).toBeVisible();
     await publicPage.getByLabel('Password').fill('incorrect password');
-    await publicPage.getByRole('button', { name: /unlock/i }).click();
+    await publicPage.getByRole('button', { name: /open private page/i }).click();
     await expect(publicPage.getByRole('alert')).toBeVisible();
 
     await publicPage.getByLabel('Password').fill(password);
-    await publicPage.getByRole('button', { name: /unlock/i }).click();
-    await publicPage.waitForURL(`**/portfolios/${slug}/notes`);
-    await expect(publicPage.getByRole('heading', { name: 'Field notes' })).toBeVisible();
+    await publicPage.getByRole('button', { name: /open private page/i }).click();
+    await expect(publicPage.getByRole('heading', { name: /this page is private/i })).toHaveCount(0);
+    await expect(publicPage.getByRole('link', { name: /profolio home/i })).toBeVisible();
     const contentResponse = await publicPage.reload();
     expect(contentResponse?.headers()['cache-control']).toContain('private, no-store');
     expect(contentResponse?.headers()['x-robots-tag']).toContain('noindex, nofollow');
+    await expect(publicPage.getByRole('heading', { name: /this page is private/i })).toHaveCount(0);
     await visitor.close();
   });
 
@@ -146,15 +170,26 @@ test.describe('password-protected portfolio pages', () => {
     const password = 'localized private notes';
     await signUp(page, account);
     const slug = await createPortfolio(page, 'Localized Private Owner');
+    await page.getByLabel('Headline').fill('Localization engineer');
+    await page.getByLabel('Summary').fill('A reviewed portfolio with localized private notes.');
+    await openEditorDisclosure(page, 'Pages');
     await page.locator('#new-page-title').fill('Notes');
     await page.locator('#new-page-nav').fill('Notes');
     await page.locator('#new-page-slug').fill('notes');
     await page.getByRole('button', { name: 'Add page' }).click();
     await saveEditor(page);
+    await openEditorPageEntries(page);
     await page.getByLabel('Page access').last().selectOption('private');
     await page.getByLabel('Share password').last().fill(password);
-    await page.getByRole('button', { name: 'Update page access' }).last().click();
-    await page.getByRole('button', { name: 'Publish', exact: true }).click();
+    await submitEditorServerAction(
+      page,
+      page.getByRole('button', { name: 'Update page access' }).last(),
+    );
+    await submitEditorServerAction(
+      page,
+      page.getByRole('button', { name: 'Publish', exact: true }),
+    );
+    await page.getByRole('button', { name: 'Unpublish' }).waitFor();
 
     const response = await page.request.post('/api/private-page-access', {
       form: { portfolioSlug: slug, pageSlug: 'notes', password, locale: 'fr' },
@@ -170,15 +205,26 @@ test.describe('password-protected portfolio pages', () => {
     const password = 'bounded private password';
     await signUp(page, account);
     const slug = await createPortfolio(page, 'Rate Limited Private Owner');
+    await page.getByLabel('Headline').fill('Security engineer');
+    await page.getByLabel('Summary').fill('A reviewed portfolio with a protected private page.');
+    await openEditorDisclosure(page, 'Pages');
     await page.locator('#new-page-title').fill('Notes');
     await page.locator('#new-page-nav').fill('Notes');
     await page.locator('#new-page-slug').fill('notes');
     await page.getByRole('button', { name: 'Add page' }).click();
     await saveEditor(page);
+    await openEditorPageEntries(page);
     await page.getByLabel('Page access').last().selectOption('private');
     await page.getByLabel('Share password').last().fill(password);
-    await page.getByRole('button', { name: 'Update page access' }).last().click();
-    await page.getByRole('button', { name: 'Publish', exact: true }).click();
+    await submitEditorServerAction(
+      page,
+      page.getByRole('button', { name: 'Update page access' }).last(),
+    );
+    await submitEditorServerAction(
+      page,
+      page.getByRole('button', { name: 'Publish', exact: true }),
+    );
+    await page.getByRole('button', { name: 'Unpublish' }).waitFor();
 
     for (let attempt = 0; attempt < 10; attempt += 1) {
       await page.request.post('/api/private-page-access', {
@@ -200,12 +246,14 @@ test.describe('password-protected portfolio pages', () => {
 
     await signUp(page, account);
     const slug = await createPortfolio(page, 'Private Sitemap Owner');
+    await openEditorDisclosure(page, 'Pages');
     await page.locator('#new-page-title').fill('Confidential');
     await page.locator('#new-page-nav').fill('Confidential');
     await page.locator('#new-page-slug').fill('confidential');
     await page.getByRole('button', { name: 'Add page' }).click();
     await saveEditor(page);
     await expect(page.getByText('Saved').first()).toBeVisible();
+    await openEditorPageEntries(page);
     await page.getByLabel('Page access').last().selectOption('private');
     await page.getByLabel('Share password').last().fill('a private sitemap password');
     await page.getByRole('button', { name: 'Update page access' }).last().click();

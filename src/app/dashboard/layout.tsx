@@ -11,6 +11,7 @@ import { HomeIcon } from '@/packages/icons';
 import { AppLink } from '@/packages/link';
 import { appRedirect } from '@/packages/navigation';
 import { LANDMARK_IDS } from '@/shared/accessibility/landmark-ids.constants';
+import { AccountMenu } from '@/shared/components/layout/account-menu.component';
 import { SiteFooterNav } from '@/shared/components/layout/site-footer-nav.component';
 import { SiteShell } from '@/shared/components/layout/site-shell.component';
 import { siteShellClasses } from '@/shared/components/layout/site-shell.variants';
@@ -45,6 +46,18 @@ export default async function DashboardLayout(props: {
     <>
       <SkipLink targetHref={`#${LANDMARK_IDS.mainContent}`} label={tApp('skipToContent')} />
       <SiteShell
+        account={
+          <AccountMenu
+            name={user.name}
+            email={user.email}
+            menuLabel={tApp('nav.accountMenu')}
+            dashboardHref={ROUTE_PATHS.dashboard}
+            dashboardLabel={tApp('nav.dashboard')}
+            preferencesHref={ROUTE_PATHS.dashboardSettings}
+            preferencesLabel={tApp('nav.preferences')}
+            logout={<SignOutButtonContainer />}
+          />
+        }
         navigationLabel={tApp('nav.dashboard')}
         brandName={tApp('name')}
         homeLink={
@@ -63,7 +76,11 @@ export default async function DashboardLayout(props: {
             <span className={siteShellClasses.brandEmail}>{user.email}</span>
           </AppLink>
         }
-        navigation={<SignOutButtonContainer />}
+        navigation={
+          <AppLink href={ROUTE_PATHS.dashboardSettings} className={siteShellClasses.navLink}>
+            {tApp('nav.preferences')}
+          </AppLink>
+        }
         actions={
           <ThemeToggleContainer label={tApp('theme.label')} options={buildThemeOptions(tApp)} />
         }

@@ -1,7 +1,10 @@
-import '@testing-library/jest-dom/vitest';
-
 import { cleanup } from '@testing-library/react';
 import { afterEach, vi } from 'vitest';
+import '@testing-library/jest-dom/vitest';
+
+if (typeof HTMLElement.prototype.scrollIntoView !== 'function') {
+  HTMLElement.prototype.scrollIntoView = (): void => undefined;
+}
 
 /**
  * Unit tests run in jsdom against real modules wherever possible. Only the

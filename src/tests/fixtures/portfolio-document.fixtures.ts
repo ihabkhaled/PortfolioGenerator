@@ -116,6 +116,8 @@ export function buildFullPortfolioDocument(): PortfolioDocument {
       summary:
         'Backend engineer working on payment systems.\nI care about the boring parts: idempotency, reconciliation, and error budgets that someone actually reads.',
       location: 'Lisbon, Portugal',
+      nationality: null,
+      militaryStatus: null,
       portraitAssetId: null,
       availabilityEnabled: true,
       tagline: 'Open to staff-level backend work, remote or Lisbon-based.',

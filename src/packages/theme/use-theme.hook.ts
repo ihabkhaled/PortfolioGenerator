@@ -26,9 +26,11 @@ export function useTheme(): ThemeController {
 
   useEffect(() => {
     const stored = readPreference();
+    const storedResolved = resolveTheme(stored);
 
     setState(stored);
-    setResolved(resolveTheme(stored));
+    setResolved(storedResolved);
+    applyTheme(storedResolved);
   }, []);
 
   useEffect(() => {

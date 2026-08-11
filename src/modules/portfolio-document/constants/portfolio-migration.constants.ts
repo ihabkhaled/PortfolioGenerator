@@ -1,5 +1,6 @@
 import { upgradeDocumentToVersion2 } from '../helpers/portfolio-document-v2.migration';
 import { upgradeDocumentToVersion3 } from '../helpers/portfolio-document-v3.migration';
+import { upgradeDocumentToVersion4 } from '../helpers/portfolio-document-v4.migration';
 import type { DocumentMigrationStep } from '../types/portfolio-migration.types';
 
 /**
@@ -12,4 +13,5 @@ import type { DocumentMigrationStep } from '../types/portfolio-migration.types';
 export const DOCUMENT_MIGRATION_STEPS: readonly DocumentMigrationStep[] = [
   { from: 1, to: 2, upgrade: upgradeDocumentToVersion2 },
   { from: 2, to: 3, upgrade: upgradeDocumentToVersion3 },
+  { from: 3, to: 4, upgrade: upgradeDocumentToVersion4 },
 ];

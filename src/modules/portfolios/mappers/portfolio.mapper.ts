@@ -90,6 +90,8 @@ export function readIdentity(draftDocument: unknown): PortfolioDocument['identit
       headline: null,
       summary: null,
       location: null,
+      nationality: null,
+      militaryStatus: null,
       portraitAssetId: null,
       availabilityEnabled: false,
       tagline: null,

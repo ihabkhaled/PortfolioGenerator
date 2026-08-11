@@ -11,6 +11,8 @@ export interface EditorLabels {
   readonly headline: string;
   readonly summary: string;
   readonly location: string;
+  readonly nationality: string;
+  readonly militaryStatus: string;
   readonly tagline: string;
   readonly availabilityEnabled: string;
   readonly availabilityNote: string;
@@ -32,6 +34,7 @@ export interface EditorLabels {
   readonly saved: string;
   readonly unsaved: string;
   readonly warningsTitle: string;
+  readonly required: string;
 }
 
 /** Which pane is visible below the `lg` breakpoint, where there is room for one. */

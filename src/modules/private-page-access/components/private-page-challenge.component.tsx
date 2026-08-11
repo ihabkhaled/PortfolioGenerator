@@ -31,6 +31,8 @@ export function PrivatePageChallenge(props: PrivatePageChallengeProps): ReactEle
             action={PRIVATE_PAGE_ACCESS_ENDPOINT}
             method="post"
             className={privatePageChallengeClasses.form}
+            onSubmit={props.onSubmit}
+            aria-busy={props.pending}
           >
             <input
               type="hidden"
@@ -54,7 +56,11 @@ export function PrivatePageChallenge(props: PrivatePageChallengeProps): ReactEle
                 required
               />
             </div>
-            <Button type="submit" className={privatePageChallengeClasses.submit}>
+            <Button
+              type="submit"
+              className={privatePageChallengeClasses.submit}
+              disabled={props.pending}
+            >
               {props.labels.submit}
             </Button>
           </form>

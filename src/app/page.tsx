@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import type { ReactElement } from 'react';
 
+import { SignOutButtonContainer } from '@/modules/auth';
 import { getCurrentUser } from '@/modules/auth/server';
 import { DEFAULT_LOCALE, isAppLocale } from '@/modules/localization';
 import {
@@ -29,6 +30,7 @@ import { LANDMARK_IDS } from '@/shared/accessibility/landmark-ids.constants';
 import { ManifestPanel } from '@/shared/components/data-display/manifest-panel.component';
 import { Section } from '@/shared/components/data-display/section.component';
 import { sectionClasses } from '@/shared/components/data-display/section.variants';
+import { AccountMenu } from '@/shared/components/layout/account-menu.component';
 import { SiteAuthNav } from '@/shared/components/layout/site-auth-nav.component';
 import { SiteFooterNav } from '@/shared/components/layout/site-footer-nav.component';
 import { SiteShell } from '@/shared/components/layout/site-shell.component';
@@ -171,6 +173,20 @@ export default async function LandingPage(): Promise<ReactElement> {
     <>
       <SkipLink targetHref={`#${LANDMARK_IDS.mainContent}`} label={tApp('skipToContent')} />
       <SiteShell
+        account={
+          user === null ? undefined : (
+            <AccountMenu
+              name={user.name}
+              email={user.email}
+              menuLabel={tApp('nav.accountMenu')}
+              dashboardHref={ROUTE_PATHS.dashboard}
+              dashboardLabel={tApp('nav.dashboard')}
+              preferencesHref={ROUTE_PATHS.dashboardSettings}
+              preferencesLabel={tApp('nav.preferences')}
+              logout={<SignOutButtonContainer />}
+            />
+          )
+        }
         navigationLabel={tApp('name')}
         brandName={tApp('name')}
         homeLink={

@@ -5,6 +5,7 @@ import { buildDocxFixture } from '@/packages/document-text/test-support';
 import {
   buildAccount,
   createPortfolio,
+  openEditorDisclosure,
   openImport,
   publishPortfolio,
   signUp,
@@ -72,7 +73,14 @@ test.describe('Word document import', () => {
       mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
       buffer: Buffer.from(
         buildDocxFixture(
-          'Ada Lovelace\nAnalytical engine programmer\nLondon\nExperience\nMathematician',
+          [
+            'Ada Lovelace',
+            'Analytical engine programmer',
+            'London',
+            'Experience',
+            'Mathematician and technical writer documenting algorithms for the analytical engine.',
+            'Collaborated on mathematical research, computational methods, and explanatory notes.',
+          ].join('\n'),
         ),
       ),
     });
@@ -80,6 +88,7 @@ test.describe('Word document import', () => {
     await page.waitForURL('**/editor', { timeout: 60_000 });
 
     await expect(page.getByLabel('Display name')).toHaveValue('Ada Lovelace');
+    await openEditorDisclosure(page, 'Photos and downloads');
     const importedAttachment = page.getByText('ada-lovelace.docx', { exact: true }).locator('..');
     await expect(importedAttachment).toBeVisible();
     await expect(importedAttachment.getByRole('checkbox')).not.toBeChecked();

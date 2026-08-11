@@ -7,7 +7,7 @@ import type { ProjectsSectionProps } from '../types/section-props.types';
 
 export function ProjectsSection(props: Readonly<ProjectsSectionProps>): ReactElement {
   return (
-    <div className={projectClasses.list}>
+    <div className={projectClasses.list} data-testid="project-card-list">
       {props.projects.map((project) => (
         <article key={project.id} className={projectClasses.item}>
           <h3 className={projectClasses.name}>{project.name}</h3>

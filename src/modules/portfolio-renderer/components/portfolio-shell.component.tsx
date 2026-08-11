@@ -41,9 +41,13 @@ export function PortfolioShell(props: Readonly<PortfolioShellProps>): ReactEleme
         </div>
       </header>
 
-      <main id={LANDMARK_IDS.mainContent} className={portfolioShellClasses.main}>
-        {props.children}
-      </main>
+      {props.isPreview ? (
+        <div className={portfolioShellClasses.main}>{props.children}</div>
+      ) : (
+        <main id={LANDMARK_IDS.mainContent} className={portfolioShellClasses.main}>
+          {props.children}
+        </main>
+      )}
 
       <footer className={portfolioShellClasses.footer}>
         <div className={portfolioShellClasses.footerInner}>

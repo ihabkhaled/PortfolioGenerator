@@ -55,12 +55,9 @@ export async function POST(request: Request): Promise<Response> {
     request.url,
   );
 
-  if (grant === null) {
-    target.searchParams.set('access', 'denied');
-  }
+  if (grant === null) target.searchParams.set('access', 'denied');
 
   const headers = new Headers(buildPrivatePageHeaders());
-  headers.set('Location', target.href);
 
   if (grant !== null) {
     headers.set(
@@ -68,10 +65,19 @@ export async function POST(request: Request): Promise<Response> {
       buildPrivatePageCookie({
         grant,
         scope,
-        secure: env.NODE_ENV === 'production',
+        secure: env.NEXT_PUBLIC_APP_ENV !== 'local',
       }),
     );
   }
 
+  if (request.headers.get('accept')?.includes('application/json')) {
+    headers.set('Content-Type', 'application/json');
+    return Response.json(
+      { target: `${target.pathname}${target.search}` },
+      { status: grant === null ? 401 : 200, headers },
+    );
+  }
+
+  headers.set('Location', target.href);
   return new Response(null, { status: 303, headers });
 }

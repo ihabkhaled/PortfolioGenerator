@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from '@testing-library/react';
+import { act, fireEvent, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -27,6 +27,18 @@ const props = {
   applyLabel: 'Apply crop',
   cancelLabel: 'Cancel',
 };
+
+const resizeHarness: { notify: () => void } = { notify: () => {} };
+
+class TestResizeObserver {
+  constructor(callback: ResizeObserverCallback) {
+    resizeHarness.notify = () => {
+      callback([], this as unknown as ResizeObserver);
+    };
+  }
+  observe(): void {}
+  disconnect(): void {}
+}
 
 function setCropGeometry(width = 200, height = 200): void {
   const viewport = screen.getByRole('region', { name: 'Crop portrait' });
@@ -65,6 +77,8 @@ describe('image crop field', () => {
       configurable: true,
       value: TestDataTransfer,
     });
+    resizeHarness.notify = (): void => {};
+    vi.stubGlobal('ResizeObserver', TestResizeObserver);
     HTMLDialogElement.prototype.showModal = vi.fn(function (this: HTMLDialogElement) {
       this.setAttribute('open', '');
     });
@@ -133,6 +147,55 @@ describe('image crop field', () => {
     expect(toBlob).toHaveBeenCalledOnce();
     expect(input.files?.[0]?.name).toBe('portrait.jpg');
     expect(HTMLDialogElement.prototype.close).toHaveBeenCalledOnce();
+  });
+
+  it('re-clamps the focal point when the responsive viewport resizes', async () => {
+    const user = userEvent.setup();
+    render(<ImageCropFieldContainer {...props} />);
+    await user.upload(
+      screen.getByLabelText<HTMLInputElement>('Portrait'),
+      new File(['one'], 'portrait.png', { type: 'image/png' }),
+    );
+    setCropGeometry();
+    const viewport = screen.getByRole('region', { name: 'Crop portrait' });
+    Object.defineProperty(viewport, 'getBoundingClientRect', {
+      configurable: true,
+      value: () => ({ width: 700, height: 400 }),
+    });
+    act(() => {
+      resizeHarness.notify();
+    });
+
+    expect(screen.getByRole('presentation')).toHaveStyle({
+      width: '800px',
+      height: '400px',
+      transform: 'translate(-100px, 0px)',
+    });
+  });
+
+  it('recomputes cover scale when a resize changes the viewport aspect ratio', async () => {
+    const user = userEvent.setup();
+    render(<ImageCropFieldContainer {...props} />);
+    await user.upload(
+      screen.getByLabelText<HTMLInputElement>('Portrait'),
+      new File(['x'], 'p.png', { type: 'image/png' }),
+    );
+    setCropGeometry();
+    const viewport = screen.getByRole('region', { name: 'Crop portrait' });
+    Object.defineProperty(viewport, 'getBoundingClientRect', {
+      configurable: true,
+      value: () => ({ width: 100, height: 300 }),
+    });
+
+    act(() => {
+      resizeHarness.notify();
+    });
+
+    expect(screen.getByRole('presentation')).toHaveStyle({
+      width: '600px',
+      height: '300px',
+      transform: 'translate(-175px, 0px)',
+    });
   });
 
   it('leaves the original choice alone when crop prerequisites disappear', async () => {

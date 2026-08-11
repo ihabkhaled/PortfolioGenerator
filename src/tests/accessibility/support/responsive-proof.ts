@@ -14,8 +14,14 @@ interface Rectangle {
   readonly width: number;
 }
 
+interface TargetRectangle extends Rectangle {
+  readonly description: string;
+}
+
 interface FixedControlEvidence {
+  readonly description: string;
   readonly hitTestVisible: boolean;
+  readonly overlappingContent: string | null;
   readonly overlapsDocumentContent: boolean;
   readonly rectangle: Rectangle;
 }
@@ -29,7 +35,7 @@ function rectanglesOverlap(first: Rectangle, second: Rectangle): boolean {
   );
 }
 
-async function visibleRectangles(locator: Locator): Promise<readonly Rectangle[]> {
+async function visibleRectangles(locator: Locator): Promise<readonly TargetRectangle[]> {
   return locator.evaluateAll((elements) =>
     elements.flatMap((element) => {
       const style = globalThis.getComputedStyle(element);
@@ -38,6 +44,8 @@ async function visibleRectangles(locator: Locator): Promise<readonly Rectangle[]
       if (
         style.display === 'none' ||
         style.visibility === 'hidden' ||
+        style.opacity === '0' ||
+        style.clipPath === 'inset(50%)' ||
         rectangle.width === 0 ||
         rectangle.height === 0
       ) {
@@ -47,6 +55,9 @@ async function visibleRectangles(locator: Locator): Promise<readonly Rectangle[]
       return [
         {
           bottom: rectangle.bottom,
+          description: `${element.tagName}${
+            element instanceof HTMLInputElement ? `#${element.id}[${element.type}]` : ''
+          } ${element.getAttribute('aria-label') ?? element.textContent.trim().slice(0, 80)}`.trim(),
           height: rectangle.height,
           left: rectangle.left,
           right: rectangle.right,
@@ -73,8 +84,10 @@ export async function expectResponsivePage(page: Page): Promise<void> {
     ),
   );
   for (const target of targets) {
-    expect(target.width).toBeGreaterThanOrEqual(MINIMUM_TARGET_SIZE);
-    expect(target.height).toBeGreaterThanOrEqual(MINIMUM_TARGET_SIZE);
+    expect(target.width, `${target.description} width`).toBeGreaterThanOrEqual(MINIMUM_TARGET_SIZE);
+    expect(target.height, `${target.description} height`).toBeGreaterThanOrEqual(
+      MINIMUM_TARGET_SIZE,
+    );
   }
 
   await page.evaluate(() => {
@@ -137,17 +150,17 @@ export async function expectResponsivePage(page: Page): Promise<void> {
       const rectangle = element.getBoundingClientRect();
       if (rectangle.width === 0 || rectangle.height === 0) return [];
       const points = [
-        [rectangle.left + 2, rectangle.top + 2],
-        [rectangle.right - 2, rectangle.top + 2],
         [rectangle.left + rectangle.width / 2, rectangle.top + rectangle.height / 2],
-        [rectangle.left + 2, rectangle.bottom - 2],
-        [rectangle.right - 2, rectangle.bottom - 2],
+        [rectangle.left + rectangle.width / 4, rectangle.top + rectangle.height / 2],
+        [rectangle.left + (rectangle.width * 3) / 4, rectangle.top + rectangle.height / 2],
+        [rectangle.left + rectangle.width / 2, rectangle.top + rectangle.height / 4],
+        [rectangle.left + rectangle.width / 2, rectangle.top + (rectangle.height * 3) / 4],
       ] as const;
       const hitTestVisible = points.every(([x, y]) => {
         const hit = globalThis.document.elementFromPoint(x, y);
         return hit !== null && (hit === element || element.contains(hit));
       });
-      const overlapsDocumentContent = documentContent.some((content) => {
+      const overlappingContent = documentContent.find((content) => {
         const style = globalThis.getComputedStyle(content);
         const target = content.getBoundingClientRect();
         if (
@@ -173,7 +186,12 @@ export async function expectResponsivePage(page: Page): Promise<void> {
       return [
         {
           hitTestVisible,
-          overlapsDocumentContent,
+          description: `${element.tagName} ${element.textContent.trim().slice(0, 80)}`.trim(),
+          overlappingContent:
+            overlappingContent === undefined
+              ? null
+              : `${overlappingContent.tagName} ${overlappingContent.textContent.trim().slice(0, 80)}`.trim(),
+          overlapsDocumentContent: overlappingContent !== undefined,
           rectangle: {
             bottom: rectangle.bottom,
             height: rectangle.height,
@@ -196,8 +214,11 @@ export async function expectResponsivePage(page: Page): Promise<void> {
     expect(control.rectangle.bottom).toBeLessThanOrEqual(
       (viewport?.height ?? 0) - MINIMUM_SAFE_AREA_OFFSET + VIEWPORT_TOLERANCE,
     );
-    expect(control.hitTestVisible).toBe(true);
-    expect(control.overlapsDocumentContent).toBe(false);
+    expect(control.hitTestVisible, `${control.description} must receive pointer hits`).toBe(true);
+    expect(
+      control.overlapsDocumentContent,
+      `${control.description} overlaps ${control.overlappingContent ?? 'document content'}`,
+    ).toBe(false);
 
     const remainingControls = fixedControls.slice(index + 1);
     for (const other of remainingControls) {

@@ -1,4 +1,5 @@
 export { PrivatePageChallenge } from './components/private-page-challenge.component';
+export { PrivatePageChallengeContainer } from './containers/private-page-challenge.container';
 export { PrivatePagePasswordContainer } from './containers/private-page-password.container';
 export type {
   PrivatePageChallengeLabels,

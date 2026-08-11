@@ -20,6 +20,8 @@
     "skipToContent": "コンテンツにスキップ",
     "loading": "読み込み中",
     "nav": {
+      "accountMenu": "アカウントメニュー",
+      "preferences": "設定",
       "home": "ホーム",
       "menu": "メニュー",
       "signUp": "アカウントを作成する",
@@ -550,7 +552,19 @@
     "lead": "ページをレンダリングできませんでした。問題は記録されています。"
   },
   "portfolio": {
+    "nationalityLabel": "国籍",
+    "militaryStatusLabel": "兵役状況",
     "sections": {
+      "soft-skills": "ソフトスキル",
+      "courses": "コース",
+      "publications": "出版物",
+      "volunteering": "ボランティア活動",
+      "awards": "受賞歴",
+      "interests": "興味のあること",
+      "testimonials": "お客様の声",
+      "gallery": "ギャラリー",
+      "attachments": "ダウンロード",
+      "social": "接触",
       "hero": "プロフィール",
       "projects": "プロジェクト",
       "about": "について",
@@ -687,6 +701,26 @@
     "warningsTitle": "もう一度見る価値あり"
   },
   "editor": {
+    "disclosures": {
+      "identity": "あなたは誰ですか",
+      "contact": "接触",
+      "assets": "ギャラリーとダウンロード",
+      "collections": "ポートフォリオの内容",
+      "pages": "ポートフォリオページ",
+      "seo": "検索と共有",
+      "sections": "ページセクション",
+      "items": "{count} 件"
+    },
+    "issues": {
+      "count": "{count} 件の問題を確認してください",
+      "previous": "前の問題",
+      "next": "次の問題",
+      "general": "全般的な問題",
+      "fieldMessage": "保存する前にこの項目を確認してください。",
+      "required": "必須"
+    },
+    "nationality": "国籍",
+    "militaryStatus": "兵役状況",
     "save": "保存",
     "saved": "保存されました",
     "unsaved": "未保存の変更",
@@ -939,8 +973,8 @@
     "phoneCountryNone": "国なし"
   },
   "account": {
-    "title": "アカウント",
-    "lead": "私たちがあなたについて保持しているものと、それを削除する方法。",
+    "title": "設定とアカウント",
+    "lead": "プロフィール、言語、テーマ、セキュリティ、セッション、アカウントデータを管理します。",
     "summary": {
       "emailLabel": "電子メール",
       "portfolioCountLabel": "ポートフォリオ",

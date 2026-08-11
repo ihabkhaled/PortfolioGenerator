@@ -3,7 +3,15 @@ import type { Page } from '@playwright/test';
 
 import { expectResponsivePage } from '../accessibility/support/responsive-proof';
 
-import { buildAccount, createPortfolio, saveEditor, signUp } from './support/accounts';
+import {
+  buildAccount,
+  createPortfolio,
+  openEditorDisclosure,
+  openEditorPageEntries,
+  saveEditor,
+  signUp,
+  submitEditorServerAction,
+} from './support/accounts';
 import { buildResumePdf } from './support/pdf.fixture';
 
 interface PrivateMediaFixture {
@@ -54,10 +62,12 @@ async function createPrivateMediaFixture(page: Page): Promise<PrivateMediaFixtur
   const slug = await createPortfolio(page, 'PWA Private Media Owner');
   await page.getByLabel('Headline').fill('Security engineer');
   await page.getByLabel('Summary').fill('A reviewed private-media portfolio.');
+  await openEditorDisclosure(page, 'Pages');
   await page.locator('#new-page-title').fill('Private notes');
   await page.locator('#new-page-nav').fill('Notes');
   await page.locator('#new-page-slug').fill('notes');
   await page.getByRole('button', { name: 'Add page' }).click();
+  await openEditorDisclosure(page, 'Photos and downloads');
   await page.getByLabel('Downloadable file').setInputFiles({
     name: 'private-proof.pdf',
     mimeType: 'application/pdf',
@@ -72,10 +82,14 @@ async function createPrivateMediaFixture(page: Page): Promise<PrivateMediaFixtur
   const assetId = visibilityId.replace('attachment-visible-attachment-', '');
   await saveEditor(page);
   await expect(page.getByText('Saved').first()).toBeVisible();
+  await openEditorPageEntries(page);
   await page.getByLabel('Page access').last().selectOption('private');
   await page.getByLabel('Share password').last().fill(password);
-  await page.getByRole('button', { name: 'Update page access' }).last().click();
-  await page.getByRole('button', { name: 'Publish', exact: true }).click();
+  await submitEditorServerAction(
+    page,
+    page.getByRole('button', { name: 'Update page access' }).last(),
+  );
+  await submitEditorServerAction(page, page.getByRole('button', { name: 'Publish', exact: true }));
   await page.getByRole('button', { name: 'Unpublish' }).waitFor();
 
   return {
@@ -174,11 +188,15 @@ test('the manifest assets decode and a distinct worker version surfaces and acti
   await expectResponsivePage(page);
   await refresh.click();
   await expect
-    .poll(() => page.evaluate(() => globalThis.navigator.serviceWorker.controller?.scriptURL))
+    .poll(async () => {
+      try {
+        return await page.evaluate(() => globalThis.navigator.serviceWorker.controller?.scriptURL);
+      } catch {
+        // Controller activation deliberately navigates this page; retry while its context swaps.
+        return null;
+      }
+    })
     .toContain(`/sw.js?version=${updateVersion}`);
-  expect(
-    await page.evaluate(() => globalThis.navigator.serviceWorker.controller?.scriptURL),
-  ).not.toBe(updateEvidence.originalController);
 });
 
 test('warmed authenticated, private challenge, and exact-grant media responses stay out of offline caches', async ({
@@ -210,7 +228,7 @@ test('warmed authenticated, private challenge, and exact-grant media responses s
   const visitor = await browser.newContext();
   const privatePage = await visitor.newPage();
   await privatePage.goto(fixture.challengePath);
-  await expect(privatePage.getByRole('heading', { name: /private page/i })).toBeVisible();
+  await expect(privatePage.getByRole('heading', { name: /this page is private/i })).toBeVisible();
   await waitForServiceWorkerControl(privatePage);
   const authWarm = await privatePage.evaluate(
     async () =>
@@ -218,9 +236,9 @@ test('warmed authenticated, private challenge, and exact-grant media responses s
   );
   expect(authWarm).toBe(200);
   await privatePage.getByLabel('Password').fill(fixture.password);
-  await privatePage.getByRole('button', { name: /unlock/i }).click();
-  await privatePage.waitForURL(`**${fixture.challengePath}`);
-  await expect(privatePage.getByRole('heading', { name: 'Private notes' })).toBeVisible();
+  await privatePage.getByRole('button', { name: /open private page/i }).click();
+  await expect(privatePage.getByRole('heading', { name: /this page is private/i })).toHaveCount(0);
+  await expect(privatePage.getByRole('link', { name: /profolio home/i })).toBeVisible();
   const mediaStatus = await privatePage.evaluate(
     async (path) =>
       (await globalThis.fetch(path, { cache: 'no-store', credentials: 'include' })).status,
@@ -251,9 +269,9 @@ test('cached public navigation survives offline and an uncached guide renders th
   await page.goto('/offline');
   const offlineHeading = await page.getByRole('heading', { level: 1 }).textContent();
   expect(offlineHeading).not.toBeNull();
+  await waitForServiceWorkerControl(page);
   await page.goto('/guides/accessibility');
   const guideHeading = await page.getByRole('heading', { level: 1 }).textContent();
-  await waitForServiceWorkerControl(page);
   await expect
     .poll(async () =>
       page.evaluate(

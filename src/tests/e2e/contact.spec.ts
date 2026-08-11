@@ -29,7 +29,7 @@ test.describe('contact delivery boundary', () => {
   });
 
   test('submits a valid message through the public form and clears it', async ({ page }) => {
-    await page.goto('/contact');
+    await page.goto('/guides/contact');
     await page.getByLabel('Name').fill(validMessage.name);
     await page.getByLabel('Email').fill(validMessage.email);
     await page.getByLabel('Subject').fill(validMessage.subject);

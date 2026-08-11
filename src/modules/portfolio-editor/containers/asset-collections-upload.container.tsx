@@ -9,6 +9,7 @@ import type { PortfolioDocument } from '@/modules/portfolio-document';
 import { I18N_NAMESPACES, useAppTranslation } from '@/packages/i18n';
 import { Button, Input, Label, Select } from '@/packages/ui-primitives';
 
+import { RequiredFieldLabel } from '../components/required-field-label.component';
 import { editorClasses } from '../constants/editor-style.constants';
 import { EDITOR_ATTACHMENT_KINDS } from '../constants/editor.constants';
 import type { AssetCollectionsUploadProps } from '../types/asset-collections-upload.types';
@@ -64,7 +65,11 @@ export function AssetCollectionsUploadContainer(
         <input type="hidden" name="portfolioId" value={props.portfolioId} />
         <input type="hidden" name="purpose" value="gallery" />
         <div className={editorClasses.field}>
-          <Label htmlFor="gallery-asset">{t('assets.galleryFile')}</Label>
+          <RequiredFieldLabel
+            htmlFor="gallery-asset"
+            label={t('assets.galleryFile')}
+            requiredLabel={t('issues.required')}
+          />
           <ImageCropFieldContainer
             id="gallery-asset"
             name="asset"
@@ -81,9 +86,15 @@ export function AssetCollectionsUploadContainer(
           />
         </div>
         <div className={editorClasses.field}>
-          <Label htmlFor="gallery-alt">{t('assets.galleryAlt')}</Label>
+          <RequiredFieldLabel
+            htmlFor="gallery-alt"
+            label={t('assets.galleryAlt')}
+            requiredLabel={t('issues.required')}
+          />
           <Input
             id="gallery-alt"
+            aria-required="true"
+            aria-labelledby="gallery-alt-label"
             value={alt}
             onChange={(event) => {
               setAlt(event.target.value);
@@ -145,19 +156,32 @@ export function AssetCollectionsUploadContainer(
         <input type="hidden" name="portfolioId" value={props.portfolioId} />
         <input type="hidden" name="purpose" value="attachment" />
         <div className={editorClasses.field}>
-          <Label htmlFor="attachment-asset">{t('assets.attachmentFile')}</Label>
+          <RequiredFieldLabel
+            htmlFor="attachment-asset"
+            label={t('assets.attachmentFile')}
+            requiredLabel={t('issues.required')}
+          />
           <Input
             id="attachment-asset"
             name="asset"
             type="file"
             accept="application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/rtf,image/png,image/jpeg,image/webp"
             required
+            aria-required="true"
+            aria-labelledby="attachment-asset-label"
           />
         </div>
         <div className={editorClasses.field}>
-          <Label htmlFor="attachment-kind">{t('assets.attachmentKind')}</Label>
+          <RequiredFieldLabel
+            htmlFor="attachment-kind"
+            label={t('assets.attachmentKind')}
+            requiredLabel={t('issues.required')}
+          />
           <Select
             id="attachment-kind"
+            required
+            aria-required="true"
+            aria-labelledby="attachment-kind-label"
             value={kind}
             onChange={(event) => {
               setKind(event.target.value as typeof kind);
@@ -171,9 +195,15 @@ export function AssetCollectionsUploadContainer(
           </Select>
         </div>
         <div className={editorClasses.field}>
-          <Label htmlFor="attachment-label">{t('assets.attachmentLabel')}</Label>
+          <RequiredFieldLabel
+            htmlFor="attachment-label"
+            label={t('assets.attachmentLabel')}
+            requiredLabel={t('issues.required')}
+          />
           <Input
             id="attachment-label"
+            aria-required="true"
+            aria-labelledby="attachment-label-label"
             value={label}
             onChange={(event) => {
               setLabel(event.target.value);

@@ -24,6 +24,8 @@
     "loading": "Carregando",
     "footerNote": "Seu currículo permanece privado. Somente o que você analisa e publica se torna público.",
     "nav": {
+      "accountMenu": "Menu da conta",
+      "preferences": "Preferências",
       "home": "Início",
       "menu": "Menu",
       "dashboard": "Painel",
@@ -550,7 +552,19 @@
     "unauthorized": "Você não tem acesso a esse portfólio."
   },
   "portfolio": {
+    "nationalityLabel": "Nacionalidade",
+    "militaryStatusLabel": "Situação militar",
     "sections": {
+      "soft-skills": "Habilidades interpessoais",
+      "courses": "Cursos",
+      "publications": "Publicações",
+      "volunteering": "Voluntariado",
+      "awards": "Prêmios",
+      "interests": "Interesses",
+      "testimonials": "Depoimentos",
+      "gallery": "Galeria",
+      "attachments": "Transferências",
+      "social": "Contato",
       "hero": "Perfil",
       "about": "Sobre",
       "experience": "Experiência",
@@ -687,6 +701,26 @@
     }
   },
   "editor": {
+    "disclosures": {
+      "identity": "Quem você é",
+      "contact": "Contato",
+      "assets": "Galeria e downloads",
+      "collections": "Conteúdo do portfólio",
+      "pages": "Páginas do portfólio",
+      "seo": "Pesquisar e compartilhar",
+      "sections": "Seções da página",
+      "items": "{count} itens"
+    },
+    "issues": {
+      "count": "{count} problemas precisam de atenção",
+      "previous": "Problema anterior",
+      "next": "Próximo problema",
+      "general": "Problemas gerais",
+      "fieldMessage": "Verifique este campo antes de salvar.",
+      "required": "Obrigatório"
+    },
+    "nationality": "Nacionalidade",
+    "militaryStatus": "Situação militar",
     "title": "Revise e edite",
     "untitled": "Portfólio sem título",
     "save": "Salvar",
@@ -939,8 +973,8 @@
     }
   },
   "account": {
-    "title": "Conta",
-    "lead": "O que temos sobre você e como removê-lo.",
+    "title": "Preferências e conta",
+    "lead": "Gerencie seu perfil, idioma, tema, segurança, sessões e dados da conta.",
     "summary": {
       "title": "Sua conta",
       "nameLabel": "Nome",

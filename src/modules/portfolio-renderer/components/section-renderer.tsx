@@ -362,6 +362,22 @@ function renderHeroAside(
     });
   }
 
+  if (typeof document.identity.nationality === 'string') {
+    rows.push({
+      id: 'nationality',
+      label: labels.nationalityLabel,
+      value: document.identity.nationality,
+    });
+  }
+
+  if (typeof document.identity.militaryStatus === 'string') {
+    rows.push({
+      id: 'military-status',
+      label: labels.militaryStatusLabel,
+      value: document.identity.militaryStatus,
+    });
+  }
+
   if (rows.length === 0) {
     return null;
   }
@@ -369,21 +385,25 @@ function renderHeroAside(
   return <ManifestPanel rows={rows} ariaLabel={labels.contactCta} />;
 }
 
-function renderSocialLinks(document: PortfolioDocument): ReactElement {
+function renderSocialLinks(document: PortfolioDocument): ReactElement | null {
+  const visibleLinks = document.socialLinks.filter((link) => link.visible);
+
+  if (visibleLinks.length === 0) {
+    return null;
+  }
+
   return (
     <>
-      {document.socialLinks
-        .filter((link) => link.visible)
-        .map((link) => {
-          const Icon = socialIcon(link.kind);
-          const label = link.label ?? socialLabel(link.kind);
-          return (
-            <ExternalLink key={link.id} href={link.url} className={heroClasses.socialLink}>
-              <Icon aria-hidden size={16} />
-              {label}
-            </ExternalLink>
-          );
-        })}
+      {visibleLinks.map((link) => {
+        const Icon = socialIcon(link.kind);
+        const label = link.label ?? socialLabel(link.kind);
+        return (
+          <ExternalLink key={link.id} href={link.url} className={heroClasses.socialLink}>
+            <Icon aria-hidden size={16} />
+            {label}
+          </ExternalLink>
+        );
+      })}
     </>
   );
 }

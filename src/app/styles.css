@@ -33,9 +33,10 @@
   input[type='checkbox'],
   input[type='radio'] {
     accent-color: var(--role-primary);
-    block-size: 1.5rem;
+    block-size: 24px;
     cursor: pointer;
-    inline-size: 1.5rem;
+    flex-shrink: 0;
+    inline-size: 24px;
   }
 
   /*
@@ -122,6 +123,8 @@
 
 :root {
   color-scheme: light;
+  --editor-fixed-surface-reserve: 0rem;
+  --pwa-fixed-surface-reserve: 0rem;
 
   --role-font-display: var(--font-display-latin), 'Segoe UI', ui-sans-serif, system-ui, sans-serif;
   --role-font-body: var(--font-body-latin), 'Segoe UI', ui-sans-serif, system-ui, sans-serif;
@@ -269,7 +272,12 @@ body {
    how a short, non-scrolling page (an auth form) stays clear of it without
    ever needing to scroll at all. */
 body:has([data-fixed-surface='pwa']) {
+  --pwa-fixed-surface-reserve: 10rem;
   padding-bottom: calc(env(safe-area-inset-bottom) + 11rem);
+}
+
+body:has([data-fixed-surface='editor-actions']) {
+  --editor-fixed-surface-reserve: 6rem;
 }
 
 @media (display-mode: standalone) {
@@ -330,6 +338,10 @@ body:has([data-fixed-surface='pwa']) {
 
 /* Printing a portfolio should produce the document, not the site chrome. */
 @media print {
+  body {
+    padding-bottom: 0;
+  }
+
   header,
   footer,
   [data-sonner-toaster] {

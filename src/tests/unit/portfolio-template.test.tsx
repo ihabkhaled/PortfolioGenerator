@@ -84,6 +84,23 @@ describe.each([
 });
 
 describe('the template on a full portfolio', () => {
+  it('keeps section rhythm and typography compact in a narrow portfolio container', () => {
+    renderPage(buildFullPortfolioDocument());
+
+    const page = screen.getByTestId('portfolio-section-page');
+    const sections = screen.getAllByRole('region');
+    expect(sections.length).toBeGreaterThan(1);
+    expect(page).toHaveClass(
+      '@max-4xl/portfolio:[&>section]:py-10',
+      '@max-4xl/portfolio:[&>section>p]:pt-0',
+      '@max-4xl/portfolio:[&>section>div>h2]:text-2xl',
+      '@max-4xl/portfolio:[&>section>div>div]:pt-6',
+    );
+    expect(screen.queryByTestId('portfolio-section-band')).not.toBeInTheDocument();
+    expect(sections[0]).toHaveClass('first:border-t-0');
+    expect(sections[1]).toHaveClass('border-t');
+  });
+
   it('renders every reviewed v2 profile collection', () => {
     const document = buildFullPortfolioDocument();
     renderPage({

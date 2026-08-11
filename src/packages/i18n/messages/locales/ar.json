@@ -24,6 +24,8 @@
     "tagline": "تحويل السيرة الذاتية إلى محفظة تتحكم فيها",
     "skipToContent": "انتقل إلى المحتوى",
     "nav": {
+      "accountMenu": "قائمة الحساب",
+      "preferences": "التفضيلات",
       "home": "الرئيسية",
       "menu": "القائمة",
       "dashboard": "لوحة القيادة",
@@ -550,7 +552,19 @@
     "unauthorized": "ليس لديك حق الوصول إلى تلك المحفظة."
   },
   "portfolio": {
+    "nationalityLabel": "الجنسية",
+    "militaryStatusLabel": "الحالة العسكرية",
     "sections": {
+      "soft-skills": "المهارات الناعمة",
+      "courses": "الدورات",
+      "publications": "المنشورات",
+      "volunteering": "التطوع",
+      "awards": "الجوائز",
+      "interests": "الاهتمامات",
+      "testimonials": "الشهادات",
+      "gallery": "معرض",
+      "attachments": "التنزيلات",
+      "social": "اتصال",
       "about": "عن",
       "hero": "حساب تعريفي",
       "experience": "خبرة",
@@ -687,6 +701,26 @@
     "warningsTitle": "يستحق نظرة ثانية"
   },
   "editor": {
+    "disclosures": {
+      "identity": "من أنت",
+      "contact": "اتصال",
+      "assets": "المعرض والتنزيلات",
+      "collections": "محتوى المحفظة",
+      "pages": "صفحات المحفظة",
+      "seo": "البحث والمشاركة",
+      "sections": "أقسام الصفحة",
+      "items": "{count} عناصر"
+    },
+    "issues": {
+      "count": "تحتاج {count} مشكلات إلى الانتباه",
+      "previous": "المشكلة السابقة",
+      "next": "المشكلة التالية",
+      "general": "مشكلات عامة",
+      "fieldMessage": "راجع هذا الحقل قبل الحفظ.",
+      "required": "مطلوب"
+    },
+    "nationality": "الجنسية",
+    "militaryStatus": "الحالة العسكرية",
     "title": "مراجعة وتحرير",
     "save": "حفظ",
     "untitled": "محفظة بلا عنوان",
@@ -939,8 +973,8 @@
     }
   },
   "account": {
-    "title": "حساب",
-    "lead": "ما نحمله عنك، وكيفية إزالته.",
+    "title": "التفضيلات والحساب",
+    "lead": "أدر ملفك الشخصي ولغتك وسمتك وأمانك وجلساتك وبيانات حسابك.",
     "summary": {
       "title": "حسابك",
       "emailLabel": "بريد إلكتروني",

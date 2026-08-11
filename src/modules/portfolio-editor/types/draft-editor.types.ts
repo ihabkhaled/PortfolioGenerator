@@ -1,5 +1,7 @@
 import type { PortfolioDocument } from '@/modules/portfolio-document';
 
+import type { EditorIssue } from './editor.types';
+
 export interface DraftEditorInput {
   readonly portfolioId: string;
   readonly initialDocument: PortfolioDocument;
@@ -13,6 +15,7 @@ export interface DraftEditor {
   readonly isSaving: boolean;
   /** A message key, or null. */
   readonly error: string | null;
+  readonly issues: readonly EditorIssue[];
   readonly update: (next: PortfolioDocument) => void;
   readonly adoptVersion: (version: number) => void;
   readonly save: () => void;

@@ -246,6 +246,32 @@ describe('splitIntoSections', () => {
 });
 
 describe('parseDeterministicResume', () => {
+  it('preserves only explicitly labelled nationality and military status', () => {
+    const result = parseDeterministicResume(
+      'Amina Rahman\nEngineer\nNationality: Egyptian\nMilitary status: Completed',
+    );
+
+    expect(result.identity.nationality).toBe('Egyptian');
+    expect(result.identity.militaryStatus).toBe('Completed');
+  });
+
+  it('does not infer sensitive identity facts from ordinary prose', () => {
+    const result = parseDeterministicResume(
+      'Amina Rahman\nEngineer\nBased in Egypt and worked with the armed forces.',
+    );
+
+    expect(result.identity.nationality).toBeNull();
+    expect(result.identity.militaryStatus).toBeNull();
+  });
+
+  it('treats an explicitly labelled but empty sensitive value as absent', () => {
+    const result = parseDeterministicResume(
+      'Amina Rahman\nEngineer\nNationality:   \nMilitary status:',
+    );
+
+    expect(result.identity.nationality).toBeNull();
+    expect(result.identity.militaryStatus).toBeNull();
+  });
   const result = parseDeterministicResume(SAMPLE_RESUME);
 
   it('produces output the extraction schema accepts', () => {

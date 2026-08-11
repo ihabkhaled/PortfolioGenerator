@@ -35,12 +35,15 @@ import { requireElement } from '../fixtures/dom.fixtures';
  */
 
 const editorLabels = {
+  required: 'Required',
   identityTitle: 'Identity',
   identityHint: 'Who you are.',
   displayName: 'Display name',
   headline: 'Headline',
   summary: 'Summary',
   location: 'Location',
+  nationality: 'Nationality',
+  militaryStatus: 'Military status',
   tagline: 'Tagline',
   availabilityEnabled: 'Available for work',
   availabilityNote: 'Availability note',
@@ -217,6 +220,11 @@ describe('PageSkeleton', () => {
     expect(within(shell).getAllByRole('generic', { hidden: true }).length).toBeGreaterThanOrEqual(
       12,
     );
+    const animatedSurface = within(shell)
+      .getAllByRole('generic', { hidden: true })
+      .find((element) => element.className.includes('animate-pulse'));
+    expect(animatedSurface).toBeDefined();
+    expect(animatedSurface).toHaveClass('motion-reduce:animate-none');
   });
 });
 
@@ -401,6 +409,8 @@ describe('editor field components', () => {
         headline="Engineer"
         summary=""
         location="Lisbon"
+        nationality="Egyptian"
+        militaryStatus="Completed"
         tagline="Welcome"
         availabilityEnabled
         availabilityNote="Open to work"
@@ -409,6 +419,8 @@ describe('editor field components', () => {
         onHeadlineChange={noop}
         onSummaryChange={noop}
         onLocationChange={noop}
+        onNationalityChange={noop}
+        onMilitaryStatusChange={noop}
         onTaglineChange={noop}
         onAvailabilityEnabledChange={noop}
         onAvailabilityNoteChange={noop}
@@ -416,7 +428,7 @@ describe('editor field components', () => {
       />,
     );
 
-    await userEvent.type(screen.getByLabelText('Display name'), '!');
+    await userEvent.type(screen.getByLabelText(/^Display name/u), '!');
 
     expect(onDisplayNameChange).toHaveBeenCalled();
     expect(screen.getByLabelText('Location')).toHaveValue('Lisbon');

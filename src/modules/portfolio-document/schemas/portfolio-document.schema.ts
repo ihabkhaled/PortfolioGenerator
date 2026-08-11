@@ -101,6 +101,8 @@ const identitySchema = z.object({
   headline: boundedText(DOCUMENT_LIMITS.headline).nullable(),
   summary: boundedText(DOCUMENT_LIMITS.summary).nullable(),
   location: boundedText(DOCUMENT_LIMITS.location).nullable(),
+  nationality: boundedText(DOCUMENT_LIMITS.nationality).nullable(),
+  militaryStatus: boundedText(DOCUMENT_LIMITS.militaryStatus).nullable(),
   portraitAssetId: z.string().max(DOCUMENT_LIMITS.assetId).nullable(),
   availabilityEnabled: z.boolean(),
   /** One line under the headline — what the person is looking for right now. */

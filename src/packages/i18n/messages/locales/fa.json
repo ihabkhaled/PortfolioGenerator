@@ -24,6 +24,8 @@
     "loading": "در حال بارگذاری",
     "footerNote": "رزومه شما خصوصی می ماند. فقط مواردی که بررسی و منتشر می کنید عمومی می شوند.",
     "nav": {
+      "accountMenu": "منوی حساب",
+      "preferences": "ترجیحات",
       "home": "خانه",
       "menu": "منو",
       "dashboard": "داشبورد",
@@ -550,7 +552,19 @@
     "unauthorized": "شما به آن نمونه کارها دسترسی ندارید."
   },
   "portfolio": {
+    "nationalityLabel": "ملیت",
+    "militaryStatusLabel": "وضعیت نظام وظیفه",
     "sections": {
+      "soft-skills": "مهارت های نرم",
+      "courses": "دوره ها",
+      "publications": "انتشارات",
+      "volunteering": "داوطلب شدن",
+      "awards": "جوایز",
+      "interests": "علایق",
+      "testimonials": "گواهینامه ها",
+      "gallery": "گالری",
+      "attachments": "دانلودها",
+      "social": "تماس بگیرید",
       "hero": "نمایه",
       "about": "درباره",
       "experience": "تجربه کنید",
@@ -687,6 +701,26 @@
     }
   },
   "editor": {
+    "disclosures": {
+      "identity": "تو کی هستی",
+      "contact": "تماس بگیرید",
+      "assets": "گالری و دانلود",
+      "collections": "محتوای نمونه کارها",
+      "pages": "صفحات نمونه کارها",
+      "seo": "جستجو و اشتراک گذاری",
+      "sections": "بخش های صفحه",
+      "items": "{count} مورد"
+    },
+    "issues": {
+      "count": "{count} مشکل نیاز به بررسی دارد",
+      "previous": "مشکل قبلی",
+      "next": "مشکل بعدی",
+      "general": "مشکلات عمومی",
+      "fieldMessage": "پیش از ذخیره این فیلد را بررسی کنید.",
+      "required": "الزامی"
+    },
+    "nationality": "ملیت",
+    "militaryStatus": "وضعیت نظام وظیفه",
     "title": "بررسی و ویرایش کنید",
     "untitled": "نمونه کارها بدون عنوان",
     "save": "ذخیره کنید",
@@ -939,8 +973,8 @@
     }
   },
   "account": {
-    "title": "حساب",
-    "lead": "آنچه در مورد شما داریم و نحوه حذف آن.",
+    "title": "ترجیحات و حساب",
+    "lead": "نمایه، زبان، پوسته، امنیت، نشست‌ها و داده‌های حساب خود را مدیریت کنید.",
     "summary": {
       "title": "حساب شما",
       "nameLabel": "نام",

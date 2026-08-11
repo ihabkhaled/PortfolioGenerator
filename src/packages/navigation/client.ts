@@ -7,4 +7,4 @@
  * points at this file rather than at the caller.
  */
 
-export { usePathname } from 'next/navigation';
+export { usePathname, useRouter } from 'next/navigation';

@@ -1,4 +1,4 @@
-const CACHE_NAME = 'portfolio-generate-shell-v2';
+const CACHE_NAME = 'portfolio-generate-shell-v3';
 const PRECACHE_URLS = [
   '/offline',
   '/manifest.webmanifest',
@@ -41,8 +41,11 @@ self.addEventListener('fetch', (event) => {
   if (isStaticAsset(url)) {
     event.respondWith(
       caches.match(event.request).then((cached) =>
-        cached ?? fetch(event.request).then((response) => {
-          if (response.ok) void caches.open(CACHE_NAME).then((cache) => cache.put(event.request, response.clone()));
+        cached ?? fetch(event.request).then(async (response) => {
+          if (response.ok) {
+            const cache = await caches.open(CACHE_NAME);
+            await cache.put(event.request, response.clone());
+          }
           return response;
         }),
       ),
@@ -54,8 +57,11 @@ self.addEventListener('fetch', (event) => {
 
   event.respondWith(
     fetch(event.request)
-      .then((response) => {
-        if (response.ok) void caches.open(CACHE_NAME).then((cache) => cache.put(event.request, response.clone()));
+      .then(async (response) => {
+        if (response.ok) {
+          const cache = await caches.open(CACHE_NAME);
+          await cache.put(event.request, response.clone());
+        }
         return response;
       })
       .catch(() => caches.match(event.request).then((cached) => cached ?? caches.match('/offline'))),

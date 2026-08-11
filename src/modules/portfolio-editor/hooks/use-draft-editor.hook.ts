@@ -28,12 +28,14 @@ export function useDraftEditor(input: DraftEditorInput): DraftEditor {
   const [version, setVersion] = useState<number>(input.initialVersion);
   const [isDirty, setIsDirty] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+  const [issues, setIssues] = useState<DraftEditor['issues']>([]);
   const [isSaving, startSaving] = useTransition();
 
   const update = useCallback((next: PortfolioDocument): void => {
     setDocument(next);
     setIsDirty(true);
     setError(null);
+    setIssues([]);
   }, []);
 
   const adoptVersion = useCallback((nextVersion: number): void => {
@@ -50,6 +52,7 @@ export function useDraftEditor(input: DraftEditorInput): DraftEditor {
 
       if (result.status === 'error') {
         setError(result.error);
+        setIssues(result.issues ?? []);
 
         // A conflict returns the server's current version. Adopting it lets the
         // user reload and retry without the second attempt failing for the same
@@ -67,8 +70,9 @@ export function useDraftEditor(input: DraftEditorInput): DraftEditor {
 
       setIsDirty(false);
       setError(null);
+      setIssues([]);
     });
   }, [document, input.portfolioId, version]);
 
-  return { document, version, isDirty, isSaving, error, update, adoptVersion, save };
+  return { document, version, isDirty, isSaving, error, issues, update, adoptVersion, save };
 }

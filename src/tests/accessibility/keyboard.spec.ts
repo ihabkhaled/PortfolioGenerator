@@ -3,6 +3,7 @@ import { expect, test } from '@playwright/test';
 import {
   buildAccount,
   createPortfolio,
+  openEditorDisclosure,
   publishPortfolio,
   signUp,
   uniqueSlug,
@@ -50,6 +51,7 @@ test.describe('keyboard operation', () => {
   test('sections reorder from the keyboard', async ({ page }) => {
     await signUp(page, buildAccount('kbd-reorder'));
     await createPortfolio(page, 'Reorder Me');
+    await openEditorDisclosure(page, 'Page sections');
 
     const moveDown = page.getByRole('button', { name: /down/i }).first();
 

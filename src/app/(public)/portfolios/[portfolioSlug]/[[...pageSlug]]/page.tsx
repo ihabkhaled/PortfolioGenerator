@@ -23,7 +23,7 @@ import {
 import { buildThemeOptions } from '@/modules/preferences';
 import { ThemeToggleContainer } from '@/modules/preferences/preferences-ui';
 import { buildPrivatePageCookieName, verifyPrivatePageGrant } from '@/modules/private-page-access';
-import { PrivatePageChallenge } from '@/modules/private-page-access/private-page-access-ui';
+import { PrivatePageChallengeContainer } from '@/modules/private-page-access/private-page-access-ui';
 import {
   buildPageUrl,
   buildPersonStructuredData,
@@ -150,12 +150,11 @@ export default async function PublicPortfolioPage(
         scope,
         secret: getServerEnv().BETTER_AUTH_SECRET,
       });
-
     if (!authorized) {
       const searchParams = await props.searchParams;
 
       return (
-        <PrivatePageChallenge
+        <PrivatePageChallengeContainer
           portfolioSlug={portfolioSlug}
           pageSlug={resolved.page.slug}
           locale={locale}

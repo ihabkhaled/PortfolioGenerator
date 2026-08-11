@@ -24,6 +24,8 @@
     "loading": "Laden",
     "footerNote": "Ihr Lebenslauf bleibt vertraulich. Nur das, was Sie überprüfen und veröffentlichen, wird öffentlich.",
     "nav": {
+      "accountMenu": "Kontomenü",
+      "preferences": "Einstellungen",
       "home": "Startseite",
       "menu": "Menü",
       "dashboard": "Armaturenbrett",
@@ -550,7 +552,19 @@
     "unauthorized": "Sie haben keinen Zugriff auf dieses Portfolio."
   },
   "portfolio": {
+    "nationalityLabel": "Nationalität",
+    "militaryStatusLabel": "Militärstatus",
     "sections": {
+      "soft-skills": "Soft Skills",
+      "courses": "Kurse",
+      "publications": "Veröffentlichungen",
+      "volunteering": "Freiwilligenarbeit",
+      "awards": "Auszeichnungen",
+      "interests": "Interessen",
+      "testimonials": "Erfahrungsberichte",
+      "gallery": "Galerie",
+      "attachments": "Downloads",
+      "social": "Kontakt",
       "hero": "Profil",
       "about": "Über",
       "experience": "Erfahrung",
@@ -687,6 +701,26 @@
     }
   },
   "editor": {
+    "disclosures": {
+      "identity": "Wer du bist",
+      "contact": "Kontakt",
+      "assets": "Galerie und Downloads",
+      "collections": "Portfolioinhalte",
+      "pages": "Portfolioseiten",
+      "seo": "Suchen und teilen",
+      "sections": "Seitenabschnitte",
+      "items": "{count} Elemente"
+    },
+    "issues": {
+      "count": "{count} Probleme benötigen Aufmerksamkeit",
+      "previous": "Vorheriges Problem",
+      "next": "Nächstes Problem",
+      "general": "Allgemeine Probleme",
+      "fieldMessage": "Prüfen Sie dieses Feld vor dem Speichern.",
+      "required": "Erforderlich"
+    },
+    "nationality": "Nationalität",
+    "militaryStatus": "Militärstatus",
     "title": "Überprüfen und bearbeiten",
     "untitled": "Portfolio ohne Titel",
     "save": "Speichern",
@@ -939,8 +973,8 @@
     }
   },
   "account": {
-    "title": "Konto",
-    "lead": "Was wir über Sie speichern und wie Sie es entfernen können.",
+    "title": "Einstellungen & Konto",
+    "lead": "Verwalten Sie Profil, Sprache, Design, Sicherheit, Sitzungen und Kontodaten.",
     "summary": {
       "title": "Ihr Konto",
       "nameLabel": "Name",

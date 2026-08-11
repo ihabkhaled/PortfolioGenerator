@@ -33,6 +33,8 @@ const editorPageLabels: EditorLabels = {
   headline: 'Headline',
   summary: 'Summary',
   location: 'Location',
+  nationality: 'Nationality',
+  militaryStatus: 'Military status',
   tagline: 'Tagline',
   availabilityEnabled: 'Available for work',
   availabilityNote: 'Availability note',
@@ -54,6 +56,7 @@ const editorPageLabels: EditorLabels = {
   saved: 'Saved',
   unsaved: 'Unsaved changes',
   warningsTitle: 'Worth a second look',
+  required: 'Required',
 };
 
 function leaveAssetUploadIdle(): Promise<{ readonly status: 'idle' }> {
@@ -228,8 +231,15 @@ describe('PortfolioEditorContainer', () => {
   it('renders the forms and a live preview of the draft', () => {
     renderEditor();
 
-    expect(screen.getByLabelText('Display name')).toHaveValue('Amina Rahman');
+    expect(screen.getByRole('textbox', { name: /Display name.*Required/u })).toHaveValue(
+      'Amina Rahman',
+    );
     expect(screen.getAllByRole('heading', { name: 'Amina Rahman' }).length).toBeGreaterThan(0);
+  });
+
+  it('reserves document space beneath the floating save dock', () => {
+    renderEditor();
+    expect(screen.getByRole('region', { name: 'Amina Rahman' })).toHaveClass('pb-36');
   });
 
   // Editing marks the draft dirty; the save button is the only way it leaves.
@@ -279,9 +289,9 @@ describe('PortfolioEditorContainer', () => {
 
   it('creates a subpage without collecting a password in draft state', async () => {
     renderEditor([], buildMinimalPortfolioDocument());
-    const title = requireElement(screen.getAllByLabelText('Page title')[0]);
-    const navigationLabel = requireElement(screen.getAllByLabelText('Navigation label')[0]);
-    const address = requireElement(screen.getAllByLabelText('Address')[0]);
+    const title = requireElement(screen.getAllByLabelText(/Page title/u)[0]);
+    const navigationLabel = requireElement(screen.getAllByLabelText(/Navigation label/u)[0]);
+    const address = requireElement(screen.getAllByLabelText(/Address/u)[0]);
     const user = userEvent.setup();
     // Pasting exercises the user-facing controlled inputs while avoiding a full
     // editor rerender for every character in each value.

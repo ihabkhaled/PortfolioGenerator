@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import type * as ReactModule from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
@@ -23,6 +23,7 @@ const mocks = vi.hoisted(() => ({
   getBrowserLocation: vi.fn(),
   navigateBrowser: vi.fn(),
   copyBrowserText: vi.fn().mockResolvedValue(undefined),
+  refresh: vi.fn(),
 }));
 
 vi.mock('react', async () => {
@@ -34,6 +35,10 @@ vi.mock('@/packages/browser', () => ({
   getBrowserLocation: mocks.getBrowserLocation,
   navigateBrowser: mocks.navigateBrowser,
   copyBrowserText: mocks.copyBrowserText,
+}));
+
+vi.mock('@/packages/navigation/client', () => ({
+  useRouter: () => ({ refresh: mocks.refresh }),
 }));
 
 const idleState = { status: 'idle', error: null };
@@ -122,6 +127,9 @@ function renderTranslationPanel(snapshots = [translationSnapshot()]): void {
 
 beforeEach(() => {
   mocks.useActionState.mockReset();
+  mocks.useActionState.mockReturnValue([idleState, action, false]);
+  mocks.refresh.mockReset();
+  action.mockReset();
   mocks.getBrowserLocation.mockReturnValue({
     pathname: '/amina',
     search: '?preview=1',
@@ -178,6 +186,126 @@ describe('account settings containers', () => {
     expect(screen.getByLabelText('Theme')).toHaveValue('dark');
     expect(screen.getByLabelText('Country')).toHaveValue('');
     expect(screen.getByRole('status')).toHaveTextContent('Preferences saved');
+    expect(mocks.refresh).not.toHaveBeenCalled();
+  });
+
+  it('saves the complete preference form when a preference changes', async () => {
+    queueActionState();
+    render(
+      <AccountPreferencesContainer
+        preferences={{ locale: 'en', themePreference: 'system', defaultCountryIso: null }}
+        localeOptions={[
+          { value: 'en', label: 'English' },
+          { value: 'ar', label: 'Arabic' },
+        ]}
+        themeOptions={[
+          { value: 'system', label: 'System' },
+          { value: 'dark', label: 'Dark' },
+        ]}
+        countryOptions={[{ value: 'EG', label: 'Egypt' }]}
+        labels={{
+          locale: 'Language',
+          theme: 'Theme',
+          country: 'Country',
+          noCountry: 'No country',
+          submit: 'Save preferences',
+          pending: 'Saving preferences',
+          saved: 'Preferences saved',
+        }}
+      />,
+    );
+
+    await userEvent.selectOptions(screen.getByLabelText('Language'), 'ar');
+
+    expect(action).toHaveBeenCalledTimes(1);
+    const submitted: unknown = action.mock.calls[0]?.[0];
+    expect(submitted).toBeInstanceOf(FormData);
+    if (!(submitted instanceof FormData)) {
+      throw new TypeError('Expected the preference action to receive FormData.');
+    }
+    expect(submitted.get('locale')).toBe('ar');
+    expect(submitted.get('themePreference')).toBe('system');
+    expect(submitted.get('defaultCountryIso')).toBe('');
+  });
+
+  it('announces automatic preference saving while it is pending', () => {
+    queueActionState(idleState, true);
+    render(
+      <AccountPreferencesContainer
+        preferences={{ locale: 'en', themePreference: 'system', defaultCountryIso: null }}
+        localeOptions={[{ value: 'en', label: 'English' }]}
+        themeOptions={[{ value: 'system', label: 'System' }]}
+        countryOptions={[]}
+        labels={{
+          locale: 'Language',
+          theme: 'Theme',
+          country: 'Country',
+          noCountry: 'No country',
+          submit: 'Save preferences',
+          pending: 'Saving preferences',
+          saved: 'Preferences saved',
+        }}
+      />,
+    );
+
+    expect(screen.getByRole('status')).toHaveTextContent('Saving preferences');
+    expect(screen.getByLabelText('Language')).toBeDisabled();
+    expect(screen.getByLabelText('Theme')).toBeDisabled();
+    expect(screen.getByLabelText('Country')).toBeDisabled();
+  });
+
+  it('restores the saved theme when automatic persistence fails', async () => {
+    let preferenceState: { readonly status: string; readonly error: string | null } = idleState;
+    mocks.useActionState.mockImplementation(() => [preferenceState, action, false]);
+    const view = render(
+      <AccountPreferencesContainer
+        preferences={{ locale: 'en', themePreference: 'system', defaultCountryIso: null }}
+        localeOptions={[{ value: 'en', label: 'English' }]}
+        themeOptions={[
+          { value: 'system', label: 'System' },
+          { value: 'dark', label: 'Dark' },
+        ]}
+        countryOptions={[]}
+        labels={{
+          locale: 'Language',
+          theme: 'Theme',
+          country: 'Country',
+          noCountry: 'No country',
+          submit: 'Save preferences',
+          pending: 'Saving preferences',
+          saved: 'Preferences saved',
+        }}
+      />,
+    );
+
+    await userEvent.selectOptions(screen.getByLabelText('Theme'), 'dark');
+    expect(globalThis.localStorage.getItem('pg-theme')).toBe('dark');
+
+    preferenceState = { status: 'error', error: 'errors.unknown' };
+    view.rerender(
+      <AccountPreferencesContainer
+        preferences={{ locale: 'en', themePreference: 'system', defaultCountryIso: null }}
+        localeOptions={[{ value: 'en', label: 'English' }]}
+        themeOptions={[
+          { value: 'system', label: 'System' },
+          { value: 'dark', label: 'Dark' },
+        ]}
+        countryOptions={[]}
+        labels={{
+          locale: 'Language',
+          theme: 'Theme',
+          country: 'Country',
+          noCountry: 'No country',
+          submit: 'Save preferences',
+          pending: 'Saving preferences',
+          saved: 'Preferences saved',
+        }}
+      />,
+    );
+
+    await waitFor(() => {
+      expect(globalThis.localStorage.getItem('pg-theme')).toBeNull();
+    });
   });
 
   it('hides verification and revoke controls for verified and current sessions', () => {

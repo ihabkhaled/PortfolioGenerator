@@ -24,14 +24,20 @@ export function isPublishedAssetReferenced(document: PortfolioDocument, assetId:
     return true;
   }
 
-  const hasVisibleAboutSection = visibleSections.some((section) => section.type === 'about');
+  const rendersGallery = visibleSections.some(
+    (section) => section.type === 'about' || section.type === 'gallery',
+  );
 
-  if (hasVisibleAboutSection && document.gallery.some((item) => item.assetId === assetId)) {
+  if (rendersGallery && document.gallery.some((item) => item.assetId === assetId)) {
     return true;
   }
 
+  const rendersAttachments = visibleSections.some(
+    (section) => section.type === 'about' || section.type === 'attachments',
+  );
+
   return (
-    hasVisibleAboutSection &&
+    rendersAttachments &&
     document.attachments.some((attachment) => attachment.assetId === assetId && attachment.visible)
   );
 }
@@ -55,9 +61,13 @@ export function isAssetReferencedOnPage(
     visibleSections.some((section) => section.type === 'projects')
   )
     return true;
-  if (visibleSections.every((section) => section.type !== 'about')) return false;
+  if (
+    visibleSections.some((section) => section.type === 'about' || section.type === 'gallery') &&
+    document.gallery.some((item) => item.assetId === assetId)
+  )
+    return true;
   return (
-    document.gallery.some((item) => item.assetId === assetId) ||
+    visibleSections.some((section) => section.type === 'about' || section.type === 'attachments') &&
     document.attachments.some((attachment) => attachment.assetId === assetId && attachment.visible)
   );
 }

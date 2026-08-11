@@ -17,7 +17,7 @@ import type { SectionListProps } from '../types/section-list.types';
  */
 export function SectionList(props: Readonly<SectionListProps>): ReactElement {
   return (
-    <section className={editorClasses.section}>
+    <section id="editor-sections-list" className={editorClasses.section} tabIndex={-1}>
       <div className={editorClasses.sectionHead}>
         <h2 className={editorClasses.sectionTitle}>{props.title}</h2>
       </div>

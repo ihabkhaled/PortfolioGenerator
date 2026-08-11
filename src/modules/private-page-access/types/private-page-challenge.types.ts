@@ -1,3 +1,5 @@
+import type { SyntheticEvent } from 'react';
+
 import type { AppLocale } from '@/modules/localization';
 
 export interface PrivatePageChallengeLabels {
@@ -14,4 +16,6 @@ export interface PrivatePageChallengeProps {
   readonly denied: boolean;
   readonly locale: AppLocale;
   readonly labels: PrivatePageChallengeLabels;
+  readonly onSubmit?: (event: SyntheticEvent<HTMLFormElement>) => void;
+  readonly pending?: boolean;
 }

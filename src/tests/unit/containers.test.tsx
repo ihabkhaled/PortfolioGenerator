@@ -353,18 +353,19 @@ describe('every control in the editor is wired to the draft', () => {
   });
 
   it('accepts search metadata and the indexing opt-out', async () => {
-    renderEditor();
+    renderEditor([], buildMinimalPortfolioDocument());
 
     const seoTitle = requireElement(screen.getAllByLabelText('Title').at(-1));
-    await userEvent.type(seoTitle, 'Amina Rahman, backend engineer');
-    await userEvent.type(
-      requireElement(screen.getAllByLabelText('Description').at(-1)),
-      'Payments and reliability.',
-    );
+    const seoDescription = requireElement(screen.getAllByLabelText('Description').at(-1));
+    const user = userEvent.setup();
+    await user.click(seoTitle);
+    await user.paste('Amina Rahman, backend engineer');
+    await user.click(seoDescription);
+    await user.paste('Payments and reliability.');
 
     const checkboxes = screen.getAllByRole('checkbox');
 
-    await userEvent.click(requireElement(checkboxes.at(-1)));
+    await user.click(requireElement(checkboxes.at(-1)));
 
     expect(seoTitle).toHaveValue('Amina Rahman, backend engineer');
   });

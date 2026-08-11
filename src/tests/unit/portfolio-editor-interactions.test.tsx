@@ -21,7 +21,10 @@ import {
 } from '@/modules/portfolio-editor/editor-ui';
 
 import { requireElement } from '../fixtures/dom.fixtures';
-import { buildFullPortfolioDocument } from '../fixtures/portfolio-document.fixtures';
+import {
+  buildFullPortfolioDocument,
+  buildMinimalPortfolioDocument,
+} from '../fixtures/portfolio-document.fixtures';
 
 const { saveDraftAction } = vi.hoisted(() => ({
   saveDraftAction: vi.fn<(payload: SaveDraftPayload) => Promise<EditorActionState>>(),
@@ -186,6 +189,7 @@ describe('editor disclosures', () => {
 
 describe('editor issue navigation', () => {
   it('switches mobile preview back to edit before focusing a rejected field', async () => {
+    const user = userEvent.setup();
     saveDraftAction.mockResolvedValueOnce({
       status: 'error',
       error: null,
@@ -195,7 +199,7 @@ describe('editor issue navigation', () => {
     render(
       <PortfolioEditorContainer
         portfolioId="portfolio-1"
-        initialDocument={buildFullPortfolioDocument()}
+        initialDocument={buildMinimalPortfolioDocument()}
         initialVersion={3}
         warnings={[]}
         uploadAssetAction={leaveUploadIdle}
@@ -234,14 +238,16 @@ describe('editor issue navigation', () => {
       />,
     );
     const name = screen.getByLabelText(/Display name/u);
-    await userEvent.clear(name);
-    await userEvent.click(screen.getByRole('button', { name: 'Preview' }));
-    await userEvent.click(screen.getByRole('button', { name: 'Save' }));
+    await user.clear(name);
+    await user.click(screen.getByRole('button', { name: 'Preview' }));
+    await user.click(screen.getByRole('button', { name: 'Save' }));
     await screen.findByRole('button', { name: 'Next issue' });
-    await userEvent.click(screen.getByRole('button', { name: 'Next issue' }));
+    await user.click(screen.getByRole('button', { name: 'Next issue' }));
 
-    expect(screen.getByRole('button', { name: 'Edit' })).toHaveAttribute('aria-pressed', 'true');
-    expect(name).toHaveFocus();
+    await waitFor(() => {
+      expect(screen.getByRole('button', { name: 'Edit' })).toHaveAttribute('aria-pressed', 'true');
+      expect(name).toHaveFocus();
+    });
   }, 15_000);
   it('opens ancestors, highlights and focuses the exact control, and cycles issues', async () => {
     render(
@@ -273,9 +279,13 @@ describe('editor issue navigation', () => {
     expect(identityControl).toHaveFocus();
 
     await userEvent.click(screen.getByRole('button', { name: 'Next issue' }));
-    expect(seoControl).toHaveFocus();
+    await waitFor(() => {
+      expect(seoControl).toHaveFocus();
+    });
     await userEvent.click(screen.getByRole('button', { name: 'Previous issue' }));
-    expect(identityControl).toHaveFocus();
+    await waitFor(() => {
+      expect(identityControl).toHaveFocus();
+    });
   });
 
   it('lists unmapped issues without adding them to the navigable cycle and cleans stale state', async () => {

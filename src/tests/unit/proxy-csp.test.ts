@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest';
 import {
   buildContentSecurityPolicy,
   buildLocaleRewriteUrl,
+  resolveCrossOriginOpenerPolicy,
   resolveDashboardEditorPortfolioId,
 } from '@/proxy';
 
@@ -49,6 +50,14 @@ describe('proxy content security policy', () => {
         expect(directive).toContain(origin);
       }
     }
+  });
+
+  it('allows PayPal checkout popups only on the localized settings route', () => {
+    expect(resolveCrossOriginOpenerPolicy('/dashboard/settings')).toBe('same-origin-allow-popups');
+    expect(resolveCrossOriginOpenerPolicy('/fr/dashboard/settings')).toBe(
+      'same-origin-allow-popups',
+    );
+    expect(resolveCrossOriginOpenerPolicy('/dashboard')).toBe('same-origin');
   });
 });
 

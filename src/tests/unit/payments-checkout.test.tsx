@@ -65,6 +65,10 @@ describe('PayPal checkout', () => {
       expect.stringContaining('client-id=client%2Fid'),
     );
     expect(screen.getByRole('button', { name: 'SDK' })).toHaveAttribute(
+      'data-src',
+      expect.stringContaining('components=buttons'),
+    );
+    expect(screen.getByRole('button', { name: 'SDK' })).toHaveAttribute(
       'data-script-nonce',
       'request-nonce',
     );
@@ -83,7 +87,8 @@ describe('PayPal checkout', () => {
     paymentActions.getPlan.mockResolvedValue('plan-1');
     paymentActions.recordApproval.mockResolvedValue({ status: 'success', error: null });
     let options: PaypalButtonsOptions | undefined;
-    const renderButtons = vi.fn().mockResolvedValue(undefined);
+    const rendering = Promise.withResolvers<undefined>();
+    const renderButtons = vi.fn(() => rendering.promise);
     Object.defineProperty(globalThis, 'paypal', {
       configurable: true,
       value: {
@@ -105,6 +110,13 @@ describe('PayPal checkout', () => {
     await user.click(screen.getByRole('button', { name: 'SDK' }));
     await waitFor(() => {
       expect(renderButtons).toHaveBeenCalledOnce();
+    });
+    expect(screen.getByTestId('paypal-button-slot')).toHaveClass('invisible');
+    act(() => {
+      rendering.resolve(undefined);
+    });
+    await waitFor(() => {
+      expect(screen.getByTestId('paypal-button-slot')).not.toHaveClass('invisible');
     });
     expect(options).toMatchObject({ cspNonce: 'request-nonce' });
 

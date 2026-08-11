@@ -70,6 +70,14 @@ export function buildContentSecurityPolicy(
   ].join('; ');
 }
 
+export function resolveCrossOriginOpenerPolicy(
+  pathname: string,
+): 'same-origin' | 'same-origin-allow-popups' {
+  return resolveLocalePath(pathname).pathname === ROUTE_PATHS.dashboardSettings
+    ? 'same-origin-allow-popups'
+    : 'same-origin';
+}
+
 export function buildLocaleRewriteUrl(requestUrl: string | URL, pathname: string): URL {
   const rewritten = new URL(requestUrl.toString());
   rewritten.pathname = pathname;
@@ -205,6 +213,10 @@ export default async function proxy(request: NextRequest): Promise<NextResponse>
 
   response.headers.set('content-security-policy', contentSecurityPolicy);
   response.headers.set('content-language', locale);
+  response.headers.set(
+    'cross-origin-opener-policy',
+    resolveCrossOriginOpenerPolicy(request.nextUrl.pathname),
+  );
 
   await applyPrivatePageResponseHeaders(response, request.nextUrl.pathname, locale);
 

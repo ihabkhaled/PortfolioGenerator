@@ -84,7 +84,6 @@ export function PaypalCheckoutContainer(
     }
 
     hasRendered.current = true;
-    setPhase('ready');
 
     void paypal
       .Buttons({
@@ -107,10 +106,16 @@ export function PaypalCheckoutContainer(
           setPhase('failed');
         },
       })
-      .render(container);
+      .render(container)
+      .then(() => {
+        setPhase('ready');
+      })
+      .catch(() => {
+        setPhase('failed');
+      });
   }, [nonce, ownerId, planId, sdkReady]);
 
-  const sdkUrl = `https://www.paypal.com/sdk/js?client-id=${encodeURIComponent(clientId)}&vault=true&intent=subscription`;
+  const sdkUrl = `https://www.paypal.com/sdk/js?client-id=${encodeURIComponent(clientId)}&components=buttons&vault=true&intent=subscription`;
 
   return (
     <div className={paymentsClasses.checkout}>
@@ -127,7 +132,6 @@ export function PaypalCheckoutContainer(
         }}
       />
 
-      {phase === 'loading' ? <Skeleton className={paymentsClasses.buttonSkeleton} /> : null}
       {phase === 'unavailable' ? (
         <p className={paymentsClasses.status}>{labels.unavailable}</p>
       ) : null}
@@ -137,7 +141,21 @@ export function PaypalCheckoutContainer(
       {phase === 'succeeded' ? <p className={paymentsClasses.status}>{labels.succeeded}</p> : null}
       {phase === 'failed' ? <p className={paymentsClasses.status}>{labels.failed}</p> : null}
 
-      <div ref={buttonSlotRef} className={paymentsClasses.buttonSlot} />
+      <div
+        className={
+          phase === 'loading' ? paymentsClasses.buttonFrameLoading : paymentsClasses.buttonFrame
+        }
+      >
+        {phase === 'loading' ? <Skeleton className={paymentsClasses.buttonSkeleton} /> : null}
+        <div
+          ref={buttonSlotRef}
+          data-testid="paypal-button-slot"
+          aria-hidden={phase === 'loading'}
+          className={
+            phase === 'loading' ? paymentsClasses.buttonSlotLoading : paymentsClasses.buttonSlot
+          }
+        />
+      </div>
     </div>
   );
 }

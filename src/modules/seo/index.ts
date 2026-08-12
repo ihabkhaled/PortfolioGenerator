@@ -12,7 +12,7 @@ export {
   SITEMAP_CHANGE_FREQUENCY,
 } from './constants/seo.constants';
 export { StructuredData } from './components/structured-data.component';
-export { AdSenseScript } from './components/adsense-script.component';
+export { AdSenseScript } from './containers/adsense-script.container';
 export { buildPortfolioFeedItems, escapeXml, serializeRssFeed } from './helpers/feed.helper';
 export { buildOgCardValues } from './helpers/og-card.helper';
 export {

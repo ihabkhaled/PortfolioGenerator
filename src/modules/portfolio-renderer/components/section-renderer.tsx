@@ -489,6 +489,13 @@ function renderAboutCollections(
 ): ReactElement {
   return (
     <>
+      {document.identity.availabilityEnabled && document.identity.availabilityNote !== null ? (
+        <SupplementalSection title={labels.availability}>
+          <p className={supplementalClasses.chip}>
+            {labels.availability} — {document.identity.availabilityNote}
+          </p>
+        </SupplementalSection>
+      ) : null}
       {document.publications.length === 0 ? null : (
         <SupplementalSection title={labels.supplemental.publications}>
           <FactListSection

@@ -539,7 +539,8 @@
       "publish": "Pubblica la traduzione",
       "publishing": "Traduzione editoriale",
       "errors": {
-        "generic": "Impossibile completare l'operazione di traduzione. Non è stato pubblicato nulla."
+        "generic": "Impossibile completare l'operazione di traduzione. Non è stato pubblicato nulla.",
+        "quotaExceeded": "La quota del fornitore di traduzione è esaurita. Il tuo portfolio non è stato modificato. Riprova dopo il ripristino della quota."
       }
     }
   },
@@ -943,6 +944,10 @@
       "crop": {
         "title": "Inquadra la tua foto",
         "zoomLabel": "Zoom",
+        "fitModeLabel": "Adattamento foto",
+        "cropModeLabel": "Ritaglia nel riquadro",
+        "fullPhotoModeLabel": "Mostra foto intera",
+        "aspectRatioLabel": "Proporzioni",
         "apply": "Usa questa inquadratura",
         "cancel": "Annulla"
       },

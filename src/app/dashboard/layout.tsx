@@ -3,6 +3,7 @@ import type { ReactElement, ReactNode } from 'react';
 
 import { SignOutButtonContainer } from '@/modules/auth';
 import { getCurrentUser } from '@/modules/auth/server';
+import { HeaderLocalizationControlsContainer } from '@/modules/localization';
 import { buildThemeOptions } from '@/modules/preferences';
 import { ThemeToggleContainer } from '@/modules/preferences/preferences-ui';
 import { I18N_NAMESPACES } from '@/packages/i18n';
@@ -78,7 +79,10 @@ export default async function DashboardLayout(props: {
         }
         navigation={null}
         actions={
-          <ThemeToggleContainer label={tApp('theme.label')} options={buildThemeOptions(tApp)} />
+          <>
+            <ThemeToggleContainer label={tApp('theme.label')} options={buildThemeOptions(tApp)} />
+            <HeaderLocalizationControlsContainer />
+          </>
         }
         footerNote={tApp('footerNote')}
         footerLinks={<SiteFooterNav columns={buildSiteFooterLinks(tApp)} />}

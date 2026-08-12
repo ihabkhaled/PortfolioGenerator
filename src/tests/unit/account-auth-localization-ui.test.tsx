@@ -1,4 +1,4 @@
-import { render, screen, waitFor, within } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import type * as ReactModule from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
@@ -15,7 +15,6 @@ import {
 } from '@/modules/auth';
 import { LocalizationControlsContainer, TranslationPanelContainer } from '@/modules/localization';
 import { I18nLocaleProvider } from '@/packages/i18n';
-import { LOCALIZATION_CONTROLS_TARGET_ID } from '@/shared/constants/localization-target.constants';
 
 import { buildFullPortfolioDocument } from '../fixtures/portfolio-document.fixtures';
 
@@ -610,14 +609,43 @@ describe('localization controls', () => {
     expect(mocks.navigateBrowser).not.toHaveBeenCalled();
   });
 
-  it('places the controls in the active shell header', async () => {
-    const target = globalThis.document.createElement('div');
-    target.id = LOCALIZATION_CONTROLS_TARGET_ID;
-    globalThis.document.body.append(target);
-    render(controls);
+  it('renders inside the shell slot without mutating another React tree', async () => {
+    const view = render(controls);
+    const language = await screen.findByRole('combobox', { name: 'Language' });
 
-    expect(await within(target).findByRole('combobox', { name: 'Language' })).toBeInTheDocument();
-    target.remove();
+    expect(view.container).toContainElement(language);
+  });
+
+  it('can keep reader actions out of the header language slot', async () => {
+    render(<LocalizationControlsContainer {...controls.props} showReaderActions={false} />);
+
+    expect(await screen.findByRole('combobox', { name: 'Language' })).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Copy URL' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Share' })).not.toBeInTheDocument();
+  });
+
+  it('can render reader actions without repeating the language selector', async () => {
+    render(<LocalizationControlsContainer {...controls.props} showLocale={false} />);
+
+    expect(await screen.findByRole('button', { name: 'Copy URL' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Share' })).toBeInTheDocument();
+    expect(screen.queryByRole('combobox', { name: 'Language' })).not.toBeInTheDocument();
+  });
+
+  it('shows explicitly requested reader actions on the canonical portfolio route', async () => {
+    mocks.getBrowserLocation.mockReturnValue({
+      pathname: '/portfolios/amina',
+      search: '',
+      hash: '',
+      href: 'https://portfoliogenerate.test/portfolios/amina',
+    });
+
+    render(
+      <LocalizationControlsContainer {...controls.props} showLocale={false} showReaderActions />,
+    );
+
+    expect(await screen.findByRole('button', { name: 'Copy URL' })).toBeVisible();
+    expect(screen.getByRole('button', { name: 'Share' })).toBeVisible();
   });
 
   it('copies the complete public URL and confirms it', async () => {

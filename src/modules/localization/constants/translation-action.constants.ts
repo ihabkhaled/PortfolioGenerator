@@ -13,3 +13,4 @@ export const TRANSLATION_ACTION_FIELDS = {
 } as const;
 
 export const TRANSLATION_ACTION_ERROR_KEY = 'translation.errors.generic';
+export const TRANSLATION_QUOTA_ERROR_KEY = 'translation.errors.quotaExceeded';

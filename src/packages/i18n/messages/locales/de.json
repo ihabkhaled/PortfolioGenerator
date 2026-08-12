@@ -539,7 +539,8 @@
       "publish": "Übersetzung veröffentlichen",
       "publishing": "Übersetzung veröffentlichen",
       "errors": {
-        "generic": "Der Übersetzungsvorgang konnte nicht abgeschlossen werden. Es wurde nichts veröffentlicht."
+        "generic": "Der Übersetzungsvorgang konnte nicht abgeschlossen werden. Es wurde nichts veröffentlicht.",
+        "quotaExceeded": "Das Kontingent des Übersetzungsanbieters ist aufgebraucht. Ihr Portfolio wurde nicht geändert. Versuchen Sie es erneut, sobald das Kontingent zurückgesetzt wurde."
       }
     }
   },
@@ -943,6 +944,10 @@
       "crop": {
         "title": "Foto zuschneiden",
         "zoomLabel": "Zoom",
+        "fitModeLabel": "Fotoanpassung",
+        "cropModeLabel": "Auf Rahmen zuschneiden",
+        "fullPhotoModeLabel": "Ganzes Foto anzeigen",
+        "aspectRatioLabel": "Seitenverhältnis",
         "apply": "Diesen Ausschnitt verwenden",
         "cancel": "Abbrechen"
       },

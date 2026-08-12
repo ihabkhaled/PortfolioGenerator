@@ -21,6 +21,7 @@ describe('portfolio renderer interactions', () => {
       <PortfolioNavMenuContainer
         navigationLabel="Portfolio pages"
         toggleLabel="Toggle pages"
+        actions={<button type="button">Reader settings</button>}
         items={[
           {
             pageId: 'home',
@@ -47,6 +48,7 @@ describe('portfolio renderer interactions', () => {
     await user.click(toggle);
     expect(toggle).toHaveAttribute('aria-expanded', 'true');
     expect(screen.getByRole('navigation', { name: 'Portfolio pages' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Reader settings' })).toBeInTheDocument();
 
     await user.click(screen.getByRole('link', { name: 'Projects' }));
     expect(screen.queryByRole('navigation', { name: 'Portfolio pages' })).not.toBeInTheDocument();

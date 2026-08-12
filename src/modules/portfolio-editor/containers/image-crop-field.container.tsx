@@ -11,7 +11,7 @@ import {
   type ReactElement,
 } from 'react';
 
-import { Button, cn, Input } from '@/packages/ui-primitives';
+import { Button, cn, Input, Select } from '@/packages/ui-primitives';
 
 import { editorClasses } from '../constants/editor-style.constants';
 import {
@@ -21,7 +21,16 @@ import {
   IMAGE_CROP_OUTPUT_QUALITY,
 } from '../constants/image-crop.constants';
 import { zoomAroundViewportCenter } from '../helpers/image-crop-geometry.helper';
-import type { ImageCropFieldProps, ImageCropPoint } from '../types/image-crop.types';
+import type { ImageCropFieldProps, ImageCropPoint, ImageCropSize } from '../types/image-crop.types';
+
+function resolveImageBaseScale(
+  bounds: ImageCropSize,
+  natural: ImageCropSize,
+  fitMode: 'crop' | 'full',
+): number {
+  const scales = [bounds.width / natural.width, bounds.height / natural.height];
+  return fitMode === 'crop' ? Math.max(...scales) : Math.min(...scales);
+}
 
 /**
  * A file input that never lets an image through unframed.
@@ -41,6 +50,10 @@ export function ImageCropFieldContainer(props: Readonly<ImageCropFieldProps>): R
     outputHeight,
     dialogTitle,
     zoomLabel,
+    fitModeLabel,
+    cropModeLabel,
+    fullPhotoModeLabel,
+    aspectRatioLabel,
     applyLabel,
     cancelLabel,
     ...inputProps
@@ -59,6 +72,8 @@ export function ImageCropFieldContainer(props: Readonly<ImageCropFieldProps>): R
   const [baseScale, setBaseScale] = useState(1);
   const [zoom, setZoom] = useState(IMAGE_CROP_MIN_ZOOM);
   const [offset, setOffset] = useState<ImageCropPoint>({ x: 0, y: 0 });
+  const [fitMode, setFitMode] = useState<'crop' | 'full'>('crop');
+  const [selectedAspectRatio, setSelectedAspectRatio] = useState(aspectRatio);
 
   useEffect(() => {
     return () => {
@@ -76,10 +91,7 @@ export function ImageCropFieldContainer(props: Readonly<ImageCropFieldProps>): R
 
     const observer = new ResizeObserver(() => {
       const bounds = viewport.getBoundingClientRect();
-      const nextBaseScale = Math.max(
-        bounds.width / naturalSize.width,
-        bounds.height / naturalSize.height,
-      );
+      const nextBaseScale = resolveImageBaseScale(bounds, naturalSize, fitMode);
       const currentBaseScale = baseScaleRef.current;
       if (Math.abs(nextBaseScale - currentBaseScale) < 0.000001) return;
       setOffset((current) =>
@@ -102,7 +114,7 @@ export function ImageCropFieldContainer(props: Readonly<ImageCropFieldProps>): R
     return () => {
       observer.disconnect();
     };
-  }, [naturalSize, zoom]);
+  }, [fitMode, naturalSize, zoom]);
 
   function clampOffset(candidate: ImageCropPoint, scale: number): ImageCropPoint {
     const viewport = viewportRef.current;
@@ -147,7 +159,7 @@ export function ImageCropFieldContainer(props: Readonly<ImageCropFieldProps>): R
 
     const bounds = viewport.getBoundingClientRect();
     const natural = { width: image.naturalWidth, height: image.naturalHeight };
-    const cover = Math.max(bounds.width / natural.width, bounds.height / natural.height);
+    const cover = resolveImageBaseScale(bounds, natural, fitMode);
 
     setNaturalSize(natural);
     baseScaleRef.current = cover;
@@ -228,14 +240,21 @@ export function ImageCropFieldContainer(props: Readonly<ImageCropFieldProps>): R
 
     const bounds = viewport.getBoundingClientRect();
     const scale = baseScale * zoom;
-    const sourceX = -offset.x / scale;
-    const sourceY = -offset.y / scale;
-    const sourceWidth = bounds.width / scale;
-    const sourceHeight = bounds.height / scale;
+    const sourceX = fitMode === 'full' ? 0 : -offset.x / scale;
+    const sourceY = fitMode === 'full' ? 0 : -offset.y / scale;
+    const sourceWidth = fitMode === 'full' ? naturalSize.width : bounds.width / scale;
+    const sourceHeight = fitMode === 'full' ? naturalSize.height : bounds.height / scale;
 
     const canvas = globalThis.document.createElement('canvas');
-    canvas.width = outputWidth;
-    canvas.height = outputHeight;
+    const requestedHeight =
+      fitMode === 'full'
+        ? Math.round(outputWidth / (naturalSize.width / naturalSize.height))
+        : Math.round(outputWidth / selectedAspectRatio);
+    canvas.height = Math.min(outputHeight, requestedHeight);
+    const outputAspectRatio =
+      fitMode === 'full' ? naturalSize.width / naturalSize.height : selectedAspectRatio;
+    canvas.width =
+      requestedHeight > outputHeight ? Math.round(outputHeight * outputAspectRatio) : outputWidth;
     const context = canvas.getContext('2d');
 
     if (context === null) {
@@ -251,7 +270,7 @@ export function ImageCropFieldContainer(props: Readonly<ImageCropFieldProps>): R
       0,
       0,
       outputWidth,
-      outputHeight,
+      canvas.height,
     );
 
     canvas.toBlob(
@@ -297,11 +316,16 @@ export function ImageCropFieldContainer(props: Readonly<ImageCropFieldProps>): R
             aria-label={dialogTitle}
             className={cn(
               editorClasses.cropViewport,
-              shape === 'circle'
+              shape === 'circle' && fitMode === 'crop' && selectedAspectRatio === 1
                 ? editorClasses.cropViewportCircle
                 : editorClasses.cropViewportRect,
             )}
-            style={shape === 'rect' ? { aspectRatio } : undefined}
+            style={{
+              aspectRatio:
+                fitMode === 'full' && naturalSize !== null
+                  ? naturalSize.width / naturalSize.height
+                  : selectedAspectRatio,
+            }}
             onPointerDown={handlePointerDown}
             onPointerMove={handlePointerMove}
             onPointerUp={handlePointerUp}
@@ -326,6 +350,37 @@ export function ImageCropFieldContainer(props: Readonly<ImageCropFieldProps>): R
                 draggable={false}
               />
             )}
+          </div>
+
+          <div className={editorClasses.cropZoomRow}>
+            <label htmlFor={`${inputProps.id}-fit`}>{fitModeLabel}</label>
+            <Select
+              id={`${inputProps.id}-fit`}
+              value={fitMode}
+              onChange={(event) => {
+                setFitMode(event.target.value as 'crop' | 'full');
+                setZoom(IMAGE_CROP_MIN_ZOOM);
+              }}
+            >
+              <option value="crop">{cropModeLabel}</option>
+              <option value="full">{fullPhotoModeLabel}</option>
+            </Select>
+          </div>
+
+          <div className={editorClasses.cropZoomRow}>
+            <label htmlFor={`${inputProps.id}-aspect`}>{aspectRatioLabel}</label>
+            <Select
+              id={`${inputProps.id}-aspect`}
+              value={String(selectedAspectRatio)}
+              disabled={fitMode === 'full'}
+              onChange={(event) => {
+                setSelectedAspectRatio(Number(event.target.value));
+              }}
+            >
+              <option value="1">1:1</option>
+              <option value={String(4 / 3)}>4:3</option>
+              <option value={String(16 / 9)}>16:9</option>
+            </Select>
           </div>
 
           <div className={editorClasses.cropZoomRow}>

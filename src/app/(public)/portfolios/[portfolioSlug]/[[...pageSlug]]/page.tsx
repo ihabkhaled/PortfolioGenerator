@@ -4,7 +4,13 @@ import type { ReactElement } from 'react';
 
 import { SignOutButtonContainer } from '@/modules/auth';
 import { getCurrentUser } from '@/modules/auth/server';
-import { DEFAULT_LOCALE, isAppLocale, localizePath } from '@/modules/localization';
+import {
+  DEFAULT_LOCALE,
+  HeaderLocalizationControlsContainer,
+  isAppLocale,
+  localizePath,
+  PortfolioShareControlsContainer,
+} from '@/modules/localization';
 import {
   buildPublicNavigation,
   findVisiblePage,
@@ -224,6 +230,7 @@ export default async function PublicPortfolioPage(
         actions={
           <>
             <ThemeToggleContainer label={tApp('theme.label')} options={buildThemeOptions(tApp)} />
+            <HeaderLocalizationControlsContainer />
             {user === null ? null : (
               <AccountMenu
                 name={user.name}
@@ -239,13 +246,16 @@ export default async function PublicPortfolioPage(
           </>
         }
         footerLinks={
-          downloadToken === null ? null : (
-            <PortfolioPdfDownloadLink
-              href={buildPortfolioPdfDownloadPath(downloadToken)}
-              label={translate('pdf.downloadCta')}
-              downloadFilename={buildPortfolioPdfDownloadFilename(portfolioSlug)}
-            />
-          )
+          <>
+            {downloadToken === null ? null : (
+              <PortfolioPdfDownloadLink
+                href={buildPortfolioPdfDownloadPath(downloadToken)}
+                label={translate('pdf.downloadCta')}
+                downloadFilename={buildPortfolioPdfDownloadFilename(portfolioSlug)}
+              />
+            )}
+            <PortfolioShareControlsContainer />
+          </>
         }
         {...(resolved.page.visibility === 'private'
           ? {

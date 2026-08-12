@@ -537,7 +537,8 @@
       "correcting": "保存修正",
       "reviewing": "标记已审核",
       "errors": {
-        "generic": "翻译操作无法完成。什么也没有发表。"
+        "generic": "翻译操作无法完成。什么也没有发表。",
+        "quotaExceeded": "翻译服务商的配额已用尽。你的作品集未被更改。请在配额重置后重试。"
       }
     },
     "copyUrl": "复制网址",
@@ -945,6 +946,10 @@
       "crop": {
         "title": "裁剪你的照片",
         "zoomLabel": "缩放",
+        "fitModeLabel": "照片适配方式",
+        "cropModeLabel": "裁剪至边框",
+        "fullPhotoModeLabel": "显示完整照片",
+        "aspectRatioLabel": "宽高比",
         "apply": "使用此构图",
         "cancel": "取消"
       },

@@ -23,7 +23,10 @@ export {
   translationCorrectionActionSchema,
 } from './schemas/translation-action.schema';
 export { fingerprintTranslationSource } from './helpers/translation-fingerprint.helper';
+export { translationErrorKey } from './helpers/translation-error-key.helper';
 export { LocalizationControlsContainer } from './containers/localization-controls.container';
+export { HeaderLocalizationControlsContainer } from './containers/header-localization-controls.container';
+export { PortfolioShareControlsContainer } from './containers/portfolio-share-controls.container';
 export { TranslationPanelContainer } from './containers/translation-panel.container';
 export type {
   LocaleOption,

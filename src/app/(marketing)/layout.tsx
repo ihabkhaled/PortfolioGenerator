@@ -2,6 +2,7 @@ import type { ReactElement, ReactNode } from 'react';
 
 import { SignOutButtonContainer } from '@/modules/auth';
 import { getCurrentUser } from '@/modules/auth/server';
+import { HeaderLocalizationControlsContainer } from '@/modules/localization';
 import { buildThemeOptions } from '@/modules/preferences';
 import { ThemeToggleContainer } from '@/modules/preferences/preferences-ui';
 import { I18N_NAMESPACES } from '@/packages/i18n';
@@ -68,7 +69,12 @@ export default async function MarketingLayout(
           signUpLabel={t('nav.signUp')}
         />
       }
-      actions={<ThemeToggleContainer label={t('theme.label')} options={buildThemeOptions(t)} />}
+      actions={
+        <>
+          <ThemeToggleContainer label={t('theme.label')} options={buildThemeOptions(t)} />
+          <HeaderLocalizationControlsContainer />
+        </>
+      }
       footerNote={t('footerNote')}
       footerLinks={<SiteFooterNav columns={buildSiteFooterLinks(t)} />}
     >

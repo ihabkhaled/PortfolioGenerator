@@ -21,6 +21,12 @@ import {
   buildMinimalPortfolioDocument,
 } from '../fixtures/portfolio-document.fixtures';
 
+const { copyBrowserText } = vi.hoisted(() => ({
+  copyBrowserText: vi.fn<() => Promise<void>>(),
+}));
+
+vi.mock('@/packages/browser', () => ({ copyBrowserText }));
+
 // The complete editor intentionally renders every authoring collection. Under
 // V8 coverage instrumentation that full integration surface can exceed the
 // default five-second unit timeout on shared CI workers.
@@ -309,6 +315,36 @@ describe('PortfolioEditorContainer', () => {
 });
 
 describe('PublishPanelContainer', () => {
+  it('reports clipboard success only after the public URL is copied', async () => {
+    copyBrowserText.mockResolvedValueOnce();
+    renderPanel(false);
+
+    await userEvent.click(screen.getByRole('button', { name: 'Copy URL' }));
+
+    expect(copyBrowserText).toHaveBeenCalledWith(
+      'https://portfoliogenerate.test/portfolios/amina-rahman',
+    );
+    expect(await screen.findByRole('status')).toHaveTextContent('Copied');
+  });
+
+  it('does not announce success when the browser rejects clipboard access', async () => {
+    copyBrowserText.mockRejectedValueOnce(new Error('Clipboard denied'));
+    renderPanel(false);
+
+    await userEvent.click(screen.getByRole('button', { name: 'Copy URL' }));
+
+    expect(screen.getByRole('status')).toBeEmptyDOMElement();
+    expect(screen.getByRole('button', { name: 'Copy URL' })).toBeVisible();
+  });
+
+  it('keeps publish actions in a sticky surface reserved above the save dock', () => {
+    renderPanel(false);
+
+    const actionSurface = screen.getByRole('group', { name: 'Publish' });
+    expect(actionSurface.className).toContain('sticky');
+    expect(actionSurface.className).toContain('editor-action-dock-reserve');
+  });
+
   it('previews the public URL as the slug is typed', async () => {
     renderPanel(false);
 

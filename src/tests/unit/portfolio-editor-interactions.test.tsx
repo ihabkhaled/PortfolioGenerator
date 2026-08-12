@@ -461,6 +461,19 @@ describe('collection controls', () => {
     ).toBe(true);
   });
 
+  it('preserves a typed comma while synchronizing interests before Save is clicked', async () => {
+    const user = userEvent.setup();
+    const documentValue = buildMinimalPortfolioDocument();
+    const onChange = vi.fn<(value: PortfolioDocument) => void>();
+    render(<CollectionManagerContainer document={documentValue} onChange={onChange} />);
+
+    const interests = screen.getByLabelText('Interests, separated by commas');
+    await user.type(interests, 'Football,');
+
+    expect(interests).toHaveValue('Football,');
+    expect(onChange).toHaveBeenLastCalledWith(expect.objectContaining({ interests: ['Football'] }));
+  });
+
   it('wires boolean, select, multiline, move, and remove controls for an entry', async () => {
     const documentValue = buildFullPortfolioDocument();
     const onChange = vi.fn<(value: PortfolioDocument) => void>();

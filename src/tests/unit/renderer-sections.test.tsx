@@ -727,6 +727,7 @@ describe('the about band', () => {
     expect(screen.getByRole('img', { name: /settlement state machine/i })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: /Curriculum vitae/ })).toBeInTheDocument();
     expect(screen.getByText(/I have spent eight years/)).toBeInTheDocument();
+    expect(screen.getByText('availability — Available from March')).toBeInTheDocument();
   });
 
   it('omits a gallery caption that was not supplied', () => {

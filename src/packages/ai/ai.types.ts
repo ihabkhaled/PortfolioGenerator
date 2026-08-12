@@ -9,6 +9,8 @@ export interface StructuredRequest {
   readonly timeoutMs: number;
 }
 
+export type StructuredErrorCode = 'invalid-output' | 'provider-error' | 'quota-exceeded';
+
 /**
  * A structured-output result, already reduced to what may be stored.
  *
@@ -27,7 +29,7 @@ export type StructuredResponse =
     }
   | {
       readonly ok: false;
-      readonly errorCode: 'invalid-output' | 'provider-error';
+      readonly errorCode: StructuredErrorCode;
       readonly model: string;
       readonly inputUnits: number | null;
       readonly outputUnits: number | null;

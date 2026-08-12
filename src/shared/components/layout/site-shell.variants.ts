@@ -32,7 +32,7 @@ export const siteShellClasses = {
   brandEmail: 'hidden truncate text-[0.8125rem] font-medium text-muted-foreground sm:inline',
 
   headerActions: 'hidden min-w-0 items-center justify-end gap-2 sm:flex sm:gap-3',
-  headerAccount: 'flex shrink-0 items-center',
+  headerAccount: 'ms-auto flex shrink-0 items-center sm:ms-0',
   nav: 'flex items-center gap-1 sm:gap-2',
   navLink:
     'inline-flex min-h-11 cursor-pointer items-center gap-1.5 rounded-md px-2.5 py-2 text-sm font-medium whitespace-nowrap text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring',

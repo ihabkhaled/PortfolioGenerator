@@ -1,4 +1,4 @@
-import { InvalidToolInputError } from 'ai';
+import { APICallError, InvalidToolInputError } from 'ai';
 import type * as Ai from 'ai';
 import { describe, expect, it, vi } from 'vitest';
 
@@ -57,6 +57,22 @@ describe('createStructuredClient', () => {
     const result = await client(buildRequest());
 
     expect(result).toMatchObject({ ok: false, errorCode: 'provider-error' });
+  });
+
+  it('reports an exhausted provider quota separately from a transient provider failure', async () => {
+    generateText.mockRejectedValueOnce(
+      new APICallError({
+        message: 'Resource exhausted',
+        url: 'https://generativelanguage.googleapis.com/v1beta/openai/chat/completions',
+        requestBodyValues: {},
+        statusCode: 429,
+      }),
+    );
+    const client = createStructuredClient({ apiKey: 'key', baseUrl: undefined });
+
+    const result = await client(buildRequest());
+
+    expect(result).toMatchObject({ ok: false, errorCode: 'quota-exceeded' });
   });
 
   it('reports a timed-out request as provider-error', async () => {

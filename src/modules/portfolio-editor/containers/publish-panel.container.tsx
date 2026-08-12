@@ -61,6 +61,16 @@ export function PublishPanelContainer(props: Readonly<PublishPanelProps>): React
   const blockers = publishState.blockers ?? [];
   const publishLabelKey = resolvePublishLabelKey(isPublishing, props.isPublished);
   const publicUrl = `${props.origin}${buildPortfolioPath(slug)}`;
+  const copyPublicUrl = async (): Promise<void> => {
+    setCopied(false);
+    try {
+      await copyBrowserText(publicUrl);
+      setCopied(true);
+    } catch {
+      // Clipboard permission belongs to the browser. A failed write must not
+      // announce success; the visible URL remains available for manual copy.
+    }
+  };
 
   return (
     <section className={editorClasses.section}>
@@ -115,6 +125,7 @@ export function PublishPanelContainer(props: Readonly<PublishPanelProps>): React
             maxLength={48}
             onChange={(event) => {
               setSlug(event.target.value);
+              setCopied(false);
             }}
           />
         </div>
@@ -128,21 +139,22 @@ export function PublishPanelContainer(props: Readonly<PublishPanelProps>): React
             variant="secondary"
             size="sm"
             onClick={() => {
-              void copyBrowserText(publicUrl).then(() => {
-                setCopied(true);
-              });
+              void copyPublicUrl();
             }}
           >
             <CopyIcon aria-hidden size={14} />
             {tLocalization(copied ? 'copied' : 'copyUrl')}
           </Button>
+          <span className={editorClasses.copyStatus} role="status" aria-live="polite">
+            {copied ? tLocalization('copied') : null}
+          </span>
           <ExternalLink href={publicUrl} aria-label={t('publish.urlPreview', { url: publicUrl })}>
             <ExternalIcon aria-hidden size={14} />
           </ExternalLink>
         </div>
       </form>
 
-      <div className={editorClasses.headerActions}>
+      <div className={editorClasses.publishActionDock} role="group" aria-label={t('publish.title')}>
         <form action={runPublish}>
           <input type="hidden" name="portfolioId" value={props.portfolioId} />
           <Button type="submit" disabled={isPublishing || draft.isDirty}>

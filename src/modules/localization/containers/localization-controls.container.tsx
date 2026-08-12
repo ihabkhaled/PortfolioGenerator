@@ -3,7 +3,6 @@
 
 import { useEffect, useState } from 'react';
 import type { ChangeEvent, ReactElement } from 'react';
-import { createPortal } from 'react-dom';
 
 import {
   copyBrowserText,
@@ -13,7 +12,6 @@ import {
 } from '@/packages/browser';
 import { CopyIcon, ShareIcon } from '@/packages/icons';
 import { Button, Select } from '@/packages/ui-primitives';
-import { LOCALIZATION_CONTROLS_TARGET_ID } from '@/shared/constants/localization-target.constants';
 
 import { localizationClasses } from '../constants/localization-style.constants';
 import {
@@ -36,13 +34,8 @@ export function LocalizationControlsContainer(
 ): ReactElement {
   const [copyVisible, setCopyVisible] = useState(false);
   const [copied, setCopied] = useState(false);
-  const [target, setTarget] = useState<HTMLElement | null>(null);
   useEffect(() => {
     setCopyVisible(isPublicPortfolioCandidatePath(getBrowserLocation().pathname));
-    setTarget(
-      globalThis.document.querySelector<HTMLElement>(`#${LOCALIZATION_CONTROLS_TARGET_ID}`) ??
-        globalThis.document.body,
-    );
   }, []);
 
   async function copyCurrentUrl(): Promise<void> {
@@ -56,39 +49,38 @@ export function LocalizationControlsContainer(
     if (!shared) await copyCurrentUrl();
   }
 
-  if (target === null) return <span hidden />;
-
-  return createPortal(
+  return (
     <aside
       className={localizationClasses.controlsHeader}
       aria-label={props.label}
       data-fixed-surface="locale"
     >
-      <Select
-        aria-label={props.label}
-        value={props.locale}
-        onChange={changeLocale}
-        className={localizationClasses.select}
-      >
-        {props.options.map((option) => (
-          <option key={option.value} value={option.value}>
-            {option.label}
-          </option>
-        ))}
-      </Select>
-      {copyVisible ? (
+      {props.showLocale === false ? null : (
+        <Select
+          aria-label={props.label}
+          value={props.locale}
+          onChange={changeLocale}
+          className={localizationClasses.select}
+        >
+          {props.options.map((option) => (
+            <option key={option.value} value={option.value}>
+              {option.label}
+            </option>
+          ))}
+        </Select>
+      )}
+      {copyVisible && props.showReaderActions !== false ? (
         <Button type="button" variant="secondary" size="sm" onClick={() => void copyCurrentUrl()}>
           <CopyIcon aria-hidden size={14} />
           {copied ? props.copied : props.copyUrl}
         </Button>
       ) : null}
-      {copyVisible ? (
+      {copyVisible && props.showReaderActions !== false ? (
         <Button type="button" variant="secondary" size="sm" onClick={() => void shareCurrentUrl()}>
           <ShareIcon aria-hidden size={14} />
           {props.shareUrl}
         </Button>
       ) : null}
-    </aside>,
-    target,
+    </aside>
   );
 }

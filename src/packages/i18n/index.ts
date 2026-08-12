@@ -18,5 +18,5 @@ export {
 } from './translator';
 export type { CatalogParityIssue } from './translator';
 export { useAppTranslation } from './use-app-translation.hook';
-export { I18nLocaleProvider } from './locale-context';
+export { I18nLocaleProvider, useI18nLocale } from './locale-context';
 export type { AppMessages, MessageCatalog, TranslateFunction } from './i18n.types';

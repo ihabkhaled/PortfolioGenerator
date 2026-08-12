@@ -535,7 +535,8 @@
       "versions": "ドラフト バージョン {draft} · 公開バージョン {published}",
       "markReviewed": "マークがレビュー済み",
       "errors": {
-        "generic": "翻訳操作を完了できませんでした。何も出版されていませんでした。"
+        "generic": "翻訳操作を完了できませんでした。何も出版されていませんでした。",
+        "quotaExceeded": "翻訳プロバイダーの割り当て上限に達しました。ポートフォリオは変更されていません。割り当てがリセットされた後にもう一度お試しください。"
       },
       "reviewing": "マーキングの見直し",
       "publishing": "翻訳の出版",
@@ -966,6 +967,10 @@
       "crop": {
         "title": "写真の位置を調整",
         "zoomLabel": "ズーム",
+        "fitModeLabel": "写真の表示方法",
+        "cropModeLabel": "枠に合わせて切り抜く",
+        "fullPhotoModeLabel": "写真全体を表示",
+        "aspectRatioLabel": "縦横比",
         "apply": "このフレーミングを使用",
         "cancel": "キャンセル"
       },

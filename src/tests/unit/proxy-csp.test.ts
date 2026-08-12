@@ -19,6 +19,7 @@ describe('proxy content security policy', () => {
       'frame-src https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net',
     );
     expect(policy).toContain('https://tpc.googlesyndication.com');
+    expect(policy).toContain('https://www.google.com');
     expect(policy).toContain("object-src 'none'");
     expect(policy).toContain("frame-ancestors 'none'");
   });

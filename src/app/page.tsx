@@ -3,7 +3,11 @@ import type { ReactElement } from 'react';
 
 import { SignOutButtonContainer } from '@/modules/auth';
 import { getCurrentUser } from '@/modules/auth/server';
-import { DEFAULT_LOCALE, isAppLocale } from '@/modules/localization';
+import {
+  DEFAULT_LOCALE,
+  HeaderLocalizationControlsContainer,
+  isAppLocale,
+} from '@/modules/localization';
 import {
   LandingCta,
   LandingDirectory,
@@ -217,7 +221,10 @@ export default async function LandingPage(): Promise<ReactElement> {
           />
         }
         actions={
-          <ThemeToggleContainer label={tApp('theme.label')} options={buildThemeOptions(tApp)} />
+          <>
+            <ThemeToggleContainer label={tApp('theme.label')} options={buildThemeOptions(tApp)} />
+            <HeaderLocalizationControlsContainer />
+          </>
         }
         footerNote={tApp('footerNote')}
         footerLinks={<SiteFooterNav columns={buildSiteFooterLinks(tApp)} />}

@@ -539,7 +539,8 @@
       "publish": "Publish translation",
       "publishing": "Publishing translation",
       "errors": {
-        "generic": "The translation operation could not be completed. Nothing was published."
+        "generic": "The translation operation could not be completed. Nothing was published.",
+        "quotaExceeded": "The translation provider's quota is exhausted. Your portfolio was not changed. Please try again after the provider quota resets."
       }
     }
   },
@@ -943,6 +944,10 @@
       "crop": {
         "title": "Frame your photo",
         "zoomLabel": "Zoom",
+        "fitModeLabel": "Photo fit",
+        "cropModeLabel": "Crop to frame",
+        "fullPhotoModeLabel": "Show full photo",
+        "aspectRatioLabel": "Aspect ratio",
         "apply": "Use this framing",
         "cancel": "Cancel"
       },

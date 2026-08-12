@@ -1,9 +1,9 @@
 import 'server-only';
 
 import { createOpenAI } from '@ai-sdk/openai';
-import { generateText, InvalidToolInputError, tool } from 'ai';
+import { APICallError, generateText, InvalidToolInputError, tool } from 'ai';
 
-import type { StructuredRequest, StructuredResponse } from './ai.types';
+import type { StructuredErrorCode, StructuredRequest, StructuredResponse } from './ai.types';
 
 /**
  * Owner of the AI SDK.
@@ -99,9 +99,14 @@ export function createStructuredClient(config: {
       // is an infrastructure failure with nothing wrong in what the model
       // said, and has to stay `provider-error` so the retry policy doesn't
       // mistake an outage for a model that needs the costlier fallback.
+      let errorCode: StructuredErrorCode = 'provider-error';
+      if (InvalidToolInputError.isInstance(error)) errorCode = 'invalid-output';
+      else if (APICallError.isInstance(error) && error.statusCode === 429)
+        errorCode = 'quota-exceeded';
+
       return {
         ok: false,
-        errorCode: InvalidToolInputError.isInstance(error) ? 'invalid-output' : 'provider-error',
+        errorCode,
         model: request.model,
         inputUnits: null,
         outputUnits: null,

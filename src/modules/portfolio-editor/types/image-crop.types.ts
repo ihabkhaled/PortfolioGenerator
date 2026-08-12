@@ -10,6 +10,10 @@ export interface ImageCropFieldProps extends Readonly<
   readonly outputHeight: number;
   readonly dialogTitle: string;
   readonly zoomLabel: string;
+  readonly fitModeLabel: string;
+  readonly cropModeLabel: string;
+  readonly fullPhotoModeLabel: string;
+  readonly aspectRatioLabel: string;
   readonly applyLabel: string;
   readonly cancelLabel: string;
 }

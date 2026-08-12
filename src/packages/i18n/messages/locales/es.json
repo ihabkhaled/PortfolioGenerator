@@ -539,7 +539,8 @@
       "publish": "Publicar traducción",
       "publishing": "Traducción editorial",
       "errors": {
-        "generic": "No se pudo completar la operación de traducción. No se publicó nada."
+        "generic": "No se pudo completar la operación de traducción. No se publicó nada.",
+        "quotaExceeded": "La cuota del proveedor de traducción se ha agotado. Tu portafolio no se modificó. Inténtalo de nuevo cuando se restablezca la cuota."
       }
     }
   },
@@ -943,6 +944,10 @@
       "crop": {
         "title": "Encuadra tu foto",
         "zoomLabel": "Zoom",
+        "fitModeLabel": "Ajuste de la foto",
+        "cropModeLabel": "Recortar al marco",
+        "fullPhotoModeLabel": "Mostrar foto completa",
+        "aspectRatioLabel": "Relación de aspecto",
         "apply": "Usar este encuadre",
         "cancel": "Cancelar"
       },

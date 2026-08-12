@@ -1,4 +1,5 @@
 import { render } from '@testing-library/react';
+import { createElement } from 'react';
 import { describe, expect, it } from 'vitest';
 
 import {
@@ -93,7 +94,7 @@ describe('serializeRssFeed', () => {
 
 describe('AdSenseScript', () => {
   it('loads the official script once, after hydration, with the request nonce', () => {
-    render(AdSenseScript({ nonce: 'request-nonce' }));
+    render(createElement(AdSenseScript, { nonce: 'request-nonce' }));
     const scripts = [...document.scripts].filter((script) => script.src === ADSENSE_SCRIPT_URL);
 
     // `next/script`'s `afterInteractive` strategy is what makes this load
@@ -104,5 +105,6 @@ describe('AdSenseScript', () => {
     expect(scripts).toHaveLength(1);
     expect(scripts[0]).toHaveAttribute('crossorigin', 'anonymous');
     expect(scripts[0]).toHaveAttribute('nonce', 'request-nonce');
+    expect(scripts[0]).not.toHaveAttribute('data-nscript');
   });
 });

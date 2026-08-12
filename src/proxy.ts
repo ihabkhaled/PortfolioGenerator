@@ -60,7 +60,7 @@ export function buildContentSecurityPolicy(
     // than a visitor's data.
     `connect-src 'self' https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net https://*.adtrafficquality.google${paypalSources}`,
     ...(allowsPaypalCheckout ? [`child-src${paypalSources}`] : []),
-    `frame-src https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net https://tpc.googlesyndication.com https://*.adtrafficquality.google${paypalSources}`,
+    `frame-src https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net https://tpc.googlesyndication.com https://*.adtrafficquality.google https://www.google.com${paypalSources}`,
     `media-src 'none'`,
     `object-src 'none'`,
     `base-uri 'self'`,

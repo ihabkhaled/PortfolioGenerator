@@ -66,6 +66,7 @@ export function PortfolioNavMenuContainer(props: Readonly<PortfolioNavMenuProps>
               {item.label}
             </AppLink>
           ))}
+          <div className={portfolioShellClasses.mobileNavActions}>{props.actions}</div>
         </nav>
       ) : null}
     </>

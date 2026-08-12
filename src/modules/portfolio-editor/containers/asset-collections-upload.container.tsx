@@ -81,6 +81,10 @@ export function AssetCollectionsUploadContainer(
             outputHeight={900}
             dialogTitle={t('assets.crop.title')}
             zoomLabel={t('assets.crop.zoomLabel')}
+            fitModeLabel={t('assets.crop.fitModeLabel')}
+            cropModeLabel={t('assets.crop.cropModeLabel')}
+            fullPhotoModeLabel={t('assets.crop.fullPhotoModeLabel')}
+            aspectRatioLabel={t('assets.crop.aspectRatioLabel')}
             applyLabel={t('assets.crop.apply')}
             cancelLabel={t('assets.crop.cancel')}
           />

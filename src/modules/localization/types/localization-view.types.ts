@@ -13,6 +13,8 @@ export interface LocalizationControlsProps {
   readonly copyUrl: string;
   readonly shareUrl: string;
   readonly copied: string;
+  readonly showLocale?: boolean;
+  readonly showReaderActions?: boolean;
 }
 
 export interface TranslationPanelProps {

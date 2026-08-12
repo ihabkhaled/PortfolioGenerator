@@ -19,7 +19,15 @@ export interface TranslationSnapshot {
 
 export type TranslationWriteResult =
   | { readonly ok: true; readonly value: TranslationSnapshot }
-  | { readonly ok: false; readonly reason: 'not-found' | 'not-reviewed' | 'ai-failed' };
+  | {
+      readonly ok: false;
+      readonly reason: 'not-found' | 'not-reviewed' | 'ai-failed' | 'quota-exceeded';
+    };
+
+export type TranslationFailureReason = Extract<
+  TranslationWriteResult,
+  { readonly ok: false }
+>['reason'];
 
 export interface TranslationActionState {
   readonly status: 'idle' | 'success' | 'error';

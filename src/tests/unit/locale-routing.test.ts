@@ -70,6 +70,8 @@ describe('locale routing', () => {
 
   it('recognizes localized and unprefixed public portfolio paths', () => {
     expect(isPublicPortfolioCandidatePath('/ihabkhaled')).toBe(true);
+    expect(isPublicPortfolioCandidatePath('/portfolios/ihabkhaled')).toBe(true);
+    expect(isPublicPortfolioCandidatePath('/ar/portfolios/ihabkhaled/about')).toBe(true);
     expect(isPublicPortfolioCandidatePath('/ar/ihabkhaled/about')).toBe(true);
     expect(isPublicPortfolioCandidatePath('/ar/sign-in')).toBe(false);
     expect(isPublicPortfolioCandidatePath('/')).toBe(false);

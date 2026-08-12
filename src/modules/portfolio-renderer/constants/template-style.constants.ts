@@ -30,8 +30,9 @@ export const portfolioShellClasses = {
     'font-display text-sm font-bold tracking-tight text-foreground group-hover:text-primary-readable',
   identity: 'hidden min-w-0 @3xl/portfolio:block',
   headerActions: 'flex min-w-0 items-center justify-end gap-2',
+  desktopActions: 'hidden min-w-0 items-center gap-2 @5xl/portfolio:flex',
   footerLinks:
-    'fixed right-4 bottom-[max(1rem,env(safe-area-inset-bottom))] z-30 flex flex-wrap items-center gap-2 rounded-xl border border-border bg-surface/95 p-2 shadow-lg backdrop-blur empty:hidden print:hidden',
+    'fixed end-[max(1rem,env(safe-area-inset-right))] bottom-[calc(env(safe-area-inset-bottom)+var(--pwa-fixed-surface-reserve)+1rem)] z-30 flex max-w-[calc(100vw-2rem)] flex-wrap items-center gap-2 rounded-xl border border-border bg-surface/95 p-2 shadow-lg backdrop-blur empty:hidden print:hidden rtl:end-[max(1rem,env(safe-area-inset-left))]',
   brandName:
     'font-display truncate text-sm font-bold tracking-tight text-foreground @3xl/portfolio:text-[0.95rem]',
   brandHeadline:
@@ -67,6 +68,8 @@ export const portfolioShellClasses = {
   mobileNavLink:
     'relative flex min-h-11 cursor-pointer items-center gap-2.5 rounded-md px-3 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring',
   mobileNavLinkCurrent: 'bg-muted text-foreground',
+  mobileNavActions:
+    'mt-2 flex min-w-0 flex-wrap items-center gap-2 border-t border-border pt-3 @5xl/portfolio:hidden [&>*]:max-w-full',
   // The locale switcher (`localizationClasses.controls`) is `fixed` at the
   // viewport bottom, not appended after the document's last element, so on a
   // short page `body`'s own bottom reserve (src/app/styles.css) never comes

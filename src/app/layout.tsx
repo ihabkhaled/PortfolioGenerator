@@ -2,13 +2,7 @@ import type { Metadata, Viewport } from 'next';
 import { headers } from 'next/headers';
 import type { ReactElement, ReactNode } from 'react';
 
-import {
-  APP_LOCALES,
-  DEFAULT_LOCALE,
-  getLocaleDirection,
-  isAppLocale,
-  LocalizationControlsContainer,
-} from '@/modules/localization';
+import { DEFAULT_LOCALE, getLocaleDirection, isAppLocale } from '@/modules/localization';
 import { PwaRegistrationContainer } from '@/modules/pwa/pwa-ui';
 import { AdSenseScript } from '@/modules/seo';
 import { appOrigin } from '@/packages/env';
@@ -85,7 +79,6 @@ export default async function RootLayout(props: {
   const requestedLocale = requestHeaders.get('x-app-locale') ?? DEFAULT_LOCALE;
   const locale = isAppLocale(requestedLocale) ? requestedLocale : DEFAULT_LOCALE;
   const tApp = await getServerTranslations(I18N_NAMESPACES.app, locale);
-  const tLocalization = await getServerTranslations(I18N_NAMESPACES.localization, locale);
 
   return (
     <html
@@ -101,17 +94,6 @@ export default async function RootLayout(props: {
       <body>
         <I18nLocaleProvider locale={locale}>
           {props.children}
-          <LocalizationControlsContainer
-            locale={locale}
-            options={APP_LOCALES.map((option) => ({
-              value: option,
-              label: tLocalization(`locales.${option}`),
-            }))}
-            label={tLocalization('label')}
-            copyUrl={tLocalization('copyUrl')}
-            shareUrl={tLocalization('shareUrl')}
-            copied={tLocalization('copied')}
-          />
           <AppToaster />
           <PwaRegistrationContainer
             installTitle={tApp('pwa.installTitle')}

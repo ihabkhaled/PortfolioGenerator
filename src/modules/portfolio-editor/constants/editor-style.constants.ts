@@ -81,6 +81,9 @@ export const editorClasses = {
   slugRow: 'grid gap-3 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-end',
   slugPreview:
     'flex min-w-0 flex-wrap items-center gap-2 font-mono text-[0.6875rem] text-muted-foreground sm:col-span-2',
+  copyStatus: 'sr-only',
+  publishActionDock:
+    'sticky bottom-[calc(env(safe-area-inset-bottom)+var(--pwa-fixed-surface-reserve)+var(--editor-action-dock-reserve,7rem))] z-30 flex flex-wrap items-center justify-end gap-2 rounded-xl border border-border bg-surface-raised/95 p-3 shadow-lg backdrop-blur',
   blockerList: 'grid gap-2',
   blocker: 'flex items-start gap-2 text-sm text-warning-readable',
 

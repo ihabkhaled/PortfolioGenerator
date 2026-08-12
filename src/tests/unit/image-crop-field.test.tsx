@@ -24,6 +24,10 @@ const props = {
   outputHeight: 400,
   dialogTitle: 'Crop portrait',
   zoomLabel: 'Zoom',
+  fitModeLabel: 'Fit',
+  cropModeLabel: 'Crop',
+  fullPhotoModeLabel: 'Full photo',
+  aspectRatioLabel: 'Aspect ratio',
   applyLabel: 'Apply crop',
   cancelLabel: 'Cancel',
 };
@@ -85,6 +89,20 @@ describe('image crop field', () => {
     HTMLDialogElement.prototype.close = vi.fn(function (this: HTMLDialogElement) {
       this.removeAttribute('open');
     });
+  });
+
+  it('offers crop, full-photo, and aspect-ratio framing controls', async () => {
+    const user = userEvent.setup();
+    render(<ImageCropFieldContainer {...props} />);
+    await user.upload(
+      screen.getByLabelText<HTMLInputElement>('Portrait'),
+      new File(['one'], 'one.png', { type: 'image/png' }),
+    );
+
+    expect(screen.getByRole('combobox', { name: 'Fit' })).toHaveValue('crop');
+    expect(screen.getByRole('combobox', { name: 'Aspect ratio' })).toHaveValue('1');
+    await user.selectOptions(screen.getByRole('combobox', { name: 'Fit' }), 'full');
+    expect(screen.getByRole('combobox', { name: 'Fit' })).toHaveValue('full');
   });
 
   it('opens for a chosen image, supports framing, and cancels cleanly', async () => {

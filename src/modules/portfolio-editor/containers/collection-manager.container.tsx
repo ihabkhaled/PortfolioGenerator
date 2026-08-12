@@ -1,8 +1,9 @@
 'use client';
 // client-boundary-reason: collection CRUD mutates the local draft before the shared save action validates it.
 
-import { useEffect, useState, type ReactElement } from 'react';
+import { useEffect, useRef, useState, type ReactElement } from 'react';
 
+import type { PortfolioDocument } from '@/modules/portfolio-document';
 import { I18N_NAMESPACES, useAppTranslation } from '@/packages/i18n';
 import { Button, Input, Label } from '@/packages/ui-primitives';
 
@@ -26,13 +27,16 @@ function entryTitle(item: object, fallback: string): string {
 export function CollectionManagerContainer(props: Readonly<CollectionManagerProps>): ReactElement {
   const t = useAppTranslation(I18N_NAMESPACES.editor);
   const [interests, setInterestsDraft] = useState(props.document.interests.join(', '));
+  const editingInterests = useRef(false);
 
   useEffect(() => {
-    setInterestsDraft(props.document.interests.join(', '));
+    if (!editingInterests.current) setInterestsDraft(props.document.interests.join(', '));
   }, [props.document.interests]);
 
-  function commitInterests(): void {
-    props.onChange(setInterests(props.document, interests.split(',')));
+  function synchronizeInterests(value: string): PortfolioDocument {
+    const nextDocument = setInterests(props.document, value.split(','));
+    props.onChange(nextDocument);
+    return nextDocument;
   }
   return (
     <section className={editorClasses.section}>
@@ -89,12 +93,22 @@ export function CollectionManagerContainer(props: Readonly<CollectionManagerProp
         <Input
           id="portfolio-interests"
           value={interests}
-          onChange={(event) => {
-            setInterestsDraft(event.target.value);
+          onFocus={() => {
+            editingInterests.current = true;
           }}
-          onBlur={commitInterests}
+          onChange={(event) => {
+            const value = event.target.value;
+            setInterestsDraft(value);
+            synchronizeInterests(value);
+          }}
+          onBlur={() => {
+            editingInterests.current = false;
+            setInterestsDraft(synchronizeInterests(interests).interests.join(', '));
+          }}
           onKeyDown={(event) => {
-            if (event.key === 'Enter') commitInterests();
+            if (event.key === 'Enter') {
+              setInterestsDraft(synchronizeInterests(interests).interests.join(', '));
+            }
           }}
         />
       </div>

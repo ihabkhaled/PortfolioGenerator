@@ -84,6 +84,33 @@ describe.each([
 });
 
 describe('the template on a full portfolio', () => {
+  it('marks PDF and reader actions as one safe floating surface', () => {
+    const document = buildFullPortfolioDocument();
+    const resolved = findVisiblePage(document, '');
+    if (resolved === null) throw new Error('Expected the overview page');
+
+    const view = render(
+      <PortfolioTemplate
+        document={document}
+        sections={resolved.sections}
+        navigation={buildNavigation(document, 'amina-rahman', '')}
+        labels={buildPortfolioLabels(translate)}
+        portfolioSlug="amina-rahman"
+        pageTitle={resolved.page.title}
+        isPreview={false}
+        actions={null}
+        footerLinks={<button type="button">Download PDF and share</button>}
+      />,
+    );
+
+    expect(
+      view.container.querySelector('[data-fixed-surface="portfolio-actions"]'),
+    ).toHaveTextContent('Download PDF and share');
+    expect(
+      view.container.querySelector('[data-fixed-surface="portfolio-actions"]'),
+    ).toHaveAttribute('data-fixed-surface', 'portfolio-actions');
+  });
+
   it('keeps section rhythm and typography compact in a narrow portfolio container', () => {
     renderPage(buildFullPortfolioDocument());
 

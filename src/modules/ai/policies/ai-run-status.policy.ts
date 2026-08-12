@@ -21,6 +21,7 @@ export function toAiRunStatus(errorCode: AiErrorCode): AiRunStatus {
     }
 
     case 'provider-error':
+    case 'quota-exceeded':
     case 'not-configured': {
       return 'FAILED_PROVIDER';
     }
@@ -36,7 +37,7 @@ export function toAiRunStatus(errorCode: AiErrorCode): AiRunStatus {
  * model, or a transient network fault.
  */
 export function isRetryable(errorCode: AiErrorCode): boolean {
-  return errorCode !== 'not-configured';
+  return errorCode !== 'not-configured' && errorCode !== 'quota-exceeded';
 }
 
 /** Whether the next attempt should escalate to the stronger, costlier model. */

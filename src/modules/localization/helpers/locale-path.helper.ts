@@ -17,6 +17,8 @@ export function isAppLocale(value: string): value is AppLocale {
 
 export function isPublicPortfolioCandidatePath(pathname: string): boolean {
   const canonical = resolveLocalePath(pathname).pathname;
+  const segments = canonical.split('/').filter(Boolean);
+  if (segments[0] === 'portfolios' && segments[1] !== undefined) return true;
   const firstSegment = canonical.split('/').find(Boolean);
   return firstSegment !== undefined && !PLATFORM_ROUTE_SEGMENTS.includes(firstSegment);
 }

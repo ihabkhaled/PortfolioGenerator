@@ -53,6 +53,7 @@ export function PortfolioTemplate(props: Readonly<PortfolioTemplateProps>): Reac
           items={props.navigation}
           navigationLabel={props.labels.navigationLabel}
           toggleLabel={props.labels.menuToggleLabel}
+          actions={props.actions}
         />
       }
       actions={props.actions}

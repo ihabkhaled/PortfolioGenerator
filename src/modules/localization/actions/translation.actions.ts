@@ -10,6 +10,7 @@ import {
   TRANSLATION_ACTION_ERROR_KEY,
   TRANSLATION_ACTION_FIELDS,
 } from '../constants/translation-action.constants';
+import { translationErrorKey } from '../helpers/translation-error-key.helper';
 import {
   translationActionSchema,
   translationCorrectionActionSchema,
@@ -79,7 +80,12 @@ export async function generateTranslationAction(
     parsed.value.locale,
   );
   if (result.ok) invalidatePath(buildDashboardEditorPath(parsed.value.portfolioId));
-  return resultState(result.ok);
+  return result.ok
+    ? resultState(true)
+    : {
+        status: 'error',
+        error: translationErrorKey(result.reason),
+      };
 }
 
 export async function reviewTranslationAction(

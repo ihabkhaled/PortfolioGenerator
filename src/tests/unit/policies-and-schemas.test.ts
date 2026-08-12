@@ -69,6 +69,7 @@ describe('toAiRunStatus', () => {
     ['timeout', 'FAILED_TIMEOUT'],
     ['provider-error', 'FAILED_PROVIDER'],
     ['not-configured', 'FAILED_PROVIDER'],
+    ['quota-exceeded', 'FAILED_PROVIDER'],
   ] as const)('records %s as %s', (code, status) => {
     expect(toAiRunStatus(code)).toBe(status);
   });
@@ -78,6 +79,10 @@ describe('isRetryable', () => {
   // A misconfigured provider will not fix itself between two calls.
   it('does not retry a configuration failure', () => {
     expect(isRetryable('not-configured')).toBe(false);
+  });
+
+  it('does not retry an exhausted provider quota', () => {
+    expect(isRetryable('quota-exceeded')).toBe(false);
   });
 
   it.each(['invalid-output', 'timeout', 'provider-error'] as const)('retries %s', (code) => {

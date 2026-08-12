@@ -7,6 +7,7 @@ import {
   versionedTranslationActionSchema,
   translationCorrectionActionSchema,
   fingerprintTranslationSource,
+  translationErrorKey,
 } from '@/modules/localization';
 import { parseSchema } from '@/packages/zod';
 
@@ -57,6 +58,11 @@ describe('toTranslationSnapshot', () => {
 });
 
 describe('translation action schemas', () => {
+  it('gives an exhausted AI quota an honest, specific user-facing message key', () => {
+    expect(translationErrorKey('quota-exceeded')).toBe('translation.errors.quotaExceeded');
+    expect(translationErrorKey('ai-failed')).toBe('translation.errors.generic');
+  });
+
   it('requires a bounded serialized document for an owner correction', () => {
     expect(
       parseSchema(translationCorrectionActionSchema, {

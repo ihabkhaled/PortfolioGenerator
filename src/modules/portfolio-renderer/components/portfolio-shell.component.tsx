@@ -3,7 +3,6 @@ import type { ReactElement } from 'react';
 import { HomeIcon } from '@/packages/icons';
 import { AppLink } from '@/packages/link';
 import { LANDMARK_IDS } from '@/shared/accessibility/landmark-ids.constants';
-import { LOCALIZATION_CONTROLS_TARGET_ID } from '@/shared/constants/localization-target.constants';
 import { ROUTE_PATHS } from '@/shared/constants/route-paths.constants';
 
 import { portfolioShellClasses } from '../constants/template-style.constants';
@@ -37,8 +36,7 @@ export function PortfolioShell(props: Readonly<PortfolioShellProps>): ReactEleme
           </nav>
           <div className={portfolioShellClasses.headerActions}>
             {props.mobileMenu}
-            {props.actions}
-            <div id={LOCALIZATION_CONTROLS_TARGET_ID} />
+            <div className={portfolioShellClasses.desktopActions}>{props.actions}</div>
           </div>
         </div>
       </header>
@@ -54,7 +52,9 @@ export function PortfolioShell(props: Readonly<PortfolioShellProps>): ReactEleme
       <footer className={portfolioShellClasses.footer}>
         <div className={portfolioShellClasses.footerInner}>
           <p className={portfolioShellClasses.footerNote}>{props.footerNote}</p>
-          <div className={portfolioShellClasses.footerLinks}>{props.footerLinks}</div>
+          <div className={portfolioShellClasses.footerLinks} data-fixed-surface="portfolio-actions">
+            {props.footerLinks}
+          </div>
         </div>
       </footer>
     </div>

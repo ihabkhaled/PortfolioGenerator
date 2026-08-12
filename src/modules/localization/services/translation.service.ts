@@ -45,7 +45,12 @@ export async function generateTranslationDraft(
     document: redactPrivatePagePasswords(portfolio.draftDocument),
     targetLocale: locale,
   });
-  if (!translated.ok) return { ok: false, reason: 'ai-failed' };
+  if (!translated.ok) {
+    return {
+      ok: false,
+      reason: translated.errorCode === 'quota-exceeded' ? 'quota-exceeded' : 'ai-failed',
+    };
+  }
   const saved = await saveOwnedTranslationDraft(
     ownerId,
     portfolioId,

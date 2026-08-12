@@ -539,7 +539,8 @@
       "publish": "Publicar tradução",
       "publishing": "Tradução de publicação",
       "errors": {
-        "generic": "A operação de tradução não pôde ser concluída. Nada foi publicado."
+        "generic": "A operação de tradução não pôde ser concluída. Nada foi publicado.",
+        "quotaExceeded": "A cota do provedor de tradução foi esgotada. Seu portfólio não foi alterado. Tente novamente após a redefinição da cota."
       }
     }
   },
@@ -943,6 +944,10 @@
       "crop": {
         "title": "Enquadre sua foto",
         "zoomLabel": "Zoom",
+        "fitModeLabel": "Ajuste da foto",
+        "cropModeLabel": "Recortar no quadro",
+        "fullPhotoModeLabel": "Mostrar foto inteira",
+        "aspectRatioLabel": "Proporção",
         "apply": "Usar este enquadramento",
         "cancel": "Cancelar"
       },

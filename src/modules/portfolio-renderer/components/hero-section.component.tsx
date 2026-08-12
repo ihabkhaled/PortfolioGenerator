@@ -22,6 +22,7 @@ export function HeroSection(props: Readonly<HeroSectionProps>): ReactElement {
             </p>
           )}
           <h1 className={heroClasses.name}>{props.displayName}</h1>
+          {props.tagline === null ? null : <p className={heroClasses.headline}>{props.tagline}</p>}
           {props.headline === null ? null : (
             <p className={heroClasses.headline}>{props.headline}</p>
           )}

@@ -502,6 +502,7 @@
   "localization": {
     "label": "Lingua",
     "copyUrl": "Copia l'URL",
+    "shareUrl": "Condividi",
     "copied": "Copiato",
     "locales": {
       "en": "Inglese",

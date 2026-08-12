@@ -74,11 +74,12 @@ export function SectionRenderer(props: Readonly<SectionRendererProps>): ReactEle
       return (
         <HeroSection
           displayName={document.identity.displayName}
+          tagline={document.identity.tagline}
           headline={document.identity.headline}
           summary={document.identity.summary}
           availabilityLabel={
             section.config.showAvailability && document.identity.availabilityEnabled
-              ? labels.availability
+              ? joinNonEmpty([labels.availability, document.identity.availabilityNote], ' — ')
               : null
           }
           portrait={renderPortrait(
@@ -96,7 +97,12 @@ export function SectionRenderer(props: Readonly<SectionRendererProps>): ReactEle
     case 'about': {
       return (
         <div className={supplementalClasses.stack}>
-          <AboutSection paragraphs={splitParagraphs(document.identity.summary ?? '')} />
+          <AboutSection
+            paragraphs={splitParagraphs(
+              joinNonEmpty([document.identity.summary, document.identity.coverLetter], '\n\n') ??
+                '',
+            )}
+          />
           {renderAboutCollections(document, labels, buildAssetPath)}
         </div>
       );

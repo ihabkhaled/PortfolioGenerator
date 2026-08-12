@@ -12,6 +12,7 @@ export type PortfolioCustomLinkBlock = Extract<PortfolioCustomBlock, { readonly 
 
 export interface HeroSectionProps {
   readonly displayName: string;
+  readonly tagline: string | null;
   readonly headline: string | null;
   readonly summary: string | null;
   readonly availabilityLabel: string | null;

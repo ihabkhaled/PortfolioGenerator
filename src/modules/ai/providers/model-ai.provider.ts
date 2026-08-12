@@ -114,7 +114,10 @@ export function createModelAiProvider(): PortfolioAiProvider {
         schema: portfolioDocumentSchema,
         systemPrompt: PORTFOLIO_TRANSLATION_SYSTEM_PROMPT,
         userPrompt: `Target locale: ${input.targetLocale}\n\n${JSON.stringify(input.document)}`,
-        maxOutputTokens: env.AI_MAX_OUTPUT_TOKENS,
+        // A translated portfolio repeats the complete validated document. The
+        // extraction-sized ceiling truncates realistic portfolios before the
+        // closing JSON fields, which the schema correctly rejects.
+        maxOutputTokens: Math.max(env.AI_MAX_OUTPUT_TOKENS, 32_768),
         timeoutMs: env.AI_REQUEST_TIMEOUT_MS,
       });
       const usage = {

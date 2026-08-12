@@ -326,13 +326,13 @@ describe('PublishPanelContainer', () => {
 
     const buttons = screen.getAllByRole('button');
 
-    expect(buttons).toHaveLength(2);
+    expect(buttons).toHaveLength(3);
   });
 
   it('offers unpublish once a portfolio is live', () => {
     renderPanel(true);
 
-    expect(screen.getAllByRole('button')).toHaveLength(3);
+    expect(screen.getAllByRole('button')).toHaveLength(4);
   });
 });
 

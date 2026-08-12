@@ -6,6 +6,7 @@ export const localizationClasses = {
   // uses print media by default).
   controls:
     'fixed end-[max(1rem,env(safe-area-inset-right))] bottom-[calc(env(safe-area-inset-bottom)+var(--pwa-fixed-surface-reserve)+var(--editor-fixed-surface-reserve)+1rem)] z-50 flex w-fit max-w-[calc(100vw-2rem)] items-center gap-2 rounded-xl border border-border bg-surface-raised/95 p-2 shadow-lg backdrop-blur lg:bottom-[calc(env(safe-area-inset-bottom)+var(--editor-fixed-surface-reserve)+1rem)] rtl:end-[max(1rem,env(safe-area-inset-left))] [@media(max-height:30rem)]:static [@media(max-height:30rem)]:ms-auto [@media(max-height:30rem)]:me-4 [@media(max-height:30rem)]:mt-4 [@media(max-height:30rem)]:mb-4 print:hidden',
+  controlsHeader: 'flex items-center gap-2 print:hidden',
   select: 'h-9 min-w-32 py-0',
   panel: 'grid gap-5 rounded-xl border border-border bg-surface-raised p-5',
   header: 'grid gap-1',

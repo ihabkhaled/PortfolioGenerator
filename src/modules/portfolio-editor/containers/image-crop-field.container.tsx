@@ -51,6 +51,7 @@ export function ImageCropFieldContainer(props: Readonly<ImageCropFieldProps>): R
   const viewportRef = useRef<HTMLDivElement>(null);
   const imageRef = useRef<HTMLImageElement | null>(null);
   const dragRef = useRef<{ pointer: ImageCropPoint; offset: ImageCropPoint } | null>(null);
+  const baseScaleRef = useRef(1);
 
   const [objectUrl, setObjectUrl] = useState<string | null>(null);
   const [pendingFile, setPendingFile] = useState<File | null>(null);
@@ -79,10 +80,12 @@ export function ImageCropFieldContainer(props: Readonly<ImageCropFieldProps>): R
         bounds.width / naturalSize.width,
         bounds.height / naturalSize.height,
       );
+      const currentBaseScale = baseScaleRef.current;
+      if (Math.abs(nextBaseScale - currentBaseScale) < 0.000001) return;
       setOffset((current) =>
         zoomAroundViewportCenter({
           currentOffset: current,
-          currentZoom: baseScale * zoom,
+          currentZoom: currentBaseScale * zoom,
           nextZoom: nextBaseScale * zoom,
           viewport: { width: bounds.width, height: bounds.height },
           nextRendered: {
@@ -91,6 +94,7 @@ export function ImageCropFieldContainer(props: Readonly<ImageCropFieldProps>): R
           },
         }),
       );
+      baseScaleRef.current = nextBaseScale;
       setBaseScale(nextBaseScale);
     });
     observer.observe(viewport);
@@ -98,7 +102,7 @@ export function ImageCropFieldContainer(props: Readonly<ImageCropFieldProps>): R
     return () => {
       observer.disconnect();
     };
-  }, [baseScale, naturalSize, zoom]);
+  }, [naturalSize, zoom]);
 
   function clampOffset(candidate: ImageCropPoint, scale: number): ImageCropPoint {
     const viewport = viewportRef.current;
@@ -146,6 +150,7 @@ export function ImageCropFieldContainer(props: Readonly<ImageCropFieldProps>): R
     const cover = Math.max(bounds.width / natural.width, bounds.height / natural.height);
 
     setNaturalSize(natural);
+    baseScaleRef.current = cover;
     setBaseScale(cover);
     setOffset({
       x: (bounds.width - natural.width * cover) / 2,

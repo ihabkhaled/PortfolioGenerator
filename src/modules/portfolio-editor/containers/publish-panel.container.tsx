@@ -5,9 +5,11 @@
 import { useActionState, useState } from 'react';
 import type { ReactElement } from 'react';
 
+import { copyBrowserText } from '@/packages/browser';
 import { I18N_NAMESPACES, useAppTranslation } from '@/packages/i18n';
-import { ErrorIcon, WarningIcon } from '@/packages/icons';
+import { CopyIcon, ErrorIcon, ExternalIcon, WarningIcon } from '@/packages/icons';
 import { Button, Input, Label } from '@/packages/ui-primitives';
+import { ExternalLink } from '@/shared/components/primitives/external-link';
 import { buildPortfolioPath } from '@/shared/constants/route-paths.constants';
 
 import { claimSlugAction, publishAction, unpublishAction } from '../actions/editor.actions';
@@ -38,7 +40,9 @@ function resolvePublishLabelKey(isPublishing: boolean, isPublished: boolean): st
 
 export function PublishPanelContainer(props: Readonly<PublishPanelProps>): ReactElement {
   const t = useAppTranslation(I18N_NAMESPACES.editor);
+  const tLocalization = useAppTranslation(I18N_NAMESPACES.localization);
   const [slug, setSlug] = useState<string>(props.slug);
+  const [copied, setCopied] = useState(false);
   const [slugState, claimAction, isClaiming] = useActionState(
     claimSlugAction,
     EDITOR_INITIAL_STATE,
@@ -56,6 +60,7 @@ export function PublishPanelContainer(props: Readonly<PublishPanelProps>): React
   const error = slugState.error ?? publishState.error ?? unpublishState.error;
   const blockers = publishState.blockers ?? [];
   const publishLabelKey = resolvePublishLabelKey(isPublishing, props.isPublished);
+  const publicUrl = `${props.origin}${buildPortfolioPath(slug)}`;
 
   return (
     <section className={editorClasses.section}>
@@ -112,13 +117,29 @@ export function PublishPanelContainer(props: Readonly<PublishPanelProps>): React
               setSlug(event.target.value);
             }}
           />
-          <p className={editorClasses.slugPreview}>
-            {t('publish.urlPreview', { url: `${props.origin}${buildPortfolioPath(slug)}` })}
-          </p>
         </div>
         <Button type="submit" variant="secondary" disabled={isClaiming}>
           {t('publish.claim')}
         </Button>
+        <div className={editorClasses.slugPreview}>
+          <span>{t('publish.urlPreview', { url: publicUrl })}</span>
+          <Button
+            type="button"
+            variant="secondary"
+            size="sm"
+            onClick={() => {
+              void copyBrowserText(publicUrl).then(() => {
+                setCopied(true);
+              });
+            }}
+          >
+            <CopyIcon aria-hidden size={14} />
+            {tLocalization(copied ? 'copied' : 'copyUrl')}
+          </Button>
+          <ExternalLink href={publicUrl} aria-label={t('publish.urlPreview', { url: publicUrl })}>
+            <ExternalIcon aria-hidden size={14} />
+          </ExternalLink>
+        </div>
       </form>
 
       <div className={editorClasses.headerActions}>

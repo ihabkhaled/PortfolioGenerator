@@ -1,6 +1,7 @@
 import type { ReactElement } from 'react';
 
 import { LANDMARK_IDS } from '@/shared/accessibility/landmark-ids.constants';
+import { LOCALIZATION_CONTROLS_TARGET_ID } from '@/shared/constants/localization-target.constants';
 
 import type { SiteShellProps } from '../types/shared-component.types';
 
@@ -41,6 +42,7 @@ export function SiteShell(props: Readonly<SiteShellProps>): ReactElement {
               {props.navigation}
             </nav>
             {props.actions}
+            <div id={LOCALIZATION_CONTROLS_TARGET_ID} />
           </div>
 
           {props.account === undefined ? null : (

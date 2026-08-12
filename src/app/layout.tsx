@@ -109,6 +109,7 @@ export default async function RootLayout(props: {
             }))}
             label={tLocalization('label')}
             copyUrl={tLocalization('copyUrl')}
+            shareUrl={tLocalization('shareUrl')}
             copied={tLocalization('copied')}
           />
           <AppToaster />

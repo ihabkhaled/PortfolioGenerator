@@ -8,5 +8,5 @@
  * already saved.
  */
 export const portfolioPdfDownloadLinkClasses = {
-  link: 'text-sm text-muted-foreground underline-offset-4 transition-colors hover:text-foreground hover:underline print:hidden',
+  link: 'inline-flex min-h-11 items-center gap-2 rounded-lg px-3 text-sm font-medium text-foreground underline-offset-4 transition-colors hover:bg-surface-raised focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring print:hidden',
 } as const;

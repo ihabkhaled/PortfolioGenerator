@@ -58,6 +58,10 @@ export const editorClasses = {
   entryHead: 'flex flex-wrap items-center justify-between gap-2',
   entryTitle: 'truncate text-sm font-medium text-foreground',
   entryActions: 'flex shrink-0 items-center gap-1',
+  assetEntry:
+    'grid gap-3 rounded-md border border-border bg-surface/40 p-3 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center',
+  assetEntryControls: 'flex flex-wrap items-center gap-2 sm:justify-end',
+  assetPlacement: 'flex min-h-11 items-center gap-2 rounded-md px-2 text-sm font-medium',
 
   warning: 'flex items-start gap-2 rounded-md border border-warning/40 bg-warning/8 px-3 py-2',
   warningText: 'text-sm text-warning-readable',
@@ -75,7 +79,8 @@ export const editorClasses = {
   shellWithDock: 'mx-auto grid w-full max-w-7xl gap-6 px-5 pt-8 pb-36 sm:px-8 lg:px-10',
 
   slugRow: 'grid gap-3 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-end',
-  slugPreview: 'truncate font-mono text-[0.6875rem] text-muted-foreground',
+  slugPreview:
+    'flex min-w-0 flex-wrap items-center gap-2 font-mono text-[0.6875rem] text-muted-foreground sm:col-span-2',
   blockerList: 'grid gap-2',
   blocker: 'flex items-start gap-2 text-sm text-warning-readable',
 

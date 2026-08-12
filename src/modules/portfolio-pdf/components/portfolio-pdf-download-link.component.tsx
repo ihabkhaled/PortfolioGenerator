@@ -1,5 +1,6 @@
 import type { ReactElement } from 'react';
 
+import { DocumentIcon } from '@/packages/icons';
 import { AppLink, toAppRoute } from '@/packages/link';
 
 import { portfolioPdfDownloadLinkClasses } from '../constants/portfolio-pdf-style.constants';
@@ -16,6 +17,7 @@ export function PortfolioPdfDownloadLink(
       prefetch={false}
       className={portfolioPdfDownloadLinkClasses.link}
     >
+      <DocumentIcon aria-hidden size={16} />
       {props.label}
     </AppLink>
   );

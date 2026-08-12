@@ -80,6 +80,14 @@ function custom(blocks: PortfolioCustomBlock[]) {
 }
 
 describe('the hero band', () => {
+  it('renders the owner-written welcome tagline', () => {
+    renderSection(hero());
+
+    expect(
+      screen.getByText('Open to staff-level backend work, remote or Lisbon-based.'),
+    ).toBeInTheDocument();
+  });
+
   it('orders contact evidence before social profiles and uses a dialable phone link', () => {
     const document = buildFullPortfolioDocument();
     renderSection(hero(), {
@@ -114,7 +122,7 @@ describe('the hero band', () => {
   it('shows the availability note when both the section and the person allow it', () => {
     renderSection(hero());
 
-    expect(screen.getByText('availability')).toBeInTheDocument();
+    expect(screen.getByText('availability — Available from March')).toBeInTheDocument();
   });
 
   it('hides the availability note when the section turns it off', () => {
@@ -718,6 +726,7 @@ describe('the about band', () => {
     expect(screen.getByText(/rounding bug/)).toBeInTheDocument();
     expect(screen.getByRole('img', { name: /settlement state machine/i })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: /Curriculum vitae/ })).toBeInTheDocument();
+    expect(screen.getByText(/I have spent eight years/)).toBeInTheDocument();
   });
 
   it('omits a gallery caption that was not supplied', () => {

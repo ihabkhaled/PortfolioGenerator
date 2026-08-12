@@ -2,6 +2,8 @@ import type { Metadata } from 'next';
 import { headers } from 'next/headers';
 import type { ReactElement } from 'react';
 
+import { SignOutButtonContainer } from '@/modules/auth';
+import { getCurrentUser } from '@/modules/auth/server';
 import { DEFAULT_LOCALE, isAppLocale, localizePath } from '@/modules/localization';
 import {
   buildPublicNavigation,
@@ -37,9 +39,11 @@ import { getRequestCookie } from '@/packages/headers';
 import { I18N_NAMESPACES } from '@/packages/i18n';
 import { getServerTranslations } from '@/packages/i18n/server';
 import { appNotFound } from '@/packages/navigation';
+import { AccountMenu } from '@/shared/components/layout/account-menu.component';
 import {
   buildPortfolioPdfDownloadPath,
   buildPrivatePageAssetPath,
+  ROUTE_PATHS,
 } from '@/shared/constants/route-paths.constants';
 
 /**
@@ -172,6 +176,7 @@ export default async function PublicPortfolioPage(
   }
 
   const tApp = await getServerTranslations(I18N_NAMESPACES.app);
+  const user = await getCurrentUser();
   const pageUrl = buildPageUrl(portfolioSlug, resolved.page.slug, locale);
 
   /*
@@ -217,7 +222,21 @@ export default async function PublicPortfolioPage(
         pageTitle={resolved.page.title}
         isPreview={false}
         actions={
-          <ThemeToggleContainer label={tApp('theme.label')} options={buildThemeOptions(tApp)} />
+          <>
+            <ThemeToggleContainer label={tApp('theme.label')} options={buildThemeOptions(tApp)} />
+            {user === null ? null : (
+              <AccountMenu
+                name={user.name}
+                email={user.email}
+                menuLabel={tApp('nav.accountMenu')}
+                dashboardHref={ROUTE_PATHS.dashboard}
+                dashboardLabel={tApp('nav.dashboard')}
+                preferencesHref={ROUTE_PATHS.dashboardSettings}
+                preferencesLabel={tApp('nav.preferences')}
+                logout={<SignOutButtonContainer />}
+              />
+            )}
+          </>
         }
         footerLinks={
           downloadToken === null ? null : (

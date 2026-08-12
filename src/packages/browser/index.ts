@@ -67,6 +67,13 @@ export function copyBrowserText(value: string): Promise<void> {
   return globalThis.navigator.clipboard.writeText(value);
 }
 
+export async function shareBrowserUrl(url: string): Promise<boolean> {
+  const share = Reflect.get(globalThis.navigator, 'share') as unknown;
+  if (typeof share !== 'function') return false;
+  await Reflect.apply(share, globalThis.navigator, [{ url }]);
+  return true;
+}
+
 export function observeBrowserServiceWorker(
   path: string,
   onUpdate: BrowserServiceWorkerUpdateListener,

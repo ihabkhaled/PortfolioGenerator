@@ -123,23 +123,30 @@ export function AssetCollectionsUploadContainer(
       </form>
 
       {props.gallery.map((item, index) => (
-        <div className={editorClasses.entryActions} key={item.id}>
+        <div className={editorClasses.assetEntry} key={item.id}>
           <span>{item.alt}</span>
-          <Button
-            type="button"
-            variant="secondary"
-            onClick={() => {
-              props.onGalleryRemove(index);
-            }}
-          >
-            {t('assets.remove')}
-          </Button>
+          <div className={editorClasses.assetEntryControls}>
+            <Button
+              type="button"
+              variant="secondary"
+              size="sm"
+              onClick={() => {
+                props.onGalleryRemove(index);
+              }}
+            >
+              {t('assets.remove')}
+            </Button>
+          </div>
         </div>
       ))}
       {props.gallery.length === 0
         ? null
         : props.pages.map((page) => (
-            <Label key={`gallery-${page.id}`} htmlFor={`gallery-page-${page.id}`}>
+            <Label
+              className={editorClasses.assetPlacement}
+              key={`gallery-${page.id}`}
+              htmlFor={`gallery-page-${page.id}`}
+            >
               <Input
                 id={`gallery-page-${page.id}`}
                 type="checkbox"
@@ -222,34 +229,44 @@ export function AssetCollectionsUploadContainer(
       </form>
 
       {props.attachments.map((item, index) => (
-        <div className={editorClasses.entryActions} key={item.id}>
+        <div className={editorClasses.assetEntry} key={item.id}>
           <span>{item.label}</span>
-          <Label htmlFor={`attachment-visible-${item.id}`}>
-            <Input
-              id={`attachment-visible-${item.id}`}
-              type="checkbox"
-              checked={item.visible}
-              onChange={(event) => {
-                props.onAttachmentVisibilityChange?.(index, event.target.checked);
+          <div className={editorClasses.assetEntryControls}>
+            <Label
+              className={editorClasses.assetPlacement}
+              htmlFor={`attachment-visible-${item.id}`}
+            >
+              <Input
+                id={`attachment-visible-${item.id}`}
+                type="checkbox"
+                checked={item.visible}
+                onChange={(event) => {
+                  props.onAttachmentVisibilityChange?.(index, event.target.checked);
+                }}
+              />
+              {t('collections.fields.visible')}
+            </Label>
+            <Button
+              type="button"
+              variant="secondary"
+              size="sm"
+              onClick={() => {
+                props.onAttachmentRemove(index);
               }}
-            />
-            {t('collections.fields.visible')}
-          </Label>
-          <Button
-            type="button"
-            variant="secondary"
-            onClick={() => {
-              props.onAttachmentRemove(index);
-            }}
-          >
-            {t('assets.remove')}
-          </Button>
+            >
+              {t('assets.remove')}
+            </Button>
+          </div>
         </div>
       ))}
       {props.attachments.length === 0
         ? null
         : props.pages.map((page) => (
-            <Label key={`attachments-${page.id}`} htmlFor={`attachments-page-${page.id}`}>
+            <Label
+              className={editorClasses.assetPlacement}
+              key={`attachments-${page.id}`}
+              htmlFor={`attachments-page-${page.id}`}
+            >
               <Input
                 id={`attachments-page-${page.id}`}
                 type="checkbox"

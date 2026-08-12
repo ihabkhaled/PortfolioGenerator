@@ -30,7 +30,8 @@ export const portfolioShellClasses = {
     'font-display text-sm font-bold tracking-tight text-foreground group-hover:text-primary-readable',
   identity: 'hidden min-w-0 @3xl/portfolio:block',
   headerActions: 'flex min-w-0 items-center justify-end gap-2',
-  footerLinks: 'flex flex-wrap items-center gap-3',
+  footerLinks:
+    'fixed right-4 bottom-[max(1rem,env(safe-area-inset-bottom))] z-30 flex flex-wrap items-center gap-2 rounded-xl border border-border bg-surface/95 p-2 shadow-lg backdrop-blur empty:hidden print:hidden',
   brandName:
     'font-display truncate text-sm font-bold tracking-tight text-foreground @3xl/portfolio:text-[0.95rem]',
   brandHeadline:

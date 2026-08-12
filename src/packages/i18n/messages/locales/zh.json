@@ -540,7 +540,8 @@
         "generic": "翻译操作无法完成。什么也没有发表。"
       }
     },
-    "copyUrl": "复制网址"
+    "copyUrl": "复制网址",
+    "shareUrl": "分享"
   },
   "errors": {
     "title": "出了点问题",

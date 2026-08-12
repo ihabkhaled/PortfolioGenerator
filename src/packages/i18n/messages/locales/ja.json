@@ -502,6 +502,7 @@
   "localization": {
     "label": "言語",
     "copyUrl": "URLをコピー",
+    "shareUrl": "共有",
     "copied": "コピーされました",
     "locales": {
       "en": "英語",

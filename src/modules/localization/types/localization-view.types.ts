@@ -11,6 +11,7 @@ export interface LocalizationControlsProps {
   readonly options: readonly LocaleOption[];
   readonly label: string;
   readonly copyUrl: string;
+  readonly shareUrl: string;
   readonly copied: string;
 }
 

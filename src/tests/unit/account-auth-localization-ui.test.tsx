@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import type * as ReactModule from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
@@ -15,6 +15,7 @@ import {
 } from '@/modules/auth';
 import { LocalizationControlsContainer, TranslationPanelContainer } from '@/modules/localization';
 import { I18nLocaleProvider } from '@/packages/i18n';
+import { LOCALIZATION_CONTROLS_TARGET_ID } from '@/shared/constants/localization-target.constants';
 
 import { buildFullPortfolioDocument } from '../fixtures/portfolio-document.fixtures';
 
@@ -23,6 +24,7 @@ const mocks = vi.hoisted(() => ({
   getBrowserLocation: vi.fn(),
   navigateBrowser: vi.fn(),
   copyBrowserText: vi.fn().mockResolvedValue(undefined),
+  shareBrowserUrl: vi.fn().mockResolvedValue(true),
   refresh: vi.fn(),
 }));
 
@@ -35,6 +37,7 @@ vi.mock('@/packages/browser', () => ({
   getBrowserLocation: mocks.getBrowserLocation,
   navigateBrowser: mocks.navigateBrowser,
   copyBrowserText: mocks.copyBrowserText,
+  shareBrowserUrl: mocks.shareBrowserUrl,
 }));
 
 vi.mock('@/packages/navigation/client', () => ({
@@ -130,6 +133,9 @@ beforeEach(() => {
   mocks.useActionState.mockReset();
   mocks.useActionState.mockReturnValue([idleState, action, false]);
   mocks.refresh.mockReset();
+  mocks.navigateBrowser.mockReset();
+  mocks.copyBrowserText.mockClear();
+  mocks.shareBrowserUrl.mockReset().mockResolvedValue(true);
   action.mockReset();
   mocks.getBrowserLocation.mockReturnValue({
     pathname: '/amina',
@@ -578,6 +584,7 @@ describe('localization controls', () => {
       ]}
       label="Language"
       copyUrl="Copy URL"
+      shareUrl="Share"
       copied="Copied"
     />
   );
@@ -590,6 +597,29 @@ describe('localization controls', () => {
     expect(mocks.navigateBrowser).toHaveBeenCalledWith('/ar/amina?preview=1#work');
   });
 
+  it('ignores an unsupported locale value', async () => {
+    render(controls);
+    const select = await screen.findByRole('combobox', { name: 'Language' });
+    const unsupported = globalThis.document.createElement('option');
+    unsupported.value = 'unsupported';
+    unsupported.textContent = 'Unsupported';
+    select.append(unsupported);
+
+    await userEvent.selectOptions(select, 'unsupported');
+
+    expect(mocks.navigateBrowser).not.toHaveBeenCalled();
+  });
+
+  it('places the controls in the active shell header', async () => {
+    const target = globalThis.document.createElement('div');
+    target.id = LOCALIZATION_CONTROLS_TARGET_ID;
+    globalThis.document.body.append(target);
+    render(controls);
+
+    expect(await within(target).findByRole('combobox', { name: 'Language' })).toBeInTheDocument();
+    target.remove();
+  });
+
   it('copies the complete public URL and confirms it', async () => {
     render(controls);
 
@@ -599,6 +629,29 @@ describe('localization controls', () => {
       'https://portfoliogenerate.test/amina?preview=1#work',
     );
     expect(await screen.findByRole('button', { name: 'Copied' })).toBeInTheDocument();
+  });
+
+  it('opens the platform share sheet for a public URL', async () => {
+    render(controls);
+
+    await userEvent.click(await screen.findByRole('button', { name: 'Share' }));
+
+    expect(mocks.shareBrowserUrl).toHaveBeenCalledWith(
+      'https://portfoliogenerate.test/amina?preview=1#work',
+    );
+  });
+
+  it('copies the URL when the browser has no share sheet', async () => {
+    mocks.shareBrowserUrl.mockResolvedValueOnce(false);
+    render(controls);
+
+    await userEvent.click(await screen.findByRole('button', { name: 'Share' }));
+
+    await waitFor(() => {
+      expect(mocks.copyBrowserText).toHaveBeenCalledWith(
+        'https://portfoliogenerate.test/amina?preview=1#work',
+      );
+    });
   });
 
   it('does not offer URL copying on an authoring route', () => {

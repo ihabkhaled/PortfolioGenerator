@@ -42,6 +42,7 @@ export {
   Plus as AddIcon,
   Rocket as PublishIcon,
   Save as SaveIcon,
+  Share2 as ShareIcon,
   Settings as SettingsIcon,
   Sparkles as SkillsIcon,
   Sun as SunIcon,

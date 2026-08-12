@@ -1,7 +1,7 @@
 'use client';
 // client-boundary-reason: collection CRUD mutates the local draft before the shared save action validates it.
 
-import type { ReactElement } from 'react';
+import { useEffect, useState, type ReactElement } from 'react';
 
 import { I18N_NAMESPACES, useAppTranslation } from '@/packages/i18n';
 import { Button, Input, Label } from '@/packages/ui-primitives';
@@ -25,6 +25,15 @@ function entryTitle(item: object, fallback: string): string {
 
 export function CollectionManagerContainer(props: Readonly<CollectionManagerProps>): ReactElement {
   const t = useAppTranslation(I18N_NAMESPACES.editor);
+  const [interests, setInterestsDraft] = useState(props.document.interests.join(', '));
+
+  useEffect(() => {
+    setInterestsDraft(props.document.interests.join(', '));
+  }, [props.document.interests]);
+
+  function commitInterests(): void {
+    props.onChange(setInterests(props.document, interests.split(',')));
+  }
   return (
     <section className={editorClasses.section}>
       <h2 className={editorClasses.sectionTitle}>{t('collections.title')}</h2>
@@ -79,9 +88,13 @@ export function CollectionManagerContainer(props: Readonly<CollectionManagerProp
         <Label htmlFor="portfolio-interests">{t('collections.interests')}</Label>
         <Input
           id="portfolio-interests"
-          value={props.document.interests.join(', ')}
+          value={interests}
           onChange={(event) => {
-            props.onChange(setInterests(props.document, event.target.value.split(',')));
+            setInterestsDraft(event.target.value);
+          }}
+          onBlur={commitInterests}
+          onKeyDown={(event) => {
+            if (event.key === 'Enter') commitInterests();
           }}
         />
       </div>

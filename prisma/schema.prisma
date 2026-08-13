@@ -467,3 +467,173 @@ model PaypalWebhookEvent {
 
   @@map("paypal_webhook_events")
 }
+
+// ---------------------------------------------------------------------------
+// Admin portal (fully isolated from user-facing auth — see ADR-0010)
+// ---------------------------------------------------------------------------
+
+enum AdminRole {
+  SUPER_ADMIN
+  ADMIN
+  MODERATOR
+
+  @@map("admin_role")
+}
+
+enum AdminPermission {
+  USERS_VIEW
+  USERS_SUSPEND
+  USERS_RESET_PASSWORD
+  PORTFOLIOS_VIEW
+  PORTFOLIOS_SUSPEND
+  PORTFOLIOS_DELETE
+  PAGES_MODERATE
+  ADMINS_MANAGE
+  RBAC_MANAGE
+  AUDIT_VIEW
+
+  @@map("admin_permission")
+}
+
+enum AdminUserStatus {
+  ACTIVE
+  SUSPENDED
+
+  @@map("admin_user_status")
+}
+
+enum AdminAuditTargetType {
+  USER
+  PORTFOLIO
+  ADMIN_USER
+
+  @@map("admin_audit_target_type")
+}
+
+/// Mirrors `User` field-for-field for the core better-auth-managed columns
+/// (no `@map` on those, matching how `User` itself is unmapped — only the
+/// app-added columns below get snake_case mapping). Zero relation to `User`:
+/// the two auth systems must never reference each other.
+model AdminUser {
+  id               String  @id
+  name             String
+  email            String  @unique
+  emailVerified    Boolean @default(false)
+  image            String?
+  twoFactorEnabled Boolean @default(false)
+
+  role         AdminRole
+  /// The resolved, currently-effective permission set — set from
+  /// `DEFAULT_ROLE_PERMISSIONS[role]` at creation, overwritten wholesale (never
+  /// merged) by the Phase 3 RBAC editor. See `src/modules/admin/constants/
+  /// admin-permission.constants.ts`.
+  permissions  AdminPermission[]
+  /// Set to `true` by exactly one code path: `support/seed-super-admin.mts`.
+  /// Every action that would modify, suspend or delete an `AdminUser` must
+  /// reject when the *target* has this set, regardless of the caller's role.
+  isSuperAdmin Boolean         @default(false) @map("is_super_admin")
+  status       AdminUserStatus @default(ACTIVE)
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  sessions    AdminSession[]
+  accounts    AdminAccount[]
+  twoFactors  AdminTwoFactor[]
+  auditEvents AdminAuditEvent[]
+
+  @@map("admin_users")
+}
+
+model AdminSession {
+  id          String   @id
+  expiresAt   DateTime
+  token       String   @unique
+  ipAddress   String?
+  userAgent   String?
+  adminUserId String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  adminUser AdminUser @relation(fields: [adminUserId], references: [id], onDelete: Cascade)
+
+  @@index([adminUserId])
+  @@map("admin_sessions")
+}
+
+model AdminAccount {
+  id                    String    @id
+  accountId             String
+  providerId            String
+  adminUserId           String
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  adminUser AdminUser @relation(fields: [adminUserId], references: [id], onDelete: Cascade)
+
+  @@unique([providerId, accountId])
+  @@index([adminUserId])
+  @@map("admin_accounts")
+}
+
+model AdminVerification {
+  id         String   @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([identifier])
+  @@map("admin_verifications")
+}
+
+/// Table shape is the `two-factor` plugin's own contract
+/// (`node_modules/better-auth/dist/plugins/two-factor/schema.d.mts`) — field
+/// names are not ours to change. Notably the foreign key field must be named
+/// `userId`, not `adminUserId`: better-auth's schema builder resolves it via
+/// `options.session?.fields?.userId || "userId"`-style lookups that default
+/// to the literal name `userId` regardless of what `user.modelName` is set
+/// to, and nothing in this plan's admin-auth config overrides that field
+/// name. The Prisma relation accessor is still named `adminUser` — that
+/// name is Prisma-internal and invisible to better-auth.
+model AdminTwoFactor {
+  id                      String    @id @default(uuid())
+  secret                  String
+  backupCodes             String
+  userId                  String
+  verified                Boolean   @default(true)
+  failedVerificationCount Int       @default(0)
+  lockedUntil             DateTime?
+
+  adminUser AdminUser @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("admin_two_factor")
+}
+
+/// Who did what to whom — distinct from `AuditEvent`, which records whose
+/// *data* changed, not which admin acted on it. Bounded metadata, same rule
+/// as `AuditEvent`: never CV text, never a password or TOTP secret.
+model AdminAuditEvent {
+  id          String               @id @default(uuid())
+  adminUserId String               @map("admin_user_id")
+  targetType  AdminAuditTargetType @map("target_type")
+  targetId    String               @map("target_id")
+  action      String
+  metadata    Json                 @default("{}")
+  createdAt   DateTime             @default(now()) @map("created_at")
+
+  adminUser AdminUser @relation(fields: [adminUserId], references: [id], onDelete: Cascade)
+
+  @@index([targetType, targetId, createdAt])
+  @@index([adminUserId, createdAt])
+  @@map("admin_audit_events")
+}

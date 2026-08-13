@@ -1098,5 +1098,35 @@
         "failed": "No pudimos confirmar tu suscripción. Inténtalo de nuevo o contacta con soporte si esto continúa."
       }
     }
+  },
+  "admin": {
+    "signIn": {
+      "title": "ProFolio Admin",
+      "lead": "Inicia sesión para continuar.",
+      "emailLabel": "Correo electrónico",
+      "passwordLabel": "Contraseña",
+      "codeLabel": "Código de autenticación",
+      "submitLabel": "Continuar",
+      "pendingLabel": "Comprobando…"
+    },
+    "twoFactor": {
+      "confirmPasswordTitle": "Confirma tu contraseña",
+      "confirmPasswordLead": "Necesaria una vez más antes de generar tu clave de doble factor.",
+      "passwordLabel": "Contraseña",
+      "continueLabel": "Continuar",
+      "enrollTitle": "Configurar la autenticación de dos factores",
+      "enrollLead": "Obligatoria para cada cuenta de administrador. Escanea el código a continuación con tu aplicación de autenticación.",
+      "qrAlt": "Escanea este código QR con tu aplicación de autenticación",
+      "confirmCodeLabel": "Confirma el código de tu aplicación",
+      "submitLabel": "Confirmar y continuar",
+      "pendingLabel": "Confirmando…"
+    },
+    "errors": {
+      "missingCredentials": "Introduce tu correo electrónico y contraseña.",
+      "invalidCredentials": "Correo electrónico o contraseña incorrectos.",
+      "missingCode": "Introduce el código de 6 dígitos.",
+      "invalidCode": "El código no coincide. Inténtalo de nuevo.",
+      "missingConfirmCode": "Introduce el código de 6 dígitos de tu aplicación de autenticación."
+    }
   }
 }

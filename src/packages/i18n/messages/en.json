@@ -1098,5 +1098,35 @@
         "failed": "We could not confirm your subscription. Please try again, or contact support if this keeps happening."
       }
     }
+  },
+  "admin": {
+    "signIn": {
+      "title": "ProFolio Admin",
+      "lead": "Sign in to continue.",
+      "emailLabel": "Email",
+      "passwordLabel": "Password",
+      "codeLabel": "Authenticator code",
+      "submitLabel": "Continue",
+      "pendingLabel": "Checking…"
+    },
+    "twoFactor": {
+      "confirmPasswordTitle": "Confirm your password",
+      "confirmPasswordLead": "Required once more before generating your two-factor secret.",
+      "passwordLabel": "Password",
+      "continueLabel": "Continue",
+      "enrollTitle": "Set up two-factor authentication",
+      "enrollLead": "Required for every admin account. Scan the code below with your authenticator app.",
+      "qrAlt": "Scan this QR code with your authenticator app",
+      "confirmCodeLabel": "Confirm the code from your app",
+      "submitLabel": "Confirm and continue",
+      "pendingLabel": "Confirming…"
+    },
+    "errors": {
+      "missingCredentials": "Enter your email and password.",
+      "invalidCredentials": "Incorrect email or password.",
+      "missingCode": "Enter the 6-digit code.",
+      "invalidCode": "That code did not match. Try again.",
+      "missingConfirmCode": "Enter the 6-digit code from your authenticator app."
+    }
   }
 }

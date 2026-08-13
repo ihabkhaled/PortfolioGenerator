@@ -1098,5 +1098,35 @@
         "failed": "サブスクリプションを確認できませんでした。もう一度お試しいただくか、問題が続く場合はサポートまでご連絡ください。"
       }
     }
+  },
+  "admin": {
+    "signIn": {
+      "title": "ProFolio 管理",
+      "lead": "続行するにはサインインしてください。",
+      "emailLabel": "メールアドレス",
+      "passwordLabel": "パスワード",
+      "codeLabel": "認証コード",
+      "submitLabel": "続行",
+      "pendingLabel": "確認中…"
+    },
+    "twoFactor": {
+      "confirmPasswordTitle": "パスワードを確認してください",
+      "confirmPasswordLead": "二要素認証のシークレットを生成する前に、もう一度必要です。",
+      "passwordLabel": "パスワード",
+      "continueLabel": "続行",
+      "enrollTitle": "二要素認証を設定",
+      "enrollLead": "すべての管理者アカウントに必須です。認証アプリで以下のコードをスキャンしてください。",
+      "qrAlt": "認証アプリでこのQRコードをスキャンしてください",
+      "confirmCodeLabel": "アプリのコードを確認してください",
+      "submitLabel": "確認して続行",
+      "pendingLabel": "確認中…"
+    },
+    "errors": {
+      "missingCredentials": "メールアドレスとパスワードを入力してください。",
+      "invalidCredentials": "メールアドレスまたはパスワードが正しくありません。",
+      "missingCode": "6桁のコードを入力してください。",
+      "invalidCode": "コードが一致しませんでした。もう一度お試しください。",
+      "missingConfirmCode": "認証アプリの6桁のコードを入力してください。"
+    }
   }
 }

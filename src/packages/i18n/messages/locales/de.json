@@ -1098,5 +1098,35 @@
         "failed": "Wir konnten Ihr Abonnement nicht bestätigen. Bitte versuchen Sie es erneut oder wenden Sie sich an den Support, falls dies weiterhin auftritt."
       }
     }
+  },
+  "admin": {
+    "signIn": {
+      "title": "ProFolio Admin",
+      "lead": "Melden Sie sich an, um fortzufahren.",
+      "emailLabel": "E-Mail",
+      "passwordLabel": "Passwort",
+      "codeLabel": "Authentifizierungscode",
+      "submitLabel": "Weiter",
+      "pendingLabel": "Wird geprüft…"
+    },
+    "twoFactor": {
+      "confirmPasswordTitle": "Bestätigen Sie Ihr Passwort",
+      "confirmPasswordLead": "Erneut erforderlich, bevor Ihr Zwei-Faktor-Geheimnis erstellt wird.",
+      "passwordLabel": "Passwort",
+      "continueLabel": "Weiter",
+      "enrollTitle": "Zwei-Faktor-Authentifizierung einrichten",
+      "enrollLead": "Für jedes Admin-Konto erforderlich. Scannen Sie den Code unten mit Ihrer Authentifizierungs-App.",
+      "qrAlt": "Scannen Sie diesen QR-Code mit Ihrer Authentifizierungs-App",
+      "confirmCodeLabel": "Bestätigen Sie den Code aus Ihrer App",
+      "submitLabel": "Bestätigen und fortfahren",
+      "pendingLabel": "Wird bestätigt…"
+    },
+    "errors": {
+      "missingCredentials": "Geben Sie Ihre E-Mail-Adresse und Ihr Passwort ein.",
+      "invalidCredentials": "Falsche E-Mail-Adresse oder falsches Passwort.",
+      "missingCode": "Geben Sie den 6-stelligen Code ein.",
+      "invalidCode": "Der Code stimmte nicht überein. Versuchen Sie es erneut.",
+      "missingConfirmCode": "Geben Sie den 6-stelligen Code aus Ihrer Authentifizierungs-App ein."
+    }
   }
 }

@@ -1098,5 +1098,35 @@
         "failed": "Não foi possível confirmar a sua subscrição. Tente novamente ou contacte o suporte se isto persistir."
       }
     }
+  },
+  "admin": {
+    "signIn": {
+      "title": "ProFolio Admin",
+      "lead": "Entre para continuar.",
+      "emailLabel": "E-mail",
+      "passwordLabel": "Senha",
+      "codeLabel": "Código de autenticação",
+      "submitLabel": "Continuar",
+      "pendingLabel": "Verificando…"
+    },
+    "twoFactor": {
+      "confirmPasswordTitle": "Confirme sua senha",
+      "confirmPasswordLead": "Necessária mais uma vez antes de gerar seu segredo de dois fatores.",
+      "passwordLabel": "Senha",
+      "continueLabel": "Continuar",
+      "enrollTitle": "Configurar autenticação de dois fatores",
+      "enrollLead": "Obrigatória para cada conta de administrador. Escaneie o código abaixo com seu aplicativo autenticador.",
+      "qrAlt": "Escaneie este código QR com seu aplicativo autenticador",
+      "confirmCodeLabel": "Confirme o código do seu aplicativo",
+      "submitLabel": "Confirmar e continuar",
+      "pendingLabel": "Confirmando…"
+    },
+    "errors": {
+      "missingCredentials": "Digite seu e-mail e senha.",
+      "invalidCredentials": "E-mail ou senha incorretos.",
+      "missingCode": "Digite o código de 6 dígitos.",
+      "invalidCode": "O código não corresponde. Tente novamente.",
+      "missingConfirmCode": "Digite o código de 6 dígitos do seu aplicativo autenticador."
+    }
   }
 }

@@ -1098,5 +1098,35 @@
         "failed": "Non siamo riusciti a confermare il tuo abbonamento. Riprova oppure contatta l'assistenza se il problema persiste."
       }
     }
+  },
+  "admin": {
+    "signIn": {
+      "title": "ProFolio Admin",
+      "lead": "Accedi per continuare.",
+      "emailLabel": "Email",
+      "passwordLabel": "Password",
+      "codeLabel": "Codice di autenticazione",
+      "submitLabel": "Continua",
+      "pendingLabel": "Verifica in corso…"
+    },
+    "twoFactor": {
+      "confirmPasswordTitle": "Conferma la tua password",
+      "confirmPasswordLead": "Richiesta di nuovo prima di generare il tuo segreto per l'autenticazione a due fattori.",
+      "passwordLabel": "Password",
+      "continueLabel": "Continua",
+      "enrollTitle": "Configura l'autenticazione a due fattori",
+      "enrollLead": "Richiesta per ogni account amministratore. Scansiona il codice qui sotto con la tua app di autenticazione.",
+      "qrAlt": "Scansiona questo codice QR con la tua app di autenticazione",
+      "confirmCodeLabel": "Conferma il codice dalla tua app",
+      "submitLabel": "Conferma e continua",
+      "pendingLabel": "Conferma in corso…"
+    },
+    "errors": {
+      "missingCredentials": "Inserisci la tua email e password.",
+      "invalidCredentials": "Email o password errati.",
+      "missingCode": "Inserisci il codice a 6 cifre.",
+      "invalidCode": "Il codice non corrisponde. Riprova.",
+      "missingConfirmCode": "Inserisci il codice a 6 cifre dalla tua app di autenticazione."
+    }
   }
 }

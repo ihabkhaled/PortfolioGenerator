@@ -210,6 +210,7 @@ export default [
             'server',
             'client',
             'dashboard',
+            'admin-ui',
             'ingestion-ui',
             'editor-ui',
             'account-ui',

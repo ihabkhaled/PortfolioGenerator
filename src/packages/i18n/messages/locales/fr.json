@@ -1098,5 +1098,35 @@
         "failed": "Nous n'avons pas pu confirmer votre abonnement. Veuillez réessayer, ou contacter le support si cela persiste."
       }
     }
+  },
+  "admin": {
+    "signIn": {
+      "title": "ProFolio Admin",
+      "lead": "Connectez-vous pour continuer.",
+      "emailLabel": "E-mail",
+      "passwordLabel": "Mot de passe",
+      "codeLabel": "Code d'authentification",
+      "submitLabel": "Continuer",
+      "pendingLabel": "Vérification…"
+    },
+    "twoFactor": {
+      "confirmPasswordTitle": "Confirmez votre mot de passe",
+      "confirmPasswordLead": "Requis une nouvelle fois avant de générer votre secret de double authentification.",
+      "passwordLabel": "Mot de passe",
+      "continueLabel": "Continuer",
+      "enrollTitle": "Configurer l'authentification à deux facteurs",
+      "enrollLead": "Requise pour chaque compte administrateur. Scannez le code ci-dessous avec votre application d'authentification.",
+      "qrAlt": "Scannez ce code QR avec votre application d'authentification",
+      "confirmCodeLabel": "Confirmez le code de votre application",
+      "submitLabel": "Confirmer et continuer",
+      "pendingLabel": "Confirmation…"
+    },
+    "errors": {
+      "missingCredentials": "Saisissez votre e-mail et votre mot de passe.",
+      "invalidCredentials": "E-mail ou mot de passe incorrect.",
+      "missingCode": "Saisissez le code à 6 chiffres.",
+      "invalidCode": "Le code ne correspond pas. Réessayez.",
+      "missingConfirmCode": "Saisissez le code à 6 chiffres de votre application d'authentification."
+    }
   }
 }

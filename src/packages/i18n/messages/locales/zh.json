@@ -1098,5 +1098,35 @@
         "failed": "我们无法确认您的订阅。请重试，如果问题持续出现，请联系支持团队。"
       }
     }
+  },
+  "admin": {
+    "signIn": {
+      "title": "ProFolio 管理后台",
+      "lead": "登录以继续。",
+      "emailLabel": "电子邮箱",
+      "passwordLabel": "密码",
+      "codeLabel": "验证码",
+      "submitLabel": "继续",
+      "pendingLabel": "检查中…"
+    },
+    "twoFactor": {
+      "confirmPasswordTitle": "确认您的密码",
+      "confirmPasswordLead": "在生成双重验证密钥之前需要再次确认。",
+      "passwordLabel": "密码",
+      "continueLabel": "继续",
+      "enrollTitle": "设置双重验证",
+      "enrollLead": "每个管理员账户都必须设置。请使用您的身份验证器应用扫描下方的二维码。",
+      "qrAlt": "使用您的身份验证器应用扫描此二维码",
+      "confirmCodeLabel": "确认来自您应用的验证码",
+      "submitLabel": "确认并继续",
+      "pendingLabel": "确认中…"
+    },
+    "errors": {
+      "missingCredentials": "请输入您的电子邮箱和密码。",
+      "invalidCredentials": "电子邮箱或密码不正确。",
+      "missingCode": "请输入6位验证码。",
+      "invalidCode": "验证码不匹配，请重试。",
+      "missingConfirmCode": "请输入身份验证器应用中的6位验证码。"
+    }
   }
 }

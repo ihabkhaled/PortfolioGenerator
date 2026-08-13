@@ -2,7 +2,11 @@
 
 import { requireOwner } from '@/modules/auth/server';
 import { getOwnedPortfolio, saveDraftDocument } from '@/modules/portfolios/server';
-import { consumeResumeImportQuota, consumeUploadIpQuota } from '@/modules/rate-limit/server';
+import {
+  consumeResumeImportQuota,
+  consumeUploadIpQuota,
+  releaseResumeImportQuota,
+} from '@/modules/rate-limit/server';
 import { getClientAddress } from '@/packages/headers';
 import { toAppRoute } from '@/packages/link';
 import { logger } from '@/packages/logger';
@@ -64,17 +68,25 @@ export async function importResumeAction(
 
   const bytes = new Uint8Array(await file.arrayBuffer());
 
-  const outcome = await importResume({
-    ownerId: owner.id,
-    portfolioId,
-    bytes,
-    originalFilename: file.name,
-    declaredContentType: file.type,
-    displayNameFallback: owner.name,
-    now,
-  });
+  let outcome;
+
+  try {
+    outcome = await importResume({
+      ownerId: owner.id,
+      portfolioId,
+      bytes,
+      originalFilename: file.name,
+      declaredContentType: file.type,
+      displayNameFallback: owner.name,
+      now,
+    });
+  } catch (error) {
+    await releaseResumeImportQuota(owner.id, now);
+    throw error;
+  }
 
   if (!outcome.ok) {
+    await releaseResumeImportQuota(owner.id, now);
     return {
       status: 'error',
       error:

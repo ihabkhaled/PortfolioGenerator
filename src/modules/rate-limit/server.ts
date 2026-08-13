@@ -9,5 +9,6 @@ export {
   consumeResumeImportQuota,
   consumeUploadIpQuota,
   getRateLimiter,
+  releaseResumeImportQuota,
   setRateLimiter,
 } from './services/quota.service';

@@ -34,6 +34,12 @@ export function createMemoryRateLimiter(): RateLimiter {
     consume(input) {
       return Promise.resolve(evaluate(input, true));
     },
+    release(input) {
+      const start = windowStart(input.now, input.windowSeconds);
+      const key = buildBucketKey(input.bucket, start.toISOString());
+      counters.set(key, Math.max(0, (counters.get(key) ?? 0) - 1));
+      return Promise.resolve();
+    },
     peek(input) {
       return Promise.resolve(evaluate(input, false));
     },

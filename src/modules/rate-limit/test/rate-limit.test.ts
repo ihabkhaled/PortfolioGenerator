@@ -101,6 +101,15 @@ describe('the in-memory limiter', () => {
     expect((await limiter.peek(request)).used).toBe(1);
   });
 
+  it('releases a reserved call when the protected work fails', async () => {
+    const limiter = createMemoryRateLimiter();
+
+    await limiter.consume(request);
+    await limiter.release(request);
+
+    expect((await limiter.peek(request)).used).toBe(0);
+  });
+
   it('reports when the allowance resets', async () => {
     const limiter = createMemoryRateLimiter();
     const result = await limiter.consume(request);

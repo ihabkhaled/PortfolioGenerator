@@ -71,6 +71,17 @@ async function consumeCount(input: RateLimitRequest): Promise<RateLimitResult> {
   };
 }
 
+async function releaseCount(input: RateLimitRequest): Promise<void> {
+  await getDatabase().rateLimitCounter.updateMany({
+    where: {
+      bucket: input.bucket,
+      windowStart: windowStart(input.now, input.windowSeconds),
+      count: { gt: 0 },
+    },
+    data: { count: { decrement: 1 } },
+  });
+}
+
 export function createDatabaseRateLimiter(): RateLimiter {
-  return { consume: consumeCount, peek: peekCount };
+  return { consume: consumeCount, release: releaseCount, peek: peekCount };
 }

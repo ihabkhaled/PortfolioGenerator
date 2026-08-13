@@ -55,7 +55,13 @@ export function ImportResumeFormContainer(props: Readonly<ImportResumeFormProps>
       </div>
 
       <div className={importClasses.actions}>
-        <Button type="submit" disabled={isPending}>
+        <Button
+          type="submit"
+          disabled={isPending}
+          onClick={() => {
+            setFileName(null);
+          }}
+        >
           {t(isPending ? 'upload.pending' : 'upload.submit')}
         </Button>
       </div>

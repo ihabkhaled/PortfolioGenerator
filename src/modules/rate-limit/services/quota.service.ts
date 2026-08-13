@@ -52,6 +52,17 @@ export async function consumeResumeImportQuota(
   });
 }
 
+export async function releaseResumeImportQuota(ownerId: string, now: Date): Promise<void> {
+  const env = getServerEnv();
+
+  await getRateLimiter().release({
+    bucket: buildBucketKey(QUOTA_BUCKETS.resumeImport, ownerId),
+    limit: env.QUOTA_IMPORTS_PER_USER_PER_DAY,
+    windowSeconds: SECONDS_PER_DAY,
+    now,
+  });
+}
+
 export async function consumeUploadIpQuota(address: string, now: Date): Promise<RateLimitResult> {
   const env = getServerEnv();
 

@@ -13,6 +13,8 @@ export interface RateLimiter {
    * a blocked endpoint does not get a free retry every window.
    */
   consume: (input: RateLimitRequest) => Promise<RateLimitResult>;
+  /** Undo an allowed reservation when the protected operation fails. */
+  release: (input: RateLimitRequest) => Promise<void>;
   /** Read the current count without incrementing, for showing quota remaining. */
   peek: (input: RateLimitRequest) => Promise<RateLimitResult>;
 }

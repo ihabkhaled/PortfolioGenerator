@@ -221,6 +221,20 @@ describe('the containers that mount a server action', () => {
     expect(screen.getByText('amina-cv.pdf')).toBeInTheDocument();
   });
 
+  it('clears the displayed filename when an import is submitted', async () => {
+    render(<ImportResumeFormContainer portfolioId="p1" maxMegabytes={8} maxPages={15} />);
+
+    const input = screen.getByLabelText('CV file');
+    await userEvent.upload(
+      input,
+      new File(['%PDF-1.7'], 'amina-cv.pdf', { type: 'application/pdf' }),
+    );
+
+    await userEvent.click(screen.getByRole('button', { name: 'Import' }));
+
+    expect(screen.queryByText('amina-cv.pdf')).not.toBeInTheDocument();
+  });
+
   it('arms the account deletion only once the confirmation word is typed', async () => {
     render(<DeleteAccountContainer />);
 

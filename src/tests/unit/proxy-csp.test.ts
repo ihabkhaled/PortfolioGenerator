@@ -60,6 +60,14 @@ describe('proxy content security policy', () => {
     );
     expect(resolveCrossOriginOpenerPolicy('/dashboard')).toBe('same-origin');
   });
+
+  it('the managawy policy has no AdSense or PayPal allowances', () => {
+    const policy = buildContentSecurityPolicy('test-nonce', false, false, true);
+
+    expect(policy).not.toContain('googlesyndication');
+    expect(policy).not.toContain('paypal.com');
+    expect(policy).toContain("script-src 'self' 'nonce-test-nonce' 'strict-dynamic'");
+  });
 });
 
 describe('dashboard editor ownership route matching', () => {

@@ -23,6 +23,16 @@ const PRIVATE_DASHBOARD_HEADERS = {
   'Cache-Control': 'private, no-store, max-age=0',
   'X-Robots-Tag': 'noindex, nofollow',
 } as const;
+const PRIVATE_MANAGAWY_HEADERS = {
+  'Cache-Control': 'private, no-store, max-age=0',
+  'X-Robots-Tag': 'noindex, nofollow',
+} as const;
+
+function isManagawyPath(pathname: string): boolean {
+  const resolved = resolveLocalePath(pathname).pathname;
+
+  return resolved === ROUTE_PATHS.managawy || resolved.startsWith(`${ROUTE_PATHS.managawy}/`);
+}
 
 /**
  * Per-request nonce-based Content-Security-Policy. Next.js reads the CSP from
@@ -37,19 +47,22 @@ export function buildContentSecurityPolicy(
   nonce: string,
   isDevelopment = isDevelopmentEnvironment,
   allowsPaypalCheckout = false,
+  isManagawy = false,
 ): string {
-  const paypalSources = allowsPaypalCheckout
-    ? ' https://*.paypal.com https://*.paypalobjects.com https://*.venmo.com'
-    : '';
+  const paypalSources =
+    allowsPaypalCheckout && !isManagawy
+      ? ' https://*.paypal.com https://*.paypalobjects.com https://*.venmo.com'
+      : '';
+  const adSources = isManagawy ? '' : ' https://pagead2.googlesyndication.com';
   const scriptSrc = isDevelopment
-    ? `'self' 'nonce-${nonce}' 'strict-dynamic' 'unsafe-eval' https://pagead2.googlesyndication.com${paypalSources}`
-    : `'self' 'nonce-${nonce}' 'strict-dynamic' https://pagead2.googlesyndication.com${paypalSources}`;
+    ? `'self' 'nonce-${nonce}' 'strict-dynamic' 'unsafe-eval'${adSources}${paypalSources}`
+    : `'self' 'nonce-${nonce}' 'strict-dynamic'${adSources}${paypalSources}`;
 
   return [
     `default-src 'self'`,
     `script-src ${scriptSrc}`,
     `style-src 'self' 'unsafe-inline'${paypalSources}`,
-    `img-src 'self' blob: data: https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net https://*.adtrafficquality.google${paypalSources}`,
+    `img-src 'self' blob: data:${adSources}${adSources === '' ? '' : ' https://googleads.g.doubleclick.net https://*.adtrafficquality.google'}${paypalSources}`,
     `font-src 'self'`,
     `worker-src 'self'`,
     // *.adtrafficquality.google is Google's ad-traffic-quality beacon,
@@ -58,9 +71,13 @@ export function buildContentSecurityPolicy(
     // change, not ours to enumerate. Without it Google cannot verify
     // impressions as non-fraudulent, which risks the AdSense account rather
     // than a visitor's data.
-    `connect-src 'self' https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net https://*.adtrafficquality.google${paypalSources}`,
-    ...(allowsPaypalCheckout ? [`child-src${paypalSources}`] : []),
-    `frame-src https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net https://tpc.googlesyndication.com https://*.adtrafficquality.google https://www.google.com${paypalSources}`,
+    `connect-src 'self'${adSources === '' ? '' : ' https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net https://*.adtrafficquality.google'}${paypalSources}`,
+    ...(allowsPaypalCheckout && !isManagawy ? [`child-src${paypalSources}`] : []),
+    ...(isManagawy
+      ? []
+      : [
+          `frame-src https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net https://tpc.googlesyndication.com https://*.adtrafficquality.google https://www.google.com${paypalSources}`,
+        ]),
     `media-src 'none'`,
     `object-src 'none'`,
     `base-uri 'self'`,
@@ -142,6 +159,8 @@ async function buildLegacyPortfolioRedirect(
   resolvedPath: ResolvedLocalePath,
   locale: string,
 ): Promise<NextResponse | null> {
+  if (isManagawyPath(request.nextUrl.pathname)) return null;
+
   const segments = resolvedPath.pathname.split('/').filter(Boolean);
   const [slug, ...rest] = segments;
 
@@ -174,6 +193,7 @@ export default async function proxy(request: NextRequest): Promise<NextResponse>
     nonce,
     isDevelopmentEnvironment,
     resolvedPath.pathname === ROUTE_PATHS.dashboardSettings,
+    isManagawyPath(request.nextUrl.pathname),
   );
 
   const requestHeaders = new Headers(request.headers);
@@ -217,6 +237,12 @@ export default async function proxy(request: NextRequest): Promise<NextResponse>
     'cross-origin-opener-policy',
     resolveCrossOriginOpenerPolicy(request.nextUrl.pathname),
   );
+
+  if (isManagawyPath(request.nextUrl.pathname)) {
+    for (const [name, value] of Object.entries(PRIVATE_MANAGAWY_HEADERS)) {
+      response.headers.set(name, value);
+    }
+  }
 
   await applyPrivatePageResponseHeaders(response, request.nextUrl.pathname, locale);
 

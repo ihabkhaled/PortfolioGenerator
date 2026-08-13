@@ -6,6 +6,7 @@ import { getServerEnv } from '@/packages/env/server';
 
 import { OBJECT_STORAGE_REGISTRY } from '../constants/storage-registry.constants';
 import { STORAGE_KEY_RANDOM_BYTES } from '../constants/storage.constants';
+import { getVercelLocalStorageRoot } from '../policies/local-storage-root.policy';
 import { buildStorageKey } from '../policies/storage-key.policy';
 import { createLocalObjectStorage } from '../providers/local-object-storage.provider';
 import { createS3ObjectStorage } from '../providers/s3-object-storage.provider';
@@ -25,6 +26,7 @@ export function getObjectStorage(): ObjectStorage {
   }
 
   const env = getServerEnv();
+  const localRoot = env.VERCEL ? getVercelLocalStorageRoot() : env.STORAGE_LOCAL_ROOT;
   const storage =
     env.STORAGE_DRIVER === 's3'
       ? createS3ObjectStorage({
@@ -34,7 +36,7 @@ export function getObjectStorage(): ObjectStorage {
           accessKeyId: env.S3_ACCESS_KEY_ID ?? '',
           secretAccessKey: env.S3_SECRET_ACCESS_KEY ?? '',
         })
-      : createLocalObjectStorage(env.STORAGE_LOCAL_ROOT);
+      : createLocalObjectStorage(localRoot);
 
   OBJECT_STORAGE_REGISTRY.value = storage;
 

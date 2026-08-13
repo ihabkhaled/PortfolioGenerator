@@ -60,6 +60,7 @@ export const publicEnvSchema = z.object({
 
 export const serverEnvSchema = z.object({
   NODE_ENV: z.enum(['development', 'test', 'production']).default('development'),
+  VERCEL: booleanFlag.default(false),
   NEXT_PUBLIC_APP_ENV: z.enum(['local', 'staging', 'production']).default('local'),
 
   DATABASE_URL: nonEmpty,

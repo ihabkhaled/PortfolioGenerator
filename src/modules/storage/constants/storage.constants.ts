@@ -1,5 +1,6 @@
 /** 16 bytes of crypto randomness, hex-encoded: unguessable, and short enough to log. */
 export const STORAGE_KEY_RANDOM_BYTES = 16;
+export const VERCEL_LOCAL_STORAGE_DIRECTORY = '.storage';
 
 /**
  * Exactly three segments of the safe alphabet, nothing else.

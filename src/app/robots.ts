@@ -36,6 +36,8 @@ export default function robots(): MetadataRoute.Robots {
         disallow: [
           `${ROUTE_PATHS.dashboard}/`,
           ROUTE_PATHS.dashboard,
+          `${ROUTE_PATHS.managawy}/`,
+          ROUTE_PATHS.managawy,
           `${ROUTE_PATHS.api}/`,
           ROUTE_PATHS.signOut,
           ROUTE_PATHS.signIn,

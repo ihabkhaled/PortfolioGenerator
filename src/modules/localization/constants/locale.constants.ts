@@ -25,6 +25,7 @@ export const PLATFORM_ROUTE_SEGMENTS: readonly string[] = [
   'dashboard',
   'feed.xml',
   'forgot-password',
+  'managawy',
   'manifest.webmanifest',
   'media',
   'portfolios',

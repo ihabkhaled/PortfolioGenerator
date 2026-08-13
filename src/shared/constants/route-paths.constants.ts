@@ -25,6 +25,7 @@ export const ROUTE_PATHS = {
   apiContact: '/api/contact',
   apiAssetDeletionRetry: '/api/operations/asset-deletions',
   apiPortfolioPdfDownload: '/api/portfolio-pdf/download',
+  managawy: '/managawy',
   media: '/media',
   portfolios: '/portfolios',
   robots: '/robots.txt',

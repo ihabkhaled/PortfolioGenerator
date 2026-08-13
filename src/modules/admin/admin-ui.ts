@@ -22,6 +22,8 @@ export { AdminUserProfile } from './components/admin-user-profile.component';
 export { AdminUserPortfoliosTable } from './components/admin-user-portfolios-table.component';
 export { AdminUserStatusActionContainer } from './containers/admin-user-status-action.container';
 export { AdminUserResetPasswordContainer } from './containers/admin-user-reset-password.container';
+export { AdminAuditLogFilters } from './components/admin-audit-log-filters.component';
+export { AdminAuditLogTable } from './components/admin-audit-log-table.component';
 export { AdminAdminCreateFormContainer } from './containers/admin-admin-create-form.container';
 export { AdminAdminStatusActionContainer } from './containers/admin-admin-status-action.container';
 export { AdminAdminDeleteContainer } from './containers/admin-admin-delete.container';
@@ -63,6 +65,13 @@ export type {
   AdminResetPasswordActionProps,
   AdminUserStatusActionProps,
 } from './types/admin-user-action-view.types';
+export type {
+  AdminAuditLogFilterOption,
+  AdminAuditLogFiltersProps,
+  AdminAuditLogRowView,
+  AdminAuditLogTableColumnLabels,
+  AdminAuditLogTableProps,
+} from './types/admin-audit-log-view.types';
 export type {
   AdminAdminDeleteProps,
   AdminAdminListItemView,

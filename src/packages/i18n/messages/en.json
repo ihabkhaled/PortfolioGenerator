@@ -1494,6 +1494,58 @@
           "noChange": "No changes were made — the selected permissions already matched what was saved."
         }
       }
+    },
+    "auditLog": {
+      "title": "Audit log",
+      "lead": "Every recorded admin action, newest first. This list is read-only — it cannot be edited or cleared from here.",
+      "filters": {
+        "searchLabel": "Target ID",
+        "searchPlaceholder": "Search by target ID",
+        "adminLabel": "Admin",
+        "allAdmins": "All admins",
+        "targetTypeLabel": "Target type",
+        "allTargetTypes": "All target types",
+        "actionLabel": "Action",
+        "allActions": "All actions",
+        "submit": "Search"
+      },
+      "targetTypes": {
+        "USER": "User",
+        "PORTFOLIO": "Portfolio",
+        "ADMIN_USER": "Admin"
+      },
+      "resultCount": "{count} events found",
+      "empty": {
+        "title": "No events match",
+        "description": "Try a different search term, or clear a filter."
+      },
+      "columns": {
+        "when": "When",
+        "admin": "Admin",
+        "action": "Action",
+        "targetType": "Target type",
+        "targetId": "Target ID",
+        "metadata": "Details"
+      },
+      "metadataEmpty": "No additional details",
+      "pagination": {
+        "summary": "Page {page} of {pageCount}",
+        "previous": "Previous",
+        "next": "Next"
+      },
+      "actions": {
+        "sessionCreated": "Signed in",
+        "sessionSignedOut": "Signed out",
+        "twoFactorEnrolled": "Enrolled two-factor authentication",
+        "twoFactorVerified": "Verified two-factor authentication",
+        "passwordChanged": "Changed password",
+        "userSuspended": "Suspended user",
+        "userActivated": "Reactivated user",
+        "userPasswordResetRequested": "Requested user password reset",
+        "portfolioSuspended": "Suspended portfolio",
+        "portfolioActivated": "Reactivated portfolio",
+        "portfolioDeleted": "Deleted portfolio"
+      }
     }
   }
 }

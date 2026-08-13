@@ -68,6 +68,28 @@ export {
   ADMIN_USERS_QUERY_PARAM,
 } from './constants/admin-users.constants';
 export { adminUsersClasses } from './constants/admin-users-style.constants';
+export {
+  listAdminAuditEvents,
+  getAdminAuditLogFilterOptions,
+} from './repositories/admin-audit-log.repository';
+export { toAdminAuditEventSummary } from './mappers/admin-audit-log.mapper';
+export { resolveAdminAuditActionLabel } from './helpers/admin-audit-action.helper';
+export {
+  buildAdminAuditLogAdminOptions,
+  buildAdminAuditLogActionOptions,
+  buildAdminAuditLogListHref,
+  buildAdminAuditLogRowView,
+  buildAdminAuditLogTargetTypeOptions,
+  parseAdminAuditLogTargetTypeFilter,
+  sanitizeAdminAuditLogFilterValue,
+  sanitizeAdminAuditLogQuery,
+} from './helpers/admin-audit-log-view.helper';
+export {
+  ADMIN_AUDIT_LOG_ALL_VALUE,
+  ADMIN_AUDIT_LOG_PAGE_SIZE,
+  ADMIN_AUDIT_LOG_QUERY_PARAMS,
+} from './constants/admin-audit-log.constants';
+export { adminAuditLogClasses } from './constants/admin-audit-log-style.constants';
 export { searchAdminAdmins } from './repositories/admin-admins.repository';
 export {
   buildAdminAdminRowViews,
@@ -113,6 +135,12 @@ export type {
 export type { AdminDashboardStatsCounts, AdminStatTile } from './types/admin-dashboard-stats.types';
 export type { AdminNavItem, AdminShellProps } from './types/admin-shell-view.types';
 export type { AdminManagedUserDetail, AdminUserSearchResult } from './types/admin-users.types';
+export type {
+  AdminAuditEventSummary,
+  AdminAuditLogFilterOptions,
+  AdminAuditLogFilterState,
+  AdminAuditLogTargetTypeFilter,
+} from './types/admin-audit-log.types';
 export type { AdminManagedAdmin, AdminAdminSearchResult } from './types/admin-admins.types';
 export type { AdminPermissionDiff, AdminRbacSearchResult } from './types/admin-rbac.types';
 export type {

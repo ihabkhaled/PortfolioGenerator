@@ -18,4 +18,12 @@ export interface PasswordRecoveryState {
   readonly error: string | null;
 }
 
+/**
+ * Declared as a plain string-literal union rather than imported from
+ * `@prisma/client`, matching `PortfolioStatus` in
+ * `src/modules/portfolios/types/portfolio.types.ts`: `@prisma/client` stays
+ * confined to `src/packages/database/`.
+ */
+export type AccountStatus = 'ACTIVE' | 'SUSPENDED';
+
 export { type AuthenticatedUser } from '@/packages/auth';

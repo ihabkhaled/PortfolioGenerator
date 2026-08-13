@@ -5,6 +5,8 @@ import { signInAction } from '../actions/auth.actions';
 const mocks = vi.hoisted(() => ({
   signInEmail: vi.fn(),
   synchronizePreferences: vi.fn(),
+  getUserAccountStatus: vi.fn(),
+  signOutCurrentSession: vi.fn(),
   redirect: vi.fn((path: string) => {
     throw new Error(`redirect:${path}`);
   }),
@@ -22,6 +24,12 @@ vi.mock('@/packages/logger', () => ({
   logger: { info: vi.fn(), warn: vi.fn() },
 }));
 vi.mock('@/packages/navigation', () => ({ appRedirect: mocks.redirect }));
+vi.mock('../repositories/user-account.repository', () => ({
+  getUserAccountStatus: mocks.getUserAccountStatus,
+}));
+vi.mock('../services/session.service', () => ({
+  signOutCurrentSession: mocks.signOutCurrentSession,
+}));
 
 function validSignInForm(): FormData {
   const form = new FormData();
@@ -38,6 +46,8 @@ describe('signInAction preference synchronization', () => {
       token: 'session-token',
     });
     mocks.synchronizePreferences.mockResolvedValue(undefined);
+    mocks.getUserAccountStatus.mockResolvedValue('ACTIVE');
+    mocks.signOutCurrentSession.mockResolvedValue(undefined);
   });
 
   it('synchronizes persisted preferences for the authenticated user before redirecting', async () => {

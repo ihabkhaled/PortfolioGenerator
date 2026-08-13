@@ -3,6 +3,7 @@ import 'server-only';
 import { getAuth } from '@/packages/auth/server';
 import { logger } from '@/packages/logger';
 
+import { getUserAccountStatus } from '../repositories/user-account.repository';
 import type { AuthenticatedUser } from '../types/auth.types';
 
 /**
@@ -20,6 +21,17 @@ export async function getOptionalUser(requestHeaders: Headers): Promise<Authenti
     const session = await getAuth().api.getSession({ headers: requestHeaders });
 
     if (!session?.user) {
+      return null;
+    }
+
+    // `status` is an app-added column, not one better-auth's session object
+    // carries, so this is one extra indexed lookup rather than a field already
+    // in hand. A missing row (should not happen for a session that just
+    // resolved) is treated the same as active — this check exists to catch
+    // SUSPENDED, not to become a second, looser existence check.
+    const status = await getUserAccountStatus(session.user.id);
+
+    if (status === 'SUSPENDED') {
       return null;
     }
 

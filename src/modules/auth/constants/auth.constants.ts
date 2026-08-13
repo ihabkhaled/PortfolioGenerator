@@ -9,6 +9,7 @@ export const AUTH_INITIAL_FORM_STATE: AuthFormState = {
 export const AUTH_ERROR_KEYS = {
   invalidCredentials: 'errors.invalidCredentials',
   emailTaken: 'errors.emailTaken',
+  accountSuspended: 'errors.accountSuspended',
   unknown: 'errors.unknown',
 } as const;
 

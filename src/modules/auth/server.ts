@@ -16,3 +16,5 @@ export {
   consumePasswordRecovery,
   requestPasswordRecovery,
 } from './services/password-recovery.service';
+export { getUserAccountStatus, setUserAccountStatus } from './repositories/user-account.repository';
+export type { AccountStatus } from './types/auth.types';

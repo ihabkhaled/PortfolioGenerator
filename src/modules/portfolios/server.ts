@@ -23,6 +23,7 @@ export {
   listPublishedTranslationsBySlugUnscoped,
   publishOwnedPortfolio,
   saveDraftDocument,
+  setPortfolioSuspension,
   softDeleteOwnedPortfolio,
   unpublishOwnedPortfolio,
   updateOwnedSlug,
@@ -31,5 +32,7 @@ export {
   getPublishedPortfolio,
   getPublishedPortfolioById,
   getPublishedPortfolioForLocale,
+  invalidatePortfolioPublicCache,
   portfolioCacheTag,
 } from './services/public-portfolio.service';
+export type { PortfolioSuspensionOutcome } from './types/portfolio.types';

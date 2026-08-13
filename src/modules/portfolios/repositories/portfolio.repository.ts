@@ -17,6 +17,7 @@ import type {
   CreatePortfolioInput,
   OwnedPortfolio,
   PortfolioSummary,
+  PortfolioSuspensionOutcome,
   PublishedPortfolio,
   SaveDraftInput,
   PortfolioWriteResult,
@@ -230,14 +231,17 @@ export async function softDeleteOwnedPortfolio(
 /**
  * Public read. Tenant-free by definition — an anonymous visitor has no owner —
  * which is why the name says so and the lint rule keeps it out of dashboard
- * code. Returns null for a draft, an unpublished, or a soft-deleted portfolio,
- * so "does not exist" and "not published" are indistinguishable to a caller.
+ * code. Returns null for a draft, an unpublished, a soft-deleted, or a
+ * suspended portfolio, so "does not exist", "not published" and "suspended by
+ * moderation" are all indistinguishable to a caller — the public page and its
+ * `generateMetadata` both resolve through this one function, so both 404
+ * together.
  */
 export async function findPublishedBySlugUnscoped(
   slug: string,
 ): Promise<PublishedPortfolio | null> {
   const row = await getDatabase().portfolio.findFirst({
-    where: { slug, status: 'PUBLISHED', deletedAt: null },
+    where: { slug, status: 'PUBLISHED', deletedAt: null, suspendedAt: null },
     select: PORTFOLIO_SELECT,
   });
 
@@ -248,13 +252,13 @@ export async function findPublishedBySlugUnscoped(
  * Public read by id. The PDF download flow resolves a token to a portfolio
  * id — never a slug, by design — so it needs this lookup rather than
  * `findPublishedBySlugUnscoped`; everything else about the tenant-free
- * contract above applies identically.
+ * contract above applies identically, suspension included.
  */
 export async function findPublishedByIdUnscoped(
   portfolioId: string,
 ): Promise<PublishedPortfolio | null> {
   const row = await getDatabase().portfolio.findFirst({
-    where: { id: portfolioId, status: 'PUBLISHED', deletedAt: null },
+    where: { id: portfolioId, status: 'PUBLISHED', deletedAt: null, suspendedAt: null },
     select: PORTFOLIO_SELECT,
   });
 
@@ -269,17 +273,17 @@ export async function findPublishedTranslationBySlugAndLocaleUnscoped(
     where: {
       locale,
       publishedDocument: { not: DbNull },
-      portfolio: { slug, status: 'PUBLISHED', deletedAt: null },
+      portfolio: { slug, status: 'PUBLISHED', deletedAt: null, suspendedAt: null },
     },
     select: { publishedDocument: true },
   });
   return row === null ? null : tryMigratePortfolioDocument(row.publishedDocument);
 }
 
-/** Sitemap source: published, non-deleted portfolios only. */
+/** Sitemap source: published, non-deleted, non-suspended portfolios only. */
 export async function listPublishedPortfoliosUnscoped(): Promise<readonly PublishedPortfolio[]> {
   const rows = await getDatabase().portfolio.findMany({
-    where: { status: 'PUBLISHED', deletedAt: null },
+    where: { status: 'PUBLISHED', deletedAt: null, suspendedAt: null },
     orderBy: { publishedAt: 'desc' },
     select: PORTFOLIO_SELECT,
   });
@@ -296,7 +300,7 @@ export async function listPublishedTranslationsUnscoped(): Promise<
     where: {
       publishedDocument: { not: DbNull },
       publishedAt: { not: null },
-      portfolio: { status: 'PUBLISHED', deletedAt: null },
+      portfolio: { status: 'PUBLISHED', deletedAt: null, suspendedAt: null },
     },
     orderBy: { publishedAt: 'desc' },
     select: {
@@ -321,7 +325,7 @@ export async function listPublishedTranslationsBySlugUnscoped(
     where: {
       publishedDocument: { not: DbNull },
       publishedAt: { not: null },
-      portfolio: { slug, status: 'PUBLISHED', deletedAt: null },
+      portfolio: { slug, status: 'PUBLISHED', deletedAt: null, suspendedAt: null },
     },
     select: {
       locale: true,
@@ -336,6 +340,31 @@ export async function listPublishedTranslationsBySlugUnscoped(
       ? []
       : [{ slug: row.portfolio.slug, locale: row.locale, document, publishedAt: row.publishedAt }];
   });
+}
+
+/**
+ * Admin moderation write. Not owner-scoped — the caller is an administrator,
+ * not the portfolio's owner — and deliberately narrow: it flips one column
+ * and hands back the slug the caller needs to invalidate the public cache
+ * (see `invalidatePortfolioPublicCache`), rather than becoming a general
+ * `findById` the dashboard's own repository code deliberately does not have.
+ * Pass a timestamp to suspend, `null` to lift the suspension.
+ */
+export async function setPortfolioSuspension(
+  portfolioId: string,
+  suspendedAt: Date | null,
+): Promise<PortfolioSuspensionOutcome> {
+  try {
+    const row = await getDatabase().portfolio.update({
+      where: { id: portfolioId },
+      data: { suspendedAt },
+      select: { slug: true },
+    });
+
+    return { ok: true, slug: row.slug };
+  } catch {
+    return { ok: false };
+  }
 }
 
 /** Availability check for the slug editor. Advisory: publish is authoritative. */

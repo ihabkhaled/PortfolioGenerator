@@ -23,17 +23,29 @@ datasource db {
 // Authentication (owned by better-auth; field names are its contract)
 // ---------------------------------------------------------------------------
 
+/// App-added, not better-auth's: a suspended account must fail every session
+/// check and every sign-in attempt, not just lose admin-portal visibility.
+/// See `session.service.ts` (`getOptionalUser`) and `auth.actions.ts`
+/// (`signInAction`) for the two enforcement points.
+enum AccountStatus {
+  ACTIVE
+  SUSPENDED
+
+  @@map("account_status")
+}
+
 model User {
-  id                String   @id
+  id                String        @id
   name              String
-  email             String   @unique
-  emailVerified     Boolean  @default(false)
+  email             String        @unique
+  emailVerified     Boolean       @default(false)
   image             String?
-  locale            String   @default("en")
-  themePreference   String   @default("system") @map("theme_preference")
-  defaultCountryIso String?  @map("default_country_iso")
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
+  locale            String        @default("en")
+  themePreference   String        @default("system") @map("theme_preference")
+  defaultCountryIso String?       @map("default_country_iso")
+  status            AccountStatus @default(ACTIVE)
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
 
   /// Billing is account-wide, not per portfolio: one flat subscription covers
   /// every portfolio the owner has, which is why this lives on `User` rather
@@ -159,6 +171,12 @@ model Portfolio {
   /// null version reads as unpublished.
   publishedVersion  Int       @default(0) @map("published_version")
   publishedAt       DateTime? @map("published_at")
+
+  /// Set by an admin moderation action, independent of `status`: a suspended
+  /// portfolio keeps its publish state and its draft untouched, so lifting the
+  /// suspension needs no republish. The public read path treats a non-null
+  /// value exactly like "not found" — see `findPublishedBySlugUnscoped`.
+  suspendedAt DateTime? @map("suspended_at")
 
   createdAt DateTime  @default(now()) @map("created_at")
   updatedAt DateTime  @updatedAt @map("updated_at")
@@ -531,8 +549,8 @@ model AdminUser {
   /// Set to `true` by exactly one code path: `support/seed-super-admin.mts`.
   /// Every action that would modify, suspend or delete an `AdminUser` must
   /// reject when the *target* has this set, regardless of the caller's role.
-  isSuperAdmin Boolean         @default(false) @map("is_super_admin")
-  status       AdminUserStatus @default(ACTIVE)
+  isSuperAdmin Boolean           @default(false) @map("is_super_admin")
+  status       AdminUserStatus   @default(ACTIVE)
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")

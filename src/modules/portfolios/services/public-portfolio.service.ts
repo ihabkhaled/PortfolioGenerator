@@ -3,7 +3,7 @@ import 'server-only';
 import { headers } from 'next/headers';
 
 import { isAppLocale } from '@/modules/localization';
-import { cacheBySlug } from '@/packages/cache';
+import { cacheBySlug, invalidateTagImmediately } from '@/packages/cache';
 
 import { PORTFOLIO_CACHE_KEY_PREFIX } from '../constants/portfolio-cache.constants';
 import {
@@ -26,6 +26,16 @@ import type { PublishedPortfolio } from '../types/portfolio.types';
  */
 export function portfolioCacheTag(slug: string): string {
   return `${PORTFOLIO_CACHE_KEY_PREFIX}${slug}`;
+}
+
+/**
+ * The same invalidation publish and unpublish already perform, exposed so
+ * suspending or reactivating a portfolio — from outside this module, e.g. an
+ * admin action — can drop the cached snapshot the instant moderation state
+ * changes, with the same read-your-own-writes semantics.
+ */
+export function invalidatePortfolioPublicCache(slug: string): void {
+  invalidateTagImmediately(portfolioCacheTag(slug));
 }
 
 export async function getPublishedPortfolio(slug: string): Promise<PublishedPortfolio | null> {

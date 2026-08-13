@@ -493,6 +493,7 @@
     "errors": {
       "invalidCredentials": "That email and password combination did not match an account.",
       "emailTaken": "An account already exists for that email.",
+      "accountSuspended": "This account has been suspended. Contact support if you believe this is a mistake.",
       "weakPassword": "Choose a password of at least 12 characters.",
       "invalidEmail": "Enter a valid email address.",
       "nameRequired": "Enter the name you want to sign in as.",

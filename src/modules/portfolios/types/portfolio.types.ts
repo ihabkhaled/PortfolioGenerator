@@ -72,3 +72,11 @@ export type PortfolioWriteFailure =
 
 export type PortfolioWriteResult<TValue> =
   { readonly ok: true; readonly value: TValue } | ({ readonly ok: false } & PortfolioWriteFailure);
+
+/**
+ * The outcome of `setPortfolioSuspension`: just enough for a caller to
+ * invalidate the right public cache tag, deliberately not the full
+ * `OwnedPortfolio` shape a dashboard write returns.
+ */
+export type PortfolioSuspensionOutcome =
+  { readonly ok: true; readonly slug: string } | { readonly ok: false };

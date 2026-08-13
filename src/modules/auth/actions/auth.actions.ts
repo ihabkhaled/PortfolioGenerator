@@ -11,6 +11,7 @@ import { parseSchema } from '@/packages/zod';
 import { ROUTE_PATHS } from '@/shared/constants/route-paths.constants';
 
 import { AUTH_ERROR_KEYS, AUTH_FIELD_NAMES, AUTH_NOTICE_KEYS } from '../constants/auth.constants';
+import { getUserAccountStatus } from '../repositories/user-account.repository';
 import {
   passwordResetRequestSchema,
   passwordResetSchema,
@@ -116,6 +117,19 @@ export async function signInAction(
     logger.info('auth.sign_in.rejected');
 
     return { status: 'error', error: AUTH_ERROR_KEYS.invalidCredentials, notice: null };
+  }
+
+  // Checked only now that the credentials themselves have been confirmed —
+  // checking suspension any earlier would let a caller who does not know the
+  // password learn account state anyway. better-auth has already created a
+  // session and queued its cookie by this point, so a suspended account is
+  // signed straight back out rather than left with a working cookie under an
+  // error message.
+  if ((await getUserAccountStatus(result.user.id)) === 'SUSPENDED') {
+    await signOutCurrentSession(await headers());
+    logger.info('auth.sign_in.blocked_suspended');
+
+    return { status: 'error', error: AUTH_ERROR_KEYS.accountSuspended, notice: null };
   }
 
   try {

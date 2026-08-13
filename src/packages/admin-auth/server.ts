@@ -36,12 +36,21 @@ function createAdminAuth() {
     basePath: ADMIN_AUTH_API_BASE_PATH,
     database: prismaAdapter(getDatabase(), { provider: 'postgresql' }),
     user: { modelName: 'adminUser' },
+    // `fields: { userId: 'adminUserId' }` on both models below: better-auth's
+    // Prisma adapter queries the foreign key back to the user table by its
+    // own generic `userId` name unless told otherwise — our schema names it
+    // `adminUserId` (see ADR-0010's "no `@map` on core better-auth-managed
+    // columns, only app-added ones" rule extended to the FK name itself, to
+    // keep every admin column unambiguously prefixed). Omitting this mapping
+    // fails every session/account lookup with a Prisma "Unknown argument
+    // `userId`" error.
     session: {
       modelName: 'adminSession',
+      fields: { userId: 'adminUserId' },
       expiresIn: ADMIN_SESSION_MAX_AGE_SECONDS,
       updateAge: ADMIN_SESSION_MAX_AGE_SECONDS / 4,
     },
-    account: { modelName: 'adminAccount' },
+    account: { modelName: 'adminAccount', fields: { userId: 'adminUserId' } },
     verification: { modelName: 'adminVerification' },
     emailAndPassword: {
       enabled: true,
@@ -51,6 +60,9 @@ function createAdminAuth() {
     plugins: [
       twoFactor({
         issuer: 'ProFolio Admin',
+        // No `fields` remap needed here, unlike `session`/`account` above:
+        // `AdminTwoFactor.userId` (see `prisma/schema.prisma`) already
+        // matches the `two-factor` plugin's own default field name.
         twoFactorTable: 'adminTwoFactor',
       }),
       // Must stay last: it forwards Set-Cookie from server actions.

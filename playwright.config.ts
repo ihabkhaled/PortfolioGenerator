@@ -37,7 +37,9 @@ export default defineConfig({
   },
   projects: [{ name: 'chromium', use: { ...devices['Desktop Chrome'] } }],
   webServer: {
-    command: `npm run db:migrate:deploy && npm run build && npm run start -- --port ${PORT}`,
+    command:
+      `npm run db:migrate:deploy && npm run db:seed:admin && npm run build && ` +
+      `npm run start -- --port ${PORT}`,
     url: BASE_URL,
     reuseExistingServer: !isContinuousIntegration,
     timeout: 300_000,
@@ -48,6 +50,14 @@ export default defineConfig({
       NODE_ENV: 'test',
       AUTH_REQUIRE_EMAIL_VERIFICATION: 'false',
       EMAIL_CAPTURE_PATH: 'test-results/email-capture.jsonl',
+      // Read by `support/seed-super-admin.mts` (via `db:seed:admin` above)
+      // and by `src/tests/e2e/support/admin-accounts.ts`, so both sides of
+      // the E2E super-admin sign-in flow always agree on the same account —
+      // CI supplies real values through the job env (see `.github/workflows/
+      // e2e.yml`), and a local run falls back to these deterministic ones.
+      ADMIN_SEED_EMAIL: process.env['ADMIN_SEED_EMAIL'] ?? 'e2e-super-admin@example.com',
+      ADMIN_SEED_PASSWORD:
+        process.env['ADMIN_SEED_PASSWORD'] ?? 'e2e-super-admin-password-16-chars',
     },
   },
 });

@@ -16,4 +16,5 @@ export const ADMIN_AUTH_ERROR_KEYS = {
   missingCode: 'errors.missingCode',
   invalidCode: 'errors.invalidCode',
   missingConfirmCode: 'errors.missingConfirmCode',
+  rateLimited: 'errors.rateLimited',
 } as const;

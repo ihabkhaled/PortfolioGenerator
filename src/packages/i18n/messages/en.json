@@ -1126,7 +1126,8 @@
       "invalidCredentials": "Incorrect email or password.",
       "missingCode": "Enter the 6-digit code.",
       "invalidCode": "That code did not match. Try again.",
-      "missingConfirmCode": "Enter the 6-digit code from your authenticator app."
+      "missingConfirmCode": "Enter the 6-digit code from your authenticator app.",
+      "rateLimited": "Too many attempts. Try again in 15 minutes."
     }
   }
 }

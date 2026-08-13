@@ -1126,7 +1126,8 @@
       "invalidCredentials": "メールアドレスまたはパスワードが正しくありません。",
       "missingCode": "6桁のコードを入力してください。",
       "invalidCode": "コードが一致しませんでした。もう一度お試しください。",
-      "missingConfirmCode": "認証アプリの6桁のコードを入力してください。"
+      "missingConfirmCode": "認証アプリの6桁のコードを入力してください。",
+      "rateLimited": "試行回数が多すぎます。15分後にもう一度お試しください。"
     }
   }
 }

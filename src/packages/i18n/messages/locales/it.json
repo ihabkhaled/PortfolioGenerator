@@ -1126,7 +1126,8 @@
       "invalidCredentials": "Email o password errati.",
       "missingCode": "Inserisci il codice a 6 cifre.",
       "invalidCode": "Il codice non corrisponde. Riprova.",
-      "missingConfirmCode": "Inserisci il codice a 6 cifre dalla tua app di autenticazione."
+      "missingConfirmCode": "Inserisci il codice a 6 cifre dalla tua app di autenticazione.",
+      "rateLimited": "Troppi tentativi. Riprova tra 15 minuti."
     }
   }
 }

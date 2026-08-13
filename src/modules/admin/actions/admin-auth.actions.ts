@@ -3,6 +3,7 @@
 import { headers } from 'next/headers';
 import QRCode from 'qrcode';
 
+import { getRateLimiter } from '@/modules/rate-limit/server';
 import { getAdminAuth } from '@/packages/admin-auth/server';
 import { toAppRoute } from '@/packages/link';
 import { logger } from '@/packages/logger';
@@ -37,6 +38,18 @@ export async function adminSignInAction(
     password === ''
   ) {
     return { status: 'error', error: ADMIN_AUTH_ERROR_KEYS.missingCredentials };
+  }
+
+  const rateLimitResult = await getRateLimiter().consume({
+    bucket: `admin-sign-in:${email}`,
+    limit: 5,
+    windowSeconds: 900,
+    now: new Date(),
+  });
+
+  if (!rateLimitResult.allowed) {
+    logger.warn('admin.sign_in.rate_limited');
+    return { status: 'error', error: ADMIN_AUTH_ERROR_KEYS.rateLimited };
   }
 
   try {
@@ -127,13 +140,22 @@ export async function adminConfirmTwoFactorEnrollmentAction(
     return { status: 'error', error: ADMIN_AUTH_ERROR_KEYS.missingConfirmCode };
   }
 
+  // Captured *before* `verifyTOTP`, not after: a first-time verification
+  // rotates the session (better-auth issues a fresh token and deletes the
+  // password-step one). Resolving the admin afterward would call
+  // `getSession` with the original request's now-stale cookie, find no
+  // matching session, and have better-auth clear the cookie it had just set
+  // moments earlier in this same response — silently bouncing the admin
+  // back to sign-in right after a successful enrollment. The admin's
+  // identity does not change across that rotation, so capturing it first is
+  // both correct and side-effect-free.
+  const admin = await getOptionalAdminSession();
+
   try {
     await getAdminAuth().api.verifyTOTP({ body: { code }, headers: await headers() });
   } catch {
     return { status: 'error', error: ADMIN_AUTH_ERROR_KEYS.invalidCode };
   }
-
-  const admin = await getOptionalAdminSession();
 
   if (admin) {
     await recordAdminAuditEvent({

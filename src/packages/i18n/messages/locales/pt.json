@@ -1126,7 +1126,8 @@
       "invalidCredentials": "E-mail ou senha incorretos.",
       "missingCode": "Digite o código de 6 dígitos.",
       "invalidCode": "O código não corresponde. Tente novamente.",
-      "missingConfirmCode": "Digite o código de 6 dígitos do seu aplicativo autenticador."
+      "missingConfirmCode": "Digite o código de 6 dígitos do seu aplicativo autenticador.",
+      "rateLimited": "Muitas tentativas. Tente novamente em 15 minutos."
     }
   }
 }

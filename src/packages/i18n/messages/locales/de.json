@@ -1126,7 +1126,8 @@
       "invalidCredentials": "Falsche E-Mail-Adresse oder falsches Passwort.",
       "missingCode": "Geben Sie den 6-stelligen Code ein.",
       "invalidCode": "Der Code stimmte nicht überein. Versuchen Sie es erneut.",
-      "missingConfirmCode": "Geben Sie den 6-stelligen Code aus Ihrer Authentifizierungs-App ein."
+      "missingConfirmCode": "Geben Sie den 6-stelligen Code aus Ihrer Authentifizierungs-App ein.",
+      "rateLimited": "Zu viele Versuche. Versuchen Sie es in 15 Minuten erneut."
     }
   }
 }

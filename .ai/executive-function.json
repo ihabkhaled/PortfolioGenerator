@@ -1,0 +1,11 @@
+{
+  "$doc": "Machine-readable budget numbers for rules/09-executive-function.md. Numbers here must match that file exactly; no other file restates them. The reasoning lives in rules/09-executive-function.md and the recovery steps in skills/recover-from-a-loop.md.",
+  "canonical": "rules/09-executive-function.md",
+  "recoveryProtocol": "skills/recover-from-a-loop.md",
+  "budgets": {
+    "MAX_ACTIVE_NESTING_DEPTH": 3,
+    "MAX_SAME_STRATEGY_ATTEMPTS": 3,
+    "MAX_CRITIC_FIX_ROUNDS": 2,
+    "MAX_ACTIVE_WORK_ITEMS": 1
+  }
+}

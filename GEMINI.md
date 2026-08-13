@@ -33,3 +33,14 @@ templates in [skills/communicate-briefly.md](./skills/communicate-briefly.md).
 - A blocker starts with `Blocked:`.
 - `Done.` carries its proof.
 - No filler openers, no fake background work.
+
+## Executive function — mandatory
+
+Follow [rules/09-executive-function.md](./rules/09-executive-function.md);
+recover from a stall with
+[skills/recover-from-a-loop.md](./skills/recover-from-a-loop.md).
+
+- State objective, Definition of Done and scope before deep reasoning.
+- Classify discoveries: only `BLOCKER`/`REQUIRED` may interrupt.
+- Respect the nesting, retry and critic budgets.
+- Stop when done — completion is not an invitation to find more work.

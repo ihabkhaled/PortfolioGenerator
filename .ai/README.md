@@ -32,3 +32,13 @@ a reader cannot tell which copy is authoritative.
 [`../rules/08-communication-style.md`](../rules/08-communication-style.md) —
 1–5 short lines, exact names, `Blocked:` first, proof with `Done.`.
 Templates: [`../skills/communicate-briefly.md`](../skills/communicate-briefly.md).
+
+## Before you plan, audit or edit
+
+[`../rules/09-executive-function.md`](../rules/09-executive-function.md) —
+establish objective, Definition of Done and scope before deep reasoning
+starts; classify discoveries instead of chasing them; respect the nesting,
+retry and critic budgets. Machine-readable policy:
+[`executive-function.json`](./executive-function.json). Stuck, repeating or
+drifting: [`../skills/recover-from-a-loop.md`](../skills/recover-from-a-loop.md).
+Failure-mode lookup: [`../docs/ai/failure-modes.md`](../docs/ai/failure-modes.md).

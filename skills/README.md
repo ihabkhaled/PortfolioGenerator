@@ -14,3 +14,4 @@ needs regenerating, a surface that also needs exporting.
 | [add-a-section-type.md](./add-a-section-type.md)                 | A new kind of band on a page          |
 | [investigate-a-failing-gate.md](./investigate-a-failing-gate.md) | When `npm run validate` fails         |
 | [communicate-briefly.md](./communicate-briefly.md)               | Every message you send                |
+| [recover-from-a-loop.md](./recover-from-a-loop.md)               | When work stalls, repeats or drifts   |

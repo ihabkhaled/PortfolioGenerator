@@ -119,6 +119,17 @@ claim background work that is not running. The rule is
 [`rules/08-communication-style.md`](./rules/08-communication-style.md); the
 templates are [`skills/communicate-briefly.md`](./skills/communicate-briefly.md).
 
+**Establish the objective before you plan.** Before planning, auditing or
+editing, know the Primary Objective, Definition of Done and In/Out of Scope
+in a sentence each. Classify anything else you find as `BLOCKER`,
+`REQUIRED`, `OPTIONAL` or `UNRELATED` — only the first two may interrupt the
+current task; the rest get written down, not chased. Respect the nesting,
+retry and critic budgets, and stop when the Definition of Done is met;
+finishing is not an invitation to keep looking for work. The rule is
+[`rules/09-executive-function.md`](./rules/09-executive-function.md); recover
+from a stall with
+[`skills/recover-from-a-loop.md`](./skills/recover-from-a-loop.md).
+
 ---
 
 ## 5. Commands

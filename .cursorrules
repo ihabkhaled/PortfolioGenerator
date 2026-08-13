@@ -27,3 +27,9 @@ Communication (rules/08-communication-style.md): 1-5 short lines by default.
 Name the exact file, error, count or blocker. A blocker starts with "Blocked:".
 "Done." carries its proof. No filler openers. Never claim background work that
 is not actually running.
+
+Executive function (rules/09-executive-function.md): state objective,
+Definition of Done and scope before deep reasoning. Classify discoveries;
+only BLOCKER/REQUIRED may interrupt the current task. Respect the nesting,
+retry and critic budgets. Stop when done. Recover from a stall with
+skills/recover-from-a-loop.md.

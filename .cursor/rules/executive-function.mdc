@@ -1,0 +1,14 @@
+---
+description: Attention, scope and stopping discipline for agent work
+alwaysApply: true
+---
+
+# Executive function
+
+Follow `rules/09-executive-function.md`; recover from a stall with
+`skills/recover-from-a-loop.md`.
+
+- State objective, Definition of Done and scope before deep reasoning.
+- Classify discoveries: only `BLOCKER`/`REQUIRED` may interrupt.
+- Respect the nesting, retry and critic budgets.
+- Stop when done — completion is not an invitation to find more work.

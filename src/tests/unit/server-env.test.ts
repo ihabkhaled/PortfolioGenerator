@@ -19,6 +19,7 @@ const BASE_ENV: Record<string, string> = {
   DATABASE_URL: 'postgresql://postgres:postgres@localhost:5433/portfolio_generate_test',
   BETTER_AUTH_SECRET: 'a'.repeat(48),
   BETTER_AUTH_URL: 'http://localhost:3000',
+  ADMIN_AUTH_SECRET: 'b'.repeat(48),
   NEXT_PUBLIC_APP_URL: 'http://localhost:3000',
   NEXT_PUBLIC_APP_ENV: 'local',
   STORAGE_DRIVER: 'local',
@@ -61,6 +62,35 @@ describe('getServerEnv', () => {
     applyEnv({ BETTER_AUTH_SECRET: 'too-short' });
 
     expect(() => getServerEnv()).toThrow(/Invalid server environment/);
+  });
+
+  it('refuses a short admin auth secret', () => {
+    applyEnv({ ADMIN_AUTH_SECRET: 'too-short' });
+
+    expect(() => getServerEnv()).toThrow(/Invalid server environment/);
+  });
+
+  it('refuses a missing admin auth secret', () => {
+    applyEnv({ ADMIN_AUTH_SECRET: undefined });
+
+    expect(() => getServerEnv()).toThrow(/Invalid server environment/);
+  });
+
+  it('refuses an admin auth secret equal to the user-facing auth secret in production', () => {
+    applyEnv({
+      NEXT_PUBLIC_APP_ENV: 'production',
+      ADMIN_AUTH_SECRET: 'a'.repeat(48),
+      CRON_SECRET: 'c'.repeat(32),
+      AUTH_REQUIRE_EMAIL_VERIFICATION: 'true',
+      CONTACT_EMAIL_ENABLED: 'true',
+      CONTACT_EMAIL_FROM: 'sender@example.com',
+      CONTACT_EMAIL_TO: 'support@example.com',
+      CONTACT_SMTP_HOST: 'smtp.example.com',
+      CONTACT_SMTP_USER: 'smtp-user',
+      CONTACT_SMTP_PASS: 'smtp-password',
+    });
+
+    expect(() => getServerEnv()).toThrow(/ADMIN_AUTH_SECRET must not equal BETTER_AUTH_SECRET/);
   });
 
   // Selecting s3 and forgetting the bucket must fail at boot, not at the first

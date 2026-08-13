@@ -70,6 +70,19 @@ export const serverEnvSchema = z.object({
   BETTER_AUTH_URL: z.url(),
   AUTH_REQUIRE_EMAIL_VERIFICATION: booleanFlag.default(false),
 
+  // Signing secret for the fully isolated /managawy admin auth instance —
+  // must never equal BETTER_AUTH_SECRET; sharing a secret between the two
+  // auth systems would partially defeat the isolation the second instance
+  // exists for.
+  ADMIN_AUTH_SECRET: z.string().min(32),
+  // Bootstrap super-admin account, read once by support/seed-super-admin.mts.
+  // Optional at the schema level: the seed script itself requires both to be
+  // set the one time it actually needs to run, but a deployment where the
+  // super admin is already seeded should not be forced to keep the password
+  // in its environment forever.
+  ADMIN_SEED_EMAIL: optionalString,
+  ADMIN_SEED_PASSWORD: optionalString,
+
   STORAGE_DRIVER: z.enum(['local', 's3']).default('local'),
   STORAGE_LOCAL_ROOT: z.string().trim().default('.storage'),
   S3_ENDPOINT: optionalString,

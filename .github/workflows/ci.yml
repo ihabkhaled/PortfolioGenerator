@@ -14,6 +14,7 @@ env:
   NEXT_PUBLIC_APP_ENV: local
   BETTER_AUTH_SECRET: ci-only-not-a-real-secret-ci-only-not-a-real
   BETTER_AUTH_URL: http://localhost:3000
+  ADMIN_AUTH_SECRET: ci-only-not-a-real-admin-secret-ci-only-not-a
   AI_PROVIDER: deterministic
   STORAGE_DRIVER: local
 

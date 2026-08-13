@@ -7,6 +7,7 @@ const base = {
   DATABASE_URL: 'postgresql://test:test@localhost:5432/test',
   BETTER_AUTH_SECRET: 'x'.repeat(32),
   BETTER_AUTH_URL: 'http://localhost:3000',
+  ADMIN_AUTH_SECRET: 'y'.repeat(32),
 };
 
 describe('contact email environment', () => {

@@ -49,6 +49,9 @@ function validateProductionRequirements(environment: ServerEnv): void {
   if (environment.AUTH_REQUIRE_EMAIL_VERIFICATION && !environment.CONTACT_EMAIL_ENABLED) {
     throw new Error('AUTH_REQUIRE_EMAIL_VERIFICATION=true requires CONTACT_EMAIL_ENABLED=true');
   }
+  if (isProduction && environment.ADMIN_AUTH_SECRET === environment.BETTER_AUTH_SECRET) {
+    throw new Error('ADMIN_AUTH_SECRET must not equal BETTER_AUTH_SECRET in production');
+  }
 }
 
 export function parseServerEnvironment(input: unknown): ServerEnv {

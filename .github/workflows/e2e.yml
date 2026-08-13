@@ -35,6 +35,9 @@ jobs:
       NEXT_PUBLIC_APP_ENV: local
       BETTER_AUTH_SECRET: ci-only-not-a-real-secret-ci-only-not-a-real
       BETTER_AUTH_URL: http://127.0.0.1:3100
+      ADMIN_AUTH_SECRET: ci-only-not-a-real-admin-secret-ci-only-not-a
+      ADMIN_SEED_EMAIL: e2e-super-admin@example.com
+      ADMIN_SEED_PASSWORD: ci-only-not-a-real-admin-password-ci-only
       # CI must never reach a paid model: the deterministic provider is the
       # only extraction backend the E2E suite is allowed to use.
       AI_PROVIDER: deterministic
@@ -56,6 +59,9 @@ jobs:
 
       - name: Migrate from an empty database
         run: npm run db:migrate:deploy
+
+      - name: Seed the super admin
+        run: npm run db:seed:admin
 
       - name: Install Playwright browsers
         run: npm exec -- playwright install --with-deps chromium

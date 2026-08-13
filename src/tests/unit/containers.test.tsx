@@ -4,6 +4,7 @@ import { describe, expect, it, vi } from 'vitest';
 
 import { ACCOUNT_DELETE_CONFIRMATION } from '@/modules/account';
 import { DeleteAccountContainer, DeletePortfolioContainer } from '@/modules/account/account-ui';
+import { AdminSignInFormContainer, AdminTwoFactorEnrollContainer } from '@/modules/admin/admin-ui';
 import { SignInFormContainer, SignOutButtonContainer, SignUpFormContainer } from '@/modules/auth';
 import {
   PortfolioEditorContainer,
@@ -230,6 +231,20 @@ describe('the containers that mount a server action', () => {
     await userEvent.type(screen.getByRole('textbox'), ACCOUNT_DELETE_CONFIRMATION);
 
     expect(submit).toBeEnabled();
+  });
+
+  it('renders the admin sign-in form', () => {
+    render(<AdminSignInFormContainer />);
+
+    expect(screen.getByLabelText('Email')).toBeRequired();
+    expect(screen.getByRole('button', { name: 'Continue' })).toBeInTheDocument();
+  });
+
+  it('renders the admin two-factor enrollment password-confirmation step first', () => {
+    render(<AdminTwoFactorEnrollContainer />);
+
+    expect(screen.getByLabelText('Password')).toBeRequired();
+    expect(screen.getByRole('button', { name: 'Continue' })).toBeInTheDocument();
   });
 });
 

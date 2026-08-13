@@ -4,6 +4,7 @@ import { createElement } from 'react';
 import { describe, expect, it, vi } from 'vitest';
 
 import { AccountDisclosure, AccountSummary, accountClasses } from '@/modules/account/account-ui';
+import { AdminShell, AdminSignInForm, AdminTwoFactorEnroll } from '@/modules/admin/admin-ui';
 import { CredentialForm } from '@/modules/auth';
 import {
   LandingCta,
@@ -420,6 +421,171 @@ describe('CredentialForm', () => {
     );
 
     expect(screen.getByRole('button', { name: 'Signing in' })).toBeDisabled();
+  });
+});
+
+describe('AdminSignInForm', () => {
+  const labels = {
+    title: 'ProFolio Admin',
+    lead: 'Sign in to continue.',
+    emailLabel: 'Email',
+    passwordLabel: 'Password',
+    codeLabel: 'Authenticator code',
+    submitLabel: 'Continue',
+    pendingLabel: 'Checking…',
+  };
+
+  it('renders the email and password fields by default', () => {
+    render(
+      <AdminSignInForm
+        state={{ status: 'idle', error: null }}
+        action={noop}
+        isPending={false}
+        errorMessage={null}
+        labels={labels}
+      />,
+    );
+
+    expect(screen.getByLabelText('Email')).toBeRequired();
+    expect(screen.getByLabelText('Password')).toHaveAttribute('autocomplete', 'current-password');
+    expect(screen.queryByLabelText('Authenticator code')).not.toBeInTheDocument();
+  });
+
+  it('swaps to the authenticator-code field once two-factor is required', () => {
+    render(
+      <AdminSignInForm
+        state={{ status: 'needs-two-factor', error: null }}
+        action={noop}
+        isPending={false}
+        errorMessage={null}
+        labels={labels}
+      />,
+    );
+
+    expect(screen.getByLabelText('Authenticator code')).toHaveAttribute(
+      'autocomplete',
+      'one-time-code',
+    );
+    expect(screen.queryByLabelText('Email')).not.toBeInTheDocument();
+    expect(screen.queryByLabelText('Password')).not.toBeInTheDocument();
+  });
+
+  it('announces a sign-in error', () => {
+    render(
+      <AdminSignInForm
+        state={{ status: 'error', error: 'admin.errors.invalidCredentials' }}
+        action={noop}
+        isPending={false}
+        errorMessage="Incorrect email or password."
+        labels={labels}
+      />,
+    );
+
+    expect(screen.getByRole('alert')).toHaveTextContent('Incorrect email or password.');
+  });
+
+  it('shows the pending label while the action is in flight', () => {
+    render(
+      <AdminSignInForm
+        state={{ status: 'idle', error: null }}
+        action={noop}
+        isPending
+        errorMessage={null}
+        labels={labels}
+      />,
+    );
+
+    expect(screen.getByRole('button', { name: 'Checking…' })).toBeDisabled();
+  });
+});
+
+describe('AdminTwoFactorEnroll', () => {
+  const labels = {
+    enrollTitle: 'Set up two-factor authentication',
+    enrollLead: 'Required for every admin account.',
+    qrAlt: 'Scan this QR code with your authenticator app',
+    confirmCodeLabel: 'Confirm the code from your app',
+    submitLabel: 'Confirm and continue',
+    pendingLabel: 'Confirming…',
+  };
+  const enrollment = {
+    totpUri: 'otpauth://totp/ProFolio%20Admin:admin%40example.com?secret=ABC&issuer=ProFolio',
+    qrCodeDataUrl: 'data:image/png;base64,fake',
+    backupCodes: ['aaaa-bbbb', 'cccc-dddd'],
+  };
+
+  it('renders the QR code, the plaintext secret, and every backup code', () => {
+    render(
+      <AdminTwoFactorEnroll
+        enrollment={enrollment}
+        state={{ status: 'idle', error: null }}
+        action={noop}
+        isPending={false}
+        errorMessage={null}
+        labels={labels}
+      />,
+    );
+
+    expect(screen.getByAltText('Scan this QR code with your authenticator app')).toHaveAttribute(
+      'src',
+      enrollment.qrCodeDataUrl,
+    );
+    expect(screen.getByText(enrollment.totpUri)).toBeInTheDocument();
+    expect(screen.getByText('aaaa-bbbb')).toBeInTheDocument();
+    expect(screen.getByText('cccc-dddd')).toBeInTheDocument();
+  });
+
+  it('announces a confirmation error', () => {
+    render(
+      <AdminTwoFactorEnroll
+        enrollment={enrollment}
+        state={{ status: 'error', error: 'admin.errors.invalidCode' }}
+        action={noop}
+        isPending={false}
+        errorMessage="That code did not match. Try again."
+        labels={labels}
+      />,
+    );
+
+    expect(screen.getByRole('alert')).toHaveTextContent('That code did not match. Try again.');
+  });
+
+  it('shows the pending label while confirming', () => {
+    render(
+      <AdminTwoFactorEnroll
+        enrollment={enrollment}
+        state={{ status: 'idle', error: null }}
+        action={noop}
+        isPending
+        errorMessage={null}
+        labels={labels}
+      />,
+    );
+
+    expect(screen.getByRole('button', { name: 'Confirming…' })).toBeDisabled();
+  });
+});
+
+describe('AdminShell', () => {
+  it('renders a real link for an available nav item and a disabled label for one not yet built', () => {
+    render(
+      <AdminShell
+        navItems={[
+          { id: 'dashboard', label: 'Dashboard', href: '/managawy' },
+          { id: 'users', label: 'Users', href: null },
+        ]}
+        brandLabel="ProFolio Admin"
+        navAriaLabel="Admin"
+      >
+        <p>dashboard content</p>
+      </AdminShell>,
+    );
+
+    expect(screen.getByRole('link', { name: 'Dashboard' })).toHaveAttribute('href', '/managawy');
+    expect(screen.getByText('Users')).toHaveAttribute('aria-disabled');
+    expect(screen.queryByRole('link', { name: 'Users' })).not.toBeInTheDocument();
+    expect(screen.getByText('dashboard content')).toBeInTheDocument();
+    expect(screen.getByRole('navigation', { name: 'Admin' })).toBeInTheDocument();
   });
 });
 

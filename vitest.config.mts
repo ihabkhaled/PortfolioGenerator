@@ -72,6 +72,10 @@ export default defineConfig({
         // Vendor facades that only re-export or construct a client.
         'src/packages/database/**',
         'src/packages/auth/**',
+        // The isolated /managawy admin auth instance — same shape as
+        // packages/auth above, exercised by the E2E suite (see
+        // src/tests/e2e/managawy-and-privacy.spec.ts), not mocked here.
+        'src/packages/admin-auth/**',
         'src/packages/ai/client.ts',
         // A raw TCP client for clamd. Exercised against a real daemon in the
         // E2E suite; a socket mocked here would assert the mock.

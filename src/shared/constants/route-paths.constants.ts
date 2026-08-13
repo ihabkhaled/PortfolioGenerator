@@ -26,6 +26,8 @@ export const ROUTE_PATHS = {
   apiAssetDeletionRetry: '/api/operations/asset-deletions',
   apiPortfolioPdfDownload: '/api/portfolio-pdf/download',
   managawy: '/managawy',
+  managawySignIn: '/managawy/sign-in',
+  managawyTwoFactorEnroll: '/managawy/two-factor/enroll',
   media: '/media',
   portfolios: '/portfolios',
   robots: '/robots.txt',

@@ -40,3 +40,48 @@ export interface AuthenticatedAdmin {
 export interface SuperAdminGuardTarget {
   readonly isSuperAdmin: boolean;
 }
+
+/**
+ * Who did what to whom, as opposed to `AuditEventType`'s "whose data
+ * changed" — declared as a plain string-literal union rather than imported
+ * from `@prisma/client`, for the same reason `AdminRole` above is.
+ */
+export type AdminAuditTargetType = 'USER' | 'PORTFOLIO' | 'ADMIN_USER';
+
+/**
+ * Bounded metadata, matching `AuditMetadata`'s convention exactly: scalars
+ * only, never CV text, never a password or TOTP secret.
+ */
+export type AdminAuditMetadata = Readonly<Record<string, string | number | boolean | null>>;
+
+export interface AdminAuditEventInput {
+  readonly adminUserId: string;
+  readonly targetType: AdminAuditTargetType;
+  readonly targetId: string;
+  readonly action: string;
+  readonly metadata?: AdminAuditMetadata;
+}
+
+/** The sink an admin audit event is written to. */
+export interface AdminAuditSink {
+  record: (event: AdminAuditEventInput) => Promise<void>;
+}
+
+/**
+ * The database projection `toAuthenticatedAdmin` accepts.
+ *
+ * Declared structurally rather than importing Prisma's generated `AdminUser`
+ * model type: `@prisma/client` is confined to `src/packages/database/`, and
+ * enum-like fields are typed as plain `string` here, cast to their narrow
+ * union at the mapper boundary — the same convention `PortfolioRow` follows
+ * in `src/modules/portfolios/types/portfolio-row.types.ts`.
+ */
+export interface AdminUserRow {
+  readonly id: string;
+  readonly email: string;
+  readonly name: string;
+  readonly role: string;
+  readonly permissions: readonly string[];
+  readonly isSuperAdmin: boolean;
+  readonly status: string;
+}

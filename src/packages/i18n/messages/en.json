@@ -1132,7 +1132,55 @@
       "missingCode": "Enter the 6-digit code.",
       "invalidCode": "That code did not match. Try again.",
       "missingConfirmCode": "Enter the 6-digit code from your authenticator app.",
-      "rateLimited": "Too many attempts. Try again in 15 minutes."
+      "rateLimited": "Too many attempts. Try again in 15 minutes.",
+      "weakPassword": "Choose a password that is at least 16 characters.",
+      "passwordReused": "Choose a password different from your current one.",
+      "currentPasswordRejected": "Your current password was incorrect.",
+      "unknown": "Something went wrong. Please try again."
+    },
+    "theme": {
+      "label": "Colour theme",
+      "light": "Light",
+      "dark": "Dark",
+      "system": "Match my system"
+    },
+    "roles": {
+      "SUPER_ADMIN": "Super admin",
+      "ADMIN": "Admin",
+      "MODERATOR": "Moderator"
+    },
+    "topBar": {
+      "homeLabel": "Go to the platform homepage",
+      "accountMenuLabel": "Admin account menu",
+      "preferencesLink": "Admin preferences",
+      "changePasswordLink": "Change password",
+      "signOut": "Sign out"
+    },
+    "account": {
+      "title": "Admin preferences & security",
+      "lead": "Manage your own password and preferences for the /managawy admin console.",
+      "summary": {
+        "title": "Your account",
+        "nameLabel": "Name",
+        "emailLabel": "Email",
+        "roleLabel": "Role",
+        "permissionsLabel": "Granted permissions"
+      },
+      "security": {
+        "title": "Change password",
+        "hint": "Changing your password signs out every other session of yours.",
+        "currentPassword": "Current password",
+        "newPassword": "New password",
+        "showPassword": "Show password",
+        "hidePassword": "Hide password",
+        "submit": "Change password",
+        "pending": "Changing password…",
+        "success": "Your password was changed."
+      },
+      "preferences": {
+        "title": "Preferences",
+        "hint": "These settings apply only to your own admin session."
+      }
     }
   }
 }

@@ -9,14 +9,18 @@ export const ADMIN_SHELL_BRAND_LABEL = 'ProFolio Admin';
 export const ADMIN_SHELL_NAV_ARIA_LABEL = 'Admin';
 
 /**
- * Only `Dashboard` carries a real `href` — the rest are visible-but-disabled
- * placeholders for the Phase 2 management screens (see spec).
+ * Every `/managawy` management screen, wired to its real route.
+ *
+ * `href` stays nullable on the type — see `AdminNavItem` — so a future item
+ * a given admin cannot reach yet can still render disabled rather than as a
+ * dead link, but Phase 2 shipped all six destinations, so nothing here is
+ * `null` any more.
  */
 export const ADMIN_NAV_ITEMS: readonly AdminNavItem[] = [
   { id: 'dashboard', label: 'Dashboard', href: ROUTE_PATHS.managawy },
-  { id: 'users', label: 'Users', href: null },
-  { id: 'portfolios', label: 'Portfolios', href: null },
-  { id: 'admins', label: 'Admins', href: null },
-  { id: 'rbac', label: 'RBAC', href: null },
-  { id: 'audit-log', label: 'Audit Log', href: null },
+  { id: 'users', label: 'Users', href: ROUTE_PATHS.managawyUsers },
+  { id: 'portfolios', label: 'Portfolios', href: ROUTE_PATHS.managawyPortfolios },
+  { id: 'admins', label: 'Admins', href: ROUTE_PATHS.managawyAdmins },
+  { id: 'rbac', label: 'RBAC', href: ROUTE_PATHS.managawyRbac },
+  { id: 'audit-log', label: 'Audit Log', href: ROUTE_PATHS.managawyAuditLog },
 ];

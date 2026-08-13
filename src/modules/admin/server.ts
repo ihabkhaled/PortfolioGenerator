@@ -21,6 +21,7 @@ export {
   ADMIN_SHELL_NAV_ARIA_LABEL,
 } from './constants/admin-shell-nav.constants';
 export { buildAdminDashboardStats } from './helpers/admin-stats.helper';
+export { buildAdminNavItemViews } from './helpers/admin-nav.helper';
 export { getAdminDashboardStats } from './repositories/admin-stats.repository';
 export type {
   AuthenticatedAdmin,

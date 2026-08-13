@@ -32,6 +32,25 @@ export async function getRequestLocale(): Promise<string | null> {
 }
 
 /**
+ * The canonical, delocalized pathname stamped by `src/proxy.ts` — the same
+ * shape as every `ROUTE_PATHS` entry, with no `/xx` locale prefix. A layout
+ * that needs to know which of its own routes is current (to mark a nav item
+ * active, for instance) reads it from here rather than reaching for a client
+ * hook, since a layout that gates on `requireAdmin` has to stay a server
+ * component.
+ */
+export async function getRequestPathname(): Promise<string | null> {
+  try {
+    const requestHeaders = await headers();
+
+    return requestHeaders.get('x-pathname');
+  } catch {
+    // Static generation and isolated unit tests have no request context.
+    return null;
+  }
+}
+
+/**
  * Best-effort client address for IP-scoped rate limiting.
  *
  * A client can forge `x-forwarded-for`, so this is a secondary signal only:

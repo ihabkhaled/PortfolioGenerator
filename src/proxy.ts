@@ -205,6 +205,7 @@ export default async function proxy(request: NextRequest): Promise<NextResponse>
   );
   requestHeaders.set('x-app-locale', locale);
   requestHeaders.set('x-app-direction', getLocaleDirection(locale));
+  requestHeaders.set('x-pathname', resolvedPath.pathname);
 
   const dashboardNotFound = await buildDashboardEditorNotFoundResponse(request, requestHeaders);
   if (dashboardNotFound) {

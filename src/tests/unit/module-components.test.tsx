@@ -4,7 +4,14 @@ import { createElement } from 'react';
 import { describe, expect, it, vi } from 'vitest';
 
 import { AccountDisclosure, AccountSummary, accountClasses } from '@/modules/account/account-ui';
-import { AdminShell, AdminSignInForm, AdminTwoFactorEnroll } from '@/modules/admin/admin-ui';
+import {
+  AdminAccountMenu,
+  AdminAccountSummary,
+  AdminShell,
+  AdminSignInForm,
+  AdminTopBar,
+  AdminTwoFactorEnroll,
+} from '@/modules/admin/admin-ui';
 import { CredentialForm } from '@/modules/auth';
 import {
   LandingCta,
@@ -571,21 +578,104 @@ describe('AdminShell', () => {
     render(
       <AdminShell
         navItems={[
-          { id: 'dashboard', label: 'Dashboard', href: '/managawy' },
-          { id: 'users', label: 'Users', href: null },
+          { id: 'dashboard', label: 'Dashboard', href: '/managawy', isCurrent: true },
+          { id: 'users', label: 'Users', href: '/managawy/users', isCurrent: false },
+          { id: 'rbac', label: 'RBAC', href: null, isCurrent: false },
         ]}
         brandLabel="ProFolio Admin"
         navAriaLabel="Admin"
+        topBar={<p>top bar</p>}
       >
         <p>dashboard content</p>
       </AdminShell>,
     );
 
-    expect(screen.getByRole('link', { name: 'Dashboard' })).toHaveAttribute('href', '/managawy');
-    expect(screen.getByText('Users')).toHaveAttribute('aria-disabled');
-    expect(screen.queryByRole('link', { name: 'Users' })).not.toBeInTheDocument();
+    const dashboardLink = screen.getByRole('link', { name: 'Dashboard' });
+    expect(dashboardLink).toHaveAttribute('href', '/managawy');
+    expect(dashboardLink).toHaveAttribute('aria-current', 'page');
+    expect(screen.getByRole('link', { name: 'Users' })).not.toHaveAttribute('aria-current');
+    expect(screen.getByText('RBAC')).toHaveAttribute('aria-disabled');
+    expect(screen.queryByRole('link', { name: 'RBAC' })).not.toBeInTheDocument();
+    expect(screen.getByText('top bar')).toBeInTheDocument();
     expect(screen.getByText('dashboard content')).toBeInTheDocument();
     expect(screen.getByRole('navigation', { name: 'Admin' })).toBeInTheDocument();
+  });
+});
+
+describe('AdminTopBar', () => {
+  it('links the brand home icon and renders the actions and account menu slots', () => {
+    render(
+      <AdminTopBar
+        homeHref="/"
+        homeLabel="Go to the platform homepage"
+        brandLabel="ProFolio Admin"
+        actions={<span>theme toggle</span>}
+        accountMenu={<span>account menu</span>}
+      />,
+    );
+
+    expect(screen.getByRole('link', { name: 'Go to the platform homepage' })).toHaveAttribute(
+      'href',
+      '/',
+    );
+    expect(screen.getByText('ProFolio Admin')).toBeInTheDocument();
+    expect(screen.getByText('theme toggle')).toBeInTheDocument();
+    expect(screen.getByText('account menu')).toBeInTheDocument();
+  });
+});
+
+describe('AdminAccountMenu', () => {
+  it('names the signed-in admin and links to preferences, change password and sign out', () => {
+    render(
+      <AdminAccountMenu
+        name="Ada Lovelace"
+        email="ada@example.com"
+        roleName="Super admin"
+        menuLabel="Admin account menu"
+        preferencesHref="/managawy/account"
+        preferencesLabel="Admin preferences"
+        changePasswordHref="/managawy/account#change-password"
+        changePasswordLabel="Change password"
+        logout={<button type="button">Sign out</button>}
+      />,
+    );
+
+    expect(screen.getByRole('button', { name: 'Admin account menu' })).toBeInTheDocument();
+    expect(screen.getByText('ada@example.com')).toBeInTheDocument();
+    expect(screen.getByText('Super admin')).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Admin preferences' })).toHaveAttribute(
+      'href',
+      '/managawy/account',
+    );
+    expect(screen.getByRole('link', { name: 'Change password' })).toHaveAttribute(
+      'href',
+      '/managawy/account#change-password',
+    );
+    expect(screen.getByRole('button', { name: 'Sign out' })).toBeInTheDocument();
+  });
+});
+
+describe('AdminAccountSummary', () => {
+  it('lists the granted permissions', () => {
+    render(
+      <AdminAccountSummary
+        title="Your account"
+        nameLabel="Name"
+        name="Ada Lovelace"
+        emailLabel="Email"
+        email="ada@example.com"
+        roleLabel="Role"
+        roleName="Super admin"
+        permissionsLabel="Granted permissions"
+        permissions={['USERS_VIEW', 'ADMINS_MANAGE']}
+      />,
+    );
+
+    expect(screen.getByText('Ada Lovelace')).toBeInTheDocument();
+    expect(screen.getByText('ada@example.com')).toBeInTheDocument();
+    expect(screen.getByText('Super admin')).toBeInTheDocument();
+    expect(screen.getByText('USERS_VIEW')).toBeInTheDocument();
+    expect(screen.getByText('ADMINS_MANAGE')).toBeInTheDocument();
   });
 });
 

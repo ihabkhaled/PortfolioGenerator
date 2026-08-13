@@ -1182,6 +1182,84 @@
         "title": "Preferences",
         "hint": "These settings apply only to your own admin session."
       }
+    },
+    "users": {
+      "list": {
+        "title": "Users",
+        "lead": "Every account on the platform. Search by name or email, suspend or reactivate access, or send a password reset.",
+        "searchLabel": "Search",
+        "searchPlaceholder": "Name or email",
+        "searchSubmit": "Search",
+        "resultCount": "Showing {from}-{to} of {total} users",
+        "resultCountEmpty": "No users found",
+        "pageStatus": "Page {page} of {totalPages}",
+        "previousPage": "Previous",
+        "nextPage": "Next",
+        "emptyTitle": "No users match",
+        "emptyDescription": "No one has signed up yet.",
+        "emptySearchDescription": "Try a different name or email.",
+        "columns": {
+          "name": "Name",
+          "email": "Email",
+          "verified": "Verified?",
+          "status": "Status",
+          "portfolios": "Portfolios",
+          "joined": "Joined",
+          "actions": "Actions"
+        }
+      },
+      "verified": {
+        "yes": "Verified",
+        "no": "Unverified"
+      },
+      "status": {
+        "ACTIVE": "Active",
+        "SUSPENDED": "Suspended"
+      },
+      "portfolioStatus": {
+        "DRAFT": "Draft",
+        "PUBLISHED": "Published",
+        "UNPUBLISHED": "Unpublished"
+      },
+      "detail": {
+        "backToList": "Back to users",
+        "nameLabel": "Name",
+        "emailLabel": "Email",
+        "verifiedLabel": "Email verified",
+        "statusLabel": "Account status",
+        "joinedLabel": "Joined",
+        "suspendedBadge": "Suspended",
+        "viewPublic": "View public page",
+        "viewInPortfolios": "Open in Portfolios",
+        "portfoliosTitle": "Portfolios",
+        "portfoliosEmptyTitle": "No portfolios",
+        "portfoliosEmptyDescription": "This user has not created a portfolio yet.",
+        "portfolioColumns": {
+          "slug": "Slug",
+          "status": "Status",
+          "updated": "Updated",
+          "links": "Links"
+        }
+      },
+      "actions": {
+        "suspend": "Suspend",
+        "activate": "Activate",
+        "confirmSuspend": "Suspend this user? They will be signed out and unable to sign back in until reactivated.",
+        "cancel": "Cancel",
+        "pending": "Working…",
+        "resetPassword": "Send password reset",
+        "resetPending": "Sending…",
+        "errors": {
+          "invalid": "That request could not be read. Please try again.",
+          "notFound": "That user could not be found. They may already have been deleted.",
+          "resetFailed": "The password reset email could not be sent. Please try again."
+        },
+        "success": {
+          "suspended": "User suspended.",
+          "activated": "User reactivated.",
+          "resetSent": "Password reset email sent."
+        }
+      }
     }
   }
 }

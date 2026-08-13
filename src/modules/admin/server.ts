@@ -23,6 +23,34 @@ export {
 export { buildAdminDashboardStats } from './helpers/admin-stats.helper';
 export { buildAdminNavItemViews } from './helpers/admin-nav.helper';
 export { getAdminDashboardStats } from './repositories/admin-stats.repository';
+export { buildPagination, computeOffset, parsePageParam } from './helpers/pagination.helper';
+export {
+  getAdminUserDetail,
+  listAdminUserPortfolios,
+  searchAdminUsers,
+} from './repositories/admin-users.repository';
+export {
+  setManagedUserAccountStatus,
+  sendManagedUserPasswordReset,
+} from './services/admin-user-management.service';
+export {
+  buildAdminUserDetailPath,
+  buildAdminPortfoliosSearchPath,
+  buildAdminUsersListPath,
+} from './helpers/admin-users-path.helper';
+export {
+  buildAdminUserPortfolioRowViews,
+  buildAdminUserProfileFieldsView,
+  buildAdminUserRowViews,
+  buildAdminUsersPaginationView,
+  buildAdminUsersResultCountLabel,
+} from './helpers/admin-users-view.helper';
+export {
+  ADMIN_USERS_PAGE_PARAM,
+  ADMIN_USERS_PAGE_SIZE,
+  ADMIN_USERS_QUERY_PARAM,
+} from './constants/admin-users.constants';
+export { adminUsersClasses } from './constants/admin-users-style.constants';
 export type {
   AuthenticatedAdmin,
   AdminAuditEventInput,
@@ -33,3 +61,4 @@ export type {
 } from './types/admin.types';
 export type { AdminDashboardStatsCounts, AdminStatTile } from './types/admin-dashboard-stats.types';
 export type { AdminNavItem, AdminShellProps } from './types/admin-shell-view.types';
+export type { AdminManagedUserDetail, AdminUserSearchResult } from './types/admin-users.types';

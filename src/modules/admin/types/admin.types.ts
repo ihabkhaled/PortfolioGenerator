@@ -22,6 +22,14 @@ export type AdminPermission =
 export type AdminUserStatus = 'ACTIVE' | 'SUSPENDED';
 
 /**
+ * Mirrors `PortfolioStatus` in `src/modules/portfolios/types/portfolio.types.ts`
+ * for the same reason `AdminUserStatus` mirrors `AccountStatus` above: the
+ * users-management screen renders a portfolio's status without deep-importing
+ * the portfolios module's internal types.
+ */
+export type AdminPortfolioStatus = 'DRAFT' | 'PUBLISHED' | 'UNPUBLISHED';
+
+/**
  * Deliberately narrower than the Prisma row, mirroring `AuthenticatedUser`
  * in the user-facing auth: everything below the action layer takes this
  * shape, never a raw session or a full database record.

@@ -10,7 +10,15 @@ export { AdminAccountMenu } from './components/admin-account-menu.component';
 export { AdminAccountSummary } from './components/admin-account-summary.component';
 export { AdminSignInForm } from './components/admin-sign-in-form.component';
 export { AdminTwoFactorEnroll } from './components/admin-two-factor-enroll.component';
+export { AdminUserSearchForm } from './components/admin-user-search-form.component';
+export { AdminUsersTable } from './components/admin-users-table.component';
+export { AdminUsersPagination } from './components/admin-users-pagination.component';
+export { AdminUserProfile } from './components/admin-user-profile.component';
+export { AdminUserPortfoliosTable } from './components/admin-user-portfolios-table.component';
+export { AdminUserStatusActionContainer } from './containers/admin-user-status-action.container';
+export { AdminUserResetPasswordContainer } from './containers/admin-user-reset-password.container';
 export { adminAccountClasses } from './constants/admin-account-style.constants';
+export { adminUsersClasses } from './constants/admin-users-style.constants';
 export type {
   AdminSignInFormProps,
   AdminSignInFormState,
@@ -28,3 +36,17 @@ export type {
   AdminAccountActionState,
   AdminAccountSummaryProps,
 } from './types/admin-account-view.types';
+export type {
+  AdminBadgeTone,
+  AdminStatusBadgeView,
+  AdminUserDetailProfileProps,
+  AdminUserListItemView,
+  AdminUserPortfoliosTableProps,
+  AdminUserSearchFormProps,
+  AdminUsersPaginationProps,
+  AdminUsersTableProps,
+} from './types/admin-users-view.types';
+export type {
+  AdminResetPasswordActionProps,
+  AdminUserStatusActionProps,
+} from './types/admin-user-action-view.types';

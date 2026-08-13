@@ -491,6 +491,7 @@
       "completed": "La tua password è stata modificata. Ora puoi accedere."
     },
     "errors": {
+      "accountSuspended": "Questo account è stato sospeso. Contatta l’assistenza se ritieni che si tratti di un errore.",
       "invalidCredentials": "La combinazione di email e password non corrispondeva a un account.",
       "emailTaken": "Esiste già un account per quell'e-mail.",
       "weakPassword": "Scegli una password di almeno 12 caratteri.",

@@ -491,6 +491,7 @@
       "completed": "Votre mot de passe a été modifié. Vous pouvez maintenant vous connecter."
     },
     "errors": {
+      "accountSuspended": "Ce compte a été suspendu. Contactez l’assistance si vous pensez qu’il s’agit d’une erreur.",
       "invalidCredentials": "Cette combinaison e-mail et mot de passe ne correspond à aucun compte.",
       "emailTaken": "Un compte existe déjà pour cet e-mail.",
       "weakPassword": "Choisissez un mot de passe d'au moins 12 caractères.",

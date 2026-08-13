@@ -124,4 +124,15 @@ describe('catalog interpolation contracts', () => {
       { locale: 'fr', key: 'app.farewell', reason: 'missing' },
     ]);
   });
+
+  it('can exclude a deliberately single-locale namespace from parity checks', () => {
+    expect(
+      auditCatalogParity(
+        { app: { title: 'App' }, admin: { title: 'Admin' } },
+        { app: { title: 'Application' } },
+        'fr',
+        ['admin'],
+      ),
+    ).toEqual([]);
+  });
 });

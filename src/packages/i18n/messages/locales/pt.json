@@ -491,6 +491,7 @@
       "completed": "Sua senha foi alterada. Agora você pode fazer login."
     },
     "errors": {
+      "accountSuspended": "Esta conta foi suspensa. Entre em contato com o suporte se achar que isso foi um engano.",
       "invalidCredentials": "Essa combinação de e-mail e senha não corresponde a uma conta.",
       "emailTaken": "Já existe uma conta para esse e-mail.",
       "weakPassword": "Escolha uma senha de pelo menos 12 caracteres.",

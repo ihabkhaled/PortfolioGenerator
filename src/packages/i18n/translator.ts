@@ -58,8 +58,11 @@ function auditFlattenedCatalogs(
   english: Readonly<Record<string, string>>,
   localized: Readonly<Record<string, string>>,
   locale: string,
+  excludedNamespaces: readonly string[] = [],
 ): readonly CatalogParityIssue[] {
+  const excludedPrefixes = excludedNamespaces.map((namespace) => `${namespace}.`);
   return Object.entries(english).flatMap<CatalogParityIssue>(([key, value]) => {
+    if (excludedPrefixes.some((prefix) => key.startsWith(prefix))) return [];
     const localizedValue = localized[key];
     if (localizedValue === undefined) return [{ locale, key, reason: 'missing' }];
     return hasMatchingInterpolations(localizedValue, value)
@@ -101,13 +104,16 @@ export function hasMatchingInterpolations(left: string, right: string): boolean 
 
 /** Reports every missing key and placeholder-contract mismatch without English fallback. */
 export function auditLocalizedCatalogs(locales: readonly string[]): readonly CatalogParityIssue[] {
+  // `/managawy` is an isolated, English-only operational surface. Its partial
+  // legacy translations must not make the public-locale completeness gate
+  // require every new admin capability in every customer-facing language.
   const english = flattenCatalog(catalog);
   return locales.flatMap<CatalogParityIssue>((locale) => {
     const combined = {
       ...flattenCatalog(localizedCatalogs[locale] ?? {}),
       ...flattenCatalog(launchCatalogs[locale] ?? {}),
     };
-    return auditFlattenedCatalogs(english, combined, locale);
+    return auditFlattenedCatalogs(english, combined, locale, ['admin']);
   });
 }
 
@@ -115,8 +121,14 @@ export function auditCatalogParity(
   english: MessageCatalog,
   localized: MessageCatalog,
   locale: string,
+  excludedNamespaces: readonly string[] = [],
 ): readonly CatalogParityIssue[] {
-  return auditFlattenedCatalogs(flattenCatalog(english), flattenCatalog(localized), locale);
+  return auditFlattenedCatalogs(
+    flattenCatalog(english),
+    flattenCatalog(localized),
+    locale,
+    excludedNamespaces,
+  );
 }
 
 function lookupInCatalog(source: MessageCatalog, path: readonly string[]): string | null {

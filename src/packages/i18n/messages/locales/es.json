@@ -491,6 +491,7 @@
       "completed": "Su contraseña ha sido cambiada. Ahora puedes iniciar sesión."
     },
     "errors": {
+      "accountSuspended": "Esta cuenta ha sido suspendida. Contacta con soporte si crees que se trata de un error.",
       "invalidCredentials": "Esa combinación de correo electrónico y contraseña no coincidía con ninguna cuenta.",
       "emailTaken": "Ya existe una cuenta para ese correo electrónico.",
       "weakPassword": "Elija una contraseña de al menos 12 caracteres.",

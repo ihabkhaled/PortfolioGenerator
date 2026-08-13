@@ -491,6 +491,7 @@
     "toSignUp": "还没有帐户？创建一个。",
     "pendingSignIn": "登录",
     "errors": {
+      "accountSuspended": "此帐户已被暂停。如果您认为这是误操作，请联系支持团队。",
       "invalidEmail": "输入有效的电子邮件地址。",
       "unknown": "出了点问题。再试一次。",
       "invalidCredentials": "该电子邮件和密码组合与帐户不匹配。",

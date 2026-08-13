@@ -491,6 +491,7 @@
       "completed": "Ihr Passwort wurde geändert. Sie können sich jetzt anmelden."
     },
     "errors": {
+      "accountSuspended": "Dieses Konto wurde gesperrt. Wenden Sie sich an den Support, wenn Sie glauben, dass dies ein Fehler ist.",
       "invalidCredentials": "Diese Kombination aus E-Mail-Adresse und Passwort stimmte nicht mit einem Konto überein.",
       "emailTaken": "Für diese E-Mail existiert bereits ein Konto.",
       "weakPassword": "Wählen Sie ein Passwort mit mindestens 12 Zeichen.",

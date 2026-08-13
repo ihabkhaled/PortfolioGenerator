@@ -84,7 +84,10 @@ export async function changeAccountPasswordAction(
   });
 
   if (!parsed.ok) {
-    return { status: 'error', error: ACCOUNT_SETTINGS_ERROR_KEYS.invalidPassword };
+    return {
+      status: 'error',
+      error: parsed.issues[0]?.message ?? ACCOUNT_SETTINGS_ERROR_KEYS.invalidPassword,
+    };
   }
 
   try {

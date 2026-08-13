@@ -1077,7 +1077,12 @@
     "errors": {
       "deleteFailed": "We could not complete the deletion. Nothing was removed — please try again.",
       "confirmationMismatch": "Type the confirmation word exactly to continue.",
-      "notFound": "That portfolio is no longer available."
+      "notFound": "That portfolio is no longer available.",
+      "nameRequired": "Enter your name.",
+      "weakPassword": "Choose a password of at least 12 characters.",
+      "passwordReused": "Choose a password that's different from your current one.",
+      "invalidCredentials": "Enter your correct current password.",
+      "unknown": "Something went wrong. Try again."
     }
   },
   "payments": {

@@ -1077,7 +1077,12 @@
     "errors": {
       "deleteFailed": "Não foi possível concluir a exclusão. Nada foi removido. Tente novamente.",
       "confirmationMismatch": "Digite exatamente a palavra de confirmação para continuar.",
-      "notFound": "Esse portfólio não está mais disponível."
+      "notFound": "Esse portfólio não está mais disponível.",
+      "nameRequired": "Digite seu nome.",
+      "weakPassword": "Escolha uma senha de pelo menos 12 caracteres.",
+      "passwordReused": "Escolha uma senha diferente da sua senha atual.",
+      "invalidCredentials": "Digite sua senha atual correta.",
+      "unknown": "Algo deu errado. Tente novamente."
     }
   },
   "payments": {

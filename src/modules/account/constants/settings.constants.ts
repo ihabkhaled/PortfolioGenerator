@@ -22,6 +22,7 @@ export const ACCOUNT_COUNTRY_ISOS = COUNTRY_DIAL_CODES.map(({ iso }) => iso);
 export const ACCOUNT_SETTINGS_ERROR_KEYS = {
   invalidProfile: 'errors.nameRequired',
   invalidPassword: 'errors.weakPassword',
+  passwordReused: 'errors.passwordReused',
   currentPasswordRejected: 'errors.invalidCredentials',
   unknown: 'errors.unknown',
 } as const;

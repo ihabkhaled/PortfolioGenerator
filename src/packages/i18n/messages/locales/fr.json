@@ -1077,7 +1077,12 @@
     "errors": {
       "deleteFailed": "Nous n'avons pas pu terminer la suppression. Rien n'a été supprimé. Veuillez réessayer.",
       "confirmationMismatch": "Tapez exactement le mot de confirmation pour continuer.",
-      "notFound": "Ce portefeuille n'est plus disponible."
+      "notFound": "Ce portefeuille n'est plus disponible.",
+      "nameRequired": "Entrez votre nom.",
+      "weakPassword": "Choisissez un mot de passe d'au moins 12 caractères.",
+      "passwordReused": "Choisissez un mot de passe différent de votre mot de passe actuel.",
+      "invalidCredentials": "Entrez votre mot de passe actuel correct.",
+      "unknown": "Quelque chose s'est mal passé. Essayer à nouveau."
     }
   },
   "payments": {

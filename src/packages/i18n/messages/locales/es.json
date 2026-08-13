@@ -1077,7 +1077,12 @@
     "errors": {
       "deleteFailed": "No pudimos completar la eliminación. No se eliminó nada; inténtelo de nuevo.",
       "confirmationMismatch": "Escriba la palabra de confirmación exactamente para continuar.",
-      "notFound": "Esa cartera ya no está disponible."
+      "notFound": "Esa cartera ya no está disponible.",
+      "nameRequired": "Ingrese su nombre.",
+      "weakPassword": "Elija una contraseña de al menos 12 caracteres.",
+      "passwordReused": "Elija una contraseña diferente a su contraseña actual.",
+      "invalidCredentials": "Ingrese su contraseña actual correcta.",
+      "unknown": "Algo salió mal. Intentar otra vez."
     }
   },
   "payments": {

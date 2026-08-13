@@ -1077,7 +1077,12 @@
     "errors": {
       "deleteFailed": "Wir konnten den Löschvorgang nicht abschließen. Es wurde nichts entfernt. Bitte versuchen Sie es erneut.",
       "confirmationMismatch": "Geben Sie das Bestätigungswort genau ein, um fortzufahren.",
-      "notFound": "Dieses Portfolio ist nicht mehr verfügbar."
+      "notFound": "Dieses Portfolio ist nicht mehr verfügbar.",
+      "nameRequired": "Geben Sie Ihren Namen ein.",
+      "weakPassword": "Wählen Sie ein Passwort mit mindestens 12 Zeichen.",
+      "passwordReused": "Wählen Sie ein Passwort, das sich von Ihrem aktuellen unterscheidet.",
+      "invalidCredentials": "Geben Sie Ihr korrektes aktuelles Passwort ein.",
+      "unknown": "Etwas ist schief gelaufen. Versuchen Sie es erneut."
     }
   },
   "payments": {

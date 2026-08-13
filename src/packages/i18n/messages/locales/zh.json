@@ -1077,7 +1077,12 @@
     "errors": {
       "notFound": "该投资组合不再可用。",
       "confirmationMismatch": "准确输入确认词以继续。",
-      "deleteFailed": "我们无法完成删除。没有删除任何内容 - 请重试。"
+      "deleteFailed": "我们无法完成删除。没有删除任何内容 - 请重试。",
+      "nameRequired": "输入您的姓名。",
+      "weakPassword": "选择至少 12 个字符的密码。",
+      "passwordReused": "选择与当前密码不同的密码。",
+      "invalidCredentials": "输入您正确的当前密码。",
+      "unknown": "出了点问题。再试一次。"
     }
   },
   "payments": {

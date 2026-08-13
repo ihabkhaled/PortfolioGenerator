@@ -1077,7 +1077,12 @@
     "errors": {
       "deleteFailed": "Non è stato possibile completare l'eliminazione. Non è stato rimosso nulla: riprova.",
       "confirmationMismatch": "Digita esattamente la parola di conferma per continuare.",
-      "notFound": "Quel portafoglio non è più disponibile."
+      "notFound": "Quel portafoglio non è più disponibile.",
+      "nameRequired": "Inserisci il tuo nome.",
+      "weakPassword": "Scegli una password di almeno 12 caratteri.",
+      "passwordReused": "Scegli una password diversa da quella attuale.",
+      "invalidCredentials": "Inserisci la password attuale corretta.",
+      "unknown": "Qualcosa è andato storto. Riprova."
     }
   },
   "payments": {

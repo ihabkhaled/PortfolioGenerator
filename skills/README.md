@@ -13,3 +13,4 @@ needs regenerating, a surface that also needs exporting.
 | [change-the-document-schema.md](./change-the-document-schema.md) | Changing what a portfolio can contain |
 | [add-a-section-type.md](./add-a-section-type.md)                 | A new kind of band on a page          |
 | [investigate-a-failing-gate.md](./investigate-a-failing-gate.md) | When `npm run validate` fails         |
+| [communicate-briefly.md](./communicate-briefly.md)               | Every message you send                |

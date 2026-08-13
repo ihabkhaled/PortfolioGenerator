@@ -22,3 +22,8 @@ Repositories, actions, providers and services are covered by the Playwright
 suite against a real database, not by mocks.
 
 Never weaken a gate to make it pass.
+
+Communication (rules/08-communication-style.md): 1-5 short lines by default.
+Name the exact file, error, count or blocker. A blocker starts with "Blocked:".
+"Done." carries its proof. No filler openers. Never claim background work that
+is not actually running.

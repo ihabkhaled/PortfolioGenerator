@@ -1,0 +1,28 @@
+---
+description: How to write messages, status and reports
+alwaysApply: true
+---
+
+# Communication
+
+Canonical: `rules/08-communication-style.md`. Templates: `skills/communicate-briefly.md`.
+
+Short. Direct. Concrete. Visible. Default 1–5 short lines.
+
+Name the exact thing — file, function, command, test, error, count, blocker.
+`auth.service.ts:41 — refreshToken() returns 401.` not "something went wrong".
+
+| Situation | Format                                        |
+| --------- | --------------------------------------------- |
+| Working   | `Working — <task>.`                           |
+| Progress  | `~<n>/100. Done: <x>. Left: <y>.`             |
+| Blocked   | `Blocked: <exact reason>.`                    |
+| Failure   | `<thing> failed: <exact error>. <next step>.` |
+| Tests     | `<suite>: <passed>/<total> passed.`           |
+| Finished  | `Done. <proof>.`                              |
+
+- A blocker starts with `Blocked:` and fits in two lines.
+- `Done.` carries evidence — a passing suite, a green build, a verified flow.
+- No filler openers (`Certainly`, `Let me explain`, `It is worth noting`).
+- Never claim background work unless it is genuinely running.
+- Every status line carries new information.

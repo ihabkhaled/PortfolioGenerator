@@ -113,6 +113,12 @@ narrowing a lint rule, or skipping a test to get green is a change to the
 product's guarantees and needs to be argued for, in the commit message, on its
 own.
 
+**Say it short.** Default to 1–5 lines. Name the exact file, error, count or
+blocker. A blocker starts with `Blocked:`. `Done.` carries its proof. Never
+claim background work that is not running. The rule is
+[`rules/08-communication-style.md`](./rules/08-communication-style.md); the
+templates are [`skills/communicate-briefly.md`](./skills/communicate-briefly.md).
+
 ---
 
 ## 5. Commands

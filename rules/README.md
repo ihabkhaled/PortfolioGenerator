@@ -15,3 +15,4 @@ them exist because the alternative shipped a bug once.
 | [05-ai-and-untrusted-input.md](./05-ai-and-untrusted-input.md)                   | schemas, mappers, E2E                             |
 | [06-design-system-and-accessibility.md](./06-design-system-and-accessibility.md) | architecture plugin, axe suite                    |
 | [07-git-and-quality-gates.md](./07-git-and-quality-gates.md)                     | husky, commitlint, CI                             |
+| [08-communication-style.md](./08-communication-style.md)                         | review                                            |

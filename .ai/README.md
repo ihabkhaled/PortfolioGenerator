@@ -26,3 +26,9 @@ a reader cannot tell which copy is authoritative.
 - Never add an `eslint-disable` comment.
 - Never lower a threshold or skip a test to get green.
 - If a change needs a decision rather than an implementation, say so and stop.
+
+## Before you write prose
+
+[`../rules/08-communication-style.md`](../rules/08-communication-style.md) —
+1–5 short lines, exact names, `Blocked:` first, proof with `Done.`.
+Templates: [`../skills/communicate-briefly.md`](../skills/communicate-briefly.md).

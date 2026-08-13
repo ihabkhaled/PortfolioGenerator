@@ -21,3 +21,14 @@ Two things this repository does that are easy to miss:
 - Never add an `eslint-disable` comment. Exceptions go in
   `eslint/exceptions.config.mjs` with an id and a reason.
 - Never weaken a gate to make it pass.
+
+## Communication — mandatory
+
+Follow [rules/08-communication-style.md](./rules/08-communication-style.md);
+templates in [skills/communicate-briefly.md](./skills/communicate-briefly.md).
+
+- 1–5 short lines by default.
+- Name the exact file, error, count or blocker.
+- A blocker starts with `Blocked:`.
+- `Done.` carries its proof.
+- No filler openers, no fake background work.

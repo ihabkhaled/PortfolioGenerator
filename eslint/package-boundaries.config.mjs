@@ -18,7 +18,10 @@ const packageBoundaries = [
     owners: ['src/packages/database/'],
     allowInTests: true,
   },
-  { package: 'better-auth', owners: ['src/packages/auth/'] },
+  {
+    package: 'better-auth',
+    owners: ['src/packages/auth/', 'src/packages/admin-auth/'],
+  },
   { package: 'ai', owners: ['src/packages/ai/'] },
   { package: '@ai-sdk/openai', owners: ['src/packages/ai/'] },
   { package: 'unpdf', owners: ['src/packages/pdf/'] },

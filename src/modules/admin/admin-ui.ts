@@ -26,6 +26,10 @@ export { AdminAdminCreateFormContainer } from './containers/admin-admin-create-f
 export { AdminAdminStatusActionContainer } from './containers/admin-admin-status-action.container';
 export { AdminAdminDeleteContainer } from './containers/admin-admin-delete.container';
 export { AdminAdminsTable } from './components/admin-admins-table.component';
+export { AdminPermissionMatrix } from './components/admin-permission-matrix.component';
+export { AdminRbacPickerTable } from './components/admin-rbac-picker-table.component';
+export { AdminPermissionEditor } from './components/admin-permission-editor.component';
+export { AdminPermissionEditorContainer } from './containers/admin-permission-editor.container';
 export { adminAccountClasses } from './constants/admin-account-style.constants';
 export { adminUsersClasses } from './constants/admin-users-style.constants';
 export type {
@@ -65,3 +69,20 @@ export type {
   AdminAdminsTableProps,
   AdminAdminStatusActionProps,
 } from './types/admin-admins-view.types';
+export type {
+  AdminPermissionCheckboxRowView,
+  AdminPermissionEditorLabels,
+  AdminPermissionEditorProps,
+  AdminPermissionMatrixColumn,
+  AdminPermissionMatrixColumnLabels,
+  AdminPermissionMatrixGrant,
+  AdminPermissionMatrixProps,
+  AdminPermissionMatrixRow,
+  AdminRbacPickerColumnLabels,
+  AdminRbacPickerRowView,
+  AdminRbacPickerTableProps,
+} from './types/admin-rbac-view.types';
+export type {
+  AdminPermissionEditorContainerProps,
+  AdminRbacActionState,
+} from './types/admin-rbac-action-view.types';

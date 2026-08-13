@@ -79,6 +79,29 @@ export {
   ADMIN_ADMINS_QUERY_PARAM,
 } from './constants/admin-admins.constants';
 export { adminAdminsClasses } from './constants/admin-admins-style.constants';
+export { getAdminUserForRbac, searchAdminUsersForRbac } from './repositories/admin-rbac.repository';
+export {
+  buildAdminPermissionMatrixColumns,
+  buildAdminPermissionMatrixRows,
+} from './helpers/admin-rbac-matrix.helper';
+export { buildAdminRbacListPath } from './helpers/admin-rbac-path.helper';
+export {
+  buildAdminPermissionCheckboxRows,
+  buildAdminRbacPaginationView,
+  buildAdminRbacPickerRowViews,
+  buildAdminRbacResultCountLabel,
+} from './helpers/admin-rbac-view.helper';
+export {
+  diffAdminPermissions,
+  buildAdminPermissionDiffMetadata,
+  isAdminRbacSelfLockout,
+} from './helpers/admin-permission-diff.helper';
+export {
+  ADMIN_RBAC_ADMIN_ID_PARAM,
+  ADMIN_RBAC_PAGE_PARAM,
+  ADMIN_RBAC_QUERY_PARAM,
+} from './constants/admin-rbac.constants';
+export { adminRbacClasses } from './constants/admin-rbac-style.constants';
 export type {
   AuthenticatedAdmin,
   AdminAuditEventInput,
@@ -91,3 +114,11 @@ export type { AdminDashboardStatsCounts, AdminStatTile } from './types/admin-das
 export type { AdminNavItem, AdminShellProps } from './types/admin-shell-view.types';
 export type { AdminManagedUserDetail, AdminUserSearchResult } from './types/admin-users.types';
 export type { AdminManagedAdmin, AdminAdminSearchResult } from './types/admin-admins.types';
+export type { AdminPermissionDiff, AdminRbacSearchResult } from './types/admin-rbac.types';
+export type {
+  AdminPermissionCheckboxRowView,
+  AdminPermissionMatrixColumn,
+  AdminPermissionMatrixGrant,
+  AdminPermissionMatrixRow,
+  AdminRbacPickerRowView,
+} from './types/admin-rbac-view.types';

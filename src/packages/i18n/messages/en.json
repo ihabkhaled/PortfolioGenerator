@@ -1390,6 +1390,110 @@
           "deleted": "Admin deleted."
         }
       }
+    },
+    "rbac": {
+      "title": "Permissions (RBAC)",
+      "lead": "See what each role grants by default, and adjust any individual admin's permissions.",
+      "matrix": {
+        "title": "Default permissions by role",
+        "hint": "Read-only. This reflects the platform's built-in policy, not what any individual admin currently holds.",
+        "permissionColumn": "Permission",
+        "granted": "Granted",
+        "notGranted": "Not granted"
+      },
+      "permissions": {
+        "USERS_VIEW": {
+          "label": "View users",
+          "description": "See every account on the platform and its details."
+        },
+        "USERS_SUSPEND": {
+          "label": "Suspend users",
+          "description": "Suspend and reactivate user accounts."
+        },
+        "USERS_RESET_PASSWORD": {
+          "label": "Reset user passwords",
+          "description": "Send a password reset email to a user."
+        },
+        "PORTFOLIOS_VIEW": {
+          "label": "View portfolios",
+          "description": "See every portfolio on the platform, across every owner."
+        },
+        "PORTFOLIOS_SUSPEND": {
+          "label": "Suspend portfolios",
+          "description": "Suspend and reactivate a portfolio's public page."
+        },
+        "PORTFOLIOS_DELETE": {
+          "label": "Delete portfolios",
+          "description": "Permanently delete a portfolio and its uploaded files."
+        },
+        "PAGES_MODERATE": {
+          "label": "Moderate pages",
+          "description": "Review and moderate portfolio content."
+        },
+        "ADMINS_MANAGE": {
+          "label": "Manage admins",
+          "description": "Create, suspend and manage other admin accounts."
+        },
+        "RBAC_MANAGE": {
+          "label": "Manage permissions",
+          "description": "Change which permissions any admin holds."
+        },
+        "AUDIT_VIEW": {
+          "label": "View audit log",
+          "description": "See the record of every admin action taken on the platform."
+        }
+      },
+      "picker": {
+        "title": "Choose an admin to edit",
+        "hint": "Search by name or email, then select an admin to open their permissions below.",
+        "searchLabel": "Search",
+        "searchPlaceholder": "Name or email",
+        "searchSubmit": "Search",
+        "resultCount": "Showing {from}-{to} of {total} admins",
+        "resultCountEmpty": "No admins found",
+        "pageStatus": "Page {page} of {totalPages}",
+        "previousPage": "Previous",
+        "nextPage": "Next",
+        "emptyTitle": "No admins match",
+        "emptyDescription": "No other admin accounts exist yet.",
+        "emptySearchDescription": "Try a different name or email.",
+        "columns": {
+          "name": "Name",
+          "email": "Email",
+          "role": "Role",
+          "permissions": "Permissions",
+          "actions": "Actions"
+        },
+        "edit": "Edit permissions",
+        "editing": "Currently editing",
+        "permissionCount": "{count} granted"
+      },
+      "editor": {
+        "heading": "Edit permissions",
+        "description": "Saving replaces this admin's entire permission set — nothing is merged with what they already have.",
+        "targetLabel": "Admin",
+        "roleLabel": "Role",
+        "lockedHint": "You cannot remove this permission from your own account.",
+        "changeAdmin": "Choose a different admin",
+        "save": "Save changes",
+        "confirmMessage": "Save these permissions? This replaces every permission this admin currently has.",
+        "confirm": "Confirm save",
+        "cancel": "Cancel",
+        "pending": "Saving…",
+        "notSelectedNotice": "Search for an admin below and select one to edit their permissions.",
+        "superAdminBlockedNotice": "The super admin cannot be edited here — they always hold every permission. Choose a different admin below.",
+        "notFoundNotice": "That admin could not be found. They may have been removed. Choose another admin below.",
+        "errors": {
+          "invalid": "That request could not be read. Please try again.",
+          "notFound": "That admin could not be found. They may already have been removed.",
+          "superAdminLocked": "The super admin's permissions cannot be changed.",
+          "selfLockout": "You cannot remove your own permission to manage RBAC."
+        },
+        "success": {
+          "saved": "Permissions updated.",
+          "noChange": "No changes were made — the selected permissions already matched what was saved."
+        }
+      }
     }
   }
 }

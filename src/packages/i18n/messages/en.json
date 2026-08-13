@@ -1183,6 +1183,59 @@
         "hint": "These settings apply only to your own admin session."
       }
     },
+    "portfolios": {
+      "title": "Portfolios",
+      "lead": "Every portfolio on the platform, across every owner. Search, filter and moderate from here.",
+      "filters": {
+        "searchLabel": "Search",
+        "searchPlaceholder": "Slug or owner email",
+        "statusLabel": "Status",
+        "submit": "Search",
+        "all": "All statuses"
+      },
+      "status": {
+        "draft": "Draft",
+        "published": "Published",
+        "unpublished": "Unpublished",
+        "suspended": "Suspended"
+      },
+      "suspended": {
+        "yes": "Suspended",
+        "no": "Active"
+      },
+      "columns": {
+        "slug": "Slug",
+        "owner": "Owner",
+        "status": "Status",
+        "suspended": "Suspended?",
+        "updated": "Updated",
+        "actions": "Actions"
+      },
+      "resultCount": "{count} portfolios found",
+      "empty": {
+        "title": "No portfolios match",
+        "description": "Try a different search term or clear the status filter."
+      },
+      "actions": {
+        "suspend": "Suspend",
+        "activate": "Activate",
+        "pending": "Working…",
+        "delete": "Delete",
+        "deleteConfirmHint": "Delete this portfolio? This also removes its uploaded files.",
+        "deleteConfirm": "Confirm delete",
+        "deleting": "Deleting…",
+        "deleteCancel": "Cancel"
+      },
+      "errors": {
+        "notFound": "That portfolio could not be found. It may already have been deleted.",
+        "unknown": "Something went wrong. Please try again."
+      },
+      "pagination": {
+        "summary": "Page {page} of {pageCount}",
+        "previous": "Previous",
+        "next": "Next"
+      }
+    },
     "users": {
       "list": {
         "title": "Users",

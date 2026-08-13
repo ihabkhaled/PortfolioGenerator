@@ -23,7 +23,24 @@ export {
 export { buildAdminDashboardStats } from './helpers/admin-stats.helper';
 export { buildAdminNavItemViews } from './helpers/admin-nav.helper';
 export { getAdminDashboardStats } from './repositories/admin-stats.repository';
+export {
+  getAdminPortfolioOwnerId,
+  listAdminPortfolios,
+} from './repositories/admin-portfolio.repository';
+export { toAdminPortfolioSummary } from './mappers/admin-portfolio.mapper';
 export { buildPagination, computeOffset, parsePageParam } from './helpers/pagination.helper';
+export {
+  buildAdminPortfolioListHref,
+  buildAdminPortfolioRowViewData,
+  buildAdminPortfolioStatusOptions,
+  parseAdminPortfolioStatusFilter,
+  sanitizeAdminPortfolioQuery,
+} from './helpers/admin-portfolio-view.helper';
+export {
+  ADMIN_PORTFOLIO_PAGE_SIZE,
+  ADMIN_PORTFOLIO_QUERY_PARAMS,
+} from './constants/admin-portfolio.constants';
+export { adminPortfolioClasses } from './constants/admin-portfolio-style.constants';
 export {
   getAdminUserDetail,
   listAdminUserPortfolios,

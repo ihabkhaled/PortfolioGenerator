@@ -2,3 +2,4 @@
 
 export { AdminSignInFormContainer } from './containers/admin-sign-in-form.container';
 export { AdminTwoFactorEnrollContainer } from './containers/admin-two-factor-enroll.container';
+export { AdminShell } from './components/admin-shell.component';

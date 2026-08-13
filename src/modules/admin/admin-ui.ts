@@ -22,6 +22,10 @@ export { AdminUserProfile } from './components/admin-user-profile.component';
 export { AdminUserPortfoliosTable } from './components/admin-user-portfolios-table.component';
 export { AdminUserStatusActionContainer } from './containers/admin-user-status-action.container';
 export { AdminUserResetPasswordContainer } from './containers/admin-user-reset-password.container';
+export { AdminAdminCreateFormContainer } from './containers/admin-admin-create-form.container';
+export { AdminAdminStatusActionContainer } from './containers/admin-admin-status-action.container';
+export { AdminAdminDeleteContainer } from './containers/admin-admin-delete.container';
+export { AdminAdminsTable } from './components/admin-admins-table.component';
 export { adminAccountClasses } from './constants/admin-account-style.constants';
 export { adminUsersClasses } from './constants/admin-users-style.constants';
 export type {
@@ -55,3 +59,9 @@ export type {
   AdminResetPasswordActionProps,
   AdminUserStatusActionProps,
 } from './types/admin-user-action-view.types';
+export type {
+  AdminAdminDeleteProps,
+  AdminAdminListItemView,
+  AdminAdminsTableProps,
+  AdminAdminStatusActionProps,
+} from './types/admin-admins-view.types';

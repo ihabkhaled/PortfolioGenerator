@@ -2,6 +2,7 @@ import 'server-only';
 
 import { betterAuth } from 'better-auth';
 import { prismaAdapter } from 'better-auth/adapters/prisma';
+import { hashPassword } from 'better-auth/crypto';
 import { nextCookies } from 'better-auth/next-js';
 import { twoFactor } from 'better-auth/plugins';
 
@@ -90,4 +91,16 @@ export function getAdminAuth(): AdminAuthInstance {
   cache.value = instance;
 
   return instance;
+}
+
+/**
+ * The one place outside `support/seed-super-admin.mts` allowed to hash a
+ * password for the `AdminAccount` table: `better-auth` is confined to this
+ * directory (see `eslint/package-boundaries.config.mjs`), and the admins-
+ * management create action needs the exact same hasher `emailAndPassword`
+ * verifies against — `getAdminAuth()` itself has no lower-level "hash and
+ * insert" endpoint, only `signUpEmail`, which cannot set `AdminUser.role`.
+ */
+export async function hashAdminPassword(password: string): Promise<string> {
+  return hashPassword(password);
 }

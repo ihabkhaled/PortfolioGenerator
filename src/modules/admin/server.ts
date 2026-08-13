@@ -68,6 +68,17 @@ export {
   ADMIN_USERS_QUERY_PARAM,
 } from './constants/admin-users.constants';
 export { adminUsersClasses } from './constants/admin-users-style.constants';
+export { searchAdminAdmins } from './repositories/admin-admins.repository';
+export {
+  buildAdminAdminRowViews,
+  buildAdminAdminsPaginationView,
+  buildAdminAdminsResultCountLabel,
+} from './helpers/admin-admins-view.helper';
+export {
+  ADMIN_ADMINS_PAGE_PARAM,
+  ADMIN_ADMINS_QUERY_PARAM,
+} from './constants/admin-admins.constants';
+export { adminAdminsClasses } from './constants/admin-admins-style.constants';
 export type {
   AuthenticatedAdmin,
   AdminAuditEventInput,
@@ -79,3 +90,4 @@ export type {
 export type { AdminDashboardStatsCounts, AdminStatTile } from './types/admin-dashboard-stats.types';
 export type { AdminNavItem, AdminShellProps } from './types/admin-shell-view.types';
 export type { AdminManagedUserDetail, AdminUserSearchResult } from './types/admin-users.types';
+export type { AdminManagedAdmin, AdminAdminSearchResult } from './types/admin-admins.types';

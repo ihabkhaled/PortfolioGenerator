@@ -1313,6 +1313,83 @@
           "resetSent": "Password reset email sent."
         }
       }
+    },
+    "admins": {
+      "list": {
+        "title": "Admins",
+        "lead": "Every admin and moderator with access to /managawy. Search by name or email, create a new admin, suspend access, or remove an account.",
+        "searchLabel": "Search",
+        "searchPlaceholder": "Name or email",
+        "searchSubmit": "Search",
+        "resultCount": "Showing {from}-{to} of {total} admins",
+        "resultCountEmpty": "No admins found",
+        "pageStatus": "Page {page} of {totalPages}",
+        "previousPage": "Previous",
+        "nextPage": "Next",
+        "emptyTitle": "No admins match",
+        "emptyDescription": "No admins have been created yet.",
+        "emptySearchDescription": "Try a different name or email.",
+        "columns": {
+          "name": "Name",
+          "email": "Email",
+          "role": "Role",
+          "status": "Status",
+          "twoFactor": "2FA enrolled?",
+          "joined": "Created",
+          "actions": "Actions"
+        },
+        "twoFactor": {
+          "yes": "Enrolled",
+          "no": "Not yet"
+        },
+        "protected": "Protected — super admin",
+        "self": "This is you"
+      },
+      "status": {
+        "ACTIVE": "Active",
+        "SUSPENDED": "Suspended"
+      },
+      "create": {
+        "title": "Create an admin",
+        "lead": "New admins are forced through two-factor enrollment the first time they sign in.",
+        "nameLabel": "Name",
+        "emailLabel": "Email",
+        "roleLabel": "Role",
+        "passwordLabel": "Initial password",
+        "showPassword": "Show password",
+        "hidePassword": "Hide password",
+        "submit": "Create admin",
+        "pending": "Creating…"
+      },
+      "actions": {
+        "suspend": "Suspend",
+        "activate": "Activate",
+        "confirmSuspend": "Suspend this admin? They will be signed out and unable to sign back in until reactivated.",
+        "cancel": "Cancel",
+        "pending": "Working…",
+        "delete": "Delete",
+        "deleteConfirmHint": "Delete this admin? This cannot be undone.",
+        "deleteConfirm": "Confirm delete",
+        "deleting": "Deleting…",
+        "deleteCancel": "Cancel",
+        "errors": {
+          "invalid": "That request could not be read. Please try again.",
+          "notFound": "That admin could not be found. They may already have been removed.",
+          "protected": "The super admin account cannot be changed.",
+          "selfLockout": "You cannot suspend or delete your own account.",
+          "duplicateEmail": "An admin with that email already exists.",
+          "nameRequired": "Enter a name.",
+          "invalidEmail": "Enter a valid email address.",
+          "invalidRole": "Choose Admin or Moderator.",
+          "weakPassword": "Choose a password that is at least 16 characters."
+        },
+        "success": {
+          "created": "Admin created.",
+          "suspended": "Admin suspended.",
+          "activated": "Admin reactivated.",
+          "deleted": "Admin deleted."
+        }
+      }
     }
   }
 }

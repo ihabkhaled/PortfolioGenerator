@@ -34,3 +34,17 @@ export function assertNotSuperAdmin(target: SuperAdminGuardTarget): void {
     throw new Error('The super admin account cannot be modified.');
   }
 }
+
+/**
+ * The self-lockout guard. Suspending or deleting your own admin account
+ * would strand the very person meant to reverse the change just as surely as
+ * touching the super admin would — this is the second half of "no admin
+ * mutation can make an admin unreachable", called on the *caller* alongside
+ * `assertNotSuperAdmin` on the target, before either mutation runs.
+ * `ADMINS_MANAGE` never overrides it, not even for the admin who holds it.
+ */
+export function assertNotSelfTarget(callerId: string, targetId: string): void {
+  if (callerId === targetId) {
+    throw new Error('You cannot perform this action on your own admin account.');
+  }
+}

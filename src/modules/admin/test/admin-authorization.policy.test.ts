@@ -1,6 +1,10 @@
 import { describe, expect, it } from 'vitest';
 
-import { assertNotSuperAdmin, hasAdminPermission } from '../policies/admin-authorization.policy';
+import {
+  assertNotSelfTarget,
+  assertNotSuperAdmin,
+  hasAdminPermission,
+} from '../policies/admin-authorization.policy';
 import type { AuthenticatedAdmin } from '../types/admin.types';
 
 function buildAdmin(overrides: Partial<AuthenticatedAdmin> = {}): AuthenticatedAdmin {
@@ -49,6 +53,20 @@ describe('assertNotSuperAdmin', () => {
   it('does nothing when the target is not the super admin', () => {
     expect(() => {
       assertNotSuperAdmin({ isSuperAdmin: false });
+    }).not.toThrow();
+  });
+});
+
+describe('assertNotSelfTarget', () => {
+  it('throws when the caller and the target are the same admin', () => {
+    expect(() => {
+      assertNotSelfTarget('admin-1', 'admin-1');
+    }).toThrow();
+  });
+
+  it('does nothing when the target is a different admin', () => {
+    expect(() => {
+      assertNotSelfTarget('admin-1', 'admin-2');
     }).not.toThrow();
   });
 });

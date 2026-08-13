@@ -4,6 +4,9 @@
  */
 export const ADMIN_AUTH_MIN_PASSWORD_LENGTH = 16;
 
+/** Matches better-auth's own default `emailAndPassword.maxPasswordLength` — never overridden in `createAdminAuth`. */
+export const ADMIN_AUTH_MAX_PASSWORD_LENGTH = 128;
+
 /** Twelve hours, not the user session's thirty days — force re-auth on a human timescale. */
 export const ADMIN_SESSION_MAX_AGE_SECONDS = 60 * 60 * 12;
 

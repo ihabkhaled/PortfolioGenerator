@@ -2,6 +2,7 @@
 
 export { EDITOR_ERROR_KEYS, EDITOR_INITIAL_STATE } from './constants/editor.constants';
 export { resolveEditorIssueTarget } from './helpers/editor-issue-target.helper';
+export { getImportedCompanies, getImportedPageOrder } from './helpers/imported-content.helper';
 export { zoomAroundViewportCenter } from './helpers/image-crop-geometry.helper';
 export {
   appendCollectionItem,

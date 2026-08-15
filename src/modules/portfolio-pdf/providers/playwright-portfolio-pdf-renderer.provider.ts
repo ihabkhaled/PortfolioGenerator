@@ -1,5 +1,3 @@
-import { createPdfPrintSession, mergePdfPages } from '@/packages/pdf-renderer';
-
 import type { PortfolioPdfRenderer } from '../types/portfolio-pdf.types';
 
 /**
@@ -17,6 +15,10 @@ import type { PortfolioPdfRenderer } from '../types/portfolio-pdf.types';
 export function createPlaywrightPortfolioPdfRenderer(): PortfolioPdfRenderer {
   return {
     async renderPortfolioPdf(pageUrls) {
+      // Loading Chromium at module scope makes every action that reaches the
+      // publishing surface depend on Playwright's deployment-only files. Keep
+      // that runtime behind the one operation that actually prints a PDF.
+      const { createPdfPrintSession, mergePdfPages } = await import('@/packages/pdf-renderer');
       const session = await createPdfPrintSession();
 
       try {

@@ -43,6 +43,12 @@ function validateProductionRequirements(environment: ServerEnv): void {
   if (isProduction && environment.CRON_SECRET === undefined) {
     throw new Error('CRON_SECRET is required in production');
   }
+  if (isProduction && environment.DATABASE_SSL_MODE !== 'verify-full') {
+    throw new Error('DATABASE_SSL_MODE=verify-full is required in production');
+  }
+  if (isProduction && environment.STORAGE_DRIVER !== 's3') {
+    throw new Error('STORAGE_DRIVER=s3 is required in public production');
+  }
   if (isProduction && !environment.AUTH_REQUIRE_EMAIL_VERIFICATION) {
     throw new Error('AUTH_REQUIRE_EMAIL_VERIFICATION=true is required in production');
   }

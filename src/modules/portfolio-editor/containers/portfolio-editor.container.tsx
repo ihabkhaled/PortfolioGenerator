@@ -39,6 +39,7 @@ import {
   setSeoField,
 } from '../helpers/document-edit.helper';
 import { resolveEditorIssueTarget } from '../helpers/editor-issue-target.helper';
+import { getImportedCompanies, getImportedPageOrder } from '../helpers/imported-content.helper';
 import { useDraftEditor } from '../hooks/use-draft-editor.hook';
 import type { EditorContainerProps, EditorMobilePane } from '../types/editor-view.types';
 import type { SectionListEntry } from '../types/section-list.types';
@@ -74,6 +75,8 @@ export function PortfolioEditorContainer(props: Readonly<EditorContainerProps>):
   const { document } = editor;
   const home = findVisiblePage(document, HOME_PAGE_SLUG);
   const homePage = document.pages.find((page) => page.slug === HOME_PAGE_SLUG);
+  const importedCompanies = getImportedCompanies(document);
+  const importedPageOrder = getImportedPageOrder(document);
 
   const sections: readonly SectionListEntry[] =
     homePage === undefined
@@ -271,7 +274,9 @@ export function PortfolioEditorContainer(props: Readonly<EditorContainerProps>):
             id="editor-collections"
             title={t('disclosures.collections')}
             summary={t('disclosures.items', {
-              count: EDITOR_COLLECTION_KEYS.reduce((count, key) => count + document[key].length, 0),
+              count:
+                EDITOR_COLLECTION_KEYS.reduce((count, key) => count + document[key].length, 0) +
+                importedCompanies.length,
             })}
           >
             <CollectionManagerContainer document={document} onChange={editor.update} />
@@ -335,12 +340,15 @@ export function PortfolioEditorContainer(props: Readonly<EditorContainerProps>):
           <EditorDisclosure
             id="editor-pages"
             title={t('disclosures.pages')}
-            summary={t('disclosures.items', { count: document.pages.length })}
+            summary={t('disclosures.items', {
+              count: document.pages.length,
+            })}
           >
             <PageManagerContainer
               portfolioId={props.portfolioId}
               expectedVersion={editor.version}
               document={document}
+              importedPageOrder={importedPageOrder}
               onChange={editor.update}
               onVersionChange={editor.adoptVersion}
             />

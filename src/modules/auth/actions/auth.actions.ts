@@ -5,6 +5,7 @@ import { headers } from 'next/headers';
 import { synchronizeOwnedAccountPreferences } from '@/modules/account/server';
 import { getAuth, isEmailNotVerifiedError } from '@/packages/auth/server';
 import type { AuthInstance } from '@/packages/auth/server';
+import { toAppRoute } from '@/packages/link';
 import { logger } from '@/packages/logger';
 import { appRedirect } from '@/packages/navigation';
 import { parseSchema } from '@/packages/zod';
@@ -189,11 +190,13 @@ export async function signUpAction(
 
   // A null token means verification is required and no session was created —
   // the account exists but signing straight in would just bounce off the
-  // dashboard's auth guard with no explanation. Telling the user to check
-  // their email here, instead of redirecting and hoping, is the difference
-  // between a working flow and an account that looks like it silently failed.
+  // dashboard's auth guard with no explanation. Redirecting to sign-in with
+  // the notice attached (rather than re-rendering the sign-up form in a
+  // "notice" state) is the difference between a working flow and a page that
+  // looks like account creation silently failed: the form fields are empty
+  // again and nothing on screen shows the account now exists.
   if (result.token === null) {
-    return { status: 'notice', error: null, notice: AUTH_NOTICE_KEYS.verificationEmailSent };
+    appRedirect(toAppRoute(`${ROUTE_PATHS.signIn}?notice=verification-email-sent`));
   }
 
   appRedirect(ROUTE_PATHS.dashboard);

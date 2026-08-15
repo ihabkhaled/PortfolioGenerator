@@ -37,6 +37,7 @@ export function createEmptyPortfolioDocument(displayName: string): PortfolioDocu
     links: [],
     socialLinks: [],
     experience: [],
+    companies: [],
     projects: [],
     skills: [],
     softSkills: [],
@@ -67,7 +68,7 @@ export function createEmptyPortfolioDocument(displayName: string): PortfolioDocu
     ],
     theme: { templateId: DEFAULT_TEMPLATE_ID, mode: 'system', accent: 'default' },
     seo: { title: null, description: null, indexable: true },
-    source: { kind: 'manual', resumeUploadId: null },
+    source: { kind: 'manual', resumeUploadId: null, pageOrder: null },
   };
 }
 

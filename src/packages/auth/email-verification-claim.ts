@@ -15,10 +15,6 @@ function digestToken(token: string): string {
   return createHash('sha256').update(token).digest('hex');
 }
 
-function isUniqueConstraintFailure(error: unknown): boolean {
-  return typeof error === 'object' && error !== null && 'code' in error && error.code === 'P2002';
-}
-
 export async function claimEmailVerificationToken(
   token: string,
 ): Promise<EmailVerificationClaim | null> {
@@ -39,15 +35,11 @@ export async function claimEmailVerificationToken(
   });
   if (recovered.count === 1) return claim;
 
-  try {
-    await database.emailVerificationTokenClaim.create({
-      data: { ...claim, leaseExpiresAt },
-    });
-    return claim;
-  } catch (error) {
-    if (isUniqueConstraintFailure(error)) return null;
-    throw error;
-  }
+  const inserted = await database.emailVerificationTokenClaim.createMany({
+    data: { ...claim, leaseExpiresAt },
+    skipDuplicates: true,
+  });
+  return inserted.count === 1 ? claim : null;
 }
 
 export async function renewEmailVerificationClaim(claim: EmailVerificationClaim): Promise<boolean> {

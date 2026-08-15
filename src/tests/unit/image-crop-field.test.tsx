@@ -44,7 +44,7 @@ class TestResizeObserver {
   disconnect(): void {}
 }
 
-function setCropGeometry(width = 200, height = 200): void {
+function setCropGeometry(width = 200, height = 200, naturalWidth = 400, naturalHeight = 200): void {
   const viewport = screen.getByRole('region', { name: 'Crop portrait' });
   const image = screen.getByRole('presentation');
 
@@ -64,8 +64,8 @@ function setCropGeometry(width = 200, height = 200): void {
     }),
   });
   Object.defineProperties(image, {
-    naturalWidth: { configurable: true, value: 400 },
-    naturalHeight: { configurable: true, value: 200 },
+    naturalWidth: { configurable: true, value: naturalWidth },
+    naturalHeight: { configurable: true, value: naturalHeight },
   });
   fireEvent.load(image);
 }
@@ -165,6 +165,44 @@ describe('image crop field', () => {
     expect(toBlob).toHaveBeenCalledOnce();
     expect(input.files?.[0]?.name).toBe('portrait.jpg');
     expect(HTMLDialogElement.prototype.close).toHaveBeenCalledOnce();
+  });
+
+  it('exports the full portrait into the exact canvas bounds without clipping', async () => {
+    const user = userEvent.setup();
+    const drawImage = vi.fn();
+    const getContext = vi
+      .spyOn(HTMLCanvasElement.prototype, 'getContext')
+      .mockImplementation(function () {
+        return { drawImage } as unknown as CanvasRenderingContext2D;
+      });
+    vi.spyOn(HTMLCanvasElement.prototype, 'toBlob').mockImplementation((callback) => {
+      callback(new Blob(['full-photo']));
+    });
+
+    render(<ImageCropFieldContainer {...props} shape="rect" />);
+    const input = screen.getByLabelText<HTMLInputElement>('Portrait');
+    await user.upload(input, new File(['one'], 'portrait.png', { type: 'image/png' }));
+    setCropGeometry(200, 200, 200, 400);
+    Object.defineProperty(input, 'files', {
+      configurable: true,
+      writable: true,
+      value: input.files,
+    });
+    await user.selectOptions(screen.getByRole('combobox', { name: 'Fit' }), 'full');
+    await user.click(screen.getByRole('button', { name: 'Apply crop' }));
+
+    expect(getContext.mock.instances[0]).toMatchObject({ width: 200, height: 400 });
+    expect(drawImage).toHaveBeenCalledWith(
+      expect.any(HTMLImageElement),
+      0,
+      0,
+      200,
+      400,
+      0,
+      0,
+      200,
+      400,
+    );
   });
 
   it('re-clamps the focal point when the responsive viewport resizes', async () => {

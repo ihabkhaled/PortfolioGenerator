@@ -495,3 +495,22 @@ describe('the editor on a portfolio that has almost nothing in it', () => {
     expect(screen.getByLabelText('Description')).toHaveValue('');
   });
 });
+
+describe('imported page ordering', () => {
+  it('shows source-ordered pages before pages without an observed order', () => {
+    const document = buildFullPortfolioDocument();
+    renderEditor([], {
+      ...document,
+      source: { ...document.source, pageOrder: ['projects'] },
+    });
+
+    const pageSummaries = screen.getAllByText(/^(Projects|Home|Notes)$/u, {
+      selector: 'details[id^="editor-page-"] > summary > span:first-child',
+    });
+
+    expect(pageSummaries).toHaveLength(3);
+    expect(pageSummaries[0]).toHaveTextContent('Projects');
+    expect(pageSummaries[1]).toHaveTextContent('Home');
+    expect(pageSummaries[2]).toHaveTextContent('Notes');
+  });
+});

@@ -12,6 +12,7 @@ import {
   PasswordRecoveryForm,
   PasswordResetContainer,
   PasswordResetRequestContainer,
+  SignInFormContainer,
 } from '@/modules/auth';
 import { LocalizationControlsContainer, TranslationPanelContainer } from '@/modules/localization';
 import { I18nLocaleProvider } from '@/packages/i18n';
@@ -43,7 +44,7 @@ vi.mock('@/packages/navigation/client', () => ({
   useRouter: () => ({ refresh: mocks.refresh }),
 }));
 
-const idleState = { status: 'idle', error: null };
+const idleState = { status: 'idle', error: null, notice: null };
 const action = vi.fn();
 
 const profileLabels = {
@@ -85,7 +86,11 @@ const securityLabels = {
 };
 
 function queueActionState(
-  state: { readonly status: string; readonly error: string | null } = idleState,
+  state: {
+    readonly status: string;
+    readonly error: string | null;
+    readonly notice?: string | null;
+  } = idleState,
   pending = false,
 ): void {
   mocks.useActionState.mockReturnValueOnce([state, action, pending]);
@@ -560,6 +565,22 @@ describe('password recovery UI', () => {
     render(<PasswordResetContainer token="reset-token" />);
 
     expect(screen.getByRole('status')).toBeVisible();
+  });
+});
+
+describe('sign-in notice UI', () => {
+  it('renders the redirect notice until the sign-in action returns a result', () => {
+    queueActionState();
+    render(<SignInFormContainer initialNoticeMessage="Check your inbox to verify your email." />);
+
+    expect(screen.getByRole('status')).toHaveTextContent('Check your inbox to verify your email.');
+  });
+
+  it('replaces the redirect notice with the action notice', () => {
+    queueActionState({ status: 'notice', error: null, notice: 'notices.emailNotVerified' });
+    render(<SignInFormContainer initialNoticeMessage="Old notice" />);
+
+    expect(screen.getByRole('status')).not.toHaveTextContent('Old notice');
   });
 });
 

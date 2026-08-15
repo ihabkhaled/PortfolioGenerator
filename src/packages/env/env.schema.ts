@@ -64,6 +64,8 @@ export const serverEnvSchema = z.object({
   NEXT_PUBLIC_APP_ENV: z.enum(['local', 'staging', 'production']).default('local'),
 
   DATABASE_URL: nonEmpty,
+  // `verify-full` is the production recommendation; local Postgres is plain.
+  DATABASE_SSL_MODE: z.enum(['disable', 'verify-full']).default('disable'),
 
   // 32 characters is the practical floor for a session-signing secret; a short
   // one is a silent downgrade of every session in the system.

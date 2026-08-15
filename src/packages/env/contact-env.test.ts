@@ -78,6 +78,7 @@ describe('contact email environment', () => {
       parseServerEnvironment({
         ...base,
         NEXT_PUBLIC_APP_ENV: 'production',
+        DATABASE_SSL_MODE: 'verify-full',
         EMAIL_CAPTURE_PATH: 'test-results/email-capture.jsonl',
         CLAMAV_ENABLED: 'true',
         CRON_SECRET: 'x'.repeat(32),
@@ -97,8 +98,14 @@ describe('contact email environment', () => {
       parseServerEnvironment({
         ...base,
         NEXT_PUBLIC_APP_ENV: 'production',
+        DATABASE_SSL_MODE: 'verify-full',
         CLAMAV_ENABLED: 'true',
         CRON_SECRET: 'x'.repeat(32),
+        STORAGE_DRIVER: 's3',
+        S3_ENDPOINT: 'https://s3.example.com',
+        S3_BUCKET: 'portfolios',
+        S3_ACCESS_KEY_ID: 'key',
+        S3_SECRET_ACCESS_KEY: 'secret',
       }),
     ).toThrow('AUTH_REQUIRE_EMAIL_VERIFICATION=true is required in production');
   });
@@ -152,6 +159,12 @@ describe('virus scanner environment', () => {
       parseServerEnvironment({
         ...base,
         NEXT_PUBLIC_APP_ENV: 'production',
+        DATABASE_SSL_MODE: 'verify-full',
+        STORAGE_DRIVER: 's3',
+        S3_ENDPOINT: 'https://s3.example.com',
+        S3_BUCKET: 'portfolios',
+        S3_ACCESS_KEY_ID: 'key',
+        S3_SECRET_ACCESS_KEY: 'secret',
         CLAMAV_ENABLED: 'false',
         CRON_SECRET: 'c'.repeat(32),
         AUTH_REQUIRE_EMAIL_VERIFICATION: 'true',

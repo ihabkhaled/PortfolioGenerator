@@ -24,6 +24,7 @@ export const EXTRACTION_LIMITS = {
   awards: 50,
   publications: 40,
   volunteering: 30,
+  pages: 12,
   interests: 30,
   warnings: 100,
 } as const;
@@ -53,4 +54,5 @@ export const WARNING_CODES = {
   droppedIncompleteEntry: 'DROPPED_INCOMPLETE_ENTRY',
   missingHeadline: 'MISSING_HEADLINE',
   reviewExtractedFact: 'REVIEW_EXTRACTED_FACT',
+  unsupportedContent: 'UNSUPPORTED_CONTENT',
 } as const;

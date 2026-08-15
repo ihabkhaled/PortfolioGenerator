@@ -5,7 +5,8 @@ import {
   tryMigratePortfolioDocument,
   type PortfolioDocument,
 } from '@/modules/portfolio-document';
-import { DbNull, getDatabase } from '@/packages/database';
+import { DbNull, getDatabase, resetDatabaseClient } from '@/packages/database';
+import { executeDatabaseRead } from '@/packages/database/read-recovery';
 
 import { PORTFOLIO_SELECT } from '../constants/portfolio-query.constants';
 import {
@@ -240,10 +241,14 @@ export async function softDeleteOwnedPortfolio(
 export async function findPublishedBySlugUnscoped(
   slug: string,
 ): Promise<PublishedPortfolio | null> {
-  const row = await getDatabase().portfolio.findFirst({
-    where: { slug, status: 'PUBLISHED', deletedAt: null, suspendedAt: null },
-    select: PORTFOLIO_SELECT,
-  });
+  const row = await executeDatabaseRead(
+    () =>
+      getDatabase().portfolio.findFirst({
+        where: { slug, status: 'PUBLISHED', deletedAt: null, suspendedAt: null },
+        select: PORTFOLIO_SELECT,
+      }),
+    resetDatabaseClient,
+  );
 
   return row === null ? null : toPublishedPortfolio(row);
 }
@@ -257,10 +262,14 @@ export async function findPublishedBySlugUnscoped(
 export async function findPublishedByIdUnscoped(
   portfolioId: string,
 ): Promise<PublishedPortfolio | null> {
-  const row = await getDatabase().portfolio.findFirst({
-    where: { id: portfolioId, status: 'PUBLISHED', deletedAt: null, suspendedAt: null },
-    select: PORTFOLIO_SELECT,
-  });
+  const row = await executeDatabaseRead(
+    () =>
+      getDatabase().portfolio.findFirst({
+        where: { id: portfolioId, status: 'PUBLISHED', deletedAt: null, suspendedAt: null },
+        select: PORTFOLIO_SELECT,
+      }),
+    resetDatabaseClient,
+  );
 
   return row === null ? null : toPublishedPortfolio(row);
 }
@@ -269,24 +278,32 @@ export async function findPublishedTranslationBySlugAndLocaleUnscoped(
   slug: string,
   locale: string,
 ): Promise<PortfolioDocument | null> {
-  const row = await getDatabase().portfolioTranslation.findFirst({
-    where: {
-      locale,
-      publishedDocument: { not: DbNull },
-      portfolio: { slug, status: 'PUBLISHED', deletedAt: null, suspendedAt: null },
-    },
-    select: { publishedDocument: true },
-  });
+  const row = await executeDatabaseRead(
+    () =>
+      getDatabase().portfolioTranslation.findFirst({
+        where: {
+          locale,
+          publishedDocument: { not: DbNull },
+          portfolio: { slug, status: 'PUBLISHED', deletedAt: null, suspendedAt: null },
+        },
+        select: { publishedDocument: true },
+      }),
+    resetDatabaseClient,
+  );
   return row === null ? null : tryMigratePortfolioDocument(row.publishedDocument);
 }
 
 /** Sitemap source: published, non-deleted, non-suspended portfolios only. */
 export async function listPublishedPortfoliosUnscoped(): Promise<readonly PublishedPortfolio[]> {
-  const rows = await getDatabase().portfolio.findMany({
-    where: { status: 'PUBLISHED', deletedAt: null, suspendedAt: null },
-    orderBy: { publishedAt: 'desc' },
-    select: PORTFOLIO_SELECT,
-  });
+  const rows = await executeDatabaseRead(
+    () =>
+      getDatabase().portfolio.findMany({
+        where: { status: 'PUBLISHED', deletedAt: null, suspendedAt: null },
+        orderBy: { publishedAt: 'desc' },
+        select: PORTFOLIO_SELECT,
+      }),
+    resetDatabaseClient,
+  );
 
   return rows
     .map((row) => toPublishedPortfolio(row))
@@ -296,20 +313,24 @@ export async function listPublishedPortfoliosUnscoped(): Promise<readonly Publis
 export async function listPublishedTranslationsUnscoped(): Promise<
   readonly PublishedPortfolioTranslation[]
 > {
-  const rows = await getDatabase().portfolioTranslation.findMany({
-    where: {
-      publishedDocument: { not: DbNull },
-      publishedAt: { not: null },
-      portfolio: { status: 'PUBLISHED', deletedAt: null, suspendedAt: null },
-    },
-    orderBy: { publishedAt: 'desc' },
-    select: {
-      locale: true,
-      publishedDocument: true,
-      publishedAt: true,
-      portfolio: { select: { slug: true } },
-    },
-  });
+  const rows = await executeDatabaseRead(
+    () =>
+      getDatabase().portfolioTranslation.findMany({
+        where: {
+          publishedDocument: { not: DbNull },
+          publishedAt: { not: null },
+          portfolio: { status: 'PUBLISHED', deletedAt: null, suspendedAt: null },
+        },
+        orderBy: { publishedAt: 'desc' },
+        select: {
+          locale: true,
+          publishedDocument: true,
+          publishedAt: true,
+          portfolio: { select: { slug: true } },
+        },
+      }),
+    resetDatabaseClient,
+  );
   return rows.flatMap((row) => {
     const document = tryMigratePortfolioDocument(row.publishedDocument);
     return document === null || row.publishedAt === null
@@ -321,19 +342,23 @@ export async function listPublishedTranslationsUnscoped(): Promise<
 export async function listPublishedTranslationsBySlugUnscoped(
   slug: string,
 ): Promise<readonly PublishedPortfolioTranslation[]> {
-  const rows = await getDatabase().portfolioTranslation.findMany({
-    where: {
-      publishedDocument: { not: DbNull },
-      publishedAt: { not: null },
-      portfolio: { slug, status: 'PUBLISHED', deletedAt: null, suspendedAt: null },
-    },
-    select: {
-      locale: true,
-      publishedDocument: true,
-      publishedAt: true,
-      portfolio: { select: { slug: true } },
-    },
-  });
+  const rows = await executeDatabaseRead(
+    () =>
+      getDatabase().portfolioTranslation.findMany({
+        where: {
+          publishedDocument: { not: DbNull },
+          publishedAt: { not: null },
+          portfolio: { slug, status: 'PUBLISHED', deletedAt: null, suspendedAt: null },
+        },
+        select: {
+          locale: true,
+          publishedDocument: true,
+          publishedAt: true,
+          portfolio: { select: { slug: true } },
+        },
+      }),
+    resetDatabaseClient,
+  );
   return rows.flatMap((row) => {
     const document = tryMigratePortfolioDocument(row.publishedDocument);
     return document === null || row.publishedAt === null

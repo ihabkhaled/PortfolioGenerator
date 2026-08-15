@@ -5,6 +5,8 @@ import { Prisma, PrismaClient } from '@prisma/client';
 
 import { getServerEnv } from '@/packages/env/server';
 
+import { createPostgresPoolConfig } from './postgres-config';
+
 /**
  * Owner of `@prisma/client`.
  *
@@ -20,6 +22,12 @@ import { getServerEnv } from '@/packages/env/server';
 
 const globalForPrisma = globalThis as unknown as { prismaClient?: PrismaClient };
 
+export async function resetDatabaseClient(): Promise<void> {
+  const client = globalForPrisma.prismaClient;
+  delete globalForPrisma.prismaClient;
+  if (client) await client.$disconnect();
+}
+
 export function getDatabase(): PrismaClient {
   const existing = globalForPrisma.prismaClient;
 
@@ -29,7 +37,13 @@ export function getDatabase(): PrismaClient {
 
   const env = getServerEnv();
   const client = new PrismaClient({
-    adapter: new PrismaPg({ connectionString: env.DATABASE_URL }),
+    adapter: new PrismaPg(
+      createPostgresPoolConfig({
+        databaseUrl: env.DATABASE_URL,
+        isVercel: env.VERCEL,
+        sslMode: env.DATABASE_SSL_MODE,
+      }),
+    ),
     log: env.NODE_ENV === 'development' ? ['warn', 'error'] : ['error'],
   });
 

@@ -22,6 +22,7 @@ import {
   FULL_RESUME_TEXT,
   MULTILINGUAL_RESUME_TEXT,
   PROMPT_INJECTION_RESUME_TEXT,
+  DENSE_DETERMINISTIC_RESUME_TEXT,
   SPARSE_RESUME_TEXT,
 } from './resume-text.fixtures';
 
@@ -246,6 +247,20 @@ describe('splitIntoSections', () => {
 });
 
 describe('parseDeterministicResume', () => {
+  it('extracts supported dense collections in observed page order and warns on unsupported headings', () => {
+    const result = parseDeterministicResume(DENSE_DETERMINISTIC_RESUME_TEXT);
+    expect(result.skills).toEqual(['TypeScript', 'PostgreSQL', 'Kafka']);
+    expect(result.publications).toHaveLength(1);
+    expect(result.volunteering).toHaveLength(1);
+    expect(result.interests).toEqual(['Typography', 'Distributed systems']);
+    expect(result.pageOrder).toEqual(['', 'about', 'experience', 'skills', 'contact']);
+    expect(result.warnings.filter((warning) => warning.code === 'UNSUPPORTED_CONTENT')).toEqual([
+      expect.objectContaining({ path: 'sections.testimonials' }),
+      expect.objectContaining({ path: 'sections.gallery' }),
+      expect.objectContaining({ path: 'sections.attachments' }),
+      expect.objectContaining({ path: 'sections.custom' }),
+    ]);
+  });
   it('preserves only explicitly labelled nationality and military status', () => {
     const result = parseDeterministicResume(
       'Amina Rahman\nEngineer\nNationality: Egyptian\nMilitary status: Completed',

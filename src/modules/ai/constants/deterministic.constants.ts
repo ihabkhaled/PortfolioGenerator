@@ -20,6 +20,10 @@ export const SECTION_HEADINGS = {
   publications: ['publications', 'writing'],
   volunteering: ['volunteering', 'volunteer experience', 'community service'],
   interests: ['interests', 'hobbies'],
+  testimonials: ['testimonials', 'references'],
+  gallery: ['gallery', 'media', 'portfolio media'],
+  attachments: ['attachments', 'downloads', 'documents'],
+  custom: ['custom page', 'custom section'],
 } as const;
 
 /** `Company — Title` / `Title at Company`, the two shapes worth handling. */

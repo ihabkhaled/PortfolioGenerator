@@ -10,6 +10,7 @@ import type {
 import type {
   awardSchema,
   certificationSchema,
+  companySchema,
   customBlockSchema,
   educationSchema,
   experienceSchema,
@@ -31,6 +32,7 @@ export type PortfolioProject = z.infer<typeof projectSchema>;
 export type PortfolioSkillGroup = z.infer<typeof skillGroupSchema>;
 export type PortfolioEducation = z.infer<typeof educationSchema>;
 export type PortfolioCertification = z.infer<typeof certificationSchema>;
+export type PortfolioCompany = z.infer<typeof companySchema>;
 export type PortfolioLanguage = z.infer<typeof languageSchema>;
 export type PortfolioAward = z.infer<typeof awardSchema>;
 export type PortfolioCustomBlock = z.infer<typeof customBlockSchema>;

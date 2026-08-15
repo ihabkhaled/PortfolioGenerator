@@ -38,6 +38,7 @@ export {
 
 export { upgradeDocumentToVersion3 } from './helpers/portfolio-document-v3.migration';
 export { upgradeDocumentToVersion4 } from './helpers/portfolio-document-v4.migration';
+export { upgradeDocumentToVersion5 } from './helpers/portfolio-document-v5.migration';
 
 export {
   applyMigrationSteps,
@@ -60,6 +61,7 @@ export {
 
 export {
   pageSchema,
+  companySchema,
   portfolioDocumentSchema,
   sectionSchema,
 } from './schemas/portfolio-document.schema';
@@ -68,6 +70,7 @@ export type {
   CustomBlockKind,
   PortfolioAward,
   PortfolioCertification,
+  PortfolioCompany,
   PortfolioCustomBlock,
   PortfolioDocument,
   PortfolioEducation,

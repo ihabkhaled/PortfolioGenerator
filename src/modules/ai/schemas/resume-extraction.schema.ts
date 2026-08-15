@@ -128,6 +128,7 @@ export const resumeExtractionSchema = z.object({
   }),
   links: z.array(extractedLinkSchema).max(EXTRACTION_LIMITS.links),
   experience: z.array(extractedExperienceSchema).max(EXTRACTION_LIMITS.experience),
+  pageOrder: z.array(z.string().max(EXTRACTION_LIMITS.shortText)).max(EXTRACTION_LIMITS.pages).optional(),
   projects: z.array(extractedProjectSchema).max(EXTRACTION_LIMITS.projects),
   skills: z.array(z.string().max(EXTRACTION_LIMITS.shortText)).max(EXTRACTION_LIMITS.skills),
   softSkills: z.array(extractedSoftSkillSchema).max(EXTRACTION_LIMITS.softSkills),

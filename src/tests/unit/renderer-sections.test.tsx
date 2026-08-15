@@ -6,7 +6,11 @@ import type {
   PortfolioDocument,
   PortfolioSection,
 } from '@/modules/portfolio-document';
-import { buildPortfolioLabels, SectionRenderer } from '@/modules/portfolio-renderer';
+import {
+  buildPortfolioLabels,
+  PortfolioTemplate,
+  SectionRenderer,
+} from '@/modules/portfolio-renderer';
 
 import { buildFullPortfolioDocument } from '../fixtures/portfolio-document.fixtures';
 
@@ -223,6 +227,43 @@ describe('the hero band', () => {
     });
 
     expect(screen.getByText('---')).not.toHaveAttribute('href');
+  });
+});
+
+describe('public page section order', () => {
+  it('renders imported sections in the stored page order', () => {
+    const document = buildFullPortfolioDocument();
+    render(
+      <PortfolioTemplate
+        document={document}
+        sections={[
+          {
+            id: 'section-projects',
+            type: 'projects',
+            visible: true,
+            order: 2,
+            config: { title: 'Projects', limit: null },
+          },
+          {
+            id: 'section-about',
+            type: 'about',
+            visible: true,
+            order: 1,
+            config: { title: 'About' },
+          },
+        ]}
+        navigation={[]}
+        labels={labels}
+        portfolioSlug="amina"
+        pageTitle="Amina"
+        isPreview={false}
+        actions={null}
+        footerLinks={null}
+      />,
+    );
+
+    const pageText = screen.getByTestId('portfolio-section-page').textContent;
+    expect(pageText.indexOf('About')).toBeLessThan(pageText.indexOf('Projects'));
   });
 });
 

@@ -4,7 +4,7 @@
   "properties": {
     "schemaVersion": {
       "type": "number",
-      "const": 4
+      "const": 5
     },
     "identity": {
       "type": "object",
@@ -331,6 +331,32 @@
           "summary",
           "highlights",
           "technologies"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "companies": {
+      "maxItems": 40,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 120
+          },
+          "name": {},
+          "sourceOrder": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 10000
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "sourceOrder"
         ],
         "additionalProperties": false
       }
@@ -2464,11 +2490,24 @@
               "type": "null"
             }
           ]
+        },
+        "pageOrder": {
+          "anyOf": [
+            {
+              "maxItems": 12,
+              "type": "array",
+              "items": {}
+            },
+            {
+              "type": "null"
+            }
+          ]
         }
       },
       "required": [
         "kind",
-        "resumeUploadId"
+        "resumeUploadId",
+        "pageOrder"
       ],
       "additionalProperties": false
     }
@@ -2480,6 +2519,7 @@
     "links",
     "socialLinks",
     "experience",
+    "companies",
     "projects",
     "skills",
     "softSkills",

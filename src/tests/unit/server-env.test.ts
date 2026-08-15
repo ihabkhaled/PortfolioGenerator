@@ -79,6 +79,7 @@ describe('getServerEnv', () => {
   it('refuses an admin auth secret equal to the user-facing auth secret in production', () => {
     applyEnv({
       NEXT_PUBLIC_APP_ENV: 'production',
+      DATABASE_SSL_MODE: 'verify-full',
       ADMIN_AUTH_SECRET: 'a'.repeat(48),
       CRON_SECRET: 'c'.repeat(32),
       AUTH_REQUIRE_EMAIL_VERIFICATION: 'true',
@@ -88,6 +89,11 @@ describe('getServerEnv', () => {
       CONTACT_SMTP_HOST: 'smtp.example.com',
       CONTACT_SMTP_USER: 'smtp-user',
       CONTACT_SMTP_PASS: 'smtp-password',
+      STORAGE_DRIVER: 's3',
+      S3_ENDPOINT: 'https://s3.example.com',
+      S3_BUCKET: 'portfolios',
+      S3_ACCESS_KEY_ID: 'key',
+      S3_SECRET_ACCESS_KEY: 'secret',
     });
 
     expect(() => getServerEnv()).toThrow(/ADMIN_AUTH_SECRET must not equal BETTER_AUTH_SECRET/);
@@ -112,6 +118,23 @@ describe('getServerEnv', () => {
     });
 
     expect(getServerEnv().S3_BUCKET).toBe('portfolios');
+  });
+
+  it('refuses local storage in public production', () => {
+    applyEnv({
+      NEXT_PUBLIC_APP_ENV: 'production',
+      DATABASE_SSL_MODE: 'verify-full',
+      CRON_SECRET: 'c'.repeat(32),
+      AUTH_REQUIRE_EMAIL_VERIFICATION: 'true',
+      CONTACT_EMAIL_ENABLED: 'true',
+      CONTACT_EMAIL_FROM: 'sender@example.com',
+      CONTACT_EMAIL_TO: 'support@example.com',
+      CONTACT_SMTP_HOST: 'smtp.example.com',
+      CONTACT_SMTP_USER: 'smtp-user',
+      CONTACT_SMTP_PASS: 'smtp-password',
+    });
+
+    expect(() => getServerEnv()).toThrow(/STORAGE_DRIVER=s3 is required in public production/);
   });
 
   it('names the missing AI settings when a remote provider is selected', () => {

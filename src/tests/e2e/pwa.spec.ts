@@ -199,6 +199,52 @@ test('the manifest assets decode and a distinct worker version surfaces and acti
     .toContain(`/sw.js?version=${updateVersion}`);
 });
 
+test('the mobile install prompt leaves the dashboard Import CV action reachable at the bottom', async ({
+  page,
+}) => {
+  test.setTimeout(60_000);
+  await page.setViewportSize({ width: 390, height: 844 });
+  await signUp(page, buildAccount('pwa-obstruction'));
+  await createPortfolio(page, 'PWA obstruction portfolio');
+  await page.goto('/dashboard');
+
+  await page.evaluate(() => {
+    const EventConstructor = Reflect.get(globalThis, 'Event');
+    const event = new EventConstructor('beforeinstallprompt', { cancelable: true }) as Event & {
+      prompt: () => Promise<void>;
+      userChoice: Promise<{ outcome: 'accepted' | 'dismissed' }>;
+    };
+    event.prompt = () => Promise.resolve();
+    event.userChoice = Promise.resolve({ outcome: 'dismissed' });
+    globalThis.dispatchEvent(event);
+  });
+
+  const prompt = page.locator('[data-fixed-surface="pwa"]');
+  await expect(prompt).toBeVisible();
+  const importCv = page.getByRole('link', { name: 'Import CV' });
+  await expect(importCv).toBeVisible();
+  await page.evaluate(() => {
+    globalThis.scrollTo(0, globalThis.document.documentElement.scrollHeight);
+  });
+  await expect
+    .poll(() =>
+      page.evaluate(
+        () =>
+          globalThis.scrollY + globalThis.innerHeight >=
+          globalThis.document.documentElement.scrollHeight - 1,
+      ),
+    )
+    .toBe(true);
+
+  const [promptTop, importBottom] = await Promise.all([
+    prompt.evaluate((element) => element.getBoundingClientRect().top),
+    importCv.evaluate((element) => element.getBoundingClientRect().bottom),
+  ]);
+  expect(promptTop).toBeGreaterThanOrEqual(importBottom);
+  await importCv.click();
+  await expect(page).toHaveURL(/\/dashboard\/portfolios\/[^/]+\/import$/u);
+});
+
 test('warmed authenticated, private challenge, and exact-grant media responses stay out of offline caches', async ({
   page,
   context,

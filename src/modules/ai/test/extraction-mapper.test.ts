@@ -51,6 +51,103 @@ function extraction(overrides: Partial<ResumeExtractionResult> = {}): ResumeExtr
   };
 }
 
+const DENSE_EXTRACTION: ResumeExtractionResult = {
+  identity: {
+    displayName: 'Mina Haddad',
+    headline: 'Staff Engineer',
+    summary: 'Builds systems.',
+    location: 'Cairo',
+    nationality: 'Egyptian',
+    militaryStatus: 'Completed',
+    tagline: 'Reliable by design',
+    coverLetter: 'I build useful things.',
+    availabilityEnabled: true,
+    availabilityNote: 'Open to roles',
+  },
+  contact: { email: 'mina@example.com', phone: '+351 912 345 678' },
+  links: [
+    { kind: 'github', url: 'https://github.com/mina' },
+    { kind: 'website', url: 'https://mina.example' },
+  ],
+  pageOrder: ['about', 'contact', 'skills', 'projects', 'experience', ''],
+  experience: [
+    {
+      organization: 'Acme',
+      title: 'Staff Engineer',
+      location: 'Cairo',
+      startDate: '2020-01',
+      endDate: null,
+      current: true,
+      summary: 'Led platform work.',
+      highlights: ['Reduced latency.'],
+      technologies: ['TypeScript'],
+    },
+  ],
+  projects: [
+    {
+      name: 'Atlas',
+      summary: 'A map.',
+      highlights: ['Shipped it.'],
+      technologies: ['Go'],
+      url: 'https://example.com/atlas',
+    },
+  ],
+  skills: ['TypeScript', 'Go'],
+  softSkills: [{ label: 'Mentoring', detail: 'Mentored engineers.' }],
+  education: [
+    {
+      institution: 'Cairo University',
+      degree: 'BSc',
+      field: 'Computer Science',
+      startDate: '2014-01',
+      endDate: '2018-01',
+      location: 'Cairo',
+      details: 'Honours.',
+    },
+  ],
+  courses: [
+    {
+      name: 'Security',
+      provider: 'Academy',
+      date: '2023-02',
+      url: 'https://example.com/course',
+      summary: 'Secure systems.',
+    },
+  ],
+  certifications: [
+    {
+      name: 'CKA',
+      issuer: 'CNCF',
+      date: '2022-04',
+      credentialUrl: 'https://example.com/credential',
+    },
+  ],
+  languages: [{ name: 'Arabic', proficiency: 'Native' }],
+  awards: [
+    { name: 'Reliability Award', issuer: 'Acme', date: '2021-05', description: 'For uptime.' },
+  ],
+  publications: [
+    {
+      title: 'Reliable Systems',
+      publisher: 'Systems Journal',
+      date: '2024-03',
+      url: 'https://example.com/paper',
+      summary: 'A paper.',
+    },
+  ],
+  volunteering: [
+    {
+      organization: 'Code Club',
+      role: 'Mentor',
+      startDate: '2021-01',
+      endDate: null,
+      summary: 'Taught students.',
+    },
+  ],
+  interests: ['Typography'],
+  warnings: [],
+};
+
 describe('normalizeMonth', () => {
   it.each(['2024-01', '1999-12'])('keeps the valid month %s', (month) => {
     expect(normalizeMonth(month)).toBe(month);
@@ -185,6 +282,173 @@ function role(
 }
 
 describe('mapExtractionToDocument', () => {
+  it('maps every supported extraction collection, companies, pages, sections, and source order', () => {
+    const result = mapExtractionToDocument(DENSE_EXTRACTION, 'Fallback', 'upload-dense');
+
+    expect(result.document).toMatchObject({
+      links: [],
+      socialLinks: [
+        expect.objectContaining({ kind: 'github' }),
+        expect.objectContaining({ kind: 'website' }),
+      ],
+      experience: [expect.objectContaining({ organization: 'Acme' })],
+      companies: [{ name: 'Acme', sourceOrder: 0 }],
+      projects: [expect.objectContaining({ name: 'Atlas' })],
+      skills: [expect.objectContaining({ items: ['TypeScript', 'Go'] })],
+      softSkills: [expect.objectContaining({ label: 'Mentoring' })],
+      education: [expect.objectContaining({ institution: 'Cairo University' })],
+      courses: [expect.objectContaining({ name: 'Security' })],
+      certifications: [expect.objectContaining({ name: 'CKA' })],
+      languages: [expect.objectContaining({ name: 'Arabic' })],
+      awards: [expect.objectContaining({ name: 'Reliability Award' })],
+      publications: [expect.objectContaining({ title: 'Reliable Systems' })],
+      volunteering: [expect.objectContaining({ organization: 'Code Club' })],
+      interests: ['Typography'],
+      source: { pageOrder: ['about', 'contact', 'skills', 'projects', 'experience'] },
+    });
+    expect(result.document.identity.displayName).toBe('Mina Haddad');
+    expect(result.document.identity.tagline).toBe('Reliable by design');
+    expect(result.document.pages.map((page) => page.slug)).toEqual([
+      'about',
+      'contact',
+      'skills',
+      'projects',
+      'experience',
+      '',
+    ]);
+    expect(
+      result.document.pages.flatMap((page) => page.sections.map((section) => section.type)),
+    ).toEqual(
+      expect.arrayContaining([
+        'about',
+        'social',
+        'contact',
+        'skills',
+        'soft-skills',
+        'languages',
+        'projects',
+        'experience',
+        'education',
+        'courses',
+        'certifications',
+        'publications',
+        'volunteering',
+        'awards',
+        'interests',
+      ]),
+    );
+  });
+
+  it('drops over-limit content and reports exact incomplete-entry warning paths', () => {
+    const overLimitSkills = Array.from({ length: 301 }, (_, index) => `Skill ${index}`);
+    const overLimitInterests = Array.from({ length: 31 }, (_, index) => `Interest ${index}`);
+    const result = mapExtractionToDocument(
+      extraction({
+        skills: overLimitSkills,
+        interests: overLimitInterests,
+        education: [
+          {
+            institution: null,
+            degree: 'BSc',
+            field: null,
+            startDate: null,
+            endDate: null,
+            location: null,
+            details: null,
+          },
+        ],
+        certifications: [{ name: null, issuer: null, date: null, credentialUrl: null }],
+        languages: [{ name: null, proficiency: null }],
+        awards: [{ name: null, issuer: null, date: null, description: null }],
+      }),
+      'Fallback',
+      'upload-limits',
+    );
+
+    expect(result.document.education).toEqual([]);
+    expect(result.document.certifications).toEqual([]);
+    expect(result.document.languages).toEqual([]);
+    expect(result.document.awards).toEqual([]);
+    expect(result.document.skills[0]?.items).toHaveLength(80);
+    expect(result.document.interests).toHaveLength(30);
+    expect(
+      result.warnings.filter((warning) => warning.code === WARNING_CODES.droppedIncompleteEntry),
+    ).toEqual([
+      {
+        code: WARNING_CODES.droppedIncompleteEntry,
+        path: 'education.0',
+        message: 'An entry was dropped because a required field was empty.',
+      },
+      {
+        code: WARNING_CODES.droppedIncompleteEntry,
+        path: 'certifications.0',
+        message: 'An entry was dropped because a required field was empty.',
+      },
+      {
+        code: WARNING_CODES.droppedIncompleteEntry,
+        path: 'languages.0',
+        message: 'An entry was dropped because a required field was empty.',
+      },
+      {
+        code: WARNING_CODES.droppedIncompleteEntry,
+        path: 'awards.0',
+        message: 'An entry was dropped because a required field was empty.',
+      },
+    ]);
+  });
+
+  it('reports exact truncation paths for collections and nested lists', () => {
+    const source = extraction({
+      skills: Array.from({ length: 81 }, (_, index) => `Skill ${index}`),
+      experience: [
+        {
+          ...role(),
+          highlights: Array.from({ length: 21 }, (_, index) => `H${index}`),
+          technologies: Array.from({ length: 61 }, (_, index) => `T${index}`),
+        },
+      ],
+    });
+    const result = mapExtractionToDocument(source, 'Fallback', 'upload-truncated');
+
+    expect(
+      result.warnings.filter((warning) => warning.code === WARNING_CODES.truncatedInput),
+    ).toEqual([
+      {
+        code: WARNING_CODES.truncatedInput,
+        path: 'skills',
+        message: 'Additional skills were omitted after the 80-item limit.',
+      },
+      {
+        code: WARNING_CODES.truncatedInput,
+        path: 'experience.0.highlights',
+        message: 'Additional highlights were omitted after the 20-item limit.',
+      },
+      {
+        code: WARNING_CODES.truncatedInput,
+        path: 'experience.0.technologies',
+        message: 'Additional technologies were omitted after the 60-item limit.',
+      },
+    ]);
+  });
+
+  it('reports when the social-link subset exceeds its document limit', () => {
+    const result = mapExtractionToDocument(
+      extraction({
+        links: Array.from({ length: 17 }, (_, index) => ({
+          kind: 'github',
+          url: `https://example.com/${index}`,
+        })),
+      }),
+      'Fallback',
+      'upload-social-limit',
+    );
+
+    expect(result.warnings).toContainEqual({
+      code: WARNING_CODES.truncatedInput,
+      path: 'links.social',
+      message: 'Additional social links were omitted after the 16-item limit.',
+    });
+  });
   it('preserves explicitly extracted nationality and military status exactly', () => {
     const source = extraction();
     source.identity.nationality = 'Egyptian';
@@ -204,7 +468,53 @@ describe('mapExtractionToDocument', () => {
   it('records the upload it came from', () => {
     const result = mapExtractionToDocument(extraction(), 'Fallback', 'upload-42');
 
-    expect(result.document.source).toEqual({ kind: 'resume-import', resumeUploadId: 'upload-42' });
+    expect(result.document.source).toEqual({
+      kind: 'resume-import',
+      resumeUploadId: 'upload-42',
+      pageOrder: null,
+    });
+  });
+
+  it('drops the internal empty home slug before persisting source page order', () => {
+    const result = mapExtractionToDocument(
+      extraction({ pageOrder: ['', 'about'] }),
+      'Fallback',
+      'upload-1',
+    );
+
+    expect(result.document.source.pageOrder).toEqual(['about']);
+    expect(parseSchema(portfolioDocumentSchema, result.document).ok).toBe(true);
+  });
+
+  it('keeps only known, first-seen imported page slugs', () => {
+    const result = mapExtractionToDocument(
+      extraction({ pageOrder: ['projects', 'unknown', 'projects', 'about', ''] }),
+      'Fallback',
+      'upload-order',
+    );
+
+    expect(result.document.source.pageOrder).toEqual(['projects', 'about']);
+  });
+
+  it('orders imported pages by source order and keeps unlisted pages after them', () => {
+    const result = mapExtractionToDocument(
+      extraction({
+        pageOrder: ['projects', 'about'],
+        identity: { ...extraction().identity, summary: 'About me.' },
+        experience: [role()],
+        projects: [{ name: 'Ledger', summary: null, highlights: [], technologies: [], url: null }],
+      }),
+      'Fallback',
+      'upload-order',
+    );
+
+    expect(result.document.pages.map((page) => page.slug)).toEqual([
+      'projects',
+      'about',
+      '',
+      'experience',
+    ]);
+    expect(result.document.pages.map((page) => page.order)).toEqual([0, 10, 20, 30]);
   });
 
   it('composes factual reference pages for the populated CV sections', () => {
@@ -352,17 +662,15 @@ describe('mapExtractionToDocument', () => {
       );
     });
 
-    it('keeps a role that has only one of the two, rather than losing the fact', () => {
+    it('drops a role without an explicit employer rather than inventing one', () => {
       const result = mapExtractionToDocument(
         extraction({ experience: [role({ title: null })] }),
         'Fallback',
         'upload-1',
       );
 
-      expect(result.document.experience[0]).toMatchObject({
-        organization: 'Northwind',
-        title: 'Northwind',
-      });
+      expect(result.document.experience).toHaveLength(0);
+      expect(result.document.companies).toHaveLength(0);
     });
 
     it('empties an unreadable end date and warns about it', () => {

@@ -18,6 +18,10 @@ export interface PasswordRecoveryState {
   readonly error: string | null;
 }
 
+export interface SignInFormContainerProps {
+  readonly initialNoticeMessage?: string | null;
+}
+
 /**
  * Declared as a plain string-literal union rather than imported from
  * `@prisma/client`, matching `PortfolioStatus` in

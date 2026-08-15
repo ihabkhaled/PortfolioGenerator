@@ -28,6 +28,14 @@ const nextConfig: NextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
   typedRoutes: true,
+  // Vercel's output tracing otherwise misses the native Chromium payload,
+  // leaving the PDF route healthy until its first real request.
+  outputFileTracingIncludes: {
+    '/api/portfolio-pdf/download/[token]': [
+      './node_modules/@sparticuz/chromium/**/*',
+      './node_modules/playwright-core/browsers.json',
+    ],
+  },
   // `next dev` otherwise appends a generated block to AGENTS.md on every
   // start. AGENTS.md is this repository's own hand-maintained canonical
   // instruction set (see its header); a framework-injected block inside it

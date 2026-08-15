@@ -49,3 +49,12 @@ export const IMPORTED_PAGE_DEFINITIONS = {
   },
   contact: { slug: 'contact', title: 'Contact', sectionTypes: ['social', 'contact'] },
 } as const;
+
+export const IMPORTED_PAGE_SLUGS = new Set([
+  '',
+  'experience',
+  'projects',
+  'skills',
+  'about',
+  'contact',
+]);

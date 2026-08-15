@@ -29,7 +29,9 @@ import { SectionRenderer } from './section-renderer';
  */
 export function PortfolioTemplate(props: Readonly<PortfolioTemplateProps>): ReactElement {
   const buildAssetPath = props.buildAssetPath ?? buildPublicAssetPath;
-  const renderable = props.sections.filter((section) => hasContent(section, props.document));
+  const renderable = props.sections
+    .filter((section) => hasContent(section, props.document))
+    .toSorted((left, right) => left.order - right.order);
   const heroSection = renderable.find((section) => section.type === 'hero');
   const bandSections = renderable.filter((section) => section.type !== 'hero');
 

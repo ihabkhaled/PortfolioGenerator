@@ -14,4 +14,19 @@ describe('resume extraction prompt contract', () => {
       /Overlapping experience dates are valid\. Do not warn merely because/u,
     );
   });
+
+  it('keeps unsupported portfolio content bounded and reviewable', () => {
+    expect(RESUME_EXTRACTION_SYSTEM_PROMPT).toMatch(
+      /Testimonials and media stay empty unless the document directly contains/u,
+    );
+    expect(RESUME_EXTRACTION_SYSTEM_PROMPT).toMatch(
+      /code\s+UNSUPPORTED_CONTENT, the section path, and a short review instruction/u,
+    );
+    expect(RESUME_EXTRACTION_SYSTEM_PROMPT).toMatch(
+      /Return pageOrder only as this ordered list of known slugs/u,
+    );
+    expect(RESUME_EXTRACTION_SYSTEM_PROMPT).toMatch(
+      /When a field is absent or unclear, use null or an empty array and add one\s+short warning/u,
+    );
+  });
 });

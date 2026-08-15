@@ -7,7 +7,7 @@
  * strings would make a single portfolio able to degrade the whole platform.
  */
 
-export const PORTFOLIO_SCHEMA_VERSION = 4;
+export const PORTFOLIO_SCHEMA_VERSION = 5;
 
 export const DOCUMENT_LIMITS = {
   displayName: 120,
@@ -81,6 +81,7 @@ export const DOCUMENT_LIMITS = {
   projectSlug: 80,
   pageDescription: 320,
   passwordHash: 255,
+  companyName: 200,
 } as const;
 
 export const DOCUMENT_COUNTS = {
@@ -110,6 +111,7 @@ export const DOCUMENT_COUNTS = {
   interests: 30,
   gallery: 60,
   attachments: 20,
+  companies: 40,
   projectContentBlocks: 20,
 } as const;
 

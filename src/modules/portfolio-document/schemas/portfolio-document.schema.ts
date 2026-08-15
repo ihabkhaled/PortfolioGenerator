@@ -420,6 +420,15 @@ const seoSchema = z.object({
 const sourceSchema = z.object({
   kind: z.enum(SOURCE_KINDS),
   resumeUploadId: z.string().max(DOCUMENT_LIMITS.id).nullable(),
+  /** Reliable source order, when the extractor could observe it. */
+  pageOrder: boundedArray(requiredText(DOCUMENT_LIMITS.pageSlug), DOCUMENT_COUNTS.pages).nullable(),
+});
+
+/** A distinct employer explicitly named by one or more experience entries. */
+export const companySchema = z.object({
+  id: identifier,
+  name: requiredText(DOCUMENT_LIMITS.companyName),
+  sourceOrder: z.number().int().min(0).max(10_000),
 });
 
 /**
@@ -545,6 +554,7 @@ const documentShapeSchema = z.object({
   links: boundedArray(linkSchema, DOCUMENT_COUNTS.links),
   socialLinks: boundedArray(socialLinkSchema, DOCUMENT_COUNTS.socialLinks),
   experience: boundedArray(experienceSchema, DOCUMENT_COUNTS.experience),
+  companies: boundedArray(companySchema, DOCUMENT_COUNTS.companies),
   projects: boundedArray(projectSchema, DOCUMENT_COUNTS.projects),
   skills: boundedArray(skillGroupSchema, DOCUMENT_COUNTS.skillGroups),
   softSkills: boundedArray(softSkillSchema, DOCUMENT_COUNTS.softSkills),

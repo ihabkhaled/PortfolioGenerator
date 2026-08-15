@@ -277,8 +277,7 @@ describe('mapping entries the model left partly empty', () => {
     expect(result.document.awards).toEqual([]);
   });
 
-  // A CV line that gives an employer but no role still describes a job.
-  it('uses the organization as the title when only one of the two is present', () => {
+  it('drops an experience entry without a title and reports its exact source path', () => {
     const result = mapExtractionToDocument(
       extraction({
         experience: [
@@ -299,9 +298,11 @@ describe('mapping entries the model left partly empty', () => {
       'upload-1',
     );
 
-    expect(result.document.experience[0]).toMatchObject({
-      organization: 'Northwind Payments',
-      title: 'Northwind Payments',
+    expect(result.document.experience).toEqual([]);
+    expect(result.warnings).toContainEqual({
+      code: WARNING_CODES.droppedIncompleteEntry,
+      path: 'experience.0',
+      message: 'A role was dropped because it was missing a title.',
     });
   });
 
@@ -383,7 +384,7 @@ describe('parseDeterministicResume on punctuation and month names', () => {
 });
 
 describe('mapping a role or project with the other half missing', () => {
-  it('uses the title as the organization when only the role is present', () => {
+  it('drops an experience entry without an organization and reports its exact source path', () => {
     const result = mapExtractionToDocument(
       extraction({
         experience: [
@@ -404,9 +405,11 @@ describe('mapping a role or project with the other half missing', () => {
       'upload-1',
     );
 
-    expect(result.document.experience[0]).toMatchObject({
-      organization: 'Senior Backend Engineer',
-      title: 'Senior Backend Engineer',
+    expect(result.document.experience).toEqual([]);
+    expect(result.warnings).toContainEqual({
+      code: WARNING_CODES.droppedIncompleteEntry,
+      path: 'experience.0',
+      message: 'A role was dropped because it was missing an employer.',
     });
   });
 

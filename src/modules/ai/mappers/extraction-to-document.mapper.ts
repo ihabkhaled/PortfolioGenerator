@@ -18,8 +18,13 @@ import { WARNING_CODES } from '../constants/extraction.constants';
 import {
   DEFAULT_SKILL_GROUP_LABEL,
   IMPORTED_PAGE_DEFINITIONS,
+  IMPORTED_PAGE_SLUGS,
   LINK_LABELS,
 } from '../constants/mapping.constants';
+import {
+  boundedNestedList,
+  reportCollectionTruncations,
+} from '../helpers/extraction-truncation.helper';
 import type { ResumeExtractionResult } from '../types/ai-provider.types';
 import type { ExtractionMappingResult, ImportedPageDefinition } from '../types/mapping.types';
 
@@ -44,6 +49,7 @@ export function mapExtractionToDocument(
   resumeUploadId: string,
 ): ExtractionMappingResult {
   const warnings = [...extraction.warnings];
+  reportCollectionTruncations(extraction, warnings);
   const base = createEmptyPortfolioDocument(
     extraction.identity.displayName?.trim() || displayNameFallback,
   );
@@ -51,6 +57,14 @@ export function mapExtractionToDocument(
   const links = mapLinks(extraction, warnings);
   const socialLinks = mapSocialLinks(extraction, warnings);
   const experience = mapExperience(extraction, warnings);
+  const companies = new Map(
+    experience.map((entry, index) => [
+      entry.organization.trim().toLowerCase(),
+      { id: `company-${index + 1}`, name: entry.organization.trim(), sourceOrder: index },
+    ]),
+  )
+    .values()
+    .toArray();
   const projects = mapProjects(extraction, warnings);
   const skills = mapSkills(extraction);
   const phone =
@@ -87,6 +101,7 @@ export function mapExtractionToDocument(
     links,
     socialLinks,
     experience,
+    companies,
     projects,
     skills,
     softSkills: extraction.softSkills
@@ -181,11 +196,27 @@ export function mapExtractionToDocument(
         warnings.push(reviewWarning(`interests.${index}`));
         return interest;
       }),
-    source: { kind: 'resume-import', resumeUploadId },
+    source: {
+      kind: 'resume-import',
+      resumeUploadId,
+      pageOrder: normalizePageOrder(extraction.pageOrder),
+    },
   };
 
   const cleaned = dropIncompleteEntries(document, warnings);
   return { document: { ...cleaned, pages: buildImportedPages(cleaned) }, warnings };
+}
+
+export function normalizePageOrder(value: readonly string[] | undefined): string[] | null {
+  if (value === undefined) return null;
+  const seen = new Set<string>();
+  return value.filter((slug) => {
+    // The home page is represented by an empty route slug internally, but
+    // persisted source metadata uses required non-empty slugs.
+    if (slug === '' || !IMPORTED_PAGE_SLUGS.has(slug) || seen.has(slug)) return false;
+    seen.add(slug);
+    return true;
+  });
 }
 
 export function buildImportedPages(document: PortfolioDocument): PortfolioPage[] {
@@ -221,7 +252,18 @@ export function buildImportedPages(document: PortfolioDocument): PortfolioPage[]
   )
     pages.push(createImportedPage(document, IMPORTED_PAGE_DEFINITIONS.contact, pages.length));
 
-  return pages;
+  const sourceOrder = document.source.pageOrder;
+  if (sourceOrder === null) return pages;
+  const rank = new Map(sourceOrder.map((slug, index) => [slug, index]));
+  return pages
+    .map((page, index) => ({ page, index }))
+    .toSorted(
+      (a, b) =>
+        (rank.get(a.page.slug) ?? sourceOrder.length + a.index) -
+        (rank.get(b.page.slug) ?? sourceOrder.length + b.index),
+    )
+    .map(({ page }) => page)
+    .map((page, index) => ({ ...page, order: index * 10 }));
 }
 
 export function createImportedPage(
@@ -419,6 +461,16 @@ export function mapSocialLinks(
   warnings: ExtractionMappingResult['warnings'],
 ): PortfolioDocument['socialLinks'] {
   const links: PortfolioDocument['socialLinks'][number][] = [];
+  const supportedCount = extraction.links.filter((link) =>
+    (SOCIAL_LINK_KINDS as readonly string[]).includes(normalizeLinkKind(link.kind)),
+  ).length;
+  if (supportedCount > DOCUMENT_COUNTS.socialLinks) {
+    warnings.push({
+      code: WARNING_CODES.truncatedInput,
+      path: 'links.social',
+      message: `Additional social links were omitted after the ${DOCUMENT_COUNTS.socialLinks}-item limit.`,
+    });
+  }
 
   for (const [index, link] of extraction.links.slice(0, DOCUMENT_COUNTS.socialLinks).entries()) {
     const kind = normalizeLinkKind(link.kind);
@@ -457,11 +509,11 @@ export function mapExperience(
     const organization = role.organization?.trim() ?? '';
     const title = role.title?.trim() ?? '';
 
-    if (organization === '' && title === '') {
+    if (organization === '' || title === '') {
       warnings.push({
         code: WARNING_CODES.droppedIncompleteEntry,
         path: `experience.${index}`,
-        message: 'A role was dropped because it had neither an employer nor a title.',
+        message: `A role was dropped because it was missing ${organization === '' ? 'an employer' : 'a title'}.`,
       });
 
       continue;
@@ -477,15 +529,25 @@ export function mapExperience(
 
     entries.push({
       id: `exp-${entries.length + 1}`,
-      organization: organization || title,
-      title: title || organization,
+      organization,
+      title,
       location: role.location,
       startDate: normalizeMonth(role.startDate),
       endDate: normalizeMonth(role.endDate),
       current: role.current,
       summary: role.summary,
-      highlights: role.highlights.slice(0, DOCUMENT_COUNTS.experienceHighlights),
-      technologies: role.technologies.slice(0, DOCUMENT_COUNTS.technologies),
+      highlights: boundedNestedList(
+        role.highlights,
+        DOCUMENT_COUNTS.experienceHighlights,
+        `experience.${index}.highlights`,
+        warnings,
+      ),
+      technologies: boundedNestedList(
+        role.technologies,
+        DOCUMENT_COUNTS.technologies,
+        `experience.${index}.technologies`,
+        warnings,
+      ),
     });
   }
 
@@ -524,8 +586,18 @@ export function mapProjects(
       coverAssetId: null,
       featured: false,
       summary: project.summary,
-      highlights: project.highlights.slice(0, DOCUMENT_COUNTS.projectHighlights),
-      technologies: project.technologies.slice(0, DOCUMENT_COUNTS.technologies),
+      highlights: boundedNestedList(
+        project.highlights,
+        DOCUMENT_COUNTS.projectHighlights,
+        `projects.${index}.highlights`,
+        warnings,
+      ),
+      technologies: boundedNestedList(
+        project.technologies,
+        DOCUMENT_COUNTS.technologies,
+        `projects.${index}.technologies`,
+        warnings,
+      ),
       links:
         url === null
           ? []

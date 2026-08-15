@@ -13,10 +13,13 @@ import { signInAction } from '../actions/auth.actions';
 import { CredentialForm } from '../components/credential-form.component';
 import { authClasses } from '../constants/auth-style.constants';
 import { AUTH_INITIAL_FORM_STATE } from '../constants/auth.constants';
+import type { SignInFormContainerProps } from '../types/auth.types';
 
-export function SignInFormContainer(): ReactElement {
+export function SignInFormContainer(props: SignInFormContainerProps): ReactElement {
   const t = useAppTranslation(I18N_NAMESPACES.auth);
   const [state, formAction, isPending] = useActionState(signInAction, AUTH_INITIAL_FORM_STATE);
+  const noticeMessage =
+    state.notice === null ? (props.initialNoticeMessage ?? null) : t(state.notice);
 
   return (
     <CredentialForm
@@ -24,7 +27,7 @@ export function SignInFormContainer(): ReactElement {
       action={formAction}
       isPending={isPending}
       errorMessage={state.error === null ? null : t(state.error)}
-      noticeMessage={state.notice === null ? null : t(state.notice)}
+      noticeMessage={noticeMessage}
       submitLabel={t('submitSignIn')}
       pendingLabel={t('pendingSignIn')}
       labels={{

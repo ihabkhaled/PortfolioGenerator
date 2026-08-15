@@ -35,3 +35,9 @@ export interface ZoomAroundViewportCenterInput {
   readonly viewport: ImageCropSize;
   readonly nextRendered: ImageCropSize;
 }
+
+export interface ClampImageOffsetInput {
+  readonly offset: ImageCropPoint;
+  readonly viewport: ImageCropSize;
+  readonly rendered: ImageCropSize;
+}

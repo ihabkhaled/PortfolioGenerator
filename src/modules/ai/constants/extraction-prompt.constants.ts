@@ -49,9 +49,16 @@ Return only data matching the supplied schema.
     explicitly labels or states them. Do not turn ordinary prose into an interest,
     and do not infer a publication or volunteer role from an employer or project.
 18. Testimonials and media stay empty unless the document directly contains the
-    testimonial or identifies the media as portfolio material.
+    testimonial or identifies the media as portfolio material. For testimonials,
+    gallery/media, attachments/downloads, or custom sections that cannot be
+    imported, keep the field empty and add one warning with code
+    UNSUPPORTED_CONTENT, the section path, and a short review instruction.
 19. Overlapping experience dates are valid. Do not warn merely because roles,
     freelance work, projects or part-time work overlap.
+20. Return pageOrder only as this ordered list of known slugs: empty, experience,
+    projects, skills, about, contact. Include a slug only when the CV
+    exposes that content or reliable section order; never invent or duplicate
+    slugs. Unknown page names must be omitted.
 
 The user reviews and edits everything you return before any of it is published.`;
 

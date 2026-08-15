@@ -197,6 +197,7 @@ export function buildFullPortfolioDocument(): PortfolioDocument {
         technologies: ['Go', 'PostgreSQL'],
       },
     ],
+    companies: [{ id: 'company-1', name: 'Northstar Labs', sourceOrder: 0 }],
     projects: [
       {
         id: 'proj-1',
@@ -374,7 +375,7 @@ export function buildFullPortfolioDocument(): PortfolioDocument {
     ],
     theme: { templateId: DEFAULT_TEMPLATE_ID, mode: 'system', accent: 'default' },
     seo: { title: null, description: null, indexable: true },
-    source: { kind: 'resume-import', resumeUploadId: 'upload-fixture' },
+    source: { kind: 'resume-import', resumeUploadId: 'upload-fixture', pageOrder: null },
   };
 }
 

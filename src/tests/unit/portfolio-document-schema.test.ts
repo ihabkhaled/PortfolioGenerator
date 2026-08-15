@@ -365,6 +365,7 @@ describe('createEmptyPortfolioDocument', () => {
     expect(createEmptyPortfolioDocument('Jane').source).toEqual({
       kind: 'manual',
       resumeUploadId: null,
+      pageOrder: null,
     });
   });
 

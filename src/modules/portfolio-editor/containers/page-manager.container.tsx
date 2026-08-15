@@ -19,6 +19,17 @@ export function PageManagerContainer(props: Readonly<PageManagerProps>): ReactEl
   const [slug, setSlug] = useState('');
   const [title, setTitle] = useState('');
   const [navLabel, setNavLabel] = useState('');
+  const orderedPages =
+    props.importedPageOrder === undefined || props.importedPageOrder === null
+      ? props.document.pages
+      : props.document.pages.toSorted((left, right) => {
+          const leftRank = props.importedPageOrder?.indexOf(left.slug) ?? -1;
+          const rightRank = props.importedPageOrder?.indexOf(right.slug) ?? -1;
+          return (
+            (leftRank < 0 ? Number.MAX_SAFE_INTEGER : leftRank) -
+            (rightRank < 0 ? Number.MAX_SAFE_INTEGER : rightRank)
+          );
+        });
 
   function handleCreate(event: SyntheticEvent<HTMLFormElement>): void {
     event.preventDefault();
@@ -94,7 +105,7 @@ export function PageManagerContainer(props: Readonly<PageManagerProps>): ReactEl
         <Button type="submit">{t('pages.add')}</Button>
       </form>
       <ul className={editorClasses.collection}>
-        {props.document.pages.map((page, index) => (
+        {orderedPages.map((page, index) => (
           <li key={page.id} className={editorClasses.entry}>
             <EditorDisclosure
               id={`editor-page-${page.id}`}

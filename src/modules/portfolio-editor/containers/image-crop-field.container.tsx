@@ -20,7 +20,7 @@ import {
   IMAGE_CROP_OUTPUT_MIME_TYPE,
   IMAGE_CROP_OUTPUT_QUALITY,
 } from '../constants/image-crop.constants';
-import { zoomAroundViewportCenter } from '../helpers/image-crop-geometry.helper';
+import { clampImageOffset, zoomAroundViewportCenter } from '../helpers/image-crop-geometry.helper';
 import type { ImageCropFieldProps, ImageCropPoint, ImageCropSize } from '../types/image-crop.types';
 
 function resolveImageBaseScale(
@@ -128,13 +128,11 @@ export function ImageCropFieldContainer(props: Readonly<ImageCropFieldProps>): R
       height: naturalSize.height * baseScale * scale,
     };
     const bounds = viewport.getBoundingClientRect();
-    const minX = Math.min(0, bounds.width - rendered.width);
-    const minY = Math.min(0, bounds.height - rendered.height);
-
-    return {
-      x: Math.min(0, Math.max(minX, candidate.x)),
-      y: Math.min(0, Math.max(minY, candidate.y)),
-    };
+    return clampImageOffset({
+      offset: candidate,
+      viewport: { width: bounds.width, height: bounds.height },
+      rendered,
+    });
   }
 
   function handleFileChosen(file: File): void {
@@ -269,7 +267,7 @@ export function ImageCropFieldContainer(props: Readonly<ImageCropFieldProps>): R
       sourceHeight,
       0,
       0,
-      outputWidth,
+      canvas.width,
       canvas.height,
     );
 

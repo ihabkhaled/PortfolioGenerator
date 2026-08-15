@@ -87,7 +87,7 @@ function buildVersion1Document(): Record<string, unknown> {
     ],
     theme: { templateId: 'reference-classic-v1', mode: 'system', accent: 'default' },
     seo: { title: null, description: null, indexable: true },
-    source: { kind: 'manual', resumeUploadId: null },
+    source: { kind: 'manual', resumeUploadId: null, pageOrder: null },
   };
 }
 

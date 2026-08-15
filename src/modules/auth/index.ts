@@ -10,6 +10,7 @@
 export { CredentialForm } from './components/credential-form.component';
 export { PasswordRecoveryForm } from './components/password-recovery-form.component';
 export { authClasses } from './constants/auth-style.constants';
+export { AUTH_NOTICE_KEYS } from './constants/auth.constants';
 export {
   passwordResetRequestSchema,
   passwordResetSchema,

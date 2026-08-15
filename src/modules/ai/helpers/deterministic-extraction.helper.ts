@@ -385,6 +385,34 @@ export function parseDeterministicResume(resumeText: string): ResumeExtractionRe
   const experience = parseExperience(sectionLines(sections, 'experience'));
   const summaryLines = sectionLines(sections, 'summary');
   const warnings = [...experience.warnings];
+  for (const heading of ['testimonials', 'gallery', 'attachments', 'downloads', 'custom']) {
+    if (sections.some((section) => section.heading === heading)) {
+      warnings.push({
+        code: WARNING_CODES.unsupportedContent,
+        path: `sections.${heading}`,
+        message: `The ${heading} section was found but is not imported; review it manually.`,
+      });
+    }
+  }
+  const pageOrder = [''];
+  const observedSectionPages: Record<string, string> = {
+    experience: 'experience',
+    projects: 'projects',
+    skills: 'skills',
+    summary: 'about',
+    education: 'about',
+    courses: 'about',
+    certifications: 'about',
+    awards: 'about',
+    publications: 'about',
+    volunteering: 'about',
+    interests: 'about',
+  };
+  for (const section of sections) {
+    const page = observedSectionPages[section.heading];
+    if (page !== undefined && !pageOrder.includes(page)) pageOrder.push(page);
+  }
+  if (findEmail(resumeText) !== null) pageOrder.push('contact');
 
   if (headline === null) {
     warnings.push({
@@ -409,6 +437,7 @@ export function parseDeterministicResume(resumeText: string): ResumeExtractionRe
     },
     links: findUrls(resumeText).map((url) => ({ kind: 'link', url })),
     experience: experience.entries,
+    pageOrder,
     projects: [],
     skills: [...parseSkills(sectionLines(sections, 'skills'))],
     softSkills: [],

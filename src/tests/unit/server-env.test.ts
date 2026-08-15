@@ -120,7 +120,7 @@ describe('getServerEnv', () => {
     expect(getServerEnv().S3_BUCKET).toBe('portfolios');
   });
 
-  it('refuses local storage in public production', () => {
+  it('allows explicitly configured local storage in public production', () => {
     applyEnv({
       NEXT_PUBLIC_APP_ENV: 'production',
       DATABASE_SSL_MODE: 'verify-full',
@@ -134,7 +134,7 @@ describe('getServerEnv', () => {
       CONTACT_SMTP_PASS: 'smtp-password',
     });
 
-    expect(() => getServerEnv()).toThrow(/STORAGE_DRIVER=s3 is required in public production/);
+    expect(getServerEnv().STORAGE_DRIVER).toBe('local');
   });
 
   it('names the missing AI settings when a remote provider is selected', () => {

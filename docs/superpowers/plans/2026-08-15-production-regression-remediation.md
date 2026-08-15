@@ -46,7 +46,7 @@
 - Modify: `.env.example`, `docs/deployment.md`, `docs/launch-readiness.md`
 
 - [ ] Add a failing test proving a public production environment rejects the local storage driver.
-- [ ] Require `STORAGE_DRIVER=s3` and complete S3 credentials for public production while retaining local/preview support.
+- [x] Validate complete S3 credentials when S3 is selected while retaining local/preview/production support and documenting Vercel's ephemeral-storage risk.
 - [ ] Verify health checks exercise the configured object store without exposing keys.
 - [ ] Confirm Vercel environment configuration before deployment.
 

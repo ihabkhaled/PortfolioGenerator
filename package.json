@@ -106,7 +106,7 @@
     "tailwind-merge": "^3.6.0",
     "tailwindcss": "^4.3.3",
     "typescript": "^7.0.2",
-    "unpdf": "^1.8.0",
+    "unpdf": "^1.8.1",
     "word-extractor": "^1.0.4",
     "zod": "^4.4.3"
   },

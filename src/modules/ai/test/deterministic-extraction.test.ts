@@ -279,6 +279,19 @@ describe('parseDeterministicResume', () => {
     expect(result.identity.militaryStatus).toBeNull();
   });
 
+  it('reports the recognised sections it has no parser for instead of dropping them', () => {
+    const result = parseDeterministicResume(
+      'Amina Rahman\nEngineer\n\nEducation\nUniversity of Lisbon\n\nLanguages\nPortuguese',
+    );
+
+    expect(result.education).toEqual([]);
+    expect(result.languages).toEqual([]);
+    expect(result.warnings.filter((warning) => warning.code === 'UNSUPPORTED_CONTENT')).toEqual([
+      expect.objectContaining({ path: 'sections.education' }),
+      expect.objectContaining({ path: 'sections.languages' }),
+    ]);
+  });
+
   it('separates sensitive values that share one pipe-separated line', () => {
     const result = parseDeterministicResume(
       'Amina Rahman\nEngineer\nMilitary status: Completed | Nationality: Egyptian',

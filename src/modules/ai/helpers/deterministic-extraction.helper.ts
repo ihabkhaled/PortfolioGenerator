@@ -385,7 +385,22 @@ export function parseDeterministicResume(resumeText: string): ResumeExtractionRe
   const experience = parseExperience(sectionLines(sections, 'experience'));
   const summaryLines = sectionLines(sections, 'summary');
   const warnings = [...experience.warnings];
-  for (const heading of ['testimonials', 'gallery', 'attachments', 'downloads', 'custom']) {
+  // Every heading this parser recognises but has no parser for. Saying so is
+  // the difference between a reviewer seeing "education was not imported" and
+  // publishing a CV whose education silently vanished.
+  const unimportedHeadings = [
+    'projects',
+    'education',
+    'certifications',
+    'languages',
+    'awards',
+    'testimonials',
+    'gallery',
+    'attachments',
+    'custom',
+  ];
+
+  for (const heading of unimportedHeadings) {
     if (sections.some((section) => section.heading === heading)) {
       warnings.push({
         code: WARNING_CODES.unsupportedContent,

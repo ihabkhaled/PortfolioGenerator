@@ -76,7 +76,8 @@
     },
     "eslint-plugin-jsx-a11y": {
       "eslint": "$eslint"
-    }
+    },
+    "deepmerge-ts": "^8.0.0"
   },
   "dependencies": {
     "@ai-sdk/openai": "^4.0.41",

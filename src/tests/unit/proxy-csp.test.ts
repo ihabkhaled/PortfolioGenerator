@@ -53,12 +53,17 @@ describe('proxy content security policy', () => {
     }
   });
 
-  it('allows PayPal checkout popups only on the localized settings route', () => {
+  // Settings is reached by client-side navigation, which keeps the policy of
+  // whichever dashboard document loaded first — so the whole subtree has to
+  // carry the popup allowance for the PayPal window to survive.
+  it('allows PayPal checkout popups across the localized dashboard subtree', () => {
     expect(resolveCrossOriginOpenerPolicy('/dashboard/settings')).toBe('same-origin-allow-popups');
     expect(resolveCrossOriginOpenerPolicy('/fr/dashboard/settings')).toBe(
       'same-origin-allow-popups',
     );
-    expect(resolveCrossOriginOpenerPolicy('/dashboard')).toBe('same-origin');
+    expect(resolveCrossOriginOpenerPolicy('/dashboard')).toBe('same-origin-allow-popups');
+    expect(resolveCrossOriginOpenerPolicy('/')).toBe('same-origin');
+    expect(resolveCrossOriginOpenerPolicy('/managawy')).toBe('same-origin');
   });
 
   it('the managawy policy has no AdSense or PayPal allowances', () => {

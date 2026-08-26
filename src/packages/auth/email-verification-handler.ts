@@ -32,8 +32,11 @@ function isSuccessfulVerificationResponse(request: Request, response: Response):
 }
 
 export async function handleEmailVerificationRequest(request: Request): Promise<Response> {
+  // This route serves email verification and nothing else, so a request that
+  // carries no token cannot verify anything. Rejecting here keeps the
+  // single-use claim on the only path that reaches Better Auth.
   const token = new URL(request.url).searchParams.get('token');
-  if (!token) return createAuthRouteHandlers().GET(request);
+  if (!token) return rejected();
 
   let claim;
   try {

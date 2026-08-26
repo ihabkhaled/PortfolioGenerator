@@ -15,6 +15,8 @@ import { Button, cn, Input, Select } from '@/packages/ui-primitives';
 
 import { editorClasses } from '../constants/editor-style.constants';
 import {
+  IMAGE_CROP_INPUT_ACCEPT,
+  IMAGE_CROP_INPUT_MIME_TYPES,
   IMAGE_CROP_MAX_ZOOM,
   IMAGE_CROP_MIN_ZOOM,
   IMAGE_CROP_OUTPUT_MIME_TYPE,
@@ -136,6 +138,10 @@ export function ImageCropFieldContainer(props: Readonly<ImageCropFieldProps>): R
   }
 
   function handleFileChosen(file: File): void {
+    // Only a decodable image reaches the preview, so a blob URL is never made
+    // for a file the crop surface cannot render.
+    if (!IMAGE_CROP_INPUT_MIME_TYPES.includes(file.type)) return;
+
     setPendingFile(file);
     setObjectUrl((previous) => {
       if (previous !== null) {
@@ -295,6 +301,7 @@ export function ImageCropFieldContainer(props: Readonly<ImageCropFieldProps>): R
         {...inputProps}
         ref={inputRef}
         type="file"
+        accept={IMAGE_CROP_INPUT_ACCEPT}
         onChange={(event) => {
           const file = event.target.files?.[0];
 

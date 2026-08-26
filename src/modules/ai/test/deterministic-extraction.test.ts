@@ -279,6 +279,15 @@ describe('parseDeterministicResume', () => {
     expect(result.identity.militaryStatus).toBeNull();
   });
 
+  it('separates sensitive values that share one pipe-separated line', () => {
+    const result = parseDeterministicResume(
+      'Amina Rahman\nEngineer\nMilitary status: Completed | Nationality: Egyptian',
+    );
+
+    expect(result.identity.militaryStatus).toBe('Completed');
+    expect(result.identity.nationality).toBe('Egyptian');
+  });
+
   it('treats an explicitly labelled but empty sensitive value as absent', () => {
     const result = parseDeterministicResume(
       'Amina Rahman\nEngineer\nNationality:   \nMilitary status:',

@@ -36,8 +36,10 @@ export function createLocalObjectStorage(root: string): ObjectStorage {
     async putPrivate(key, body) {
       const target = resolveKeyPath(key);
 
-      await mkdir(path.dirname(target), { recursive: true });
-      await writeFile(target, body);
+      // The root can live under the shared system temp directory (Vercel), so
+      // owner-only modes keep other users on the host out of the CV store.
+      await mkdir(path.dirname(target), { recursive: true, mode: 0o700 });
+      await writeFile(target, body, { mode: 0o600 });
     },
 
     async getPrivate(key) {

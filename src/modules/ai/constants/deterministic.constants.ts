@@ -1,6 +1,13 @@
 export const DETERMINISTIC_PROVIDER_NAME = 'deterministic';
 
 /**
+ * Resume headers routinely pack several labelled facts onto one line:
+ * `Military status: Completed | Nationality: Egyptian`. Splitting on these
+ * keeps each label's value from swallowing the ones after it.
+ */
+export const IDENTITY_SEGMENT_SEPARATORS = /[|•·]/u;
+
+/**
  * Section headings the offline parser recognises, lowercased.
  *
  * A real CV parser would need far more than this. The purpose here is a

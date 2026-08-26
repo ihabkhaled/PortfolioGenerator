@@ -31,6 +31,9 @@ self.addEventListener('activate', (event) => {
 });
 
 self.addEventListener('message', (event) => {
+  // Only this origin may drive the worker's lifecycle; a message from any other
+  // origin is not ours to act on.
+  if (event.origin !== '' && event.origin !== self.location.origin) return;
   if (event.data?.type === 'SKIP_WAITING') void self.skipWaiting();
 });
 

@@ -1,10 +1,10 @@
 import type { ComponentProps, ReactElement, ReactNode } from 'react';
 
-import { isSafeExternalUrl } from '@/shared/utils/safe-url.util';
+import { normalizeSafeUrl } from '@/shared/utils/safe-url.util';
 
 export interface ExternalLinkProps extends Omit<
   ComponentProps<'a'>,
-  'href' | 'rel' | 'target' | 'children'
+  'href' | 'rel' | 'target' | 'children' | 'dangerouslySetInnerHTML'
 > {
   readonly href: string;
   readonly children: ReactNode;
@@ -23,12 +23,16 @@ export interface ExternalLinkProps extends Omit<
 export function ExternalLink(props: Readonly<ExternalLinkProps>): ReactElement | null {
   const { href, children, fallback = null, ...rest } = props;
 
-  if (!isSafeExternalUrl(href)) {
+  // The anchor carries the canonical form the policy returned, never the raw
+  // input: the rendered value is the sanitizer's own output.
+  const safeHref = normalizeSafeUrl(href);
+
+  if (safeHref === null) {
     return fallback;
   }
 
   return (
-    <a href={href} target="_blank" rel="noopener noreferrer nofollow" {...rest}>
+    <a href={safeHref} target="_blank" rel="noopener noreferrer nofollow" {...rest}>
       {children}
     </a>
   );

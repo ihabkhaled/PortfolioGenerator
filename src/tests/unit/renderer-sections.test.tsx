@@ -387,7 +387,9 @@ describe('the fact-list bands', () => {
       config: { title: null },
     });
 
-    expect(screen.getByRole('link', { name: /example\.com/ })).toBeInTheDocument();
+    expect(
+      screen.getByRole('link', { name: /^example\.com\/credential\/cka$/u }),
+    ).toBeInTheDocument();
   });
 
   it('renders an education entry that has no link', () => {

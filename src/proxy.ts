@@ -35,6 +35,19 @@ function isManagawyPath(pathname: string): boolean {
 }
 
 /**
+ * CSP and COOP travel with the document, not the route. Settings is reached by
+ * client-side navigation from elsewhere in the dashboard, so the policy in
+ * force while PayPal renders is whichever dashboard document loaded first —
+ * scoping the checkout origins to that whole subtree is what stops the buttons
+ * rendering as blocked images inside a blocked frame.
+ */
+function isDashboardPath(pathname: string): boolean {
+  const resolved = resolveLocalePath(pathname).pathname;
+
+  return resolved === ROUTE_PATHS.dashboard || resolved.startsWith(`${ROUTE_PATHS.dashboard}/`);
+}
+
+/**
  * Per-request nonce-based Content-Security-Policy. Next.js reads the CSP from
  * the forwarded request headers and stamps the nonce onto its inline scripts.
  * The remaining security headers are static and live in next.config.ts.
@@ -90,9 +103,7 @@ export function buildContentSecurityPolicy(
 export function resolveCrossOriginOpenerPolicy(
   pathname: string,
 ): 'same-origin' | 'same-origin-allow-popups' {
-  return resolveLocalePath(pathname).pathname === ROUTE_PATHS.dashboardSettings
-    ? 'same-origin-allow-popups'
-    : 'same-origin';
+  return isDashboardPath(pathname) ? 'same-origin-allow-popups' : 'same-origin';
 }
 
 export function buildLocaleRewriteUrl(requestUrl: string | URL, pathname: string): URL {
@@ -192,7 +203,7 @@ export default async function proxy(request: NextRequest): Promise<NextResponse>
   const contentSecurityPolicy = buildContentSecurityPolicy(
     nonce,
     isDevelopmentEnvironment,
-    resolvedPath.pathname === ROUTE_PATHS.dashboardSettings,
+    isDashboardPath(request.nextUrl.pathname),
     isManagawyPath(request.nextUrl.pathname),
   );
 

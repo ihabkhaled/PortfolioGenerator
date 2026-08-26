@@ -145,7 +145,10 @@ test.describe('account recovery', () => {
     await page.getByLabel('New password').fill('a replacement password');
     await page.getByRole('button', { name: 'Save new password' }).click();
 
-    await expect(page.getByRole('alert')).toBeVisible();
+    // Next's route announcer is an empty `role="alert"` that appears once a
+    // client navigation has run, so the assertion has to name the alert that
+    // actually carries a message rather than whichever one matches first.
+    await expect(page.getByRole('alert').filter({ hasText: /\S/u })).toBeVisible();
   });
 });
 

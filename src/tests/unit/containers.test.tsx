@@ -282,8 +282,13 @@ describe('PortfolioEditorContainer', () => {
     renderEditor();
 
     const location = requireElement(screen.getAllByLabelText('Location')[0]);
-    await userEvent.clear(location);
-    await userEvent.type(location, 'Lisbon, Portugal!');
+    const user = userEvent.setup();
+
+    // Pasting keeps this to one re-render of the editor and its live preview;
+    // typing the string out was the slowest test in the file.
+    await user.clear(location);
+    await user.click(location);
+    await user.paste('Lisbon, Portugal!');
 
     expect(screen.getAllByText('Unsaved changes').length).toBeGreaterThan(0);
   });
@@ -416,13 +421,18 @@ describe('every control in the editor is wired to the draft', () => {
     renderEditor();
 
     const phone = screen.getByLabelText('Phone');
-    await userEvent.clear(phone);
-    await userEvent.type(phone, '2010');
+    const user = userEvent.setup();
+
+    // Pasting rather than typing: each keystroke re-renders the editor and its
+    // live preview, which is what pushed this past the timeout on CI.
+    await user.clear(phone);
+    await user.click(phone);
+    await user.paste('2010');
 
     const checkboxes = screen.getAllByRole('checkbox');
 
-    await userEvent.click(requireElement(checkboxes[0]));
-    await userEvent.click(requireElement(checkboxes[1]));
+    await user.click(requireElement(checkboxes[0]));
+    await user.click(requireElement(checkboxes[1]));
 
     expect(phone).toHaveValue('2010');
   });

@@ -208,19 +208,27 @@ test('the mobile install prompt leaves the dashboard Import CV action reachable 
   await createPortfolio(page, 'PWA obstruction portfolio');
   await page.goto('/dashboard');
 
-  await page.evaluate(() => {
-    const EventConstructor = Reflect.get(globalThis, 'Event');
-    const event = new EventConstructor('beforeinstallprompt', { cancelable: true }) as Event & {
-      prompt: () => Promise<void>;
-      userChoice: Promise<{ outcome: 'accepted' | 'dismissed' }>;
-    };
-    event.prompt = () => Promise.resolve();
-    event.userChoice = Promise.resolve({ outcome: 'dismissed' });
-    globalThis.dispatchEvent(event);
-  });
-
   const prompt = page.locator('[data-fixed-surface="pwa"]');
-  await expect(prompt).toBeVisible();
+
+  // The listener is attached in an effect, so an event dispatched before
+  // hydration lands on nobody. Re-dispatching until the surface appears is
+  // what makes this independent of how long hydration takes on CI.
+  await expect
+    .poll(async () => {
+      await page.evaluate(() => {
+        const EventConstructor = Reflect.get(globalThis, 'Event');
+        const event = new EventConstructor('beforeinstallprompt', { cancelable: true }) as Event & {
+          prompt: () => Promise<void>;
+          userChoice: Promise<{ outcome: 'accepted' | 'dismissed' }>;
+        };
+        event.prompt = () => Promise.resolve();
+        event.userChoice = Promise.resolve({ outcome: 'dismissed' });
+        globalThis.dispatchEvent(event);
+      });
+
+      return prompt.isVisible();
+    })
+    .toBe(true);
   const importCv = page.getByRole('link', { name: 'Import CV' });
   await expect(importCv).toBeVisible();
   await page.evaluate(() => {

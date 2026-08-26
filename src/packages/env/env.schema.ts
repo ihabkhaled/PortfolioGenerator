@@ -122,7 +122,14 @@ export const serverEnvSchema = z.object({
   EXTRACTION_MAX_INPUT_CHARS: positiveInt.default(60_000),
   QUOTA_IMPORTS_PER_USER_PER_DAY: positiveInt.default(5),
   QUOTA_AI_OPERATIONS_PER_USER_PER_DAY: positiveInt.default(20),
-  QUOTA_UPLOADS_PER_IP_PER_HOUR: positiveInt.default(20),
+  /*
+   * Anti-abuse only, not a product limit: the per-user daily quotas above are
+   * what price the feature. 20/hour was low enough to stop a real person —
+   * anyone re-importing while editing, or a whole office behind one NAT
+   * address — so it is a hundred, which still costs a scripted attacker far
+   * more addresses than a budget drain is worth.
+   */
+  QUOTA_UPLOADS_PER_IP_PER_HOUR: positiveInt.default(100),
   BUDGET_MAX_AI_OPERATIONS_PER_HOUR: positiveInt.default(200),
   BUDGET_MAX_AI_OPERATIONS_PER_DAY: positiveInt.default(2000),
 

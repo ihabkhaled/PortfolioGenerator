@@ -80,12 +80,12 @@
     "deepmerge-ts": "^8.0.0"
   },
   "dependencies": {
-    "@ai-sdk/openai": "^4.0.41",
+    "@ai-sdk/openai": "^4.0.51",
     "@prisma/adapter-pg": "^7.9.1",
     "@prisma/client": "^7.9.1",
     "@sparticuz/chromium": "^149.0.0",
     "@tailwindcss/postcss": "^4.3.3",
-    "ai": "^7.0.66",
+    "ai": "^7.0.84",
     "aws4fetch": "^1.0.20",
     "better-auth": "^1.6.26",
     "class-variance-authority": "^0.7.1",

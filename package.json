@@ -81,8 +81,8 @@
   },
   "dependencies": {
     "@ai-sdk/openai": "^4.0.51",
-    "@prisma/adapter-pg": "^7.9.1",
-    "@prisma/client": "^7.9.1",
+    "@prisma/adapter-pg": "^7.10.0",
+    "@prisma/client": "^7.10.0",
     "@sparticuz/chromium": "^149.0.0",
     "@tailwindcss/postcss": "^4.3.3",
     "ai": "^7.0.84",
@@ -98,7 +98,7 @@
     "pdf-lib": "^1.17.1",
     "playwright-core": "^1.62.1",
     "postcss": "^8.5.26",
-    "prisma": "^7.9.1",
+    "prisma": "^7.10.0",
     "qrcode": "^1.5.4",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
@@ -109,7 +109,7 @@
     "typescript": "^7.0.2",
     "unpdf": "^1.8.1",
     "word-extractor": "^1.0.4",
-    "zod": "^4.4.3"
+    "zod": "^4.5.2"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.13.0",

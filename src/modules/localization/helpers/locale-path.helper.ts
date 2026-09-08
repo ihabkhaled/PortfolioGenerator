@@ -1,3 +1,5 @@
+import { hasValidSlugShape } from '@/shared/utils/slug-shape.util';
+
 import {
   APP_LOCALES,
   DEFAULT_LOCALE,
@@ -20,7 +22,19 @@ export function isPublicPortfolioCandidatePath(pathname: string): boolean {
   const segments = canonical.split('/').filter(Boolean);
   if (segments[0] === 'portfolios' && segments[1] !== undefined) return true;
   const firstSegment = canonical.split('/').find(Boolean);
-  return firstSegment !== undefined && !PLATFORM_ROUTE_SEGMENTS.includes(firstSegment);
+  if (firstSegment === undefined || PLATFORM_ROUTE_SEGMENTS.includes(firstSegment)) return false;
+
+  /*
+   * A slug is lowercase letters, digits and single hyphens, so a first segment
+   * that cannot be a slug cannot name a portfolio and must not be looked up.
+   *
+   * The list above enumerates the platform paths that were known when it was
+   * written, and every asset added since — sw.js, the PWA icons — fell through
+   * it into a database query per request for a slug that could never exist.
+   * Asking the slug rule instead of extending a list is what stops the next
+   * asset doing the same.
+   */
+  return hasValidSlugShape(firstSegment);
 }
 
 export function resolveLocalePath(pathname: string): ResolvedLocalePath {

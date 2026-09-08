@@ -76,4 +76,28 @@ describe('locale routing', () => {
     expect(isPublicPortfolioCandidatePath('/ar/sign-in')).toBe(false);
     expect(isPublicPortfolioCandidatePath('/')).toBe(false);
   });
+
+  /**
+   * Each of these was observed in production as a database query for a
+   * portfolio slug that could never exist: the proxy's matcher excludes
+   * _next/static but not the service worker or the PWA icons, and the platform
+   * segment list did not name them either.
+   */
+  it.each(['/sw.js', '/icon-512.png', '/apple-touch-icon.png', '/icon-maskable-512.png'])(
+    'does not treat the asset %s as a portfolio slug',
+    (path) => {
+      expect(isPublicPortfolioCandidatePath(path)).toBe(false);
+    },
+  );
+
+  it('rejects a first segment that could not be a slug', () => {
+    expect(isPublicPortfolioCandidatePath('/Not-A-Slug')).toBe(false);
+    expect(isPublicPortfolioCandidatePath('/double--hyphen')).toBe(false);
+    expect(isPublicPortfolioCandidatePath('/-leading')).toBe(false);
+  });
+
+  it('still recognizes a real slug, including under a locale prefix', () => {
+    expect(isPublicPortfolioCandidatePath('/ihab-regression-20260815')).toBe(true);
+    expect(isPublicPortfolioCandidatePath('/ar/ihab-regression-20260815')).toBe(true);
+  });
 });

@@ -79,6 +79,22 @@ export function isEmailNotVerifiedError(error: unknown): boolean {
   return error instanceof APIError && error.body?.code === BASE_ERROR_CODES.EMAIL_NOT_VERIFIED.code;
 }
 
+/**
+ * A genuinely taken address, as opposed to every other way sign-up can fail.
+ *
+ * Worth its own predicate because the alternative is a bare catch reporting
+ * "that email is taken" for a database fault, a rejected verification email or
+ * a schema the library has moved past — which is how a missing column once
+ * read as a credentials problem and stayed hidden.
+ */
+export function isUserAlreadyExistsError(error: unknown): boolean {
+  return (
+    error instanceof APIError &&
+    (error.body?.code === BASE_ERROR_CODES.USER_ALREADY_EXISTS.code ||
+      error.body?.code === BASE_ERROR_CODES.USER_ALREADY_EXISTS_USE_ANOTHER_EMAIL.code)
+  );
+}
+
 export function isSessionNotFreshError(error: unknown): boolean {
   return error instanceof APIError && error.body?.code === BASE_ERROR_CODES.SESSION_NOT_FRESH.code;
 }

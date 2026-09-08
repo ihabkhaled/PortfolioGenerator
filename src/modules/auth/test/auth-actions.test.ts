@@ -8,6 +8,7 @@ const mocks = vi.hoisted(() => ({
   synchronizePreferences: vi.fn(),
   getUserAccountStatus: vi.fn(),
   signOutCurrentSession: vi.fn(),
+  isUserAlreadyExistsError: vi.fn(),
   redirect: vi.fn((path: string) => {
     throw new Error(`redirect:${path}`);
   }),
@@ -20,9 +21,10 @@ vi.mock('@/modules/account/server', () => ({
 vi.mock('@/packages/auth/server', () => ({
   getAuth: () => ({ api: { signInEmail: mocks.signInEmail, signUpEmail: mocks.signUpEmail } }),
   isEmailNotVerifiedError: () => false,
+  isUserAlreadyExistsError: mocks.isUserAlreadyExistsError,
 }));
 vi.mock('@/packages/logger', () => ({
-  logger: { info: vi.fn(), warn: vi.fn() },
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn() },
 }));
 vi.mock('@/packages/navigation', () => ({ appRedirect: mocks.redirect }));
 vi.mock('../repositories/user-account.repository', () => ({
@@ -89,6 +91,42 @@ describe('verification-required sign-up', () => {
     await expect(
       signUpAction({ status: 'idle', error: null, notice: null }, validSignUpForm()),
     ).rejects.toThrow('redirect:/sign-in?notice=verification-email-sent');
+  });
+});
+
+/**
+ * The bug this locks down: a bare catch reported every sign-up failure —
+ * including the schema error that meant no account row was ever written — as
+ * "an account already exists for that email", which is how a real fault stayed
+ * disguised as a credentials problem.
+ */
+describe('sign-up failure reporting', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it('reports emailTaken only for a genuine duplicate address', async () => {
+    mocks.signUpEmail.mockRejectedValue(new Error('duplicate'));
+    mocks.isUserAlreadyExistsError.mockReturnValue(true);
+
+    const result = await signUpAction(
+      { status: 'idle', error: null, notice: null },
+      validSignUpForm(),
+    );
+
+    expect(result).toMatchObject({ status: 'error', error: 'errors.emailTaken' });
+  });
+
+  it('reports every other failure as unknown rather than as a taken email', async () => {
+    mocks.signUpEmail.mockRejectedValue(new Error('column "issuer" does not exist'));
+    mocks.isUserAlreadyExistsError.mockReturnValue(false);
+
+    const result = await signUpAction(
+      { status: 'idle', error: null, notice: null },
+      validSignUpForm(),
+    );
+
+    expect(result).toMatchObject({ status: 'error', error: 'errors.unknown' });
   });
 });
 

@@ -3,7 +3,7 @@
 import { headers } from 'next/headers';
 
 import { synchronizeOwnedAccountPreferences } from '@/modules/account/server';
-import { getAuth, isEmailNotVerifiedError } from '@/packages/auth/server';
+import { getAuth, isEmailNotVerifiedError, isUserAlreadyExistsError } from '@/packages/auth/server';
 import type { AuthInstance } from '@/packages/auth/server';
 import { toAppRoute } from '@/packages/link';
 import { logger } from '@/packages/logger';
@@ -179,13 +179,23 @@ export async function signUpAction(
       },
       headers: await headers(),
     });
-  } catch {
-    // better-auth reports a duplicate address as a generic failure. Telling
-    // the user their email is taken is unavoidable on a sign-up form — they
-    // need to know to sign in instead — but it is the only place we do it.
-    logger.info('auth.sign_up.rejected');
+  } catch (error) {
+    // Only a genuinely taken address is reported as one. Everything else — a
+    // database fault, a verification email that would not send, a library that
+    // has moved past this schema — is a server fault, and calling it "email
+    // taken" tells the one person who could report it to go away and try a
+    // different address.
+    if (isUserAlreadyExistsError(error)) {
+      logger.info('auth.sign_up.rejected', { reason: 'email-taken' });
 
-    return { status: 'error', error: AUTH_ERROR_KEYS.emailTaken, notice: null };
+      return { status: 'error', error: AUTH_ERROR_KEYS.emailTaken, notice: null };
+    }
+
+    logger.error('auth.sign_up.failed', {
+      reason: error instanceof Error ? `${error.name}: ${error.message}` : 'unknown error',
+    });
+
+    return { status: 'error', error: AUTH_ERROR_KEYS.unknown, notice: null };
   }
 
   // A null token means verification is required and no session was created —

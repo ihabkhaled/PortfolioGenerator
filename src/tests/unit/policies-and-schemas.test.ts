@@ -6,7 +6,7 @@ import {
   portfolioDeletionSchema,
 } from '@/modules/account';
 import { combineHealth, toHttpStatus, type HealthCheck } from '@/modules/admin-health';
-import { isRetryable, shouldEscalate, toAiRunStatus } from '@/modules/ai';
+import { isRetryable, toAiRunStatus } from '@/modules/ai';
 import { signInSchema, signUpSchema } from '@/modules/auth';
 import { saveDraftSchema } from '@/modules/portfolio-editor';
 import {
@@ -87,21 +87,6 @@ describe('isRetryable', () => {
 
   it.each(['invalid-output', 'timeout', 'provider-error'] as const)('retries %s', (code) => {
     expect(isRetryable(code)).toBe(true);
-  });
-});
-
-describe('shouldEscalate', () => {
-  it('escalates to the stronger model after the schema was missed once', () => {
-    expect(shouldEscalate('invalid-output', 1)).toBe(true);
-  });
-
-  it('does not escalate on the first attempt', () => {
-    expect(shouldEscalate('invalid-output', 0)).toBe(false);
-  });
-
-  // A timeout is not a reasoning problem; a costlier model does not fix it.
-  it('does not escalate a provider outage', () => {
-    expect(shouldEscalate('provider-error', 3)).toBe(false);
   });
 });
 

@@ -3,7 +3,7 @@
 export {
   AI_OPERATIONS,
   EXTRACTION_LIMITS,
-  MAX_EXTRACTION_ATTEMPTS,
+  EXTRACTION_CHAIN_BUDGET_MS,
   WARNING_CODES,
 } from './constants/extraction.constants';
 export { RESUME_EXTRACTION_SYSTEM_PROMPT } from './constants/extraction-prompt.constants';
@@ -20,7 +20,7 @@ export {
   mapSkills,
   normalizeMonth,
 } from './mappers/extraction-to-document.mapper';
-export { isRetryable, shouldEscalate, toAiRunStatus } from './policies/ai-run-status.policy';
+export { isRetryable, toAiRunStatus } from './policies/ai-run-status.policy';
 export { createDeterministicAiProvider } from './providers/deterministic-ai.provider';
 export { resumeExtractionSchema } from './schemas/resume-extraction.schema';
 export type {

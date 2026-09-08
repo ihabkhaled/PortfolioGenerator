@@ -42,7 +42,15 @@ export const AI_OPERATIONS = {
  * the answer is "show the user what we have and let them fix it" — a fourth
  * attempt has never been observed to help, and it is billed every time.
  */
-export const MAX_EXTRACTION_ATTEMPTS = 3;
+/**
+ * Wall-clock ceiling on one import's walk down the model chain.
+ *
+ * Four minutes, under the platform's own request limit: a nine-model chain
+ * where every model times out would otherwise outlive the request and return
+ * nothing at all, which is a worse answer than the failure of the last model
+ * actually tried.
+ */
+export const EXTRACTION_CHAIN_BUDGET_MS = 240_000;
 
 /** Warning codes the editor knows how to explain next to a field. */
 export const WARNING_CODES = {

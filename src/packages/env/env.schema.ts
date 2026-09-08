@@ -100,6 +100,20 @@ export const serverEnvSchema = z.object({
   AI_PRIMARY_MODEL: z.string().trim().default('gpt-5-mini'),
   AI_FALLBACK_MODEL: z.string().trim().default('gpt-5'),
   /*
+   * An ordered, comma-separated list of models to try, strongest first.
+   *
+   * Supersedes the two settings above when set, which stay the default so an
+   * existing deployment keeps working untouched. A chain exists because the
+   * failures worth surviving are per-model: a model retired by the provider, a
+   * parameter one endpoint rejects, a single model's rate limit. Spreading the
+   * chain across vendors is what makes it insurance rather than decoration.
+   *
+   * Every model in it must support tool calling — extraction forces a tool
+   * call — and accept AI_MAX_OUTPUT_TOKENS, so the smallest output ceiling in
+   * the chain is the one that binds.
+   */
+  AI_MODEL_CHAIN: optionalString,
+  /*
    * Translation runs on Google AI, independently of the extraction provider.
    *
    * They are separate settings rather than one shared key because they are

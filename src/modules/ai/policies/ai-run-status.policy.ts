@@ -39,8 +39,3 @@ export function toAiRunStatus(errorCode: AiErrorCode): AiRunStatus {
 export function isRetryable(errorCode: AiErrorCode): boolean {
   return errorCode !== 'not-configured' && errorCode !== 'quota-exceeded';
 }
-
-/** Whether the next attempt should escalate to the stronger, costlier model. */
-export function shouldEscalate(errorCode: AiErrorCode, attempt: number): boolean {
-  return errorCode === 'invalid-output' && attempt >= 1;
-}

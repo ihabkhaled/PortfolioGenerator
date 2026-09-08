@@ -8,6 +8,7 @@ import { parseSchema } from '@/packages/zod';
 import { RESUME_EXTRACTION_SYSTEM_PROMPT } from '../constants/extraction-prompt.constants';
 import { MODEL_PROVIDER_NAME } from '../constants/model-provider.constants';
 import { PORTFOLIO_TRANSLATION_SYSTEM_PROMPT } from '../constants/translation-prompt.constants';
+import { resolveModelChain, selectChainModel } from '../helpers/model-chain.helper';
 import { wrapResumeText } from '../helpers/resume-envelope.helper';
 import { resumeExtractionSchema } from '../schemas/resume-extraction.schema';
 import type {
@@ -36,7 +37,10 @@ export function createModelAiProvider(): PortfolioAiProvider {
 
     async extractResume(input: ResumeExtractionInput): Promise<AiOutcome<ResumeExtractionResult>> {
       const env = getServerEnv();
-      const model = input.useFallbackModel ? env.AI_FALLBACK_MODEL : env.AI_PRIMARY_MODEL;
+      const model = selectChainModel(
+        resolveModelChain(env.AI_MODEL_CHAIN, env.AI_PRIMARY_MODEL, env.AI_FALLBACK_MODEL),
+        input.modelIndex,
+      );
 
       if (env.AI_API_KEY === undefined) {
         return {

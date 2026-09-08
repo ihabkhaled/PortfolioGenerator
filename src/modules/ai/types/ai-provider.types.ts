@@ -8,8 +8,12 @@ export type ResumeExtractionResult = z.infer<typeof resumeExtractionSchema>;
 export interface ResumeExtractionInput {
   /** Already normalized and capped; the provider does not reshape it. */
   readonly resumeText: string;
-  /** Set when a previous attempt failed validation, to select the stronger model. */
-  readonly useFallbackModel: boolean;
+  /**
+   * Position in the configured model chain. The service advances it on each
+   * retry; the provider clamps it, so a caller can never ask for a model that
+   * is not there.
+   */
+  readonly modelIndex: number;
 }
 
 export interface PortfolioTranslationInput {

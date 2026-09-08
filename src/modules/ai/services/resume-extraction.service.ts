@@ -1,10 +1,12 @@
 import 'server-only';
 
+import { getServerEnv } from '@/packages/env/server';
 import { logger } from '@/packages/logger';
 
-import { AI_OPERATIONS, MAX_EXTRACTION_ATTEMPTS } from '../constants/extraction.constants';
+import { AI_OPERATIONS, EXTRACTION_CHAIN_BUDGET_MS } from '../constants/extraction.constants';
+import { resolveModelChain } from '../helpers/model-chain.helper';
 import { mapExtractionToDocument } from '../mappers/extraction-to-document.mapper';
-import { isRetryable, shouldEscalate, toAiRunStatus } from '../policies/ai-run-status.policy';
+import { isRetryable, toAiRunStatus } from '../policies/ai-run-status.policy';
 import { recordAiRun } from '../repositories/ai-run.repository';
 import type { ExtractionRequest, ExtractionOutcome } from '../types/extraction-service.types';
 
@@ -14,25 +16,36 @@ import { getAiProvider } from './ai-provider.service';
  * One import, from normalized text to a validated draft.
  *
  * The retry shape is the cost design made concrete. A normal CV costs exactly
- * one call. A model that returns something the schema rejects earns one more
- * attempt on the stronger model — because that is the failure a bigger model
- * actually fixes. A provider that is misconfigured earns none, because it will
- * not have fixed itself a second later.
+ * one call. A failure walks the configured model chain, one model per attempt,
+ * because the failures worth surviving are per-model: output the schema
+ * rejects, a parameter one endpoint refuses, a model the provider retired, a
+ * single model's rate limit. A provider that is misconfigured earns no retry
+ * at all, because no model fixes a missing key.
+ *
+ * Bounded twice over — by the length of the chain, and by a wall-clock budget,
+ * since a chain long enough to be useful is also long enough to outlive the
+ * platform's own request limit if every model times out.
  *
  * Every attempt is recorded whether it succeeded or not. A cost-per-extraction
  * figure that only counts successes is a number that flatters us.
  */
 export async function extractResumeToDraft(request: ExtractionRequest): Promise<ExtractionOutcome> {
   const provider = getAiProvider();
+  const startedAt = Date.now();
+  const env = getServerEnv();
+  const chainLength = resolveModelChain(
+    env.AI_MODEL_CHAIN,
+    env.AI_PRIMARY_MODEL,
+    env.AI_FALLBACK_MODEL,
+  ).length;
   let attempt = 0;
   let lastErrorCode: string | null = null;
   let lastFailureReason: string | null = null;
 
-  while (attempt < MAX_EXTRACTION_ATTEMPTS) {
-    const useFallbackModel = attempt > 0;
+  while (attempt < chainLength) {
     const result = await provider.extractResume({
       resumeText: request.resumeText,
-      useFallbackModel,
+      modelIndex: attempt,
     });
 
     if (result.ok) {
@@ -48,7 +61,7 @@ export async function extractResumeToDraft(request: ExtractionRequest): Promise<
         outputUnits: result.usage.outputUnits,
         latencyMs: result.usage.latencyMs,
         retryCount: attempt,
-        fallbackUsed: useFallbackModel,
+        fallbackUsed: attempt > 0,
         errorCode: null,
       });
 
@@ -77,7 +90,7 @@ export async function extractResumeToDraft(request: ExtractionRequest): Promise<
       outputUnits: result.usage.outputUnits,
       latencyMs: result.usage.latencyMs,
       retryCount: attempt,
-      fallbackUsed: useFallbackModel,
+      fallbackUsed: attempt > 0,
       errorCode: result.errorCode,
     });
 
@@ -88,7 +101,7 @@ export async function extractResumeToDraft(request: ExtractionRequest): Promise<
       break;
     }
 
-    if (!shouldEscalate(result.errorCode, attempt) && attempt >= 1) {
+    if (Date.now() - startedAt >= EXTRACTION_CHAIN_BUDGET_MS) {
       break;
     }
 

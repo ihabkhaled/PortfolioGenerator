@@ -59,7 +59,12 @@ export function createStructuredClient(config: {
 
     try {
       const result = await generateText({
-        model: openai(request.model),
+        // `.chat()`, never the bare `openai()`: since @ai-sdk/openai v4 the
+        // default model is the Responses API, which posts to /v1/responses.
+        // "OpenAI-compatible" in the wild means the Chat Completions surface —
+        // Ollama Cloud answers /v1/responses with a 400 — so the endpoint has
+        // to be pinned rather than inherited from whatever the SDK defaults to.
+        model: openai.chat(request.model),
         system: request.systemPrompt,
         prompt: request.userPrompt,
         tools: {

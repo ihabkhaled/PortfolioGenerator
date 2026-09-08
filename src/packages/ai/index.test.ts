@@ -96,6 +96,29 @@ describe('createStructuredClient', () => {
     expect(result).toMatchObject({ ok: false, errorCode: 'provider-error' });
   });
 
+  /**
+   * The bug this locks down: @ai-sdk/openai v4 made the Responses API the
+   * default model, so the bare `openai(model)` started posting to
+   * /v1/responses. Ollama Cloud — the provider actually behind AI_BASE_URL —
+   * answers that with a 400, and every CV import failed as `provider-error`
+   * with no clue why. An OpenAI-*compatible* endpoint implements Chat
+   * Completions; the default is whatever OpenAI itself has moved to next.
+   */
+  it('calls the chat completions endpoint, not whatever the SDK defaults to', async () => {
+    generateText.mockResolvedValueOnce({
+      toolCalls: [{ input: { name: 'Amina' } }],
+      usage: { inputTokens: 5, outputTokens: 1 },
+    });
+    const client = createStructuredClient({ apiKey: 'key', baseUrl: 'https://ollama.com/v1' });
+
+    await client(buildRequest());
+
+    const [call] = generateText.mock.calls.at(-1) as [{ model: { constructor: { name: string } } }];
+
+    expect(call.model.constructor.name).toContain('Chat');
+    expect(call.model.constructor.name).not.toContain('Responses');
+  });
+
   it('returns the tool call input on success', async () => {
     generateText.mockResolvedValueOnce({
       toolCalls: [{ input: { name: 'Amina' } }],

@@ -31,7 +31,7 @@ export function findCountryByIso(iso: string | null): CountryDialCode | null {
  */
 export function countryFlagEmoji(iso: string): string {
   return String.fromCodePoint(
-    ...Array.from(iso.toUpperCase(), (letter) => 127_397 + Number(letter.codePointAt(0))),
+    ...Array.from(iso.toUpperCase(), (letter) => 127_397 + (letter.codePointAt(0) ?? 0)),
   );
 }
 

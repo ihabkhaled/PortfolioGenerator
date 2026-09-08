@@ -18,6 +18,10 @@ export default [
       'src/generated/',
       'prisma/migrations/',
       '.storage/',
+      // Agent worktrees hold whole checkouts of this same repository, so
+      // linting them reports every finding once per worktree, against code
+      // that is not the working tree's.
+      '.claude/',
     ],
   },
 ];

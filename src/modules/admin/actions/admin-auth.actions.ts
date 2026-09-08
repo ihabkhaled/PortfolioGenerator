@@ -125,6 +125,16 @@ export async function adminStartTwoFactorEnrollmentAction(
     body: { password, issuer: 'ProFolio Admin' },
     headers: await headers(),
   });
+
+  // better-auth returns a union of its two second-factor shapes, and only the
+  // TOTP one carries a secret. An OTP enrolment has nothing to render — no
+  // URI, no QR code, no backup codes — so it cannot satisfy this action's
+  // contract, and reaching here with one means the plugin was reconfigured
+  // away from the authenticator-app flow the admin area is built on.
+  if (result.method !== 'totp') {
+    throw new Error('Admin two-factor enrollment requires the TOTP method.');
+  }
+
   const qrCodeDataUrl = await QRCode.toDataURL(result.totpURI, { margin: 1 });
 
   return { totpUri: result.totpURI, qrCodeDataUrl, backupCodes: result.backupCodes };

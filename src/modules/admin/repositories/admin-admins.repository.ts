@@ -2,6 +2,7 @@ import 'server-only';
 
 import { randomUUID } from 'node:crypto';
 
+import { CREDENTIAL_ACCOUNT_ISSUER } from '@/packages/admin-auth/admin-auth.constants';
 import { getDatabase } from '@/packages/database';
 
 import { ADMIN_ADMINS_PAGE_SIZE } from '../constants/admin-admins.constants';
@@ -149,6 +150,7 @@ export async function insertAdminAdmin(
       database.adminAccount.create({
         data: {
           id: randomUUID(),
+          issuer: CREDENTIAL_ACCOUNT_ISSUER,
           accountId: adminUserId,
           providerId: 'credential',
           adminUserId,

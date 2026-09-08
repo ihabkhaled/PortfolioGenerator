@@ -15,3 +15,12 @@ export const ADMIN_AUTH_API_BASE_PATH = '/api/managawy-auth';
 
 /** better-auth's own default cookie name is `better-auth.session_token`; this must differ. */
 export const ADMIN_AUTH_COOKIE_PREFIX = 'managawy';
+
+/**
+ * The `issuer` better-auth 1.7 stamps on a locally issued credential account,
+ * produced by its own `createLocalAccountIssuer('credential')`. Rows this
+ * codebase writes itself — the super-admin seed and admin creation — bypass
+ * better-auth's account routes, so they have to supply it or the insert fails
+ * on a column better-auth requires.
+ */
+export const CREDENTIAL_ACCOUNT_ISSUER = 'local:credential';

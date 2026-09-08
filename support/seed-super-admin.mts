@@ -7,7 +7,10 @@ import { hashPassword } from 'better-auth/crypto';
 // `next/headers` — resolvable inside a Next.js server context but not when this
 // script runs directly under `node --experimental-strip-types`.
 import { DEFAULT_ROLE_PERMISSIONS } from '@/modules/admin/constants/admin-permission.constants';
-import { ADMIN_AUTH_MIN_PASSWORD_LENGTH } from '@/packages/admin-auth/admin-auth.constants';
+import {
+  ADMIN_AUTH_MIN_PASSWORD_LENGTH,
+  CREDENTIAL_ACCOUNT_ISSUER,
+} from '@/packages/admin-auth/admin-auth.constants';
 import { getDatabase } from '@/packages/database';
 import { getServerEnv } from '@/packages/env/server';
 
@@ -81,6 +84,7 @@ async function main(): Promise<void> {
     database.adminAccount.create({
       data: {
         id: randomUUID(),
+        issuer: CREDENTIAL_ACCOUNT_ISSUER,
         accountId: adminUserId,
         providerId: 'credential',
         adminUserId,

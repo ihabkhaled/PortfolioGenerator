@@ -93,6 +93,11 @@ model Session {
 
 model Account {
   id                    String    @id
+  /// better-auth 1.7 scopes an account's identity by issuer ("local:credential"
+  /// for a password account), so the same provider id can legitimately recur
+  /// under a different issuer. Writing it is not optional: better-auth sends
+  /// the column on every account create.
+  issuer                String
   accountId             String
   providerId            String
   userId                String
@@ -109,6 +114,7 @@ model Account {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([providerId, accountId])
+  @@unique([issuer, accountId])
   @@index([userId])
   @@map("accounts")
 }
@@ -581,6 +587,8 @@ model AdminSession {
 
 model AdminAccount {
   id                    String    @id
+  /// See Account.issuer — the admin tables run the same better-auth version.
+  issuer                String
   accountId             String
   providerId            String
   adminUserId           String
@@ -597,6 +605,7 @@ model AdminAccount {
   adminUser AdminUser @relation(fields: [adminUserId], references: [id], onDelete: Cascade)
 
   @@unique([providerId, accountId])
+  @@unique([issuer, accountId])
   @@index([adminUserId])
   @@map("admin_accounts")
 }

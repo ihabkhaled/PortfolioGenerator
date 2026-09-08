@@ -16,7 +16,9 @@ export function TimelineSection(props: Readonly<TimelineSectionProps>): ReactEle
         <article key={entry.id} className={timelineClasses.item}>
           <div className={timelineClasses.head}>
             <div>
-              <h3 className={timelineClasses.organization}>{entry.organization}</h3>
+              {entry.organization === null ? null : (
+                <h3 className={timelineClasses.organization}>{entry.organization}</h3>
+              )}
               <p className={timelineClasses.role}>{entry.role}</p>
             </div>
             {entry.dateRange === '' ? null : (

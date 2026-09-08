@@ -70,7 +70,7 @@ export interface SectionRendererProps {
 
 export interface TimelineEntry {
   readonly id: string;
-  readonly organization: string;
+  readonly organization: string | null;
   readonly role: string;
   readonly dateRange: string;
   readonly summary: string | null;

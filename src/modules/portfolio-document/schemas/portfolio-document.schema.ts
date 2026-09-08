@@ -168,7 +168,12 @@ export const customBlockSchema = z.discriminatedUnion('kind', [
 
 export const experienceSchema = z.object({
   id: identifier,
-  organization: requiredText(DOCUMENT_LIMITS.organization),
+  /**
+   * Nullable because freelance and self-employed work names no employer, and
+   * an imported CV that says so should keep the role rather than lose it. An
+   * existing document always carries a string, so widening reads cleanly.
+   */
+  organization: boundedText(DOCUMENT_LIMITS.organization).nullable(),
   title: requiredText(DOCUMENT_LIMITS.jobTitle),
   location: boundedText(DOCUMENT_LIMITS.location).nullable(),
   startDate: month,

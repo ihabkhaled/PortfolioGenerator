@@ -433,8 +433,10 @@ describe('collection controls', () => {
       />,
     );
 
-    expect(screen.getByRole('textbox', { name: /Organization.*Required/u })).toBeRequired();
     expect(screen.getByRole('textbox', { name: /Title.*Required/u })).toBeRequired();
+    // An employer is not demanded: an imported freelance role legitimately has
+    // none, and requiring one would block the author on their own CV.
+    expect(screen.getByLabelText('Organization')).not.toBeRequired();
     expect(screen.getByLabelText('Location')).not.toBeRequired();
     expect(screen.getByLabelText('Start month')).not.toBeRequired();
   });

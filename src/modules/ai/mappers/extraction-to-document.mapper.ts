@@ -12,7 +12,7 @@ import {
   type PortfolioSkillGroup,
 } from '@/modules/portfolio-document';
 import { splitInternationalPhone } from '@/shared/utils/phone-number.util';
-import { normalizeSafeUrl } from '@/shared/utils/safe-url.util';
+import { coerceExtractedUrl, normalizeSafeUrl } from '@/shared/utils/safe-url.util';
 
 import { WARNING_CODES } from '../constants/extraction.constants';
 import {
@@ -58,10 +58,13 @@ export function mapExtractionToDocument(
   const socialLinks = mapSocialLinks(extraction, warnings);
   const experience = mapExperience(extraction, warnings);
   const companies = new Map(
-    experience.map((entry, index) => [
-      entry.organization.trim().toLowerCase(),
-      { id: `company-${index + 1}`, name: entry.organization.trim(), sourceOrder: index },
-    ]),
+    experience
+      .map((entry, index) => ({ name: entry.organization?.trim() ?? '', index }))
+      .filter((entry) => entry.name !== '')
+      .map((entry) => [
+        entry.name.toLowerCase(),
+        { id: `company-${entry.index + 1}`, name: entry.name, sourceOrder: entry.index },
+      ]),
   )
     .values()
     .toArray();
@@ -430,13 +433,13 @@ export function mapLinks(
 
   for (const [index, link] of extraction.links.slice(0, DOCUMENT_COUNTS.links).entries()) {
     if ((SOCIAL_LINK_KINDS as readonly string[]).includes(normalizeLinkKind(link.kind))) continue;
-    const url = normalizeSafeUrl(link.url);
+    const url = coerceExtractedUrl(link.url);
 
     if (url === null) {
       warnings.push({
         code: WARNING_CODES.droppedInvalidUrl,
         path: `links.${index}`,
-        message: 'A link was removed because it was not a safe https address.',
+        message: 'A link was removed because it could not be read as a safe web address.',
       });
 
       continue;
@@ -475,12 +478,12 @@ export function mapSocialLinks(
   for (const [index, link] of extraction.links.slice(0, DOCUMENT_COUNTS.socialLinks).entries()) {
     const kind = normalizeLinkKind(link.kind);
     if (!(SOCIAL_LINK_KINDS as readonly string[]).includes(kind)) continue;
-    const url = normalizeSafeUrl(link.url);
+    const url = coerceExtractedUrl(link.url);
     if (url === null) {
       warnings.push({
         code: WARNING_CODES.droppedInvalidUrl,
         path: `links.${index}`,
-        message: 'A social link was removed because it was not a safe https address.',
+        message: 'A social link was removed because it could not be read as a safe web address.',
       });
       continue;
     }
@@ -509,14 +512,26 @@ export function mapExperience(
     const organization = role.organization?.trim() ?? '';
     const title = role.title?.trim() ?? '';
 
-    if (organization === '' || title === '') {
+    // Only the title is load-bearing: a row with no title is not a role at
+    // all. A missing employer is ordinary — freelance and self-employed work
+    // names no organization — so the role is kept and flagged for the author
+    // to fill in, rather than deleted from their own history.
+    if (title === '') {
       warnings.push({
         code: WARNING_CODES.droppedIncompleteEntry,
         path: `experience.${index}`,
-        message: `A role was dropped because it was missing ${organization === '' ? 'an employer' : 'a title'}.`,
+        message: 'A role was dropped because it was missing a title.',
       });
 
       continue;
+    }
+
+    if (organization === '') {
+      warnings.push({
+        code: WARNING_CODES.incompleteEntry,
+        path: `experience.${index}.organization`,
+        message: 'This role has no employer in the CV. Add one in the editor if it needs a name.',
+      });
     }
 
     if (role.endDate !== null && normalizeMonth(role.endDate) === null) {
@@ -529,7 +544,7 @@ export function mapExperience(
 
     entries.push({
       id: `exp-${entries.length + 1}`,
-      organization,
+      organization: organization === '' ? null : organization,
       title,
       location: role.location,
       startDate: normalizeMonth(role.startDate),

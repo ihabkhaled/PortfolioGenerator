@@ -3,7 +3,7 @@ import type { IdentifiedCollectionKey } from '../types/collection-edit.types';
 export function isRequiredCollectionField(key: IdentifiedCollectionKey, field: string): boolean {
   switch (key) {
     case 'experience': {
-      return field === 'organization' || field === 'title';
+      return field === 'title';
     }
     case 'projects': {
       return field === 'name';

@@ -31,7 +31,6 @@ function requireValue<TValue>(value: TValue | null | undefined): TValue {
 
 describe('collection field shape', () => {
   it.each([
-    ['experience', 'organization'],
     ['experience', 'title'],
     ['projects', 'name'],
     ['skills', 'label'],
@@ -57,6 +56,9 @@ describe('collection field shape', () => {
   );
 
   it.each([
+    // Optional on purpose: freelance work has no employer, and the importer
+    // keeps such a role rather than dropping it.
+    ['experience', 'organization'],
     ['experience', 'summary'],
     ['projects', 'role'],
     ['skills', 'items'],
@@ -133,16 +135,10 @@ describe('collection field normalization', () => {
   it('keeps a blank required value for validation but removes an optional blank value', () => {
     const document = buildFullPortfolioDocument();
     const whitespace = ' '.repeat(3);
-    const required = setCollectionField(
-      document,
-      'experience',
-      'exp-1',
-      'organization',
-      whitespace,
-    );
+    const required = setCollectionField(document, 'experience', 'exp-1', 'title', whitespace);
     const optional = setCollectionField(document, 'experience', 'exp-1', 'location', whitespace);
 
-    expect(required.experience[0]?.organization).toBe(whitespace);
+    expect(required.experience[0]?.title).toBe(whitespace);
     expect(optional.experience[0]?.location).toBeNull();
   });
 

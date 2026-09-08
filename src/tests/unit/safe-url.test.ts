@@ -1,6 +1,11 @@
 import { describe, expect, it } from 'vitest';
 
-import { isSafeExternalUrl, normalizeSafeUrl, toDisplayUrl } from '@/shared/utils/safe-url.util';
+import {
+  coerceExtractedUrl,
+  isSafeExternalUrl,
+  normalizeSafeUrl,
+  toDisplayUrl,
+} from '@/shared/utils/safe-url.util';
 
 /**
  * The URL policy is the boundary between "a model extracted a string from a
@@ -66,5 +71,34 @@ describe('toDisplayUrl', () => {
 
   it('returns the input unchanged when it is not a safe URL, because this is presentation only', () => {
     expect(toDisplayUrl('not a url')).toBe('not a url');
+  });
+});
+
+describe('coerceExtractedUrl', () => {
+  /**
+   * Every one of these is a real line from a CV that previously imported as a
+   * removed link: a bare host, a protocol-relative address, and the leading
+   * dot left behind by "LinkedIn:.linkedin.com/...".
+   */
+  it('repairs an address a CV wrote for a human rather than a parser', () => {
+    expect(coerceExtractedUrl('github.com/ihabkhaled')).toBe('https://github.com/ihabkhaled');
+    expect(coerceExtractedUrl('.linkedin.com/in/name')).toBe('https://linkedin.com/in/name');
+    expect(coerceExtractedUrl('//eseed.net')).toBe('https://eseed.net/');
+    expect(coerceExtractedUrl('http://garment.io')).toBe('https://garment.io/');
+  });
+
+  it('refuses a dangerous scheme rather than rewriting it into a safe-looking one', () => {
+    expect(coerceExtractedUrl('javascript:alert(1)')).toBeNull();
+    expect(coerceExtractedUrl('data:text/html,<script>')).toBeNull();
+    expect(coerceExtractedUrl('vbscript:msgbox')).toBeNull();
+  });
+
+  it('does not read a bare host:port as a scheme', () => {
+    expect(coerceExtractedUrl('example.com:8080/path')).toBe('https://example.com:8080/path');
+  });
+
+  it('leaves an already-safe address alone and rejects an empty one', () => {
+    expect(coerceExtractedUrl('mailto:ihab@example.com')).toBe('mailto:ihab@example.com');
+    expect(coerceExtractedUrl(' '.repeat(3))).toBeNull();
   });
 });

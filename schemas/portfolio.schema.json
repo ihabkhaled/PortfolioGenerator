@@ -266,7 +266,14 @@
             "minLength": 1,
             "maxLength": 120
           },
-          "organization": {},
+          "organization": {
+            "anyOf": [
+              {},
+              {
+                "type": "null"
+              }
+            ]
+          },
           "title": {},
           "location": {
             "anyOf": [

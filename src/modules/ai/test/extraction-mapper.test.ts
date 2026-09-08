@@ -617,8 +617,24 @@ describe('mapExtractionToDocument', () => {
       expect(result.warnings).toContainEqual({
         code: WARNING_CODES.droppedInvalidUrl,
         path: 'links.0',
-        message: 'A social link was removed because it was not a safe https address.',
+        message: 'A social link was removed because it could not be read as a safe web address.',
       });
+    });
+
+    it('repairs a social address written without a scheme rather than removing it', () => {
+      const result = mapExtractionToDocument(
+        extraction({ links: [{ kind: 'github', url: 'github.com/ihabkhaled' }] }),
+        'Fallback',
+        'upload-1',
+      );
+
+      expect(result.document.socialLinks[0]).toMatchObject({
+        kind: 'github',
+        url: 'https://github.com/ihabkhaled',
+      });
+      expect(result.warnings).not.toContainEqual(
+        expect.objectContaining({ code: WARNING_CODES.droppedInvalidUrl }),
+      );
     });
 
     it.each(['mastodon', 'bluesky'] as const)('maps %s as a bounded social platform', (kind) => {

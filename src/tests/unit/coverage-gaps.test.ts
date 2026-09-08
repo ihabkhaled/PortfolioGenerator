@@ -384,7 +384,7 @@ describe('parseDeterministicResume on punctuation and month names', () => {
 });
 
 describe('mapping a role or project with the other half missing', () => {
-  it('drops an experience entry without an organization and reports its exact source path', () => {
+  it('keeps an experience entry without an organization and flags it for the author', () => {
     const result = mapExtractionToDocument(
       extraction({
         experience: [
@@ -405,11 +405,18 @@ describe('mapping a role or project with the other half missing', () => {
       'upload-1',
     );
 
-    expect(result.document.experience).toEqual([]);
+    // Freelance and self-employed work names no employer. Deleting the role
+    // would lose a real part of the author's history over a blank field they
+    // can fill in themselves.
+    expect(result.document.experience).toHaveLength(1);
+    expect(result.document.experience[0]).toMatchObject({
+      title: 'Senior Backend Engineer',
+      organization: null,
+    });
     expect(result.warnings).toContainEqual({
-      code: WARNING_CODES.droppedIncompleteEntry,
-      path: 'experience.0',
-      message: 'A role was dropped because it was missing an employer.',
+      code: WARNING_CODES.incompleteEntry,
+      path: 'experience.0.organization',
+      message: 'This role has no employer in the CV. Add one in the editor if it needs a name.',
     });
   });
 

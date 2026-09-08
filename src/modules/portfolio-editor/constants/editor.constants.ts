@@ -46,7 +46,10 @@ export const EDITOR_COLLECTION_FIELDS: Readonly<
   Record<IdentifiedCollectionKey, readonly CollectionFieldDefinition[]>
 > = {
   experience: [
-    { name: 'organization', kind: 'text', required: true },
+    // Not required: a freelance or self-employed role has no employer, and the
+    // importer now keeps such a role rather than dropping it. Demanding one
+    // here would block the author on a field their own CV does not have.
+    { name: 'organization', kind: 'text' },
     { name: 'title', kind: 'text', required: true },
     { name: 'location', kind: 'text' },
     { name: 'startDate', kind: 'month' },

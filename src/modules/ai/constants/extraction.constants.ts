@@ -52,6 +52,8 @@ export const WARNING_CODES = {
   truncatedInput: 'TRUNCATED_INPUT',
   droppedInvalidUrl: 'DROPPED_INVALID_URL',
   droppedIncompleteEntry: 'DROPPED_INCOMPLETE_ENTRY',
+  /** Kept, but a field the author will want to fill in is missing. */
+  incompleteEntry: 'INCOMPLETE_ENTRY',
   missingHeadline: 'MISSING_HEADLINE',
   reviewExtractedFact: 'REVIEW_EXTRACTED_FACT',
   unsupportedContent: 'UNSUPPORTED_CONTENT',

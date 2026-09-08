@@ -1,4 +1,9 @@
-import { SAFE_URL_PROTOCOLS, URL_MAX_LENGTH } from '@/shared/constants/security.constants';
+import {
+  SAFE_URL_PROTOCOLS,
+  URL_LEADING_PUNCTUATION_PATTERN,
+  URL_MAX_LENGTH,
+  URL_SCHEME_PATTERN,
+} from '@/shared/constants/security.constants';
 import { CONTROL_CHARACTER_PATTERN } from '@/shared/constants/text.constants';
 
 /**
@@ -53,6 +58,39 @@ export function normalizeSafeUrl(candidate: string): string | null {
   }
 
   return parsed.href;
+}
+
+/**
+ * A forgiving reading of a URL that came out of a CV, reduced to the same
+ * safety policy as everything else.
+ *
+ * CVs are written for humans: addresses are typed bare ("github.com/name"),
+ * pasted with the label's punctuation still attached
+ * ("LinkedIn:.linkedin.com/in/name"), or given as http. All three are the
+ * author's real link, and dropping them loses information the document plainly
+ * contained — so the shape is repaired and the result is then held to
+ * `normalizeSafeUrl` unchanged.
+ *
+ * What is *not* repaired is a scheme the author actually wrote: anything
+ * already carrying one is passed through as-is, so `javascript:` and `data:`
+ * are still rejected rather than rewritten into something safe-looking. The
+ * scheme test excludes dots for that reason — it must not mistake a bare
+ * "example.com:8080/path" for a scheme and refuse to prefix it.
+ */
+export function coerceExtractedUrl(candidate: string): string | null {
+  const trimmed = candidate.trim().replace(URL_LEADING_PUNCTUATION_PATTERN, '');
+
+  if (trimmed.length === 0) {
+    return null;
+  }
+
+  if (URL_SCHEME_PATTERN.test(trimmed)) {
+    // http is the one scheme worth rewriting: the same address, and this
+    // policy excludes plain http only over transport, not destination.
+    return normalizeSafeUrl(trimmed.replace(/^http:\/\//iu, 'https://'));
+  }
+
+  return normalizeSafeUrl(`https://${trimmed}`);
 }
 
 /**

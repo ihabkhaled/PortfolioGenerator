@@ -20,3 +20,16 @@ export const PUBLISHED_PORTFOLIO_REVALIDATE_SECONDS = 3600;
  * as anything else that survives a deploy.
  */
 export const WARNING_TEXT_MAX_LENGTH = 400;
+
+/**
+ * A real URL scheme, which never contains a dot.
+ *
+ * The exclusion is deliberate: `coerceExtractedUrl` uses this to decide
+ * whether an address already carries a scheme, and a pattern allowing dots
+ * would read a bare "example.com:8080/path" as the scheme "example.com:" and
+ * refuse to repair it.
+ */
+export const URL_SCHEME_PATTERN = /^[a-zA-Z][a-zA-Z0-9+-]*:/u;
+
+/** Label punctuation and protocol-relative slashes left on a pasted address. */
+export const URL_LEADING_PUNCTUATION_PATTERN = /^[\s./]+/u;

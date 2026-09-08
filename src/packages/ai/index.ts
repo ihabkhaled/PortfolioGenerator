@@ -32,6 +32,9 @@ import type { StructuredErrorCode, StructuredRequest, StructuredResponse } from 
 
 const EXTRACTION_TOOL_NAME = 'report_extracted_data';
 
+/** Enough for a provider's error JSON, far short of a document. */
+const MAX_FAILURE_BODY_CHARS = 300;
+
 /**
  * A provider failure in terms safe to log: what threw, the status it answered
  * with, and the endpoint it answered from. The response body is deliberately
@@ -39,7 +42,14 @@ const EXTRACTION_TOOL_NAME = 'report_extracted_data';
  */
 function describeFailure(error: unknown): string {
   if (APICallError.isInstance(error)) {
-    return `${error.name} status=${error.statusCode ?? 'none'} url=${error.url}`;
+    // The body is included, truncated: on a 4xx it is the provider's own
+    // rejection text — an unsupported parameter, an unknown model — which is
+    // the whole answer and cannot be inferred from the status alone. It is not
+    // a completion, and a rejected request never carries one; the cap keeps a
+    // provider that echoes the request from pasting the CV into the log.
+    const body = error.responseBody?.slice(0, MAX_FAILURE_BODY_CHARS) ?? 'none';
+
+    return `${error.name} status=${error.statusCode ?? 'none'} url=${error.url} body=${body}`;
   }
 
   return error instanceof Error ? `${error.name}: ${error.message}` : 'unknown error';

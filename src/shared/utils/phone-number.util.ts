@@ -28,10 +28,17 @@ export function findCountryByIso(iso: string | null): CountryDialCode | null {
  * becomes 🇪🇬 — so there is no image asset and no second list of flags that
  * could drift from `COUNTRY_DIAL_CODES`. Every entry in that list is a real
  * two-letter ISO 3166-1 code, so the mapping always produces a flag.
+ *
+ * The letter's position in the alphabet is the offset from the first
+ * regional indicator, which keeps the arithmetic total: `indexOf` always
+ * answers with a number, where reading a code point out of the letter is
+ * typed as possibly absent and would need a branch no input can reach.
  */
 export function countryFlagEmoji(iso: string): string {
+  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+
   return String.fromCodePoint(
-    ...Array.from(iso.toUpperCase(), (letter) => 127_397 + (letter.codePointAt(0) ?? 0)),
+    ...Array.from(iso.toUpperCase(), (letter) => 127_462 + alphabet.indexOf(letter)),
   );
 }
 

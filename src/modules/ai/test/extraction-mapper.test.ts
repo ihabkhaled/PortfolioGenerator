@@ -1002,29 +1002,21 @@ describe('mapExtractionToDocument', () => {
     expect(result.warnings[0]?.code).toBe('AMBIGUOUS_DATE');
   });
 
-  it('shows a contact email only when one was found', () => {
-    const withEmail = mapExtractionToDocument(
-      extraction({ contact: { email: 'amina@example.com', phone: null } }),
+  it('shows contact fields only when one was found, phone the same as email', () => {
+    const withBoth = mapExtractionToDocument(
+      extraction({ contact: { email: 'amina@example.com', phone: '+351 000' } }),
       'Fallback',
       'upload-1',
     );
-    const without = mapExtractionToDocument(extraction(), 'Fallback', 'upload-1');
+    const withNeither = mapExtractionToDocument(extraction(), 'Fallback', 'upload-1');
 
-    expect(withEmail.document.contact.email.visible).toBe(true);
-    expect(without.document.contact.email.visible).toBe(false);
+    expect(withBoth.document.contact.email.visible).toBe(true);
+    expect(withBoth.document.contact.phone.visible).toBe(true);
+    expect(withNeither.document.contact.email.visible).toBe(false);
+    expect(withNeither.document.contact.phone.visible).toBe(false);
   });
 
-  it('never makes a phone number public by default', () => {
-    const result = mapExtractionToDocument(
-      extraction({ contact: { email: null, phone: '+351 000' } }),
-      'Fallback',
-      'upload-1',
-    );
-
-    expect(result.document.contact.phone.visible).toBe(false);
-  });
-
-  it('separates a uniquely evidenced international prefix without publishing it', () => {
+  it('separates a uniquely evidenced international prefix and shows it, like any other found phone', () => {
     const result = mapExtractionToDocument(
       extraction({ contact: { email: null, phone: '+351 912 345 678' } }),
       'Fallback',
@@ -1034,7 +1026,7 @@ describe('mapExtractionToDocument', () => {
     expect(result.document.contact.phone).toEqual({
       countryIso: 'PT',
       nationalNumber: '912345678',
-      visible: false,
+      visible: true,
     });
   });
 

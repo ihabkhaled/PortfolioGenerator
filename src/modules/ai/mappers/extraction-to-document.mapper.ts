@@ -95,10 +95,14 @@ export function mapExtractionToDocument(
       // A uniquely identifying international prefix can be separated as
       // evidence. Shared plans stay intact with no country rather than turning
       // a plausible location into a professional fact.
+      //
+      // Visible on the same rule as email above: present by default, because a
+      // number the author put on their own CV is one they meant a reader to
+      // have, and hiding it required a manual step nothing on screen called out.
       phone: {
         countryIso: phone?.countryIso ?? null,
         nationalNumber: phone?.nationalNumber ?? null,
-        visible: false,
+        visible: phone !== null,
       },
     },
     links,

@@ -54,6 +54,7 @@ export function createDeterministicAiProvider(): PortfolioAiProvider {
       return Promise.resolve({
         ok: false,
         errorCode: 'not-configured',
+        failureReason: null,
         usage: {
           provider: DETERMINISTIC_PROVIDER_NAME,
           model: DETERMINISTIC_PROVIDER_NAME,

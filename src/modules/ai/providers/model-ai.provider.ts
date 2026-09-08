@@ -42,6 +42,7 @@ export function createModelAiProvider(): PortfolioAiProvider {
         return {
           ok: false,
           errorCode: 'not-configured',
+          failureReason: null,
           usage: {
             provider: MODEL_PROVIDER_NAME,
             model,
@@ -75,13 +76,23 @@ export function createModelAiProvider(): PortfolioAiProvider {
       };
 
       if (!response.ok) {
-        return { ok: false, errorCode: response.errorCode, usage };
+        return {
+          ok: false,
+          errorCode: response.errorCode,
+          failureReason: response.failureReason,
+          usage,
+        };
       }
 
       const parsed = parseSchema(resumeExtractionSchema, response.value);
 
       if (!parsed.ok) {
-        return { ok: false, errorCode: 'invalid-output', usage };
+        return {
+          ok: false,
+          errorCode: 'invalid-output',
+          failureReason: 'output failed schema validation',
+          usage,
+        };
       }
 
       return { ok: true, value: parsed.value, usage };
@@ -103,7 +114,7 @@ export function createModelAiProvider(): PortfolioAiProvider {
         latencyMs: 0,
       };
       if (env.AI_GOOGLE_API_KEY === undefined) {
-        return { ok: false, errorCode: 'not-configured', usage: emptyUsage };
+        return { ok: false, errorCode: 'not-configured', failureReason: null, usage: emptyUsage };
       }
 
       const response = await createStructuredClient({
@@ -127,11 +138,22 @@ export function createModelAiProvider(): PortfolioAiProvider {
         outputUnits: response.outputUnits,
         latencyMs: response.latencyMs,
       };
-      if (!response.ok) return { ok: false, errorCode: response.errorCode, usage };
+      if (!response.ok)
+        return {
+          ok: false,
+          errorCode: response.errorCode,
+          failureReason: response.failureReason,
+          usage,
+        };
       const parsed = parseSchema(portfolioDocumentSchema, response.value);
       return parsed.ok
         ? { ok: true, value: parsed.value, usage }
-        : { ok: false, errorCode: 'invalid-output', usage };
+        : {
+            ok: false,
+            errorCode: 'invalid-output',
+            failureReason: 'output failed schema validation',
+            usage,
+          };
     },
   };
 }

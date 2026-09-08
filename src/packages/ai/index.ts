@@ -32,6 +32,19 @@ import type { StructuredErrorCode, StructuredRequest, StructuredResponse } from 
 
 const EXTRACTION_TOOL_NAME = 'report_extracted_data';
 
+/**
+ * A provider failure in terms safe to log: what threw, the status it answered
+ * with, and the endpoint it answered from. The response body is deliberately
+ * excluded — it is the one field that can echo the prompt back.
+ */
+function describeFailure(error: unknown): string {
+  if (APICallError.isInstance(error)) {
+    return `${error.name} status=${error.statusCode ?? 'none'} url=${error.url}`;
+  }
+
+  return error instanceof Error ? `${error.name}: ${error.message}` : 'unknown error';
+}
+
 export function createStructuredClient(config: {
   readonly apiKey: string;
   readonly baseUrl: string | undefined;
@@ -76,6 +89,7 @@ export function createStructuredClient(config: {
         return {
           ok: false,
           errorCode: 'provider-error',
+          failureReason: 'model returned no tool call',
           model: request.model,
           inputUnits: result.usage.inputTokens ?? null,
           outputUnits: result.usage.outputTokens ?? null,
@@ -107,6 +121,7 @@ export function createStructuredClient(config: {
       return {
         ok: false,
         errorCode,
+        failureReason: describeFailure(error),
         model: request.model,
         inputUnits: null,
         outputUnits: null,

@@ -26,6 +26,7 @@ export async function extractResumeToDraft(request: ExtractionRequest): Promise<
   const provider = getAiProvider();
   let attempt = 0;
   let lastErrorCode: string | null = null;
+  let lastFailureReason: string | null = null;
 
   while (attempt < MAX_EXTRACTION_ATTEMPTS) {
     const useFallbackModel = attempt > 0;
@@ -81,6 +82,7 @@ export async function extractResumeToDraft(request: ExtractionRequest): Promise<
     });
 
     lastErrorCode = result.errorCode;
+    lastFailureReason = result.failureReason;
 
     if (!isRetryable(result.errorCode)) {
       break;
@@ -97,6 +99,7 @@ export async function extractResumeToDraft(request: ExtractionRequest): Promise<
     portfolioId: request.portfolioId,
     attempts: attempt + 1,
     errorCode: lastErrorCode,
+    failureReason: lastFailureReason,
   });
 
   return { ok: false, errorCode: lastErrorCode ?? 'provider-error' };

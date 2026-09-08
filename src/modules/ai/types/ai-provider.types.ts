@@ -32,7 +32,13 @@ export interface AiUsage {
 
 export type AiOutcome<TValue> =
   | { readonly ok: true; readonly value: TValue; readonly usage: AiUsage }
-  | { readonly ok: false; readonly errorCode: AiErrorCode; readonly usage: AiUsage };
+  | {
+      readonly ok: false;
+      readonly errorCode: AiErrorCode;
+      /** Provider-level diagnostics; see `StructuredResponse.failureReason`. */
+      readonly failureReason: string | null;
+      readonly usage: AiUsage;
+    };
 
 export type AiErrorCode =
   'invalid-output' | 'provider-error' | 'quota-exceeded' | 'timeout' | 'not-configured';

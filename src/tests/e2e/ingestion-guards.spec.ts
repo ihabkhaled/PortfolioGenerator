@@ -37,7 +37,10 @@ test.describe('upload validation', () => {
 
     await page.getByRole('button', { name: 'Import' }).click();
 
-    await expect(page.getByRole('alert')).toBeVisible();
+    // `.filter({ hasText })` rather than a bare role match: Next's own empty
+    // route announcer also carries role="alert" once a client-side navigation
+    // has run, and matching it alongside the real one fails strict mode.
+    await expect(page.getByRole('alert').filter({ hasText: /\S/u })).toBeVisible();
     expect(page.url()).toContain('/import');
   });
 
@@ -56,7 +59,7 @@ test.describe('upload validation', () => {
 
     await page.getByRole('button', { name: 'Import' }).click();
 
-    await expect(page.getByRole('alert')).toBeVisible();
+    await expect(page.getByRole('alert').filter({ hasText: /\S/u })).toBeVisible();
   });
 });
 
@@ -148,7 +151,7 @@ test.describe('publish readiness', () => {
     await page.getByLabel('Public address').fill('dashboard');
     await page.getByRole('button', { name: 'Save address' }).click();
 
-    await expect(page.getByRole('alert')).toBeVisible();
+    await expect(page.getByRole('alert').filter({ hasText: /\S/u })).toBeVisible();
   });
 });
 

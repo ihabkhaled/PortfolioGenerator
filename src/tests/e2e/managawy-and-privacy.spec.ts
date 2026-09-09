@@ -53,7 +53,7 @@ test.describe('admin sign-in and mandatory 2FA', () => {
       await page.getByRole('button', { name: 'Continue' }).click();
     }
 
-    await expect(page.getByRole('alert')).toBeVisible();
+    await expect(page.getByRole('alert').filter({ hasText: /\S/u })).toBeVisible();
   });
 
   test('the seeded super admin can sign in and complete 2FA', async ({ page }) => {

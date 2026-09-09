@@ -107,7 +107,7 @@ test.describe('deleting an account', () => {
     await page.getByLabel('Password', { exact: true }).fill(account.password);
     await page.getByRole('button', { name: /sign in/i }).click();
 
-    await expect(page.getByRole('alert')).toBeVisible();
+    await expect(page.getByRole('alert').filter({ hasText: /\S/u })).toBeVisible();
     expect(page.url()).toContain('/sign-in');
   });
 

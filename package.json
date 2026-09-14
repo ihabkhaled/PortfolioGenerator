@@ -83,12 +83,12 @@
     "@xmldom/xmldom": "^0.8.15"
   },
   "dependencies": {
-    "@ai-sdk/openai": "^4.0.58",
+    "@ai-sdk/openai": "^4.0.66",
     "@prisma/adapter-pg": "^7.10.0",
     "@prisma/client": "^7.10.0",
     "@sparticuz/chromium": "^149.0.0",
     "@tailwindcss/postcss": "^4.3.3",
-    "ai": "^7.0.92",
+    "ai": "^7.0.98",
     "aws4fetch": "^1.0.20",
     "better-auth": "^1.7.2",
     "class-variance-authority": "^0.7.1",

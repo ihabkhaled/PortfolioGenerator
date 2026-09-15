@@ -86,7 +86,7 @@
     "@ai-sdk/openai": "^4.0.66",
     "@prisma/adapter-pg": "^7.10.0",
     "@prisma/client": "^7.10.0",
-    "@sparticuz/chromium": "^149.0.0",
+    "@sparticuz/chromium": "^153.0.0",
     "@tailwindcss/postcss": "^4.3.3",
     "ai": "^7.0.98",
     "aws4fetch": "^1.0.20",
